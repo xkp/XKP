@@ -667,10 +667,10 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
                 args->bind(ctx);
 
 				        XSSType arg_type = args->type();
-				if (arg_type)
-					type_ = ctx->get_array_type(arg_type); 
-				else if (args->size() == 0)
-					type_ = ctx->get_array_type(ctx->get_type("var")); 
+				        if (arg_type)
+					        type_ = ctx->get_array_type(arg_type); 
+				        else if (args->size() == 0)
+					        type_ = ctx->get_array_type(ctx->get_type("var"));
                 it->bind(RESOLVE_CONST, type_);
                 return;
               };
@@ -767,14 +767,14 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
                         left.what  = RESOLVE_TYPE;
                         left.type  = current;
                       }
-					else if (resolver.type->is_array())
-					  {
+					          else if (resolver.type->is_array())
+					            {
                         current = resolver.type->array_type();
-						it->bind(resolver.what, resolver.value);
-						left.what  = RESOLVE_TYPE;
-						left.type  = current;
-					  }
-					else 
+						            it->bind(resolver.what, resolver.value);
+						            left.what  = RESOLVE_TYPE;
+						            left.type  = current;
+					            }
+					          else
                       {
                         param_list error;
                         error.add("identifier", it->identifier());
@@ -855,11 +855,11 @@ bool xss_value::is_constant()
 
 bool xss_value::is_array()
   {
-	if (operations_.size() != 1)
-	  return false;
+	  if (operations_.size() != 1)
+	    return false;
     
-	value_operation& last = get_last();
-	return last.id() == OP_ARRAY;
+	  value_operation& last = get_last();
+	  return last.id() == OP_ARRAY;
   }
 
 variant xss_value::constant()

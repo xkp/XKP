@@ -13,145 +13,148 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\jsoncpp">
+      <UniqueIdentifier>{9a52e44e-c086-498e-aa52-b8d97a750759}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tinyxml">
+      <UniqueIdentifier>{962df64b-df32-408a-8989-c336477ebd4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\xss">
+      <UniqueIdentifier>{a1604a34-ae81-4333-9fb8-0d1be9e00369}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\xss\lang">
+      <UniqueIdentifier>{63c1d791-567d-45ce-af2a-fe15bcd884cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\xss\dsl">
+      <UniqueIdentifier>{f46d9a73-cc41-46b8-9d94-a2588c22e7b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\xs">
+      <UniqueIdentifier>{5186bf01-d73f-436b-b4a7-33ea93879c59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\xs">
+      <UniqueIdentifier>{3a7449e6-ed4e-44fe-a179-4f69fced2ddb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\xss">
+      <UniqueIdentifier>{54e2b4ad-5a62-491b-aa07-b2b597730a3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\xss\lang">
+      <UniqueIdentifier>{15567ce4-c309-4048-a458-2b59b18c65a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\xss\dsl">
+      <UniqueIdentifier>{2fd37894-eb84-4fbd-bbfe-62a11c279805}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_reader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_value.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_writer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\third_party\tinyXml\tinystr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\third_party\tinyXml\tinyxml.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\third_party\tinyXml\tinyxmlerror.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\third_party\tinyXml\tinyxmlparser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\dynamic_objects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\xs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\xs\array.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xs\ast.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xs\behaviour.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xs\compiler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xs\engine.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xs\linker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xs\operators.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xs\vm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\ajax.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\ga_parser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\generic_assign.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\html5_asynch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\native.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\shell.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\smarty.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\sql.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\vm_base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl\vm_shell.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\lang\base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\lang\debug.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\lang\java.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\lang\js.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\lang\waxjs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\brace_parser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\dsl_out.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\html_parser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\language.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\object_reader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\xss_compiler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\xss_context.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\xss_parser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\xss\xss_renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\xss.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_reader.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_value.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\lib_json\json_writer.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\tinyXml\tinystr.cpp">
+      <Filter>Source Files\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\tinyXml\tinyxml.cpp">
+      <Filter>Source Files\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\tinyXml\tinyxmlerror.cpp">
+      <Filter>Source Files\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\tinyXml\tinyxmlparser.cpp">
+      <Filter>Source Files\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xs\array.cpp">
+      <Filter>Source Files\xs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xs\ast.cpp">
+      <Filter>Source Files\xs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xs\behaviour.cpp">
+      <Filter>Source Files\xs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xs\compiler.cpp">
+      <Filter>Source Files\xs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xs\engine.c">
+      <Filter>Source Files\xs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xs\linker.cpp">
+      <Filter>Source Files\xs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xs\operators.cpp">
+      <Filter>Source Files\xs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xs\vm.cpp">
+      <Filter>Source Files\xs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\dsl\native.cpp">
+      <Filter>Source Files\xss\dsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\dsl\vm_base.cpp">
+      <Filter>Source Files\xss\dsl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\lang\csharp.cpp">
+      <Filter>Source Files\xss\lang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\lang\typed.cpp">
+      <Filter>Source Files\xss\lang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\brace_parser.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\dsl_out.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\html_parser.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\data_reader.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\lang_factory.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\localfs.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\object_model.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\xml_data_reader.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\xss_code.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\xss_compiler.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\xss_context.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\xss_parser.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\xss_renderer.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\xss_expression.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\third_party\jsoncpp\include\json\json.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\third_party\tinyXml\tinystr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\third_party\tinyXml\tinyxml.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -173,122 +176,110 @@
     <ClInclude Include="..\..\..\include\xs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\xs\array.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xs\ast.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xs\behaviour.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xs\compiler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xs\debug_utils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xs\engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xs\grammar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xs\linker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xs\operators.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xs\pair_array.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xs\runtime_error.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xs\vm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xs\xs_error.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\dsl\ajax.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\dsl\ga_parser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\dsl\generic_assign.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\dsl\html5_asynch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\dsl\native.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\dsl\shell.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\dsl\smarty.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\dsl\sql.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\dsl\vm_base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\dsl\vm_shell.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\lang\base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\lang\debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\lang\java.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\lang\js.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\lang\waxjs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\brace_parser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\dsl_out.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\xss\html_parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\language.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\..\include\xs\array.h">
+      <Filter>Header Files\xs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\object_reader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\..\include\xs\ast.h">
+      <Filter>Header Files\xs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\utils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\..\include\xs\behaviour.h">
+      <Filter>Header Files\xs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xs\compiler.h">
+      <Filter>Header Files\xs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xs\debug_utils.h">
+      <Filter>Header Files\xs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xs\engine.h">
+      <Filter>Header Files\xs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xs\grammar.h">
+      <Filter>Header Files\xs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xs\linker.h">
+      <Filter>Header Files\xs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xs\operators.h">
+      <Filter>Header Files\xs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xs\pair_array.h">
+      <Filter>Header Files\xs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xs\runtime_error.h">
+      <Filter>Header Files\xs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xs\vm.h">
+      <Filter>Header Files\xs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xs\xs_error.h">
+      <Filter>Header Files\xs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\ajax.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\ga_parser.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\generic_assign.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\html5_asynch.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\native.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\shell.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\smarty.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\sql.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\vm_base.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\dsl\vm_shell.h">
+      <Filter>Header Files\xss\dsl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\lang\base.h">
+      <Filter>Header Files\xss\lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\lang\waxjs.h">
+      <Filter>Header Files\xss\lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\lang\js.h">
+      <Filter>Header Files\xss\lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\lang\debug.h">
+      <Filter>Header Files\xss\lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\lang\csharp.h">
+      <Filter>Header Files\xss\lang</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\xss\xss_compiler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\xss_context.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\xss_error.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\xss\xss_parser.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\xss</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\xss\xss_renderer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\xss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\xss_context.h">
+      <Filter>Header Files\xss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\xss_error.h">
+      <Filter>Header Files\xss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\xss_parser.h">
+      <Filter>Header Files\xss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\lang\typed.h">
+      <Filter>Header Files\xss\lang</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

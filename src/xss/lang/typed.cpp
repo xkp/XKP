@@ -29,7 +29,7 @@ XSSContext typed_lang::create_context()
 
 void typed_lang::init_compile_context(XSSContext ctx)
   {
-	//do nothing
+	  //do nothing
   }		
 
 bool typed_lang::render_code(XSSCode code, XSSContext ctx, std::ostringstream& result)
@@ -156,18 +156,18 @@ bool typed_lang::render_array_assignment(XSSExpression expr, XSSArguments index,
     if (index)
       {
         //here we render the "get" expression which will include the brackets,
-		  //this will break if the target language does not support the operator directly
+		    //this will break if the target language does not support the operator directly
         if (!render_expression(expr->left(), ctx, result))
           return false;
 
-		//result << '[';
+		    //result << '[';
         //
         //if (!render_arguments(index, ctx, result))
         //  return false;
 
         //result << "] ";
 		
-		result << operator_utils::to_string(op) << " ";
+		    result << operator_utils::to_string(op) << " ";
         if (!render_expression(expr->right(), ctx, result))
           return false;
       }
@@ -222,26 +222,26 @@ bool typed_lang::render_operator(XSSExpression expr, XSSContext ctx, std::ostrin
     //op
     if (right) //binary op
       {
-		//typical expression, render left << op << right
-		if (left->value())
-		  {
-			if (!render_value(left->value(), ctx, result))
-			  return false;
-		  }
-		else
-		  {
-			int lprec = operator_utils::precedence(left->op());
-			if (op_prec < lprec)
-			  result << "(";
+		    //typical expression, render left << op << right
+		    if (left->value())
+		      {
+			      if (!render_value(left->value(), ctx, result))
+			        return false;
+		      }
+		    else
+		      {
+			      int lprec = operator_utils::precedence(left->op());
+			      if (op_prec < lprec)
+			        result << "(";
 
-			if (!render_expression(left, ctx, result))
-			  return false;
+			      if (!render_expression(left, ctx, result))
+			        return false;
 
-			if (op_prec < lprec)
-			  result << ")";
-		  }
+			      if (op_prec < lprec)
+			        result << ")";
+		      }
 
-		result << " " << operator_utils::to_string(expr->op()) << " ";
+        result << " " << operator_utils::to_string(expr->op()) << " ";
 
         //right
         if (right->value())
@@ -264,20 +264,20 @@ bool typed_lang::render_operator(XSSExpression expr, XSSContext ctx, std::ostrin
       }
     else //unary
       {
-		operator_type op = expr->op();
-		bool pre = true;
-		switch(op)
-		  {
-			case op_inc:
-			case op_dec:
-			  {
-				pre = false;
-				break;
-			  }
-		  }
+		    operator_type op = expr->op();
+		    bool pre = true;
+		    switch(op)
+		      {
+			    case op_inc:
+			    case op_dec:
+			      {
+				    pre = false;
+				    break;
+			      }
+		      }
 		
-		if (pre)
-		  result << operator_utils::to_string(op);
+		    if (pre)
+		      result << operator_utils::to_string(op);
 
         if (left->value())
           {
@@ -297,9 +297,9 @@ bool typed_lang::render_operator(XSSExpression expr, XSSContext ctx, std::ostrin
               result << ")";
           }
 
-		if (!pre)
-		  result << operator_utils::to_string(op);
-	}
+		    if (!pre)
+		      result << operator_utils::to_string(op);
+      }
 
     return true;
   }
@@ -569,7 +569,7 @@ bool typed_lang::render_for(IStatementFor* info, XSSContext ctx, std::ostringstr
 
     result << ')';
 
-	XSSCode for_code = info->for_code();
+    XSSCode for_code = info->for_code();
     result << '\n' << "{";
     if (for_code && !render_code(for_code, ctx, result))
       return false;
@@ -888,7 +888,7 @@ bool typed_lang::render_assignment(XSSExpression expr, XSSValue left_value, XSSE
                     result << last_op.identifier() << " = ";
                     if (!render_expression(right, ctx, result))
                       return false;
-					break;
+                    break;
                   }
                 default: assert(false);
               }
@@ -962,24 +962,24 @@ bool typed_lang::render_read_operation(value_operation& op, XSSContext ctx, std:
                   }
                 break;
               }
-			case RESOLVE_TYPE:
-			  {
-				XSSType type = op.resolve_value();
+			      case RESOLVE_TYPE:
+			        {
+				        XSSType type = op.resolve_value();
                 if (!path.empty())
                     result << '.';
                 
-				result << type->output_id();
+				        result << type->output_id();
                 return true;
-			  }
-			case RESOLVE_INSTANCE:
-			  {
-				XSSObject inst = op.resolve_value();
+			        }
+			      case RESOLVE_INSTANCE:
+			        {
+				        XSSObject inst = op.resolve_value();
                 if (!path.empty())
                     result << '.';
                 
-				result << inst->output_id();
+				        result << inst->output_id();
                 return true;
-			  }
+			        }
           }
       }
 
@@ -1015,9 +1015,9 @@ bool typed_lang::render_call(value_operation& op, XSSContext ctx, std::ostringst
           }
         else
           {
-			if (!path.empty())
-			  result << '.';
-			result << mthd->output_id() << '(';
+			      if (!path.empty())
+			        result << '.';
+			      result << mthd->output_id() << '(';
             if (!render_arguments(op.args(), ctx, result))
               return false;
             result << ')';
@@ -1099,9 +1099,9 @@ bool typed_lang::render_index_operation(value_operation& op, XSSContext ctx, std
       }
 
     //no special case
-	if (!result.str().empty())
-		result << '.';
-	result << op.identifier() << '[';
+	  if (!result.str().empty())
+		  result << '.';
+	  result << op.identifier() << '[';
     if (!render_arguments(op.args(), ctx, result))
       return false;
     result << ']';

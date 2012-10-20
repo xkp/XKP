@@ -553,7 +553,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       typedef std::map<str, XSSType>  type_list;
       typedef std::pair<str, XSSType> type_list_pair;
 
-	  WeakXSSContext parent_; 
+      WeakXSSContext parent_;
       Language       lang_;
       XSSObject      this_;
       type_list      types_;

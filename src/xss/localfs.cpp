@@ -19,13 +19,13 @@ bool check(const fs::path path, const fs::path file, fs::path& result)
 //local_filesystem
 local_filesystem::local_filesystem()
   {
-	const char* ev = std::getenv("xsidioms");
-	if (ev)
-	  {
-		str idioms(ev);
-		if (!idioms.empty())
-			search_path_.push_back(idioms);
-	  }
+	  const char* ev = std::getenv("xsidioms");
+	  if (ev)
+	    {
+		    str idioms(ev);
+		    if (!idioms.empty())
+			    search_path_.push_back(idioms);
+	    }
   }
 
 fs::path local_filesystem::locate(const str& filename, fs::path base_path)

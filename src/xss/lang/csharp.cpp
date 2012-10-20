@@ -5,26 +5,26 @@ using namespace xkp;
 
 XSSContext cs_lang::create_context()
   {
-	XSSContext result = typed_lang::create_context();
+	  XSSContext result = typed_lang::create_context();
     
-	//td: generalize
+	  //td: generalize
     XSSType exception_type(new xss_type("Exception"));
     result->add_type(exception_type, str());
 
     result->register_symbol(RESOLVE_CONST, "#default_exception", exception_type);
 
-	return result;
+	  return result;
   }
 
 bool cs_lang::render_type_name(XSSType type, XSSContext ctx, std::ostringstream& result)
   {
     if (!type)
-	  {
-		result << "void";		
-		return true;
-	  }
+	    {
+		    result << "void";
+		    return true;
+	    }
 
-	if (type->is_array())
+	  if (type->is_array())
       {
         result << "List<";
         XSSType at = type->array_type();
