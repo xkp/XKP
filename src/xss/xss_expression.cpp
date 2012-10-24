@@ -450,24 +450,34 @@ void xss_arguments::bind(XSSContext ctx)
 
 XSSType xss_arguments::type()
   {
-    XSSType result;
+    if (type_)
+      return type_;
+
     xss_parameters::iterator it = args_.begin();
     xss_parameters::iterator nd = args_.end();
 
     for(; it != nd; it++)
       {
         XSSType curr = it->value()->type();
-        if (!result)
+        if (!type_)
           {
-            result = curr;
-            if (!result)
-              return result;
+            type_ = curr;
+            if (!type_)
+              return type_; //no type can be resolved
           }
-        else if (curr != result)
-          return XSSType();
+        else if (curr != type_)
+          {
+            type_.reset(); //td: handle this better
+            break;
+          }
       }
 
-    return result;
+    return type_;
+  }
+
+void xss_arguments::type(XSSType t)
+  {
+    type_ = t;
   }
 
 void xss_arguments::add(const str& name, XSSExpression value)
@@ -532,6 +542,11 @@ void value_operation::bind(RESOLVE_ITEM what, variant value)
 XSSArguments value_operation::args()
   {
     return args_;
+  }
+
+void value_operation::args(XSSArguments value)
+  {
+    args_ = value;
   }
 
 str value_operation::identifier()
@@ -957,6 +972,13 @@ bool xss_expression::is_constant()
     return value_->is_constant();
   }
 
+variant xss_expression::constant_value()
+  {
+    if (!value_)
+      return variant();
+    return value_->constant();
+  }
+
 operator_type xss_expression::op()
   {
     return op_;
@@ -985,6 +1007,17 @@ XSSExpression xss_expression::third()
 XSSOperator xss_expression::xop()
   {
     return xop_;
+  }
+
+void xss_expression::as_array(XSSArguments items)
+  {
+    op_ = op_none;
+    value_ = XSSValue(new xss_value(file_position(), file_position()));
+    
+    value_operation array_op(OP_ARRAY, str());
+    array_op.args(items);
+
+    value_->add_operation(array_op);
   }
 
 XSSValue xss_expression::value()
@@ -1215,6 +1248,11 @@ void xss_signature::bind(XSSContext ctx)
               }
           }
       }
+  }
+
+void xss_signature::arg_type(int idx, XSSType type)
+  {
+    items_[idx].type = type;
   }
 
 //xss_operator

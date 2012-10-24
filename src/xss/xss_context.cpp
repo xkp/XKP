@@ -597,6 +597,32 @@ variant xss_context::identity_value()
 	  return identity_obj_;
   }
   	
+bool xss_context::add_instance(XSSObject instance)
+  {
+    bool got_it = true;
+    switch(identity_)
+      {
+        case CTXID_TYPE:
+          {
+            XSSType type = identity_obj_;
+            type->add_instance(instance);
+
+            str id = instance->id();
+            if (!id.empty())
+              register_symbol(RESOLVE_INSTANCE, id, instance);
+            break;
+          }
+        default:
+          {
+            XSSContext pctx = parent_.lock();
+            if (pctx)
+              return pctx->add_instance(instance);
+          }
+      }
+
+    return false;
+  }
+
 variant xss_context::resolve(const str& id, RESOLVE_ITEM item_type)
   {
     resolve_info si;
@@ -1396,27 +1422,29 @@ void xss_object::set_type(XSSType type)
 
     if (typeless && type)
       {
+        //td: wassa again?
+        //0.9.5
         //shit, binding... long story short there is lag 
         //between obtaining a type and being loaded.
         //So some properties values may have been set
         //this code accounts for that
-        item_list::iterator it = items_.begin();
-        item_list::iterator nd = items_.end();
-        for(; it != nd; it++)
-          {
-            str         prop_name = it->first;
-            XSSProperty prop      = get_property(prop_name);
+        //item_list::iterator it = items_.begin();
+        //item_list::iterator nd = items_.end();
+        //for(; it != nd; it++)
+        //  {
+        //    str         prop_name = it->first;
+        //    XSSProperty prop      = get_property(prop_name);
 
-            if (prop)
-              {
-                Getter get = it->second.get;
-                if (!get)
-                  continue; // ?
+        //    if (prop)
+        //      {
+        //        Getter get = it->second.get;
+        //        if (!get)
+        //          continue; // ?
 
-                variant value = get->get(this);
-                add_property(prop_name, value, prop->type());
-              }
-          }
+        //        variant value = get->get(this);
+        //        add_property(prop_name, value, prop->type());
+        //      }
+          //}
       }
   }
 
@@ -1810,6 +1838,11 @@ void xss_object::insert_event(XSSEvent ev)
 void xss_object::insert_property(XSSProperty prop)
   {
     //td: !!! check dups
+    if (prop->id() == "array_property")
+      {
+        _asm nop;
+      }
+
     properties_->push_back(prop);
   }
 
@@ -2030,7 +2063,7 @@ void xss_object::add_property_(XSSProperty prop)
     //  }
   }
 
-XSSProperty xss_object::add_property(const str& name, variant value, XSSType type)
+XSSProperty xss_object::add_property(const str& name, XSSExpression value)
   {
     XSSProperty result;
     XSSProperty old_prop = get_property(name);
@@ -2047,8 +2080,7 @@ XSSProperty xss_object::add_property(const str& name, variant value, XSSType typ
             XSSProperty prop = *it;
             if (prop->id() == name)
               {
-                assert(false); //td:
-                //prop->set_value(value, type);
+                prop->expr_value(value);
                 return prop;
               }
           }
@@ -2056,17 +2088,15 @@ XSSProperty xss_object::add_property(const str& name, variant value, XSSType typ
         //otherwise
         result = XSSProperty(new xss_property());
         result->copy(XSSObject(old_prop));
-        result->this_ = shared_from_this();
-        
-        assert(false);
-        //result->set_value(value, type);
+        result->expr_value(value);
+        //result->this_ = shared_from_this(); //td: !!! check what is this for, it dont look good
       }
 
     if (!result)
-      result = XSSProperty(new xss_property(name, type, value, shared_from_this()));
+      result = XSSProperty(new xss_property(name, value, shared_from_this()));
 
     //do 'this' of xss_object the parent of property
-    result->set_parent(XSSObject(this));
+    result->set_parent(shared_from_this());
 
     properties_->push_back(result);
     return result;
@@ -2079,6 +2109,31 @@ void xss_object::register_property(const str& name, XSSProperty new_prop)
       {
         properties_->push_back(new_prop);
       }
+  }
+
+XSSProperty xss_object::instantiate_property(const str& prop_name)
+  {
+    XSSProperty result = get_shallow_property(prop_name);
+    if (result)
+      return result; //already have it
+
+    XSSProperty type_prop = get_property(prop_name);
+    if (type_prop)
+      {
+        result = XSSProperty(new xss_property());
+        result->copy(XSSObject(type_prop));
+        
+        if (prop_name == "array_property")
+          {
+            _asm nop;
+          }
+        
+        properties_->push_back(result);
+
+        return result;
+      }
+
+    return XSSProperty();
   }
 
 void xss_object::register_method(const str &name, XSSMethod new_mthd)
@@ -2323,6 +2378,95 @@ XSSArguments xss_type::get_constructor(XSSArguments args)
     return XSSArguments();
   }
 
+bool xss_type::accepts_child(XSSObject child, PARENT_CHILD_ACTION& result)
+  {
+    XSSType child_type = child->type();
+    if (!child_type)
+      return false;
+
+    parent_policy_list::iterator it = child_policy_.begin(); 
+    parent_policy_list::iterator nd = child_policy_.end(); 
+
+    for(; it != nd; it++)
+      {
+        if (it->match_all)
+          {
+            result = it->action;
+            return result != PCA_REJECT;
+          }
+
+        if (it->type)
+          {
+            XSSType curr = child_type;
+            bool    found = false;
+            while(!found && curr)
+              {
+                if (curr == it->type)
+                  {
+                    result = it->action;
+                    return result != PCA_REJECT;
+                  }
+
+                curr = curr->type();
+              }
+          }
+      }
+
+    return false;
+  }
+
+bool xss_type::accepts_parent(XSSObject parent, PARENT_CHILD_ACTION& result)
+  {
+    XSSType parent_type = parent->type();
+    if (!parent_type)
+      return false;
+
+    parent_policy_list::iterator it = parent_policy_.begin(); 
+    parent_policy_list::iterator nd = parent_policy_.end(); 
+
+    for(; it != nd; it++)
+      {
+        if (it->match_all)
+          {
+            result = it->action;
+            return result != PCA_REJECT;
+          }
+
+        if (it->type)
+          {
+            XSSType curr = parent_type;
+            bool    found = false;
+            while(!found && curr)
+              {
+                if (curr->type() == it->type)
+                  {
+                    result = it->action;
+                    return result != PCA_REJECT;
+                  }
+
+                curr = curr->type();
+              }
+          }
+      }
+
+    return false;
+  }
+
+void xss_type::add_instance(XSSObject instance)
+  {
+    all_instances_->push_back(instance);
+  }
+
+void xss_type::add_child_policy(parent_policy& policy)
+  {
+    child_policy_.push_back(policy);
+  }
+
+void xss_type::add_parent_policy(parent_policy& policy)
+  {
+    parent_policy_.push_back(policy);
+  }
+
 void xss_type::as_enum()
   {
     is_enum_ = true;
@@ -2424,24 +2568,24 @@ xss_property::xss_property(const xss_property& other):
 	  type_ = other.type_;
   }
 
-xss_property::xss_property(const str& _name, XSSType _type, variant _value, XSSObject _this_):
+xss_property::xss_property(const str& _name, XSSExpression _value, XSSObject _this_):
 	this_(_this_),
-	value_(_value)
+	expr_value_(_value)
   {
     DYNAMIC_INHERITANCE(xss_property)
 	  id_ = _name;
-	  type_ = _type;
+	  //type_ = _type; //td: 0.9.5
   }
 
-xss_property::xss_property(const str& _name, XSSType _type, variant _value, variant _get, variant _set, XSSObject _this_):
+xss_property::xss_property(const str& _name, XSSExpression _value, variant _get, variant _set, XSSObject _this_):
 	get_(_get),
 	set_(_set),
 	this_(_this_),
-	value_(_value)
+	expr_value_(_value)
   {
     DYNAMIC_INHERITANCE(xss_property)
 	  id_ = _name;
-	  type_ = _type;
+	  //type_ = _type;
   }
 
 str xss_property::get_name()
@@ -2455,28 +2599,43 @@ void xss_property::copy(XSSObject obj)
     //XSSProperty prop = variant_cast<XSSProperty>(obj, XSSProperty());
     if (prop)
       {
+        //td: !!! rewrite xss_property
         get_ = prop->get_;
 			  set_ = prop->set_;
 			  flags = prop->flags;
 			  this_ = prop->this_;
 			  value_ = prop->value_;
 
-        XSSObject get = obj->find("get");
-        XSSObject set = obj->find("set");
-
-        if (get) 
-          {
-            XSSObject cpy(new xss_object);
-            cpy->copy(get);
-            add_child(cpy);
-          }
+        expr_value_ = prop->expr_value_;
+        getter_ = prop->getter_;
+        setter_ = prop->setter_;
+        code_getter_ = prop->code_getter_; //td: think this through... we may need to copy the code contents
+        code_setter_ = prop->code_setter_;
+        prop_type_ = prop->prop_type_;
         
-        if (set) 
+        if (prop->instance_value_)
           {
-            XSSObject cpy(new xss_object);
-            cpy->copy(set);
-            add_child(cpy);
+            instance_value_ = XSSObject(new xss_object);
+            instance_value_->copy(prop->instance_value_);
           }
+
+        //td: do we need any of this anymore?
+        //XSSObject get = obj->find("get");
+        //XSSObject set = obj->find("set");
+
+        //if (get) 
+        //  {
+        //    XSSObject cpy(new xss_object);
+        //    cpy->copy(get);
+        //    add_child(cpy);
+        //  }
+        //
+        //if (set) 
+        //  {
+        //    XSSObject cpy(new xss_object);
+        //    cpy->copy(set);
+        //    add_child(cpy);
+        //  }
       }
 
     xss_object::copy(obj);
@@ -2535,6 +2694,11 @@ void xss_property::copy(XSSObject obj)
 //
 //    return variant();
 //  }
+
+XSSExpression xss_property::expr_value()
+  {
+    return expr_value_;
+  }
 
 void xss_property::expr_value(XSSExpression value)
   {
@@ -2599,6 +2763,16 @@ void xss_property::property_type(XSSType type)
 XSSType xss_property::property_type()
   {
     return prop_type_;
+  }
+
+XSSObject xss_property::instance_value()
+  {
+    return instance_value_;
+  }
+
+void xss_property::instance_value(XSSObject value)
+  {
+    instance_value_ = value;
   }
 
 void xss_property::bind(XSSContext ctx)
@@ -2705,7 +2879,7 @@ XSSType xss_property::type()
     //  }
 
     //return type_;
-    assert(false); //whats all this crap again?
+    //assert(false); //whats all this crap again?
     return XSSType();
   }
 

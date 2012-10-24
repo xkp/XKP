@@ -1,0 +1,28 @@
+<classes>
+    <class id="test_class" super="user_class">
+        <property id="array_property">
+            <value>
+                <item value="Hello, world"/>
+                <item value="Goodbye, world"/>
+            </value>
+        </property>
+
+        <property id="component_property" type="simple_class">
+            <value name="oh boy"/>
+        </property>
+
+        <property id="null_component_property" type="simple_class"/>
+
+        <user_class id="child_object2" simple_property="0">
+            <property id="array_property">
+                <value>
+                    <item value="Goodbye, world"/>
+                    <item value="Hello, world"/>
+                </value>
+            </property>
+        </user_class>
+
+        <child_object simple_property="23">
+        </child_object>
+    </class>
+</classes>

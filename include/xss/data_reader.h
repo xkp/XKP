@@ -21,6 +21,12 @@ typedef reference<IDataReader> DataReader;
 typedef std::map<str, str>      attribute_map;
 typedef std::vector<DataEntity> entity_list;
 
+struct data_entity_visitor
+  {
+    virtual void attribute(const str& attr, variant value) = 0;
+    virtual void child(DataEntity de)                      = 0;
+  };
+
 class data_entity
   { 
     public:
@@ -33,6 +39,7 @@ class data_entity
       DataEntity  create_child();
       entity_list find_all(const str& type_name);
       DataEntity  get(const str& type_name);
+      void        visit(data_entity_visitor* visitor);
     private:
       str type_;    
       str id_;
