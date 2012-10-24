@@ -41,7 +41,7 @@ namespace Excess.Project
 	// IronPython does not need a CodeBehindCodeGenerator because all the code should be inline, so we disable
 	// it setting a null GUID for the class that is supposed to implement it.
 	[WAProvideLanguageProperty(typeof(WAExcessProjectFactory), "CodeBehindCodeGenerator", "{00000000-0000-0000-0000-000000000000}")]
-    //[ProvideMSBuildTargets("IronPythonCompilerTasks", @"$PackageFolder$\IronPython.targets")]
+    [ProvideMSBuildTargets("ExcessCompilerTasks", @"$PackageFolder$\Excess.targets")]
     [ProvideBindingPathAttribute]
     //td
     //[RegisterSnippetsAttribute(GuidList.guidExcessLanguageString, false, 131,

@@ -156,6 +156,7 @@ namespace Excess.CompilerTasks
             if (errors.Count == 0)
             {
                 Engine engine = new Engine();
+                engine.DefaultToolsVersion = "4.0";
 
                 // Instantiate a new FileLogger to generate build log
                 myLogger logger = new myLogger(Log);
@@ -185,6 +186,7 @@ namespace Excess.CompilerTasks
                     Console.WriteLine("Build succeeded.");
                 else
                     Console.WriteLine(@"Build failed. View C:\temp\build.log for details");
+                
                 return true;
             }
 
