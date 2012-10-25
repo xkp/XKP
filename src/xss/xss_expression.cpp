@@ -782,14 +782,14 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
                         left.what  = RESOLVE_TYPE;
                         left.type  = current;
                       }
-					else if (resolver.type->is_array())
-					  {
+					          else if (resolver.type->is_array())
+					            {
                         current = resolver.type->array_type();
-						it->bind(resolver.what, resolver.value);
-						left.what  = RESOLVE_TYPE;
-						left.type  = current;
-					  }
-					else 
+						            it->bind(resolver.what, resolver.value);
+						            left.what  = RESOLVE_TYPE;
+						            left.type  = current;
+					            }
+					          else 
                       {
                         param_list error;
                         error.add("identifier", it->identifier());
