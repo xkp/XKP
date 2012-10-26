@@ -1,0 +1,13 @@
+﻿<application id="$safeprojectname$" src="application.xs" title="$safeprojectname$">
+
+  <resources>
+    <!-- resources declaration -->
+  </resources>
+
+  <scene>
+
+    <!-- scene elements -->
+
+  </scene>
+
+</application>

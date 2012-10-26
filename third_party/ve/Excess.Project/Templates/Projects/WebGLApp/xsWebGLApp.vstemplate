@@ -1,0 +1,21 @@
+<VSTemplate Version="2.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>Excess WebGL Application</Name>
+    <Description>A project for creating a webgl xs application</Description>
+    <Icon>__TemplateIcon.ico</Icon>
+    <ProjectType>Excess</ProjectType>
+    <SortOrder>50</SortOrder>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>WebGLApplication</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="xsWebGLApp.xsproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">application.xml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">application.xs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="project.xml">project.xml</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

@@ -271,6 +271,14 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="Project.jpg" />
+	<None Include="Templates\Projects\WebGLApp\application.xs" />
+    <None Include="Templates\Projects\WebGLApp\xsWebGLApp.xsproj">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Templates\Projects\ThreeJSApp\application.xs" />
+    <None Include="Templates\Projects\ThreeJSApp\xsThreeJSApp.xsproj">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Templates\Projects\WPFApp\WPFApp.xs" />
     <None Include="Templates\Projects\WPFApp\xsWPFApp.xsproj">
       <SubType>Designer</SubType>
@@ -282,6 +290,21 @@
     <VSTemplate Include="Templates\Items\WPFClass\WPFClass.vstemplate" />
     <Content Include="Templates\Items\WPFClass\wclass.xml" />
     <Content Include="Templates\Items\WPFClass\WPFClass.ico" />
+	<None Include="Templates\Projects\ThreeJSApp\__TemplateIcon.ico" />
+    <None Include="Templates\Projects\ThreeJSApp\project.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <VSTemplate Include="Templates\Projects\ThreeJSApp\xsThreeJSApp.vstemplate">
+      <SubType>Designer</SubType>
+    </VSTemplate>
+    <None Include="Templates\Projects\WebGLApp\__TemplateIcon.ico" />
+    <Content Include="Templates\Projects\WebGLApp\application.xml" />
+    <None Include="Templates\Projects\WebGLApp\project.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <VSTemplate Include="Templates\Projects\WebGLApp\xsWebGLApp.vstemplate">
+      <SubType>Designer</SubType>
+    </VSTemplate>
     <Content Include="Templates\Projects\WPFApp\WPFApp.ico" />
     <Content Include="Templates\Projects\WPFApp\WPFApp.xml" />
     <Content Include="VSIXProject_large.png">
