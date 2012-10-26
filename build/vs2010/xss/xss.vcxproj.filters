@@ -153,6 +153,9 @@
     <ClCompile Include="..\..\..\src\xss\xss_expression.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\lang\java.cpp">
+      <Filter>Source Files\xss\lang</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\base.h">
@@ -279,6 +282,12 @@
       <Filter>Header Files\xss</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\xss\lang\typed.h">
+      <Filter>Header Files\xss\lang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\lang_factory.h">
+      <Filter>Header Files\xss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\lang\java.h">
       <Filter>Header Files\xss\lang</Filter>
     </ClInclude>
   </ItemGroup>

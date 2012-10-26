@@ -47,8 +47,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -85,6 +84,7 @@
     <ClCompile Include="..\..\..\src\xss\dsl_out.cpp" />
     <ClCompile Include="..\..\..\src\xss\html_parser.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\csharp.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\java.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\typed.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang_factory.cpp" />
     <ClCompile Include="..\..\..\src\xss\localfs.cpp" />
@@ -135,9 +135,11 @@
     <ClInclude Include="..\..\..\include\xss\lang\base.h" />
     <ClInclude Include="..\..\..\include\xss\lang\csharp.h" />
     <ClInclude Include="..\..\..\include\xss\lang\debug.h" />
+    <ClInclude Include="..\..\..\include\xss\lang\java.h" />
     <ClInclude Include="..\..\..\include\xss\lang\js.h" />
     <ClInclude Include="..\..\..\include\xss\lang\typed.h" />
     <ClInclude Include="..\..\..\include\xss\lang\waxjs.h" />
+    <ClInclude Include="..\..\..\include\xss\lang_factory.h" />
     <ClInclude Include="..\..\..\include\xss\xss_compiler.h" />
     <ClInclude Include="..\..\..\include\xss\xss_context.h" />
     <ClInclude Include="..\..\..\include\xss\xss_error.h" />
