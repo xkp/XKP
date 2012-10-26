@@ -22,7 +22,7 @@ var app_width = 744;
 var app_height = 370;
 application.events = new ev.EventHolder();
 var SoundUtils = new ui.SoundUtils();
-		var streamer = new stream.Streamer();	
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
 		if(drawingCanvas){
 			var client =
@@ -43,14 +43,17 @@ var SoundUtils = new ui.SoundUtils();
         }		
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/ui_ripple.jpg",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image1;
 				global_package.events.addListener("loaded", function()
 				{

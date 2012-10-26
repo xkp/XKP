@@ -27,25 +27,30 @@ var g_elapsed;
 var g_delta;	
 var scene = new THREE.Scene();
 scene.mouse_thru = true;
-var streamer;
+var streamer = {};
 var manager = new threejs.Manager(scene, renderer, null, canvas_position);
 var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
+manager.events.parent = manager;
+manager.c_anims = [];
+manager.js_anims = [];
+manager.c_skins = [];
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 var clock = new THREE.Clock();
 application.events = new ev.EventHolder();
-		var streamer = new stream.Streamer();	
-		streamer.manager = manager;
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
-	// --------RESOURCES---------
+	streamer.manager = manager;
+// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
 		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test1.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -62,6 +67,7 @@ application.events = new ev.EventHolder();
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test2.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -78,6 +84,7 @@ application.events = new ev.EventHolder();
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test3.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -95,20 +102,25 @@ application.events = new ev.EventHolder();
 			for(var i = 0; i < global_package.items.length; i++)
 			{
 				if(global_package.items[i].id == "pack_1")
+				{		
 					global_package.items[i].children['__image4'] = child_;
-			}
+				}					
+			}	
 			var child_ = {};
 			child_.type_ = 'image';
 			for(var i = 0; i < global_package.items.length; i++)
 			{
 				if(global_package.items[i].id == "pack_1")
+				{		
 					global_package.items[i].children['__image5'] = child_;
-			}
+				}					
+			}	
                 pack_1.add_item(
 		{
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test4.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -125,6 +137,7 @@ application.events = new ev.EventHolder();
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/test5.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -156,6 +169,8 @@ if (g_elapsed < 0)
 else
 	g_delta  = now - g_elapsed;  
 g_elapsed = now; 
+if(!g_delta) g_delta = 0;
+manager.delta = g_delta;
 c_delta = clock.getDelta(),
 c_elapsed = clock.getElapsedTime() * 10;
 manager.events.dispatch("update", [g_delta, g_elapsed]);	

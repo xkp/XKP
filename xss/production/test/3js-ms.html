@@ -40,7 +40,7 @@ var lbl0;
 var cylinder_material;var camera_1;var light;var cylinder_1;
 var application = {};
 application.events = new ev.EventHolder();	
-		var streamer = new stream.Streamer();	
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
 		var g_sequence_manager = new state.Manager();
         function default_interpolate(a, b, t)
@@ -190,9 +190,10 @@ fade_1 =
 new fade_anim(
 g_sequence_manager);
 		    lbl0 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-            camera_1.position = ;
-            light.position = ;
-            cylinder_1.rotation = ;
+            camera_1.position.z = 500;
+            light.position.y = 0.5;
+            light.position.z = 1;
+            set_rotation_x(cylinder_1.rotation, 30);
 	cylinder_1.events.addListener("click", function()
 	{    
 		anim_1.start();

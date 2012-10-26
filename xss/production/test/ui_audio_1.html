@@ -33,88 +33,106 @@ var SoundUtils = new ui.SoundUtils();
 			var g_ui_root = ui_.root;
 			var mouse_pressed = false;
 		}		
-		var streamer = new stream.Streamer();	
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/stop.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image1;
 				global_package.events.addListener("loaded", function()
 				{
 					__image1 = streamer.get_resource("__image1");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/stop_over.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image2;
 				global_package.events.addListener("loaded", function()
 				{
 					__image2 = streamer.get_resource("__image2");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/bomb.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image3;
 				global_package.events.addListener("loaded", function()
 				{
 					__image3 = streamer.get_resource("__image3");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/AK-47.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image4;
 				global_package.events.addListener("loaded", function()
 				{
 					__image4 = streamer.get_resource("__image4");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__audio1",
 		resource_type:	RESOURCE_AUDIO,
 		src:			"sounds/explosion.mp3",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __audio1;
 				global_package.events.addListener("loaded", function()
 				{
 					__audio1 = streamer.get_resource("__audio1");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__audio2",
 		resource_type:	RESOURCE_AUDIO,
 		src:			"sounds/shoots.mp3",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __audio2;
 				global_package.events.addListener("loaded", function()
 				{

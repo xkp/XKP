@@ -1,0 +1,9 @@
+<project entry_point="../idioms/wax/server.xss" language="waxjs" target="xs_blend_service.xml" output="xs_blend_service.js">
+    <path>
+        <output path="../production/wax"/>
+    </path>
+
+    <idiom src="../idioms/wax/wax.xml"/>
+    <idiom src="../idioms/wax/node-shell.xml"/>
+</project>
+

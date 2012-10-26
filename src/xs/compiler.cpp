@@ -2168,9 +2168,11 @@ struct perrors_validate
   private:
     void process_error()
       {
+        if (!token_stack)
+          return;
+
         // why is NULL?
         assert(token != NULL);
-        assert(token_stack != NULL);
 
         int idx_lalr  = token->Symbol;
         line          = token->Line;

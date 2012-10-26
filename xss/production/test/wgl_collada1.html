@@ -28,27 +28,30 @@ var g_elapsed;
 var g_delta;	
 var scene = new THREE.Scene();
 scene.mouse_thru = true;
-var streamer;
+var streamer = {};
 var manager = new threejs.Manager(scene, renderer, null, canvas_position);
 var three_utils = new threejs.Utils();
 manager.events = new ev.EventHolder();
 manager.events.parent = manager;
 manager.c_anims = [];
+manager.js_anims = [];
+manager.c_skins = [];
 var app_width = window.innerWidth;
 var app_height = window.innerHeight;
 var application = {};
 var clock = new THREE.Clock();
 application.events = new ev.EventHolder();
-		var streamer = new stream.Streamer();	
-		streamer.manager = manager;
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
-	// --------RESOURCES---------
+	streamer.manager = manager;
+// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
 		{
 		id:				"eurofighter",
 		resource_type:	RESOURCE_COLLADA_MODEL,
 		src:			"model/eurofighter/eurofighter.dae",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -65,7 +68,7 @@ application.events = new ev.EventHolder();
 			for(var i = 0; i < global_package.items.length; i++)
 			{
 				if(global_package.items[i].id == "eurofighter")
-				{
+				{		
 					global_package.items[i].children['model_cam'] = child_;
 				}					
 			}	
@@ -74,6 +77,7 @@ application.events = new ev.EventHolder();
 		id:				"pump",
 		resource_type:	RESOURCE_COLLADA_MODEL,
 		src:			"model/pump/pump.dae",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -90,7 +94,7 @@ application.events = new ev.EventHolder();
 			for(var i = 0; i < global_package.items.length; i++)
 			{
 				if(global_package.items[i].id == "pump")
-				{
+				{		
 					global_package.items[i].children['model_cam1'] = child_;
 				}					
 			}	
@@ -99,7 +103,7 @@ application.events = new ev.EventHolder();
 			for(var i = 0; i < global_package.items.length; i++)
 			{
 				if(global_package.items[i].id == "pump")
-				{
+				{		
 					global_package.items[i].children['model_cam2'] = child_;
 				}					
 			}	
@@ -108,7 +112,7 @@ application.events = new ev.EventHolder();
 			for(var i = 0; i < global_package.items.length; i++)
 			{
 				if(global_package.items[i].id == "pump")
-				{
+				{		
 					global_package.items[i].children['model_cam3'] = child_;
 				}					
 			}	
@@ -133,6 +137,7 @@ else
 	g_delta  = now - g_elapsed;  
 g_elapsed = now; 
 if(!g_delta) g_delta = 0;
+manager.delta = g_delta;
 c_delta = clock.getDelta(),
 c_elapsed = clock.getElapsedTime() * 10;
 manager.events.dispatch("update", [g_delta, g_elapsed]);	

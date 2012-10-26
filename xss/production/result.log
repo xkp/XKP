@@ -87,6 +87,130 @@ log: [android] Rendering default files...
 log: Rendering Android Manifest...
 
 Success are greateful
+===[ animationsink.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Android Types...
+log: Rendering Sequence Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: lbl1
+log: Rendering instance: lbl2
+log: Rendering instance: lbl3
+log: Rendering instance: btn1
+log: Rendering instance: btn2
+log: Rendering instance: btn3
+log: Rendering instance: anim1
+log: Rendering instance: anim1
+log: Rendering instance: anim2
+log: Rendering instance: anim2
+log: Rendering instance: anim3
+log: Rendering instance: anim3
+log: Copying resource files...
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: Copying files...
+log: Rendering Android Manifest...
+
+Success are greateful
+===[ androidcollisions.project.xml ]================
+
+
+Error [404] File not found
+	file = d:/xkp/xss/samples/android/demos/androidcollisions/../../../idioms/android/classes.xmlERROR: Project:  androidcollisions.project.xml
+
+===[ androidcomponents.project.xml ]================
+
+
+Error [404] File not found
+	file = d:/xkp/xss/samples/android/demos/androidcomponents/../../../idioms/android/classes.xmlERROR: Project:  androidcomponents.project.xml
+
+===[ androidkitchensink.project.xml ]================
+
+
+Error [404] File not found
+	file = d:/xkp/xss/samples/android/demos/androidkitchensink/../../../idioms/android/classes.xmlERROR: Project:  androidkitchensink.project.xml
+
+===[ androidmaps.project.xml ]================
+
+
+Error [404] File not found
+	file = d:/xkp/xss/samples/android/demos/androidmaps/../../../idioms/android/classes.xmlERROR: Project:  androidmaps.project.xml
+
+===[ androidcollisions.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Android Types...
+log: Rendering Android Imports...
+log: Rendering class: smiley_ball
+log: Rendering Sequence Types...
+log: Rendering Java Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: __img1
+log: Rendering instance: __img2
+log: Rendering instance: __img3
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: __image1
+log: Rendering instance: __image2
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: Copying files...
+log: [jbox2d] Copying default files...
+log: Rendering Android Manifest...
+
+Success are greateful
+===[ maps.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 7
+log: Rendering Android Types...
+log: Rendering Sequence Types...
+log: Rendering Java Types...
+log: Rendering Android Imports...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: __div1
+log: Rendering instance: btnGallery
+log: Rendering instance: btnMaps
+log: Rendering instance: lblStatus
+log: Rendering instance: lblInformation
+log: Rendering instance: swtScene
+log: Rendering instance: lblSwicherInformation
+log: Rendering instance: imgGallery
+log: Rendering instance: mapController
+log: Copying resource files...
+log: Rendering instance: __resources1
+log: Rendering instance: ico_gallery
+log: Rendering instance: ico_maps
+log: Rendering instance: photos
+log: Rendering instance: worth_1
+log: Rendering instance: worth_2
+log: Rendering instance: worth_3
+log: Rendering instance: worth_4
+log: Rendering instance: worth_5
+log: Rendering instance: worth_6
+log: Rendering instance: worth_7
+log: Rendering instance: maps
+log: Rendering instance: holguin
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: Copying files...
+log: [jbox2d] Copying default files...
+log: Rendering Android Manifest...
+Error [idiom] Environment variable is not defined
+	variable_name = ANDROID_SDK
+	file = d:/xkp/xss/idioms/android/main.xssERROR: Project:  maps.project.xml
+
 ===[ figures2d.project.xml ]================
 
 
@@ -502,19 +626,19 @@ Success are greateful
 
 
 Error [404] File not found
-	file = c:/dev/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
 
 ===[ pairs.project.xml ]================
 
 
 Error [404] File not found
-	file = c:/dev/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
 
 ===[ simple.project.xml ]================
 
 
 Error [404] File not found
-	file = c:/dev/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
 
 ===[ 3js-ms.project.xml ]================(Tests)
 
@@ -524,6 +648,9 @@ log: Rendering 3js Types...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: Rendering UI...
+log: vector3d
+log: vector3d
+log: rotation_class
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -539,6 +666,8 @@ log: Rendering Resources...
 log: Rendering 3js Types...
 log: Rendering UI Types...
 log: Rendering UI...
+log: vector3d
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -552,7 +681,12 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
+log: rotation_class
+log: vector3d
+log: vector3d
+log: rotation_class
 log: Rendering UI...
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -567,6 +701,7 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -581,6 +716,7 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -594,6 +730,8 @@ Success are greateful
 log: Rendering 3js Types...
 log: Rendering UI Types...
 log: Rendering UI...
+log: vector3d
+log: vector3d
 Success are greateful
 ===[ 3js_geometries.project.xml ]================(Tests)
 
@@ -601,6 +739,16 @@ Success are greateful
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: vector3d
+log: vector3d
+log: vector3d
+log: rotation_class
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
 Success are greateful
 ===[ 3js_lights.project.xml ]================(Tests)
 
@@ -608,12 +756,20 @@ Success are greateful
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
 Success are greateful
 ===[ 3js_materials.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering 3js Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -627,6 +783,17 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: vector3d
+log: vector3d
+log: rotation_class
+log: vector3d
+log: rotation_class
+log: vector3d
+log: rotation_class
+log: vector3d
+log: rotation_class
+log: vector3d
+log: rotation_class
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -638,6 +805,9 @@ Success are greateful
 
 
 log: Rendering 3js Types...
+log: vector3d
+log: vector3d
+log: vector3d
 Success are greateful
 ===[ 3js_particle_system.project.xml ]================(Tests)
 
@@ -645,6 +815,7 @@ Success are greateful
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: vector3d
 Success are greateful
 ===[ 3js_transform.project.xml ]================(Tests)
 
@@ -652,6 +823,13 @@ Success are greateful
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: vector3d
+log: vector3d
+log: rotation_class
+log: vector3d
+log: vector3d
+log: rotation_class
+log: vector3d
 Success are greateful
 ===[ animtest.project.xml ]================(Tests)
 
@@ -660,9 +838,50 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: sequence
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
+Success are greateful
+===[ blend_xs.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: rotation_class
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+Success are greateful
+===[ blend_xs_wgl.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: rotation_class
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/loaders/ColladaLoader.js
 Success are greateful
 ===[ box2d3.project.xml ]================(Tests)
 
@@ -722,6 +941,8 @@ log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: vector3d
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -737,7 +958,22 @@ log: Rendering Resources...
 log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: Rendering 3js Types...
+log: rotation_class
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
 log: Rendering UI...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -758,6 +994,7 @@ log: Rendering Sequence Types...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -923,6 +1160,8 @@ log: Rendering Resources...
 log: Rendering 3js Types...
 log: Rendering UI Types...
 log: Rendering UI...
+log: vector3d
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -936,7 +1175,12 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
+log: rotation_class
+log: vector3d
+log: vector3d
+log: rotation_class
 log: Rendering UI...
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -949,6 +1193,11 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -988,6 +1237,8 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: component
+log: component
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1016,6 +1267,21 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1030,6 +1296,11 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: vector3d
+log: vector3d
+log: rotation_class
+log: vector3d
+log: rotation_class
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1047,6 +1318,11 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: vector3d
+log: vector3d
+log: rotation_class
+log: vector3d
+log: rotation_class
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1064,6 +1340,8 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
 log: Rendering UI...
+log: component
+log: component
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1234,6 +1512,9 @@ log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
 log: Rendering UI...
+log: vector3d
+log: vector3d
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1248,6 +1529,7 @@ ERROR: Project:  wax1.project.xml
 ===[ wax2.project.xml ]================(Tests)
 
 
+log: object
 Success are greateful
 ===[ wax3.project.xml ]================(Tests)
 
@@ -1262,6 +1544,7 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1273,19 +1556,152 @@ log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
 Success are greateful
+===[ wgl_coll_anim_2.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/loaders/ColladaLoader.js
+Success are greateful
+===[ wgl_coll_anim_3.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: rotation_class
+log: vector3d
+log: vector3d
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/loaders/ColladaLoader.js
+Success are greateful
 ===[ wgl_collada.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
-Error [xss-linker] Invalid assign
-	file = c:/dev/xkp/xss/idioms/common-js/event.xssERROR: Project:  wgl_collada.project.xml
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: rotation_class
+log: vector3d
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/loaders/ColladaLoader.js
+Success are greateful
+===[ wgl_collada1.project.xml ]================(Tests)
 
+
+log: Rendering Resources...
+log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/loaders/ColladaLoader.js
+Success are greateful
+===[ wgl_collada2.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/loaders/ColladaLoader.js
+Success are greateful
+===[ wgl_collada3.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: rotation_class
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/loaders/ColladaLoader.js
+Success are greateful
 ===[ wgl_cube_img.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1301,16 +1717,55 @@ Success are greateful
 
 
 log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: rotation_class
+log: vector3d
+log: rotation_class
+log: vector3d
+log: vector3d
+log: rotation_class
+log: vector3d
+log: rotation_class
+log: vector3d
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
+Success are greateful
+===[ wgl_flamingo.project.xml ]================(Tests)
+
+
+log: Rendering Resources...
+log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: dependency: ../js/streamer.js
+log: dependency: ../js/three/Three.js
+log: dependency: ../js/three/Stats.js
+log: dependency: ../js/three/Utils.js
+log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/loaders/ColladaLoader.js
 Success are greateful
 ===[ wgl_head.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1329,6 +1784,16 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1344,6 +1809,9 @@ Success are greateful
 
 
 log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
@@ -1354,6 +1822,11 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1372,6 +1845,17 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: rotation_class
+log: vector3d
+log: rotation_class
+log: vector3d
+log: rotation_class
+log: vector3d
+log: rotation_class
+log: vector3d
+log: rotation_class
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1388,6 +1872,10 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1424,6 +1912,21 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1435,13 +1938,38 @@ log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
 log: dependency: ../js/three/loaders/ColladaLoader.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_pp_embedded.project.xml ]================(Tests)
 
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: vector3d
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
+log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1453,12 +1981,23 @@ log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
+log: dependency: ../js/three/fonts.js
 log: dependency: ../js/three/loaders/ColladaLoader.js
+log: dependency: ../js/three/ShaderExtras.js
+log: dependency: ../js/three/postprocessing/EffectComposer.js
+log: dependency: ../js/three/postprocessing/RenderPass.js
+log: dependency: ../js/three/postprocessing/ShaderPass.js
+log: dependency: ../js/three/postprocessing/BloomPass.js
+log: dependency: ../js/three/postprocessing/FilmPass.js
+log: dependency: ../js/three/postprocessing/DotScreenPass.js
+log: dependency: ../js/three/postprocessing/TexturePass.js
+log: dependency: ../js/three/postprocessing/MaskPass.js
 Success are greateful
 ===[ wgl_reflection_cube.project.xml ]================(Tests)
 
 
 log: Rendering WebGL Types...
+log: vector3d
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
@@ -1468,6 +2007,7 @@ Success are greateful
 
 
 log: Rendering WebGL Types...
+log: vector3d
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
@@ -1478,6 +2018,8 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1494,6 +2036,8 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1509,6 +2053,7 @@ Success are greateful
 
 
 log: Rendering WebGL Types...
+log: vector3d
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
@@ -1518,6 +2063,7 @@ Success are greateful
 
 
 log: Rendering WebGL Types...
+log: vector3d
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
@@ -1527,11 +2073,19 @@ Success are greateful
 
 
 log: Rendering WebGL Types...
+log: vector3d
+log: vector3d
+log: vector3d
+log: rotation_class
 log: dependency: ../js/three/Three.js
 log: dependency: ../js/three/Stats.js
 log: dependency: ../js/three/Utils.js
 log: dependency: ../js/three/Detector.js
 log: dependency: ../js/three/fonts.js
+Success are greateful
+===[ xs_blend_service.project.xml ]================(Tests)
+
+
 Success are greateful
 ===[ xs_zip_service.project.xml ]================(Tests)
 
@@ -1544,6 +2098,7 @@ Success are greateful
 ===[ xs_zip_users.project.xml ]================(Tests)
 
 
+log: object
 Success are greateful
 ===[ xss1.project.xml ]================(Tests)
 
@@ -1890,7 +2445,7 @@ log: /usr/lib/source.xxx
 Error [vm] Cannot resolve
 	object = null
 	property = begin
-	file = c:/dev/xkp/xss/tests/xss14.project.xmlERROR: Project:  xss14.project.xml
+	file = d:/xkp/xss/tests/xss14.project.xmlERROR: Project:  xss14.project.xml
 
 ===[ xss15.project.xml ]================(Tests)
 
@@ -2115,7 +2670,7 @@ Success are greateful
 Error [syntax-error] Error while compiling xs
 	line = 4
 	column = 1
-	file = c:/dev/xkp/xss/tests/xss5.xssERROR: Project:  xss5.project.xml
+	file = d:/xkp/xss/tests/xss5.xssERROR: Project:  xss5.project.xml
 
 ===[ xss6.project.xml ]================(Tests)
 

@@ -14,7 +14,6 @@ SessionManager.on("expired", function(sid){
 });
         var mysql  = require("mysql");
         var child_process  = require("child_process");
-            application.compressor_db = {hostname : "localhost",user : "root",password : "xs@2011",database : "Compressor"};
 	application.home = function(request,response) 
 	{
 SessionManager.httpRequest(request, response, function (err, session) {

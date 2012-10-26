@@ -51,6 +51,7 @@ application.events = new ev.EventHolder();
 		id:				"model_1",
 		resource_type:	RESOURCE_JSON_MODEL,
 		src:			"model/monster/monster.js",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -106,6 +107,7 @@ else
 	g_delta  = now - g_elapsed;  
 g_elapsed = now; 
 if(!g_delta) g_delta = 0;
+manager.delta = g_delta;
 c_delta = clock.getDelta(),
 c_elapsed = clock.getElapsedTime() * 10;
 manager.events.dispatch("update", [g_delta, g_elapsed]);	

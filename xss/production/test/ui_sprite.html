@@ -21,7 +21,7 @@ var app_width = 600;
 var app_height = 600;
 application.events = new ev.EventHolder();
 var SoundUtils = new ui.SoundUtils();
-		var streamer = new stream.Streamer();	
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
 		if(drawingCanvas){
 			var client =
@@ -37,47 +37,83 @@ var SoundUtils = new ui.SoundUtils();
 		}		
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/smile_grin_48.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image1;
 				global_package.events.addListener("loaded", function()
 				{
 					__image1 = streamer.get_resource("__image1");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/smile_sad_48.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image2;
 				global_package.events.addListener("loaded", function()
 				{
 					__image2 = streamer.get_resource("__image2");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"monster_sheet",
 		resource_type:	RESOURCE_SPRITE,
 		src:			"images/monster.png",
+		runtime_src:	null,
 		frame_width:	64,
 		frame_height:	64,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var monster_sheet;
 				global_package.events.addListener("loaded", function()
 				{
 					monster_sheet = streamer.get_resource("monster_sheet");
 				});
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "monster_sheet")
+				{		
+					global_package.items[i].children['m_run_l'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "monster_sheet")
+				{		
+					global_package.items[i].children['m_run_d'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "monster_sheet")
+				{		
+					global_package.items[i].children['m_idle'] = child_;
+				}					
+			}	
 		for(var i = 0; i < global_package.items.length; i++)
         {						
 			if(global_package.items[i].id == "monster_sheet")
@@ -118,19 +154,76 @@ var SoundUtils = new ui.SoundUtils();
 				});
 		}		
                 global_package.add_item(
-            {
+		{
 		id:				"mario_sheet",
 		resource_type:	RESOURCE_SPRITE,
 		src:			"images/mario_luigi.png",
+		runtime_src:	null,
 		frame_width:	30,
 		frame_height:	45,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var mario_sheet;
 				global_package.events.addListener("loaded", function()
 				{
 					mario_sheet = streamer.get_resource("mario_sheet");
 				});
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "mario_sheet")
+				{		
+					global_package.items[i].children['m_idle_r'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "mario_sheet")
+				{		
+					global_package.items[i].children['m_idle_l'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "mario_sheet")
+				{		
+					global_package.items[i].children['mario_run_r'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "mario_sheet")
+				{		
+					global_package.items[i].children['mario_run_l'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "mario_sheet")
+				{		
+					global_package.items[i].children['m_stop_r'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "mario_sheet")
+				{		
+					global_package.items[i].children['m_stop_l'] = child_;
+				}					
+			}	
 		for(var i = 0; i < global_package.items.length; i++)
         {						
 			if(global_package.items[i].id == "mario_sheet")
@@ -210,19 +303,67 @@ var SoundUtils = new ui.SoundUtils();
 				});
 		}		
                 global_package.add_item(
-            {
+		{
 		id:				"azucola_sheet",
 		resource_type:	RESOURCE_SPRITE,
 		src:			"images/AzuCola_Trans.png",
+		runtime_src:	null,
 		frame_width:	46,
 		frame_height:	67,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var azucola_sheet;
 				global_package.events.addListener("loaded", function()
 				{
 					azucola_sheet = streamer.get_resource("azucola_sheet");
 				});
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "azucola_sheet")
+				{		
+					global_package.items[i].children['g1_down'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "azucola_sheet")
+				{		
+					global_package.items[i].children['g1_idle'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "azucola_sheet")
+				{		
+					global_package.items[i].children['g1_jump'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "azucola_sheet")
+				{		
+					global_package.items[i].children['g2_cry'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "azucola_sheet")
+				{		
+					global_package.items[i].children['g2_idle'] = child_;
+				}					
+			}	
 		for(var i = 0; i < global_package.items.length; i++)
         {						
 			if(global_package.items[i].id == "azucola_sheet")
