@@ -80,3 +80,22 @@ DataEntity data_entity::get(const str& type_name)
     
     return DataEntity();
   }
+
+void data_entity::visit(data_entity_visitor* visitor)
+  {
+    attribute_map::iterator it = attributes_.begin();
+    attribute_map::iterator nd = attributes_.end();
+
+    for(; it != nd; it++)
+      {
+        visitor->attribute(it->first, it->second);
+      }
+
+    entity_list::iterator eit = children_.begin();
+    entity_list::iterator end = children_.end();
+    for(; eit != end; eit++)
+      {
+        DataEntity de = *eit;
+        visitor->child(de);
+      }
+  }

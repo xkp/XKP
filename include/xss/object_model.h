@@ -189,6 +189,8 @@ enum FIXUP_TYPE
     FIXUP_RETURN_TYPE,
     FIXUP_INSTANCE_EVENT,
     FIXUP_SUPER_TYPE, 
+    FIXUP_ARGUMENT_TYPE, 
+    FIXUP_OBJECT_CHILD
   };
 
 struct fixup_data
@@ -219,6 +221,8 @@ struct om_context
     context_map  contexts; 
     Application  application; 
     XSSObject    instance;
+    XSSContext   xss_ctx; 
+    Idiom        idiom;
 
     document*    doc;
   };
@@ -272,14 +276,14 @@ class object_model
       LanguageFactory languages_;
       FileSystem      fs_;
       idiom_list      idioms_;
-	  bool			  changed_;	
+	    bool			      changed_;	
 
       void            assure_id(DataEntity de);
       DataEntity      assure_unique_root(DataReader dr);
       void            register_idiom(const str& id, Idiom idiom);
       Idiom           find_idiom(const str& idiom);
-      void            handle_include(Application app, const str& def, const str& src, XSSContext ctx, om_context& octx);
-      void            handle_instance(Application app, XSSObject instance, const str& def_file, const str& src_file, XSSContext ctx, om_context& octx);
+      void            handle_include(Application app, const str& def, const str& src, om_context& ctx);
+      void            handle_instance(Application app, XSSObject instance, const str& def_file, const str& src_file, om_context& octx);
     public:
       static bool compile_xs(const str& text, XSSContext ctx, om_context& octx, xs_visitor* visitor);
       static bool compile_class(const str& text, XSSContext ctx, om_context& octx);
@@ -288,17 +292,57 @@ class object_model
       //data reader
       Language        read_language(DataEntity project);
       variant         read_value(DataEntity de);
-      Idiom           read_idiom(DataEntity de, XSSContext ctx);
+      Idiom           read_idiom(DataEntity de, om_context& ctx);
       XSSType         read_type(DataEntity de, Idiom parent, XSSContext ctx);
       XSSType         read_enum(DataEntity de, XSSContext ctx);
-      XSSSignature    read_signature(DataEntity de, Idiom idiom, XSSContext ctx);
-      XSSProperty     read_property(DataEntity de, Idiom idiom, XSSContext ctx);
-      XSSMethod       read_method(DataEntity de, Idiom idiom, XSSContext ctx);
-      XSSEvent        read_event(DataEntity de, Idiom idiom, XSSContext ctx);
+      XSSSignature    read_signature(DataEntity de, om_context& ctx);
+      XSSProperty     read_property(DataEntity de, XSSObject recipient, om_context& ctx);
+      XSSMethod       read_method(DataEntity de, om_context& ctx);
+      XSSEvent        read_event(DataEntity de, om_context& ctx);
       InlineRenderer  read_inline_renderer(DataEntity de);
       XSSExpression   read_expression(DataEntity de, XSSType type, const str& attribute);
-      void            read_include_def(DataEntity de, XSSContext ctx, om_context& octx);
-      void            read_include_singleton(DataEntity de, XSSContext ctx, om_context& octx);
+      XSSObject       read_object(DataEntity de, om_context& ctx, XSSObject instance = XSSObject(), XSSType type = XSSType());
+      XSSObject       read_object_instance(DataEntity de, XSSObject parent, om_context& ctx);
+      XSSExpression   read_array(DataEntity de, XSSType array_type, om_context& ctx);
+
+      void read_attribute(const str& attr, const str& value, om_context& ctx);
+      void read_child(DataEntity de, om_context& ctx);
+    public:
+      //readers, public for access
+      void r_attr_nop(const str& attr, const str& value, const variant& this_, om_context& ctx);
+
+      void r_idiom_namespace(const str& attr, const str& value, const variant& this_, om_context& ctx);
+      void r_invalid_idiom_attr(const str& attr, const str& value, const variant& this_, om_context& ctx);
+      void r_idiom_enum(DataEntity de, const variant& this_, om_context& ctx);
+      void r_idiom_import(DataEntity de, const variant& this_, om_context& ctx);
+      void r_idiom_type(DataEntity de, const variant& this_, om_context& ctx);
+      void r_invalid_idiom_child(DataEntity de, const variant& this_, om_context& ctx);
+
+      void r_object_attr(const str& attr, const str& value, const variant& this_, om_context& ctx);
+      void r_object_property(DataEntity de, const variant& this_, om_context& ctx);
+      void r_object_method(DataEntity de, const variant& this_, om_context& ctx);
+      void r_object_event(DataEntity de, const variant& this_, om_context& ctx);
+      void r_object_instance(DataEntity de, const variant& this_, om_context& ctx);
+
+      void r_enum_item(DataEntity de, const variant& this_, om_context& ctx);
+      void r_invalid_enum_item(DataEntity de, const variant& this_, om_context& ctx);
+
+      void r_type_super(const str& attr, const str& value, const variant& this_, om_context& ctx);
+      void r_type_import(DataEntity de, const variant& this_, om_context& ctx);
+      void r_type_constructor(DataEntity de, const variant& this_, om_context& ctx);
+      void r_type_child_policy(DataEntity de, const variant& this_, om_context& ctx);
+      void r_type_reject_child(DataEntity de, const variant& this_, om_context& ctx);
+      void r_type_parent_policy(DataEntity de, const variant& this_, om_context& ctx);
+      void r_type_reject_parent(DataEntity de, const variant& this_, om_context& ctx);
+      void r_invalid_type_item(DataEntity de, const variant& this_, om_context& ctx);
+
+      void r_include_class(DataEntity de, const variant& this_, om_context& ctx);
+      void r_include_instance(DataEntity de, const variant& this_, om_context& ctx);
+      void r_invalid_include_child(DataEntity de, const variant& this_, om_context& ctx);
+
+      void r_invalid_array_attr(const str& attr, const str& value, const variant& this_, om_context& ctx);
+      void r_array_item(DataEntity de, const variant& this_, om_context& ctx);
+      void r_invalid_array_item(DataEntity de, const variant& this_, om_context& ctx);
     private:
       //document model
       application_list apps_;
@@ -308,6 +352,13 @@ class object_model
       void bind_it_up(XSSContext ctx, om_context& octx);
       bool check_type(XSSType type, const str& type_name, XSSContext ctx);
       void clear_file_errors(const str& fname);
+      void resolve_parent_child(XSSObject parent, XSSObject child, om_context& ctx);
+      void parent_child_action(PARENT_CHILD_ACTION action, XSSObject parent, XSSObject child, om_context& ctx);
+      bool parse_pca(const str& action, PARENT_CHILD_ACTION& result);
+      bool parse_policy(const str& type_name, parent_policy& result, om_context& ctx);
+      XSSExpression compile_expression(const str& expr, XSSType type);
+      variant str2var(const str& value);
+      void merge_property(XSSProperty dest, XSSProperty incoming, XSSObject owner, om_context& ctx);
   };
 
 class object_model_thread

@@ -1606,92 +1606,95 @@ str xss_compiler::render_value(variant value)
 
 XSSProperty xss_compiler::add_object_property(const param_list params)
   {
-    if (params.size() < 2)
-      {
-        param_list error;
-        error.add("id", SCompiler);
-        error.add("desc", STooFewParametersAOP);
-        xss_throw(error);
-      }
+    assert(false);
+    return XSSProperty();
+    //0.9.5
+    //if (params.size() < 2)
+    //  {
+    //    param_list error;
+    //    error.add("id", SCompiler);
+    //    error.add("desc", STooFewParametersAOP);
+    //    xss_throw(error);
+    //  }
 
-    XSSObject obj       = variant_cast<XSSObject>(params.get(0), XSSObject());
-    str       prop_name = variant_cast<str>(params.get(1), str());
+    //XSSObject obj       = variant_cast<XSSObject>(params.get(0), XSSObject());
+    //str       prop_name = variant_cast<str>(params.get(1), str());
 
-    if (!obj)
-      {
-        param_list error;
-        error.add("id", SCompiler);
-        error.add("desc", SExpectingObjectAOP);
-        xss_throw(error);
-      }
+    //if (!obj)
+    //  {
+    //    param_list error;
+    //    error.add("id", SCompiler);
+    //    error.add("desc", SExpectingObjectAOP);
+    //    xss_throw(error);
+    //  }
 
-    if (prop_name.empty())
-      {
-        param_list error;
-        error.add("id", SCompiler);
-        error.add("desc", SExpectingPropNameAOP);
-        xss_throw(error);
-      }
+    //if (prop_name.empty())
+    //  {
+    //    param_list error;
+    //    error.add("id", SCompiler);
+    //    error.add("desc", SExpectingPropNameAOP);
+    //    xss_throw(error);
+    //  }
 
-    //resolve type
-    XSSType    type;
-    XSSContext ctx = current_context();
-    variant type_value = params.get("type");
-    if (type_value.is<XSSType>())
-        type = type_value;
-    else if (type_value.is<str>())
-      {
-        str type_name = variant_cast<str>(type_value, str());
-        type = ctx->get_type(type_name);
-        if (!type)
-          {
-            param_list error;
-            error.add("id", SCompiler);
-            error.add("desc", SExpectingTypeNameAOP);
-            error.add("type name", type_name);
-            xss_throw(error);
-          }
-      }
+    ////resolve type
+    //XSSType    type;
+    //XSSContext ctx = current_context();
+    //variant type_value = params.get("type");
+    //if (type_value.is<XSSType>())
+    //    type = type_value;
+    //else if (type_value.is<str>())
+    //  {
+    //    str type_name = variant_cast<str>(type_value, str());
+    //    type = ctx->get_type(type_name);
+    //    if (!type)
+    //      {
+    //        param_list error;
+    //        error.add("id", SCompiler);
+    //        error.add("desc", SExpectingTypeNameAOP);
+    //        error.add("type name", type_name);
+    //        xss_throw(error);
+    //      }
+    //  }
 
-    //resolve_value
-    variant value      = params.get("value");
-    XSSType value_type = type_of(value);
-    if (!type)
-      type = value_type;
+    ////resolve_value
+    //variant value      = params.get("value");
+    //XSSType value_type = type_of(value);
+    //if (!type)
+    //  type = value_type;
 
-    //Add the property
-    XSSProperty result = obj->add_property(prop_name, value, type);
+    ////Add the property
+    //XSSProperty result = obj->add_property(prop_name, value, type);
 
-    for(int i = 2; i < params.size(); i++)
-      {
-        str pname = params.get_name(i);
-        if (pname.empty())
-          {
-            param_list error;
-            error.add("id", SCompiler);
-            error.add("desc", SUnnamedAtrributeAOP);
-            error.add("index", i);
-            xss_throw(error);
-          }
+    //for(int i = 2; i < params.size(); i++)
+    //  {
+    //    str pname = params.get_name(i);
+    //    if (pname.empty())
+    //      {
+    //        param_list error;
+    //        error.add("id", SCompiler);
+    //        error.add("desc", SUnnamedAtrributeAOP);
+    //        error.add("index", i);
+    //        xss_throw(error);
+    //      }
 
-        if (pname == "type" || pname == "value")
-          continue;
+    //    if (pname == "type" || pname == "value")
+    //      continue;
 
-        if (pname == "set" || pname == "get")
-          {
-            XSSObject accesor = variant_cast<XSSObject>(params.get(i), XSSObject());
-            if (accesor)
-              {
-                accesor->set_id(pname);
-                result->add_child(accesor);
-              }
-            continue;
-          }
+    //    if (pname == "set" || pname == "get")
+    //      {
+    //        XSSObject accesor = variant_cast<XSSObject>(params.get(i), XSSObject());
+    //        if (accesor)
+    //          {
+    //            accesor->set_id(pname);
+    //            result->add_child(accesor);
+    //          }
+    //        continue;
+    //      }
 
-        result->add_attribute(pname, params.get(i));
-      }
+    //    result->add_attribute(pname, params.get(i));
+    //  }
 
-    return result;
+    //return result;
   }
 
 bool xss_compiler::is_type(variant v)

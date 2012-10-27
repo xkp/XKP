@@ -93,6 +93,15 @@ enum RESOLVE_ITEM
     RESOLVE_CHILD,
   };
 
+enum PARENT_CHILD_ACTION
+  {
+    PCA_ASPROPERTY,
+    PCA_ASCHILD,
+    PCA_INDEPENDENT_CHILD,
+    PCA_DEFAULT,
+    PCA_REJECT,
+  };
+
 //context
 struct context_visitor
   {
@@ -156,6 +165,7 @@ class xss_arguments
     public:
       void           bind(XSSContext ctx);
       XSSType        type(); 
+      void           type(XSSType t); 
       void           add(const str& name, XSSExpression value);
       void           push_front(const str& name, XSSExpression value);
     public:
@@ -166,6 +176,7 @@ class xss_arguments
       xss_parameters::iterator end();
     private:
       xss_parameters args_;
+      XSSType        type_;
   };
 
 class value_operation
@@ -178,6 +189,7 @@ class value_operation
       variant         constant();
       void            bind(RESOLVE_ITEM what, variant value);
       XSSArguments    args();
+      void            args(XSSArguments value);
       str             identifier();
       bool            is_constant();
       bool            bound();
@@ -248,6 +260,7 @@ class xss_object : public editable_object<xss_object>,
       void add_event_impl(XSSEvent ev, XSSCode code);
       bool context_resolve(const str& id, resolve_info& info);
       void context_visit(context_visitor* visitor);
+      XSSProperty instantiate_property(const str& prop_name);
     public:
       struct query_info
         {
@@ -293,7 +306,7 @@ class xss_object : public editable_object<xss_object>,
       void fixup_children(XSSContext ctx);
 		public:
       void add_property_(XSSProperty prop);
-      XSSProperty add_property(const str& name, variant value, XSSType type);
+      XSSProperty add_property(const str& name, XSSExpression value);
       void register_property(const str& name, XSSProperty new_prop = XSSProperty());
       void register_method(const str& name, XSSMethod new_mthd = XSSMethod());
       void register_event_impl(const str& name, XSSEvent new_evt = XSSEvent());
@@ -323,6 +336,32 @@ class xss_object : public editable_object<xss_object>,
 
 typedef std::vector<XSSType> XSSTypeList;
 
+//type data
+struct parent_policy
+  {
+    parent_policy():
+      action(PCA_DEFAULT),
+      match_all(false)
+      {
+      }
+
+    parent_policy(PARENT_CHILD_ACTION _action, XSSType _type):
+      action(_action),
+      type(_type),
+      match_all(false)
+      {
+      }
+
+    //what to do
+    PARENT_CHILD_ACTION action;
+
+    //info
+    XSSType type;
+    bool    match_all;
+  };
+
+typedef std::vector<parent_policy> parent_policy_list;
+
 class xss_type : public xss_object
   {
     public:
@@ -351,6 +390,11 @@ class xss_type : public xss_object
       void         add_constructor(XSSSignature ctor);
       void         import(XSSType import);
       XSSArguments get_constructor(XSSArguments args);
+      bool         accepts_child(XSSObject child, PARENT_CHILD_ACTION& result);
+      bool         accepts_parent(XSSObject child, PARENT_CHILD_ACTION& result);
+      void         add_instance(XSSObject instance);
+      void         add_child_policy(parent_policy& policy);
+      void         add_parent_policy(parent_policy& policy);
     public:
       void as_enum();
       void as_array(XSSType type);
@@ -388,6 +432,8 @@ class xss_type : public xss_object
       //0.9.5
       std::vector<XSSOperator>  operators_;
       std::vector<XSSSignature> constructors_;
+      parent_policy_list        child_policy_; 
+      parent_policy_list        parent_policy_;
   };
 
 class xss_dsl : public xss_object
@@ -543,6 +589,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
       void           errors(ErrorHandler handler); 
 			void           visit(context_visitor* visitor);
 	    variant        identity_value();
+      bool           add_instance(XSSObject instance);
     public:
       variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
       bool    resolve(const str& id, resolve_info& info);
@@ -660,7 +707,13 @@ class xss_value
 class xss_expression
   {
     public:
-      xss_expression()                            {assert(false);} //forced by variants
+      xss_expression():
+        op_(op_none),
+        is_assign_(false)
+        {
+          
+        } 
+
       xss_expression(const xss_expression& other) {assert(false);}
 
       xss_expression(operator_type op, XSSExpression arg1, XSSExpression arg2 = XSSExpression(), XSSExpression arg3 = XSSExpression());
@@ -673,11 +726,14 @@ class xss_expression
       XSSType       type();
       void          type(XSSType t);
       bool          is_constant();
+      variant       constant_value();
       bool          is_assign();
       XSSExpression left();
       XSSExpression right();
       XSSExpression third();
       XSSOperator   xop();
+
+      void as_array(XSSArguments items);
     public:
       void set_extents(file_position& begin, file_position& end);
       file_position& begin();
@@ -894,6 +950,7 @@ class xss_signature
       void add_argument(const str& name, const str& type_name, XSSExpression default_value);
 
       void bind(XSSContext ctx);
+      void arg_type(int idx, XSSType type);
     private:
       signature_items items_;
   };
@@ -997,8 +1054,8 @@ class xss_property : public xss_object
 	  public:
 		  xss_property();
 		  xss_property(const xss_property& other);
-		  xss_property(const str& name, XSSType type, variant value, XSSObject _this_);
-		  xss_property(const str& name, XSSType type, variant value, variant _get, variant _set, XSSObject _this_);
+		  xss_property(const str& name, XSSExpression value, XSSObject _this_);
+		  xss_property(const str& name, XSSExpression, variant _get, variant _set, XSSObject _this_);
 
 			str get_name();
 
@@ -1035,6 +1092,8 @@ class xss_property : public xss_object
       bool            is_const();
       void            property_type(XSSType type);
       XSSType         property_type();
+      XSSObject       instance_value();
+      void            instance_value(XSSObject value);
       
       virtual void bind(XSSContext ctx);
     public:
@@ -1045,6 +1104,8 @@ class xss_property : public xss_object
       XSSCode        code_getter_;
       XSSCode        code_setter_;
       XSSType        prop_type_;
+      XSSObject      instance_value_;
+
   };
 
 class xss_event : public xss_object
@@ -1135,19 +1196,19 @@ struct xss_object_schema : editable_object_schema<T>
         this->template property_<XSSObject>   ("idiom",       &T::idiom_);
 
         this->template method_<DynamicArray, 1>("query_properties", &T::query_properties);
-        this->template method_<XSSProperty, 1> ("get_property",     &T::get_property);
-        this->template method_<XSSProperty, 3> ("add_property",     &T::add_property);
-        this->template method_<bool, 1>        ("has_property",     &T::has_property);
-        this->template method_<bool, 1>        ("have_value",       &T::have_value);
-        this->template method_<void, 1>        ("add_child",        &T::add_child);
-        this->template method_<XSSMethod, 1>   ("get_method",       &T::get_method);
-        this->template method_<void, 2>        ("add_method",       &T::add_method);
+        this->template method_<XSSProperty,  1>("get_property",     &T::get_property);
+        this->template method_<XSSProperty,  2>("add_property",     &T::add_property);
+        this->template method_<bool,         1>("has_property",     &T::has_property);
+        this->template method_<bool,         1>("have_value",       &T::have_value);
+        this->template method_<void,         1>("add_child",        &T::add_child);
+        this->template method_<XSSMethod,    1>("get_method",       &T::get_method);
+        this->template method_<void,         2>("add_method",       &T::add_method);
         this->template method_<DynamicArray, 1>("find_by_type",     &T::find_by_type);
-        this->template method_<XSSObject, 1>   ("find",             &T::find);
+        this->template method_<XSSObject,    1>("find",             &T::find);
         this->template method_<DynamicArray, 1>("get_event_code",   &T::get_event_code);
-        this->template method_<variant, 1>     ("get_event_args",   &T::get_event_args);
-        this->template method_<variant, 1>     ("attribute_value",  &T::attribute_value);
-        this->template method_<bool, 0>        ("empty",            &T::empty);
+        this->template method_<variant,      1>("get_event_args",   &T::get_event_args);
+        this->template method_<variant,      1>("attribute_value",  &T::attribute_value);
+        this->template method_<bool,         0>("empty",            &T::empty);
         this->template method_<DynamicArray, 0>("get_attributes",   &T::get_attributes);
 		  }
   };

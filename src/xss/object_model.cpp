@@ -6,6 +6,7 @@
 #include <xss/xss_expression.h>
 #include <xss/xss_code.h>
 #include <xss/xss_compiler.h>
+#include <xss/xss_expression.h>
 
 #include <xs/compiler.h>
 #include <xs/xs_error.h>
@@ -35,6 +36,8 @@ const str SBadEventSignature("Event parameter mistmach");
 const str SDupEvent("There is already an event with this name");
 const str SIdiomFileNotFound("Idiom not found");
 const str SFileNotFound("File not found");
+const str SMissingArgType("Argument must have a type");
+const str SInvalidChild("An instance of this type is not insertable on this parent");
 
 //utils
 struct text_utils
@@ -49,6 +52,73 @@ struct text_utils
         e.line = strs.size();
         e.column = strs[strs.size() - 1].size() + 1;
       }
+  };
+
+struct om_entity_visitor : data_entity_visitor
+  {
+    om_entity_visitor(object_model* owner, const variant& this__, om_context& ctx):
+      owner_(owner),
+      ctx_(ctx),
+      this_(this__)      
+      {
+      }
+
+    public:
+      //entity_visitor
+      virtual void attribute(const str& attr, variant value)
+        {
+          if (attr == "id" || attr == "output_id")
+            return; //system            
+          
+          attribute_handler_map::iterator it = attr_.find(attr);
+          if (it != attr_.end())
+            (owner_->*(it->second))(attr, value, this_, ctx_);
+          else
+            {
+              it = attr_.find("*");
+              if (it != attr_.end())
+                (owner_->*(it->second))(attr, value, this_, ctx_);
+            }
+        }
+
+      virtual void child(DataEntity de)
+        {
+          child_handler_map::iterator it = children_.find(de->type());
+          if (it != children_.end())
+            (owner_->*(it->second))(de, this_, ctx_);
+          else
+            {
+              it = children_.find("*");
+              if (it != children_.end())
+                (owner_->*(it->second))(de, this_, ctx_);
+            }
+        }
+    public:
+      //handlers
+      typedef void (object_model::* attribute_handler_func)(const str& attr, const str& value, const variant& this_, om_context& ctx);
+      typedef void (object_model::* child_handler_func)    (DataEntity de, const variant& this_, om_context& ctx);
+
+      //handler registration
+      void attribute_handler(const str& attr, attribute_handler_func handler)
+        {
+          attribute_handler_map::iterator it = attr_.find(attr); assert(it == attr_.end());
+          attr_.insert(std::pair<str, attribute_handler_func>(attr, handler));
+        }
+
+      void child_handler(const str& child, child_handler_func handler)
+        {
+          child_handler_map::iterator it = children_.find(child); assert(it == children_.end());
+          children_.insert(std::pair<str, child_handler_func>(child, handler));
+        }
+    private:
+      typedef std::map<str, attribute_handler_func> attribute_handler_map;
+      typedef std::map<str, child_handler_func>     child_handler_map;
+
+      object_model*         owner_;
+      om_context&           ctx_;
+      variant               this_;
+      attribute_handler_map attr_;
+      child_handler_map     children_;
   };
 
 //idiom
@@ -571,7 +641,12 @@ object_model::object_model(FileSystem fs, LanguageFactory languages):
 Application object_model::load(DataReader project, param_list& args, fs::path base_path)
   {
     Application result(new application(base_path));
+	  result->file_system(fs_);
+
     DataEntity  prj = assure_unique_root(project);
+
+    om_context octx;
+    octx.application = result;
 
     //setup
     result->file_system(fs_);
@@ -595,6 +670,8 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
 
     ErrorHandler eh(new om_error_handler(result));
     global->errors(eh);
+
+    octx.xss_ctx = global;
 
     //initialize the execution context on which the xss files will run, 
     //note this is different from the data context
@@ -662,7 +739,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
         if (!idiom)
           {
             DataReader idiom_data = fs_->load_data(idiom_path);
-            idiom = read_idiom(assure_unique_root(idiom_data), global);
+            idiom = read_idiom(assure_unique_root(idiom_data), octx);
             register_idiom(idiom_path.string(), idiom);
           }
 
@@ -676,15 +753,28 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
     entity_list::iterator ind = includes.end();
 
     //results
-    om_context octx;
     for(; iit != ind; iit++)
       {
         DataEntity _include = *iit;
         str        def = _include->attr("def");  
         str        src = _include->attr("src");  
 
+        //create a separate context for includes
         XSSContext include_ctx(new xss_context(CTXID_FILE, src, global));
-        handle_include(result, def, src, include_ctx, octx);
+
+        //remember the old one
+        XSSContext old_ctx = octx.xss_ctx;
+        octx.xss_ctx = include_ctx;
+        handle_include(result, def, src, octx);
+        octx.xss_ctx = old_ctx;
+      }
+
+    //register classes
+    type_map::iterator cit = octx.classes.begin();
+    type_map::iterator cnd = octx.classes.end();
+    for(; cit != cnd; cit++)
+      {
+        global->add_type(cit->first, cit->second);
       }
 
     //load application
@@ -692,8 +782,14 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
     str src = prj->attr("src");
     XSSContext app_ctx(new xss_context(CTXID_FILE, src, global));
     XSSObject  app_obj(new xss_object);
-	  app_obj->set_id("application");
-    handle_instance(result, app_obj, def, src, app_ctx, octx);
+	  XSSType    app_type = global->get_type("Application"); 
+    app_obj->set_id("application");
+    app_obj->set_type(app_type);
+
+    XSSContext old_ctx = octx.xss_ctx;
+    octx.xss_ctx = app_ctx;
+    handle_instance(result, app_obj, def, src, octx);
+    octx.xss_ctx = old_ctx;
 
     //compile
     fix_it_up(global, octx);
@@ -708,7 +804,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
 void object_model::register_app(const fs::path& fname, Application app)
   {
     apps_.insert(std::pair<fs::path, Application>(fname, app));
-	changed_ = true;
+	  changed_ = true;
   }
 
 Application object_model::remove_app(const fs::path& fname)
@@ -828,7 +924,8 @@ void object_model::add_include(Application app, const str& def, const str& src)
     om_context octx;
     XSSContext global = app->context();
     XSSContext include_ctx(new xss_context(CTXID_FILE, str(src), global));
-    handle_include(app, def, src, include_ctx, octx);
+    octx.xss_ctx = include_ctx;
+    handle_include(app, def, src, octx);
 
     fix_it_up(global, octx);
     bind_it_up(global, octx);
@@ -894,88 +991,116 @@ variant object_model::read_value(DataEntity de)
     return value; //as string
   }
 
-Idiom object_model::read_idiom(DataEntity de, XSSContext ctx)
+Idiom object_model::read_idiom(DataEntity de, om_context& ctx)
   {
     Idiom result(new idiom);
     str iid = de->id();
 
     if (iid.empty())
-      ctx->error(SIdiomsMustHaveId, null, file_position(), file_position());
+      ctx.xss_ctx->error(SIdiomsMustHaveId, null, file_position(), file_position());
 
-    str _namespace = de->attr("namespace");
-    if (_namespace.empty())
-      _namespace = iid;
+    //read
+    ctx.idiom = result;
 
-    result->set_namespace(_namespace);
-    
-    //read enums
-    entity_list           enums = de->find_all("enum");
-    entity_list::iterator eit   = enums.begin();
-    entity_list::iterator end   = enums.end();
+    om_entity_visitor oev(this, result, ctx);
+    oev.attribute_handler("namespace",  &object_model::r_idiom_namespace);
+    oev.attribute_handler("src",        &object_model::r_attr_nop); //td: !!! idioms
 
-    for(; eit != end; eit++)
-      {
-        DataEntity ed = *eit;
-        assure_id(ed);
+    oev.child_handler("enum",   &object_model::r_idiom_enum);
+    oev.child_handler("import", &object_model::r_idiom_import);
+    oev.child_handler("class",  &object_model::r_idiom_type);
+    oev.child_handler("type",   &object_model::r_idiom_type);
 
-        XSSType type = read_enum(ed, ctx);
-        result->add_type(type);
-      }
-    
-    //read imports
-    entity_list imports = de->find_all("import");
-    entity_list::iterator iit = imports.begin();
-    entity_list::iterator ind = imports.end();
+    oev.attribute_handler("*", &object_model::r_invalid_idiom_attr);
+    oev.child_handler    ("*", &object_model::r_invalid_idiom_child);
 
-    for(; eit != end; eit++)
-      {
-        DataEntity ed = *eit;
-        assure_id(ed);
+    de->visit(&oev);
 
-        str super = ed->attr("super");
-        if (!super.empty())
-          {
-            param_list error;
-            error.add("import", ed->id());
-            ctx->error(SImportCannotInherit, &error, file_position(), file_position()); //td: !!! data entity file pos
-          }
+    ctx.idiom = Idiom();
+    return result; 
 
-        XSSType type = read_type(ed, result, ctx);
-        result->add_import(type);
-      }
+    //td: !!! reader
+    //if (iid.empty())
+    //  ctx.xss_ctx->error(SIdiomsMustHaveId, null, file_position(), file_position());
 
-    //read types
-    entity_list           types = de->find_all("class");
-    entity_list::iterator it    = types.begin();
-    entity_list::iterator nd    = types.end();
+    //str _namespace = de->attr("namespace");
+    //if (_namespace.empty())
+    //  _namespace = iid;
 
-    for(; it != nd; it++)
-      {
-        DataEntity td = *it;
-        assure_id(td);
-        
-        XSSType type = read_type(td, result, ctx);
-        result->add_type(type);
-      }
+    //result->set_namespace(_namespace);
+    //
+    ////read enums
+    //entity_list           enums = de->find_all("enum");
+    //entity_list::iterator eit   = enums.begin();
+    //entity_list::iterator end   = enums.end();
 
-    return result;
+    //for(; eit != end; eit++)
+    //  {
+    //    DataEntity ed = *eit;
+    //    assure_id(ed);
+
+    //    XSSType type = read_enum(ed, ctx);
+    //    result->add_type(type);
+    //  }
+    //
+    ////read imports
+    //entity_list imports = de->find_all("import");
+    //entity_list::iterator iit = imports.begin();
+    //entity_list::iterator ind = imports.end();
+
+    //for(; eit != end; eit++)
+    //  {
+    //    DataEntity ed = *eit;
+    //    assure_id(ed);
+
+    //    str super = ed->attr("super");
+    //    if (!super.empty())
+    //      {
+    //        param_list error;
+    //        error.add("import", ed->id());
+    //        ctx.xss_ctx->error(SImportCannotInherit, &error, file_position(), file_position()); //td: !!! data entity file pos
+    //      }
+
+    //    XSSType type = read_type(ed, result, ctx);
+    //    result->add_import(type);
+    //  }
+
+    ////read types
+    //entity_list           types = de->find_all("class");
+    //entity_list::iterator it    = types.begin();
+    //entity_list::iterator nd    = types.end();
+
+    //for(; it != nd; it++)
+    //  {
+    //    DataEntity td = *it;
+    //    assure_id(td);
+    //    
+    //    XSSType type = read_type(td, result, ctx);
+    //    result->add_type(type);
+    //  }
+
+    //return result;
   }
 
-void object_model::handle_include(Application app, const str& def_file, const str& src_file, XSSContext ctx, om_context& octx)
+void object_model::handle_include(Application app, const str& def_file, const str& src_file, om_context& ctx)
   {
     fs::path path;
     if (!def_file.empty())
       {
-        DataReader def      = fs_->load_data(def_file, ctx->path());
+        DataReader def      = fs_->load_data(def_file, ctx.xss_ctx->path());
         DataEntity def_root = assure_unique_root(def);
 
-        read_include_def(def_root, ctx, octx);
-        read_include_singleton(def_root, ctx, octx);
+        om_entity_visitor oev(this, variant(), ctx);
+        oev.child_handler("class",    &object_model::r_include_class);
+        oev.child_handler("instance", &object_model::r_include_instance);
+        oev.child_handler("*",        &object_model::r_invalid_include_child);
+
+        def_root->visit(&oev);
       }
 
     if (!src_file.empty())
       {
-        fs::path src_path = fs_->locate(src_file, ctx->path());
+        fs::path src_path = fs_->locate(src_file, ctx.xss_ctx->path());
         if (src_path.empty())
           { 
             param_list error;
@@ -984,33 +1109,39 @@ void object_model::handle_include(Application app, const str& def_file, const st
             return;
           }
 
-        ctx->source_file(src_path);
+        ctx.xss_ctx->source_file(src_path);
 
         str       code = fs_->load_file(src_path);
-        document* doc  = create_document(app, src_file, ctx);
+        document* doc  = create_document(app, src_file, ctx.xss_ctx);
         
-        assert(!octx.doc);
-        octx.doc = doc;
-        compile_class(code, ctx, octx);
-        octx.doc = null;
+        assert(!ctx.doc);
+        ctx.doc = doc;
+        compile_class(code, ctx.xss_ctx, ctx);
+        ctx.doc = null;
 			}
   }
 
-void object_model::handle_instance(Application app, XSSObject instance, const str& def_file, const str& src_file, XSSContext ctx, om_context& octx)
+void object_model::handle_instance(Application app, XSSObject instance, const str& def_file, const str& src_file, om_context& ctx)
   {
     fs::path path;
     if (!def_file.empty())
       {
-        DataReader def      = fs_->load_data(def_file, ctx->path());
+        DataReader def      = fs_->load_data(def_file, ctx.xss_ctx->path());
         DataEntity def_root = assure_unique_root(def);
 
-        assert(false);
-        //read_instance(def_root, ctx, octx);
+        om_entity_visitor oev(this, instance, ctx);
+        oev.attribute_handler("*",        &object_model::r_object_attr);
+        oev.child_handler    ("property", &object_model::r_object_property);
+        oev.child_handler    ("method",   &object_model::r_object_method);
+        oev.child_handler    ("event",    &object_model::r_object_event);
+        oev.child_handler    ("*",        &object_model::r_object_instance);
+
+        def_root->visit(&oev);
       }
 
     if (!src_file.empty())
       {
-        fs::path src_path = fs_->locate(src_file, ctx->path());
+        fs::path src_path = fs_->locate(src_file, ctx.xss_ctx->path());
         if (src_path.empty())
           { 
             param_list error;
@@ -1019,17 +1150,19 @@ void object_model::handle_instance(Application app, XSSObject instance, const st
             return;
           }
 
-        ctx->source_file(src_path);
+        ctx.xss_ctx->source_file(src_path);
 
         str       code = fs_->load_file(src_path);
-        document* doc  = create_document(app, src_file, ctx);
+        document* doc  = create_document(app, src_file, ctx.xss_ctx);
         
-        assert(!octx.doc);
-        octx.doc = doc;
-        octx.instance = instance;
+        XSSContext old_ctx = ctx.xss_ctx;
+        XSSContext ictx(new xss_context(CTXID_INSTANCE, instance, ctx.xss_ctx));
 
-        XSSContext ictx(new xss_context(CTXID_INSTANCE, instance, ctx));
-        compile_instance(instance, code, ictx, octx);
+        assert(!ctx.doc);
+        ctx.doc = doc;
+        ctx.instance = instance;
+        ctx.xss_ctx = ictx;
+        compile_instance(instance, code, ictx, ctx);
         
 		    //assign the whole file to this instance
         file_position b, e;
@@ -1038,10 +1171,13 @@ void object_model::handle_instance(Application app, XSSObject instance, const st
         doc->refresh_context(ictx);
 
         //output
-		    octx.contexts.insert(std::pair<str, XSSContext>(instance->id(), ictx));
-        octx.instances.insert(std::pair<str, XSSObject>(instance->id(), instance));
-        octx.doc = null;
-        octx.instance.reset();
+		    ctx.contexts.insert(std::pair<str, XSSContext>(instance->id(), ictx));
+        ctx.instances.insert(std::pair<str, XSSObject>(instance->id(), instance));
+        
+        //restore ctx
+        ctx.doc = null;
+        ctx.instance.reset();
+        ctx.xss_ctx = old_ctx;
 			}
   }
 
@@ -1108,6 +1244,33 @@ struct fixup_super
     XSSType type;
   };
 
+struct fixup_arg_type
+  {
+    fixup_arg_type(const str& _type, XSSSignature _args, int _idx):
+      args(_args), 
+      type(_type),
+      idx(_idx)
+      {
+      }
+
+    str          type;
+    XSSSignature args;
+    int          idx;
+  };
+
+struct fixup_obj_child
+  {
+    fixup_obj_child(XSSObject _parent, DataEntity _de):
+      parent(_parent), 
+      de(_de)
+      {
+      }
+
+    XSSObject  parent;
+    DataEntity de;
+  };
+
+//visitors
 struct object_visitor : xs_visitor
   {
     object_visitor(XSSObject target, XSSContext ctx, fixup_list& fixup, IContextCallback* cb):
@@ -1472,109 +1635,685 @@ DataEntity object_model::assure_unique_root(DataReader dr)
     return dr->root()[0];
   }
 
-XSSType object_model::read_type(DataEntity de, Idiom parent, XSSContext ctx)
+void object_model::r_attr_nop(const str& attr, const str& value, const variant& this_, om_context& ctx)
+  {
+    //no op
+  }
+
+void object_model::r_idiom_namespace(const str& attr, const str& value, const variant& this_, om_context& ctx)
+  {
+    ctx.idiom->set_namespace(value);
+  }
+
+void object_model::r_invalid_idiom_attr(const str& attr, const str& value, const variant& this_, om_context& ctx)
+  {
+    assert(false);
+    //ctx.xss_ctx->error();
+  }
+
+void object_model::r_idiom_enum(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    assure_id(de);
+
+    XSSType int_type = ctx.xss_ctx->get_type("int");
+
+    XSSType result(new xss_type);
+    result->set_id(de->id());
+    result->set_output_id(de->attr("output_id"));
+    result->as_enum();
+    
+    om_entity_visitor oev(this, result, ctx);
+    oev.attribute_handler("output_id", &object_model::r_attr_nop);
+    oev.attribute_handler("*",         &object_model::r_object_attr);
+
+    oev.child_handler    ("item", &object_model::r_enum_item);
+    oev.child_handler    ("*",    &object_model::r_invalid_enum_item);
+
+    de->visit(&oev);
+
+    //td: !!! reader
+    //entity_list items = de->find_all("item");
+    //entity_list::iterator it = items.begin();
+    //entity_list::iterator nd = items.end();
+
+    //int idx = 0;
+    //for(; it != nd; it++)
+    //  {
+    //    DataEntity de = *it;
+    //    assure_id(de);
+
+    //    XSSProperty item(new xss_property(de->id(), int_type, idx, XSSObject())); //td: 0.9.5 rid of last parameter
+    //    result->insert_property(item);
+    //  }
+
+    ctx.xss_ctx->add_type(result, str()); //td: namespaces
+  }
+
+void object_model::r_idiom_import(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    assure_id(de);
+
+    XSSType type = this_;
+
+    XSSType import = ctx.idiom->import(de->id());
+    if (!import)
+      {
+        param_list error;
+        error.add("import", de->id());
+        ctx.xss_ctx->error(SUnkownImport, &error, file_position(), file_position());
+        return;
+      }
+
+    type->import(import);
+  }
+
+void object_model::r_type_super(const str& attr, const str& value, const variant& this_, om_context& ctx)
+  {
+    XSSType super_type = ctx.xss_ctx->get_type(value, str()); //td: ctx.idiom->get_namespace()
+    if (!super_type)
+      {
+        param_list error;
+        error.add("type", value);
+        add_error(SUnkownType, &error, file_location());
+      }
+
+    XSSType type = this_;
+    type->set_type(super_type);
+  }
+
+void object_model::r_type_import(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    assure_id(de);
+
+    XSSType import = ctx.idiom->import(de->id());
+    if (!import)
+      {
+        param_list error;
+        error.add("import", de->id());
+        ctx.xss_ctx->error(SUnkownImport, &error, file_position(), file_position());
+        return;
+      }
+
+    XSSType type = this_;
+    type->import(import);
+  }
+
+void object_model::r_type_constructor(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    XSSSignature cs = read_signature(de, ctx);
+
+    XSSType type = this_;
+    type->add_constructor(cs);
+  }
+
+void object_model::r_object_property(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    assure_id(de);
+    XSSObject obj = this_;
+
+    XSSProperty prop     = read_property(de, obj, ctx);
+    XSSProperty obj_prop = obj->instantiate_property(de->id());
+    if (obj_prop)
+      {
+        merge_property(obj_prop, prop, obj, ctx);
+      }
+    else
+      obj->insert_property(prop);  
+  }
+
+void object_model::r_object_method(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    assure_id(de);
+
+    XSSMethod mthd = read_method(de, ctx);
+    XSSObject obj = this_;
+    obj->insert_method(mthd);
+  }
+
+void object_model::r_object_event(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    assure_id(de);
+
+    XSSEvent ev = read_event(de, ctx);
+    XSSObject obj = this_;
+    obj->insert_event(ev);
+  }
+
+bool object_model::parse_pca(const str& action, PARENT_CHILD_ACTION& result)
+  {
+    result = PCA_DEFAULT;
+    if (!action.empty())
+      {
+        if (action == "as_property")
+            result = PCA_ASPROPERTY;
+        else if (action == "as_child")
+            result = PCA_ASCHILD;
+        else if (action == "independent")
+            result = PCA_INDEPENDENT_CHILD;
+        else 
+            return false;
+      }
+    return true;
+  }
+
+bool object_model::parse_policy(const str& type_name, parent_policy& result, om_context& ctx)
+  {
+    if (type_name == "*")
+      result.match_all = true;
+    else if (!type_name.empty())
+      {
+        XSSType policy_type = variant_cast<XSSType>(ctx.xss_ctx->get_type(type_name), XSSType());
+        if (policy_type)
+          result.type = policy_type;
+        else
+          assert(false); //td: error
+      }
+    else
+      {
+        assert(false); //td: error
+      }
+
+    return true;
+  }
+
+XSSExpression object_model::compile_expression(const str& expr, XSSType type)
+  {
+    if (type && type->id() == "string")
+      return xss_expression_utils::constant_expression(expr);
+
+    if (!expr.empty())
+      return xss_expression_utils::compile_expression(expr);
+
+    return XSSExpression();
+  }
+
+variant object_model::str2var(const str& value)
+  {
+    try
+      {
+        int value = boost::lexical_cast<int>( value );
+        return value;
+      }
+    catch(boost::bad_lexical_cast&)
+      {
+      }
+
+    try
+      {
+        float value = boost::lexical_cast<float>( value );
+        return value;
+      }
+    catch(boost::bad_lexical_cast&)
+      {
+      }
+
+    try
+      {
+        double value = boost::lexical_cast<double>( value );
+        return value;
+      }
+    catch(boost::bad_lexical_cast&)
+      {
+      }
+
+    if (value == "true")
+      return true;
+    else if (value == "false")
+      return false;
+    
+    return value;            
+  }
+
+void object_model::merge_property(XSSProperty dest, XSSProperty incoming, XSSObject owner, om_context& ctx)
+  {
+    XSSType incoming_type = incoming->property_type();
+
+    //type checking
+    if (incoming_type)
+      {
+        XSSType dest_type = dest->property_type();
+        if (incoming_type && dest_type != incoming_type)
+          {
+            assert(false); //td: error
+          }
+      }
+
+    //value
+    XSSExpression incoming_value  = incoming->expr_value();
+    XSSObject     incoming_ivalue = incoming->instance_value();
+
+    if (incoming_value)
+      {
+        assert(!incoming_ivalue); //we shouldn't have both
+        dest->expr_value(incoming_value);
+        dest->instance_value(XSSObject());
+      }
+    else if (incoming_ivalue)
+      {
+        dest->expr_value(XSSExpression());
+        dest->instance_value(incoming_ivalue);
+      }
+
+    //code
+    XSSCode incoming_getter = incoming->code_getter();
+    XSSCode incoming_setter = incoming->code_setter();
+
+    if (incoming_getter)
+      {
+        if (dest->code_getter())
+          {
+            assert(false); //td: error, trying to override accesors?
+          }
+
+        dest->code_getter(incoming_getter);
+      }
+
+    if (incoming_setter)
+      {
+        if (dest->code_setter())
+          {
+            assert(false); //td: error, trying to override accesors?
+          }
+
+        dest->code_setter(incoming_setter);
+      }
+  }
+
+void object_model::r_type_child_policy(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    XSSType type = this_;
+
+    //check wha to do when objects of this type are accepted
+    str                 action = de->attr("append");
+    PARENT_CHILD_ACTION pca;
+    if (!parse_pca(action, pca))
+      {
+        assert(false); //td: error
+        return;
+      }
+
+    parent_policy result;
+    if (!parse_policy(de->attr("type"), result, ctx))
+      {
+        assert(false); //td: error
+        return;
+      }
+    
+    result.action = pca;
+    type->add_child_policy(result);
+  }
+
+void object_model::r_type_reject_child(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    XSSType type = this_;
+    parent_policy result;
+    if (!parse_policy(de->attr("type"), result, ctx))
+      {
+        assert(false); //td: error
+        return;
+      }
+
+    result.action = PCA_REJECT;
+    type->add_child_policy(result);
+  }
+
+void object_model::r_type_parent_policy(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    XSSType type = this_;
+
+    //check wha to do when objects of this type are accepted
+    str                 action = de->attr("append");
+    PARENT_CHILD_ACTION pca;
+    if (!parse_pca(action, pca))
+      {
+        assert(false); //td: error
+        return;
+      }
+
+    parent_policy result;
+    if (!parse_policy(de->attr("type"), result, ctx))
+      {
+        assert(false); //td: error
+        return;
+      }
+    
+    result.action = pca;
+    type->add_parent_policy(result);
+  }
+
+void object_model::r_type_reject_parent(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    XSSType type = this_;
+    parent_policy result;
+    if (!parse_policy(de->attr("type"), result, ctx))
+      {
+        assert(false); //td: error
+        return;
+      }
+
+    result.action = PCA_REJECT;
+    type->add_child_policy(result);
+  }
+
+void object_model::r_invalid_type_item(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    assert(false); //td: error
+  }
+
+void object_model::r_include_class(DataEntity de, const variant& this_, om_context& ctx)
   {
     XSSType result(new xss_type());
     result->set_id(de->id());
     result->set_output_id(de->attr("output_id"));
     
-    str super = de->attr("super");
-    if (!super.empty())
+    om_entity_visitor oev(this, result, ctx);
+    oev.attribute_handler("super", &object_model::r_type_super);
+    oev.attribute_handler("*",     &object_model::r_object_attr);
+
+    oev.child_handler("property", &object_model::r_object_property);
+    oev.child_handler("method",   &object_model::r_object_method);
+    oev.child_handler("event",    &object_model::r_object_event);
+    oev.child_handler("*",        &object_model::r_object_instance);
+
+    de->visit(&oev);
+
+    ctx.classes.insert(std::pair<str, XSSType>(de->id(), result));
+  }
+
+void object_model::r_include_instance(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    XSSObject result = read_object(de, ctx);
+    ctx.instances.insert(std::pair<str, XSSObject>(de->id(), result));
+  }
+
+void object_model::r_invalid_include_child(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    assert(false); //td: error
+  }
+
+void object_model::r_invalid_array_attr(const str& attr, const str& value, const variant& this_, om_context& ctx)
+  {
+    assert(false); //td: error
+  }
+
+void object_model::r_array_item(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    XSSArguments value = this_;
+    XSSType      value_type = value->type();
+
+    if (value_type)
       {
-        XSSType super_type = ctx->get_type(super, parent->get_namespace());
-        if (!super_type)
+        if (value_type->is_object())
           {
-            param_list error;
-            error.add("type", super);
-            add_error(SUnkownType, &error, file_location());
+            assert(false); //td: for objects we may need to store instances somewhere and keep their names in the values
           }
-
-        result->set_type(super_type);
-      }
-
-    //look for imports, these are supposed to be useful
-    entity_list imports = de->find_all("import");
-    entity_list::iterator iit = imports.begin();
-    entity_list::iterator ind = imports.end();
-
-    for(; iit != ind; iit++)
-      {
-        DataEntity id = *iit;
-        assure_id(id);
-
-        XSSType import = parent->import(id->id());
-        if (!import)
+        else
           {
-            param_list error;
-            error.add("import", id->id());
-            ctx->error(SUnkownImport, &error, file_position(), file_position());
-            continue;
+            str value_str = de->attr("value");
+            if (!value_str.empty())
+              {
+                XSSExpression result;
+                if (value_type->id() == "string")
+                  result = xss_expression_utils::constant_expression(value_str);
+                else
+                  result = xss_expression_utils::compile_expression(value_str);
+
+                value->add(str(), result);
+              }
+            else
+              {
+                assert(false); //td: error
+              }
           }
-
-        result->import(import);
       }
-
-    //read constructors
-    entity_list ctors = de->find_all("constructor");
-    entity_list::iterator cit = ctors.begin();
-    entity_list::iterator cnd = ctors.end();
-
-    for(; cit != cnd; cit++)
+    else
       {
-        DataEntity cd = *cit;
-        XSSSignature cs = read_signature(cd, parent, ctx);
-
-        result->add_constructor(cs);
+        assert(false); //td: error
       }
+  }
 
-    //read properties
-    entity_list props = de->find_all("property");
-    entity_list::iterator pit = props.begin();
-    entity_list::iterator pnd = props.end();
+void object_model::r_invalid_array_item(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    assert(false); //td: error
+  }
 
-    for(; pit != pnd; pit++)
+
+XSSObject object_model::read_object_instance(DataEntity de, XSSObject parent, om_context& ctx)
+  {
+    if (parent->has_property(de->type())) //use case, the node refers to a property
       {
-        DataEntity pd = *pit;
-        assure_id(pd);
+        XSSProperty prop = parent->instantiate_property(de->type());
+        XSSType     type = prop->property_type();
 
-        XSSProperty prop = read_property(pd, parent, ctx);
+        if (type->is_object())
+          {
+            //tricky: properties can contain instances, those are hard to
+            //encapsulate in an expression, they will be stored on their own
+            XSSObject inst = prop->instance_value();
+            if (inst)
+              read_object(de, ctx, inst);
+            else
+              inst = read_object(de, ctx, XSSObject(), type);
 
-        result->insert_property(prop);
+            return inst;
+          }
+        else
+          {
+            assert(false); //td: error
+          }
       }
-
-    //read methods
-    entity_list mthds = de->find_all("method");
-    entity_list::iterator mit = mthds.begin();
-    entity_list::iterator mnd = mthds.end();
-
-    for(; mit != mnd; mit++)
+    else
       {
-        DataEntity md = *mit;
-        assure_id(md);
-
-        XSSMethod mthd = read_method(md, parent, ctx);
-        result->insert_method(mthd);
+        XSSObject child  = read_object(de, ctx);
+        if (!child)
+          ctx.fixup.push_back(fixup_data(FIXUP_OBJECT_CHILD, fixup_obj_child(parent, de)));
+        else
+          {
+            resolve_parent_child(parent, child, ctx);
+            return child;
+          }
       }
 
-    //read events
-    entity_list events = de->find_all("event");
-    entity_list::iterator eit = mthds.begin();
-    entity_list::iterator end = mthds.end();
+    return XSSObject();
+  }
 
-    for(; eit != end; eit++)
-      {
-        DataEntity ed = *eit;
-        assure_id(ed);
+XSSExpression object_model::read_array(DataEntity de, XSSType array_type, om_context& ctx)
+  {
+    XSSArguments args(new xss_arguments);
+    args->type(array_type);
 
-        XSSEvent ev = read_event(ed, parent, ctx);
-        result->insert_event(ev);
-      }
+    om_entity_visitor oev(this, args, ctx);
+    oev.attribute_handler("*",   &object_model::r_invalid_array_attr);
+    oev.child_handler   ("item", &object_model::r_array_item);
+    oev.child_handler   ("*",    &object_model::r_invalid_array_item);
 
+    de->visit(&oev);
+    
+    XSSExpression result(new xss_expression);
+    result->as_array(args);
     return result;
+  }
+
+void object_model::r_object_instance(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    XSSObject parent = this_;
+    read_object_instance(de, parent, ctx);
+  }
+
+void object_model::r_idiom_type(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    XSSType result(new xss_type());
+    result->set_id(de->id());
+    result->set_output_id(de->attr("output_id"));
+    
+    om_entity_visitor oev(this, result, ctx);
+    oev.attribute_handler("output_id",     &object_model::r_attr_nop);
+    oev.attribute_handler("super",         &object_model::r_type_super);
+    oev.attribute_handler("*",             &object_model::r_object_attr);
+
+    oev.child_handler    ("import",        &object_model::r_type_import);
+    oev.child_handler    ("constructor",   &object_model::r_type_constructor);
+    oev.child_handler    ("property",      &object_model::r_object_property);
+    oev.child_handler    ("method",        &object_model::r_object_method);
+    oev.child_handler    ("event",         &object_model::r_object_event);
+    oev.child_handler    ("accept_child",  &object_model::r_type_child_policy);
+    oev.child_handler    ("reject_child",  &object_model::r_type_reject_child);
+    oev.child_handler    ("accept_parent", &object_model::r_type_parent_policy);
+    oev.child_handler    ("reject_parent", &object_model::r_type_reject_parent);
+    oev.child_handler    ("*",             &object_model::r_object_instance);
+
+    de->visit(&oev);
+    ctx.xss_ctx->add_type(result, str());
+  }
+
+void object_model::r_invalid_idiom_child(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    assert(false); //td: error
+  }
+
+void object_model::r_enum_item(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    assure_id(de);
+
+    XSSType type = this_;
+    int     idx  = type->properties()->size();
+
+    XSSExpression value = xss_expression_utils::constant_expression(idx);
+    XSSProperty item(new xss_property(de->id(), value, XSSObject())); 
+    type->insert_property(item);
+  }
+
+void object_model::r_invalid_enum_item(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    assert(false); //td: error
+  }
+
+void object_model::r_object_attr(const str& attr, const str& value_str, const variant& this_, om_context& ctx)
+  {
+    XSSObject obj = this_;
+    if (obj->has_property(attr))
+      {
+        XSSProperty prop      = obj->instantiate_property(attr);
+        XSSType     prop_type = prop->property_type();
+
+        XSSExpression value = compile_expression(value_str, prop_type);
+        prop->expr_value(value);
+      }
+    else
+      {
+        //not a property, add it as an attribute
+        obj->add_attribute(attr, str2var(value_str));
+      }
+  }
+
+XSSType object_model::read_type(DataEntity de, Idiom parent, XSSContext ctx)
+  {
+    assert(false); //td: !!! cleanup
+    return XSSType();
+    //0.9.5
+    //XSSType result(new xss_type());
+    //result->set_id(de->id());
+    //result->set_output_id(de->attr("output_id"));
+    //
+    //str super = de->attr("super");
+    //if (!super.empty())
+    //  {
+    //    XSSType super_type = ctx->get_type(super, parent->get_namespace());
+    //    if (!super_type)
+    //      {
+    //        param_list error;
+    //        error.add("type", super);
+    //        add_error(SUnkownType, &error, file_location());
+    //      }
+
+    //    result->set_type(super_type);
+    //  }
+
+    ////look for imports, these are supposed to be useful
+    //entity_list imports = de->find_all("import");
+    //entity_list::iterator iit = imports.begin();
+    //entity_list::iterator ind = imports.end();
+
+    //for(; iit != ind; iit++)
+    //  {
+    //    DataEntity id = *iit;
+    //    assure_id(id);
+
+    //    XSSType import = parent->import(id->id());
+    //    if (!import)
+    //      {
+    //        param_list error;
+    //        error.add("import", id->id());
+    //        ctx->error(SUnkownImport, &error, file_position(), file_position());
+    //        continue;
+    //      }
+
+    //    result->import(import);
+    //  }
+
+    ////read constructors
+    //entity_list ctors = de->find_all("constructor");
+    //entity_list::iterator cit = ctors.begin();
+    //entity_list::iterator cnd = ctors.end();
+
+    //for(; cit != cnd; cit++)
+    //  {
+    //    DataEntity cd = *cit;
+    //    XSSSignature cs = read_signature(cd, parent, ctx);
+
+    //    result->add_constructor(cs);
+    //  }
+
+    ////read properties
+    //entity_list props = de->find_all("property");
+    //entity_list::iterator pit = props.begin();
+    //entity_list::iterator pnd = props.end();
+
+    //for(; pit != pnd; pit++)
+    //  {
+    //    DataEntity pd = *pit;
+    //    assure_id(pd);
+
+    //    XSSProperty prop = read_property(pd, parent, ctx);
+
+    //    result->insert_property(prop);
+    //  }
+
+    ////read methods
+    //entity_list mthds = de->find_all("method");
+    //entity_list::iterator mit = mthds.begin();
+    //entity_list::iterator mnd = mthds.end();
+
+    //for(; mit != mnd; mit++)
+    //  {
+    //    DataEntity md = *mit;
+    //    assure_id(md);
+
+    //    XSSMethod mthd = read_method(md, parent, ctx);
+    //    result->insert_method(mthd);
+    //  }
+
+    ////read events
+    //entity_list events = de->find_all("event");
+    //entity_list::iterator eit = mthds.begin();
+    //entity_list::iterator end = mthds.end();
+
+    //for(; eit != end; eit++)
+    //  {
+    //    DataEntity ed = *eit;
+    //    assure_id(ed);
+
+    //    XSSEvent ev = read_event(ed, parent, ctx);
+    //    result->insert_event(ev);
+    //  }
+
+    //return result;
   }
 
 XSSType object_model::read_enum(DataEntity de, XSSContext ctx)
   {
+    assert(false); //td: !!! cleanup
+
     XSSType int_type = ctx->get_type("int");
 
     XSSType result(new xss_type);
@@ -1592,14 +2331,14 @@ XSSType object_model::read_enum(DataEntity de, XSSContext ctx)
         DataEntity de = *it;
         assure_id(de);
 
-        XSSProperty item(new xss_property(de->id(), int_type, idx, XSSObject())); //td: 0.9.5 rid of last parameter
-        result->insert_property(item);
+        //XSSProperty item(new xss_property(de->id(), int_type, idx, XSSObject())); //td: 0.9.5 rid of last parameter
+        //result->insert_property(item);
       }
 
     return result;
   }
 
-XSSSignature object_model::read_signature(DataEntity de, Idiom idiom, XSSContext ctx)
+XSSSignature object_model::read_signature(DataEntity de, om_context& ctx)
   {
     XSSSignature result(new xss_signature);
 
@@ -1615,13 +2354,25 @@ XSSSignature object_model::read_signature(DataEntity de, Idiom idiom, XSSContext
 
         str id    = ade->id();
         str stype = ade->attr("type");
-
-        XSSType type = ctx->get_type(stype, idiom->get_namespace());
-        if (!type)
+        XSSType type;
+        if (stype.empty())
           {
             param_list error;
-            error.add("import", stype);
-            ctx->error(SUnkownType, &error, file_position(), file_position());
+            error.add("arg", id);
+            ctx.xss_ctx->error(SMissingArgType, &error, file_position(), file_position());
+          }
+        else
+          {
+            type = ctx.xss_ctx->get_type(stype, ctx.idiom->get_namespace());
+            if (!type)
+              {
+                ctx.fixup.push_back(fixup_data(FIXUP_ARGUMENT_TYPE, fixup_arg_type(stype, result, idx)));
+                
+                //td: !!! fixup errors
+                //param_list error;
+                //error.add("type", stype);
+                //ctx->error(SUnkownType, &error, file_position(), file_position());
+              }
           }
 
         XSSExpression default_value = read_expression(ade, type, "default_value");
@@ -1631,48 +2382,118 @@ XSSSignature object_model::read_signature(DataEntity de, Idiom idiom, XSSContext
     return result;
   }
 
-XSSProperty object_model::read_property(DataEntity de, Idiom idiom, XSSContext ctx)
+XSSProperty object_model::read_property(DataEntity de, XSSObject recipient, om_context& ctx)
   {
-    XSSProperty result(new xss_property());
-    result->set_id(de->id());
-    result->set_output_id(de->attr("output_id"));
+    str         prop_id = de->id();
+    XSSProperty result;
+    XSSType     type;
+    str         stype;
 
-    str stype = de->attr("type");
-    XSSType type = ctx->get_type(stype, idiom->get_namespace());
+    if (recipient && recipient->has_property(prop_id))
+      {
+        result = recipient->instantiate_property(prop_id);
+        type   = result->property_type();
+      }
+    else
+      {
+        //new prop
+        result = XSSProperty(new xss_property());
+        result->set_id(de->id());
+        result->set_output_id(de->attr("output_id"));
+
+        stype = de->attr("type");
+        if (stype.empty())
+          {
+            type = ctx.xss_ctx->get_type("var");
+          }
+        else if (stype == "array")
+          {
+            str at = de->attr("array_type");
+            if (at.empty())
+              at = "var";
+        
+            XSSType array_type = ctx.xss_ctx->get_type(at);
+            if (!array_type)
+              {
+                param_list error;
+                error.add("type", stype);
+                error.add("property", de->id());
+                ctx.xss_ctx->error(SUnkownType, &error, file_position(), file_position());
+              }
+            else
+              type = ctx.xss_ctx->get_array_type(array_type);
+          }
+        else
+          {
+            type = ctx.xss_ctx->get_type(stype, str()); //idiom->get_namespace()
+          }
+
+        result->property_type(type);
+    
+        //getter/setter
+        DataEntity ge = de->get("get");
+        if (ge)
+          {
+            InlineRenderer getter = read_inline_renderer(ge);
+            result->getter(getter);
+          }
+
+        DataEntity se = de->get("set");
+        if (se)
+          {
+            InlineRenderer setter = read_inline_renderer(se);
+            result->setter(setter);
+          }
+      }
+
+    //assure typing
     if (!type)
       {
         param_list error;
         error.add("type", stype);
         error.add("property", de->id());
-        ctx->error(SUnkownType, &error, file_position(), file_position());
-
-        type = ctx->get_type("var");
+        ctx.xss_ctx->error(SUnkownType, &error, file_position(), file_position());
+        return XSSProperty(); //td: fixup this
       }
 
-    result->set_type(type);
-    
-    XSSExpression value = read_expression(de, type, "value");
-    result->expr_value(value);
-
-    //getter/setter
-    DataEntity ge = de->get("get");
-    if (ge)
+    str value_str = de->attr("value");
+    if (!value_str.empty())
       {
-        InlineRenderer getter = read_inline_renderer(ge);
-        result->getter(getter);
+        XSSExpression value = read_expression(de, type, "value");
+        result->expr_value(value);
       }
-
-    DataEntity se = de->get("set");
-    if (se)
+    else
       {
-        InlineRenderer setter = read_inline_renderer(se);
-        result->setter(setter);
-      }
+        DataEntity vde = de->get("value");
+        if (vde)
+          {
+            //this is a value in node form, so we'll assume its either an object or an array
+            if (type->is_array())
+              {
+                XSSType       array_type = type->array_type();
+                XSSExpression value      = read_array(vde, array_type, ctx);
+                result->expr_value(value);
+              }
+            else if (type->is_object())
+              {
+                XSSObject value = result->instance_value();
+                if (value)
+                  read_object(vde, ctx, value, type);
+                else
+                  value = read_object(vde, ctx, XSSObject(), type);
 
+                result->instance_value(value);
+              }
+            else
+              {
+                assert(false); //td: error
+              }
+          }
+      }
     return result;
   }
 
-XSSMethod object_model::read_method(DataEntity de, Idiom idiom, XSSContext ctx)
+XSSMethod object_model::read_method(DataEntity de, om_context& ctx)
   {
     XSSMethod result(new xss_method());
     result->set_id(de->id());
@@ -1681,15 +2502,15 @@ XSSMethod object_model::read_method(DataEntity de, Idiom idiom, XSSContext ctx)
     str stype = de->attr("return_type");
     if (!stype.empty())
       {
-        XSSType type = ctx->get_type(stype, idiom->get_namespace());
+        XSSType type = ctx.xss_ctx->get_type(stype, ctx.idiom->get_namespace());
         if (!type)
           {
             param_list error;
             error.add("type", stype);
             error.add("method", de->id());
-            ctx->error(SUnkownType, &error, file_position(), file_position());
+            ctx.xss_ctx->error(SUnkownType, &error, file_position(), file_position());
 
-            type = ctx->get_type("var");
+            type = ctx.xss_ctx->get_type("var");
           }
         
         result->return_type(type);
@@ -1702,13 +2523,13 @@ XSSMethod object_model::read_method(DataEntity de, Idiom idiom, XSSContext ctx)
         result->renderer(caller);
       }
 
-    XSSSignature sig = read_signature(de, idiom, ctx);
+    XSSSignature sig = read_signature(de, ctx);
     result->signature(sig);
 
     return result;
   }
 
-XSSEvent object_model::read_event(DataEntity de, Idiom idiom, XSSContext ctx)
+XSSEvent object_model::read_event(DataEntity de, om_context& ctx)
   {
     XSSEvent result(new xss_event);
     result->set_id(de->id());
@@ -1721,7 +2542,7 @@ XSSEvent object_model::read_event(DataEntity de, Idiom idiom, XSSContext ctx)
         result->set_dispatcher(dispatcher);
       }
 
-    XSSSignature sig = read_signature(de, idiom, ctx);
+    XSSSignature sig = read_signature(de, ctx);
     result->set_signature(sig);
 
     return result;
@@ -1761,7 +2582,7 @@ XSSExpression object_model::read_expression(DataEntity de, XSSType type, const s
   {
     str svalue = de->attr(attribute);
 
-    if (type->id() == "string")
+    if (type && type->id() == "string")
       return xss_expression_utils::constant_expression(svalue);
 
     if (!svalue.empty())
@@ -1770,71 +2591,39 @@ XSSExpression object_model::read_expression(DataEntity de, XSSType type, const s
     return XSSExpression();
   }
 
-void object_model::read_include_def(DataEntity de, XSSContext ctx, om_context& octx)
+XSSObject object_model::read_object(DataEntity de, om_context& ctx, XSSObject instance, XSSType type)
   {
-    return; //td: !!!
-	  
-	entity_list           classes = de->find_all("class");
-    entity_list::iterator it      = classes.begin();
-    entity_list::iterator nd      = classes.end();
-
-    for(; it != nd; it++)
+    if (!type)
       {
-        DataEntity cd = *it;
-
-        str cid   = cd->id();
-        str super = cd->attr("super");
+        if (instance)
+          type = instance->type();
+        else 
+          type = ctx.xss_ctx->get_type(de->type());
         
-        assert(false); //td: read_object
-				//std::map<str, int>::iterator dcit = def_types.find(cid);
-				//if (dcit != def_types.end())
-				//	{
-				//		param_list error;
-				//		error.add("id", SProjectError);
-				//		error.add("desc", SDuplicateClassOnLibrary);
-				//		error.add("class", cid);
-				//		xss_throw(error);
-				//	}
-
-    //    def_types.insert(std::pair<str, int>(cid, classdefs.size()));
-				//classdefs.push_back(clazz_data);
-
-				//XSSType clazz(new xss_type());
-    //    clazz->set_id(cid);
-				//classes.push_back(clazz);
-
-    //    //register early
-    //    XSSModule module = app->type_idiom(super);
-    //    if (module)
-    //      module->register_user_type(clazz);
-    //    else
-    //      app_types_.push_back(clazz);
-
-    //    //mark as defined user type
-    //    clazz->add_attribute("user_defined", true);
-
-    //    ctx->add_type(cid, clazz);
+        if (!type)
+          return XSSObject();
       }
-  }
 
-void object_model::read_include_singleton(DataEntity de, XSSContext ctx, om_context& octx)
-  {
-    entity_list           singletons = de->find_all("instance");
-    entity_list::iterator it         = singletons.begin();
-    entity_list::iterator nd         = singletons.end();
-
-    for(; it != nd; it++)
+    XSSObject result = instance;
+    
+    if (!result)
       {
-        assert(false); //td: read_object 
-        //if (clazz_data->type_name() == "instance")
-        //  {
-        //    str type_name = clazz_data->get<str>("super", str());
-        //    XSSType stype = app->context()->get_type(type_name);
-        //    clazz_data->set_type(stype);
-        //    app->register_singleton(clazz_data); //td: code
-        //    continue;
-        //  }
+        result = XSSObject(new xss_object);
+        result->set_id(de->id());
+        result->set_type(type);
       }
+
+    om_entity_visitor oev(this, result, ctx);
+    oev.attribute_handler("*", &object_model::r_object_attr);
+
+    oev.child_handler("property",    &object_model::r_object_property);
+    oev.child_handler("method",      &object_model::r_object_method);
+    oev.child_handler("event",       &object_model::r_object_event);
+    oev.child_handler("*",           &object_model::r_object_instance);
+
+    de->visit(&oev);
+
+    return result;
   }
 
 document* object_model::create_document(Application app, const str& src_file, XSSContext ctx)
@@ -1853,68 +2642,86 @@ document* object_model::create_document(Application app, const str& src_file, XS
 
 void object_model::fix_it_up(XSSContext ctx, om_context& octx)
   {
-    fixup_list::iterator it = octx.fixup.begin();
-    fixup_list::iterator nd = octx.fixup.end();
+    fixup_list process = octx.fixup;
+    octx.fixup.clear();
 
-    for(; it != nd; it++)
+    while (!process.empty())
       {
-        switch(it->id)
+        fixup_list::iterator it = process.begin();
+        fixup_list::iterator nd = process.end();
+    
+        for(; it != nd; it++)
           {
-            case FIXUP_OBJECT_TYPE:
+            switch(it->id)
               {
-                fixup_type fu   = it->data;
-                XSSType type = ctx->get_type(fu.type_name);
-                if (check_type(type, fu.type_name, ctx))
-                  fu.target->set_type(type);
-                break;
+                case FIXUP_OBJECT_TYPE:
+                  {
+                    fixup_type fu   = it->data;
+                    XSSType type = ctx->get_type(fu.type_name);
+                    if (check_type(type, fu.type_name, ctx))
+                      fu.target->set_type(type);
+                    break;
+                  }
+                case FIXUP_PROPERTY_TYPE:
+                  {
+                    fixup_property_type fu = it->data;
+                    XSSType type = ctx->get_type(fu.type_name);
+				            if (check_type(type, fu.type_name.name, ctx))
+                      fu.target->property_type(type);
+                    break;
+                  }
+                case FIXUP_RETURN_TYPE:
+                  {
+                    fixup_return_type fu = it->data;
+                    XSSType type = ctx->get_type(fu.type_name);
+                    if (check_type(type, fu.type_name, ctx))
+                      fu.target->return_type(type);
+                    break;
+                  }
+                case FIXUP_INSTANCE_EVENT:
+                  {
+                    assert(false); //td:
+                    break;
+                  }
+                case FIXUP_SUPER_TYPE: 
+                  {
+                    fixup_type fu = it->data;
+                    XSSType type = ctx->get_type(fu.type_name);
+                    if (check_type(type, fu.type_name, ctx))
+                      fu.target->set_type(type);
+                    break;
+                  }
+                case FIXUP_ARGUMENT_TYPE:
+                  {
+                    fixup_arg_type fu = it->data;
+                    XSSType type = ctx->get_type(fu.type);
+                    if (check_type(type, fu.type, ctx))
+                      fu.args->arg_type(fu.idx, type);
+                    break;
+                  }
+                case FIXUP_OBJECT_CHILD:
+                  {
+                    fixup_obj_child fu    = it->data;
+                    XSSObject       child = read_object_instance(fu.de, fu.parent, octx);
+
+                    if (!child)
+                      {
+                        //td: error
+                      }
+                    break;
+                  }
+                default:
+                  assert(false); //what am I missing?
               }
-            case FIXUP_PROPERTY_TYPE:
-              {
-                fixup_property_type fu = it->data;
-                XSSType type = ctx->get_type(fu.type_name);
-				if (check_type(type, fu.type_name.name, ctx))
-                  fu.target->property_type(type);
-                break;
-              }
-            case FIXUP_RETURN_TYPE:
-              {
-                fixup_return_type fu = it->data;
-                XSSType type = ctx->get_type(fu.type_name);
-                if (check_type(type, fu.type_name, ctx))
-                  fu.target->return_type(type);
-                break;
-              }
-            case FIXUP_INSTANCE_EVENT:
-              {
-                assert(false); //td:
-                break;
-              }
-            case FIXUP_SUPER_TYPE: 
-              {
-                fixup_type fu = it->data;
-                XSSType type = ctx->get_type(fu.type_name);
-                if (check_type(type, fu.type_name, ctx))
-                  fu.target->set_type(type);
-                break;
-              }
-            default:
-              assert(false); //what am I missing?
           }
+
+        process = octx.fixup;
+        octx.fixup.clear();
       }
   }
 
 void object_model::bind_it_up(XSSContext ctx, om_context& octx)
   {
-    //first register types into the context, they'll be needed during binding
-    type_map::iterator cit = octx.classes.begin();
-    type_map::iterator cnd = octx.classes.end();
-
-    for(; cit != cnd; cit++)
-      {
-        XSSType    type = cit->second;
-        ctx->add_type(cit->first, type);
-      }
-
     instance_map::iterator it = octx.instances.begin();
     instance_map::iterator nd = octx.instances.end();
 
@@ -1925,8 +2732,8 @@ void object_model::bind_it_up(XSSContext ctx, om_context& octx)
       }
 
     //then bind
-    cit = octx.classes.begin();
-    cnd = octx.classes.end();
+    type_map::iterator cit = octx.classes.begin();
+    type_map::iterator cnd = octx.classes.end();
 
     for(; cit != cnd; cit++)
       {
@@ -2002,15 +2809,90 @@ void object_model::visit_errors(const fs::path& fname, error_visitor* visitor)
       }
   }
 
-//error_list& object_model::errors()
-//  {
-//    return errors_;
-//  }
-
 void object_model::clear_file_errors(const str& fname)
   {
     Application app = app_by_file(fname); assert(app);
     app->clear_file_errors(fname);
+  }
+
+void object_model::parent_child_action(PARENT_CHILD_ACTION action, XSSObject parent, XSSObject child, om_context& ctx)
+  {
+    switch(action)
+      {
+        case PCA_ASPROPERTY:
+          {
+            //add the child as a property
+            str child_id = child->id(); 
+            assert(!child_id.empty()); //td: naming policy
+            
+            XSSProperty prop = parent->get_property(child_id);
+            if (!prop)
+              prop = parent->add_property(child_id, XSSExpression());
+            else
+              {
+                assert(false); //td: error
+              }
+
+            prop->property_type(child->type());
+            prop->instance_value(child);
+            break;
+          }
+        case PCA_ASCHILD:
+          {
+            parent->add_child(child);
+            break;
+          }
+        case PCA_INDEPENDENT_CHILD:
+          {
+            //just register the instance, however, the parent relationship 
+            //will be kept
+            child->set_parent(parent); 
+            break;
+          }
+        default:
+          assert(false); //catch
+      }
+
+    //we also must decide what to do with the child entity
+    //this code is here since the child instance has just being created
+    //if (!ctx.xss_ctx->add_instance(child))
+    ctx.xss_ctx->add_instance(child);
+  }
+
+void object_model::resolve_parent_child(XSSObject parent, XSSObject child, om_context& ctx)
+  {
+    //find the parent type (it could be a type itself)
+    xss_type* parent_type = dynamic_cast<xss_type*>(parent.get());
+    if (!parent_type)
+      parent_type = parent->type().get();
+
+    assert(parent_type);
+    param_list error; //just in case
+    error.add("parent", parent->id());
+    error.add("child", child->id());
+
+    PARENT_CHILD_ACTION pca = PCA_DEFAULT;
+    if (parent_type->accepts_child(child, pca))
+      {
+        parent_child_action(pca, parent, child, ctx);
+      }
+    else if (pca == PCA_REJECT)
+      {
+        ctx.xss_ctx->error(SInvalidChild, &error, file_position(), file_position());
+      }
+    else
+      {
+        //probe the child
+        XSSType child_type = child->type(); assert(child_type);
+        if (child_type->accepts_parent(parent, pca))
+          {
+            parent_child_action(pca, parent, child, ctx);
+          }
+        else
+          {
+            ctx.xss_ctx->error(SInvalidChild, &error, file_position(), file_position());
+          }
+      }
   }
 
 //object_model_thread

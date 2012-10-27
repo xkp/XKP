@@ -257,6 +257,12 @@ class xss_object_model : public IObjectModel
 			return result;
 		}
 
+		Application create_placeholder(const std::string& filename)
+		{
+			Application result(new application(fs::path(filename)));
+			return result;
+		}
+
 		Application load_project(const std::string& filename, xss_error_info_list& errors)
 		{
 			fs::path filepath     = filename;
@@ -266,8 +272,12 @@ class xss_object_model : public IObjectModel
 			Application result;
 			try
 			  {
-				DataReader prj	= model_->filesystem()->load_data(filepath);
-				result = model_->load(prj, args, project_path);
+				DataReader prj		   = model_->filesystem()->load_data(filepath);
+				bool	   old_version = prj->root()[0]->attr("version") == "0.9.4";	
+				if (old_version)
+					result = create_placeholder(filename);
+				else
+					result = model_->load(prj, args, project_path);
 			  }
 			catch(xss_error err)
 			  {

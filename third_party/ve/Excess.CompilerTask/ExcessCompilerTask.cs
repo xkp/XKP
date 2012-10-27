@@ -7,6 +7,7 @@ using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
 using Microsoft.Build.BuildEngine;
 using ExcessCompiler;
+using System.Xml.Linq;
 
 namespace Excess.CompilerTasks
 {
@@ -149,6 +150,13 @@ namespace Excess.CompilerTasks
 		public override bool Execute()
 		{
             string filePath = Path.Combine(projectPath, MainFile);
+            XAttribute version = XElement.Load(filePath).Attribute("version");
+            bool old_version = version != null && version.Value == "0.9.4";
+            if (old_version)
+            {
+                //call xss.exe
+                return true;
+            }
 
             ExcessModelService service = ExcessModelService.getInstance();
             List<ExcessErrorInfo> errors = new List<ExcessErrorInfo>();
