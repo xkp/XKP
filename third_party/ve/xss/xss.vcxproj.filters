@@ -146,5 +146,11 @@
     <ClCompile Include="..\..\..\src\xss\lang\typed.cpp">
       <Filter>Source Files\xss</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\xml_data_reader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\xss\lang\java.cpp">
+      <Filter>Source Files\xss</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

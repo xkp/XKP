@@ -14,7 +14,6 @@ SessionManager.on("expired", function(sid){
 });
         var mysql  = require("mysql");
         var child_process  = require("child_process");
-            application.project_db = {hostname : "localhost",user : "root",password : "xs@2011",database : "NodeTest"};
 	application.compile = function(request,response) 
 	{
         var __params = url.parse(request.url, true).query;

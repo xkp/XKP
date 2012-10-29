@@ -36,19 +36,22 @@ var app_height = window.innerHeight;
 var material_wireframe;var p_mat1;var all_in_one;var __basic_material1;var __basic_material2;var __lambert_material1;var __lambert_material2;var __depth_material1;var __normal_material1;var __basic_material3;var __lambert_material3;var camera_1;var amb_light_1;var dir_light_1;var particle_1;var point_light_1;var plane_1;
 var application = {};
 application.events = new ev.EventHolder();	
-		var streamer = new stream.Streamer();	
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/land_ocean_ice_cloud.jpg",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image1;
 				global_package.events.addListener("loaded", function()
 				{
@@ -175,10 +178,15 @@ point_light_1.manager = manager;
 	    manager.scene.add(plane_1);
 		plane_1.events = new ev.EventHolder();
 plane_1.manager = manager;
-            camera_1.position = ;
-            dir_light_1.position = ;
-            particle_1.scale = ;
-            plane_1.position = ;
+            camera_1.position.z = 800;
+            camera_1.position.y = 200;
+            dir_light_1.position.x = Math.random() - 0.5;
+            dir_light_1.position.y = Math.random() - 0.5;
+            dir_light_1.position.z = Math.random() - 0.5;
+            particle_1.scale.x = 5;
+            particle_1.scale.y = 5;
+            particle_1.scale.z = 5;
+            plane_1.position.y = -100;
             application.timer = null;
             application.objects = [];
 	application.events.addListener("init", function()

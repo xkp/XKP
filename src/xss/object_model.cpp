@@ -680,6 +680,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
     DataEntity  prj = assure_unique_root(project, octx);
 
     //setup
+    result->file_system(fs_);
     str appname = prj->attr("name");
     if (appname.empty())
       appname = "untitled";

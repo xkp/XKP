@@ -68,9 +68,12 @@ camera_1.manager = manager;
 			particle_1 = new THREE.Particle(p_mat1) ;	
 			manager.scene.add( particle_1 );	
 particle_1.manager = manager;
-            camera_1.position = ;
-            particle_1.position = ;
-            particle_1.scale = ;
+            camera_1.position.y = 300;
+            camera_1.position.z = 500;
+            particle_1.position.y = 150;
+            particle_1.scale.x = 5;
+            particle_1.scale.y = 5;
+            particle_1.scale.z = 5;
 	application.events.addListener("mousemove", function()
 	{    
 		particle_1.scale.x = particle_1.scale.x + 0.0500000007;

@@ -48,7 +48,7 @@ var lbl0;var lbl1;
 var materials;var __basic_material1;var __basic_material2;var __basic_material3;var __basic_material4;var __basic_material5;var __basic_material6;var plane_material;var plane_mat1;var camera_1;var cube_1;var plane_1;
 var application = {};
 application.events = new ev.EventHolder();	
-		var streamer = new stream.Streamer();	
+		var streamer = new stream.Streamer();		
 		var ResourceUtils = new stream.ResourceUtils();
 		if(drawingCanvas){
 			var client =
@@ -70,140 +70,170 @@ application.events = new ev.EventHolder();
 	// --------RESOURCES---------
 		var global_package = new stream.Package(streamer);	
                 global_package.add_item(
-            {
+		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/1326602376_earth.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image1;
 				global_package.events.addListener("loaded", function()
 				{
 					__image1 = streamer.get_resource("__image1");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/1327189824_users.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image2;
 				global_package.events.addListener("loaded", function()
 				{
 					__image2 = streamer.get_resource("__image2");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/1327189922_photo-camera.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __image3;
 				global_package.events.addListener("loaded", function()
 				{
 					__image3 = streamer.get_resource("__image3");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"stop",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/1340244084_playback_stop.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var stop;
 				global_package.events.addListener("loaded", function()
 				{
 					stop = streamer.get_resource("stop");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"play",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/1340244070_playback_play.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var play;
 				global_package.events.addListener("loaded", function()
 				{
 					play = streamer.get_resource("play");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"sound_on",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/1340244179_sound_high.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var sound_on;
 				global_package.events.addListener("loaded", function()
 				{
 					sound_on = streamer.get_resource("sound_on");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"sound_off",
 		resource_type:	RESOURCE_IMAGE,
 		src:			"images/1340244116_sound_mute.png",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var sound_off;
 				global_package.events.addListener("loaded", function()
 				{
 					sound_off = streamer.get_resource("sound_off");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__video1",
 		resource_type:	RESOURCE_VIDEO,
 		src:			"video/gizmo.mp4",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __video1;
 				global_package.events.addListener("loaded", function()
 				{
 					__video1 = streamer.get_resource("__video1");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__audio1",
 		resource_type:	RESOURCE_AUDIO,
 		src:			"sounds/camera1.wav",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __audio1;
 				global_package.events.addListener("loaded", function()
 				{
 					__audio1 = streamer.get_resource("__audio1");
 				});
                 global_package.add_item(
-            {
+		{
 		id:				"__audio2",
 		resource_type:	RESOURCE_AUDIO,
 		src:			"sounds/applause.wav",
+		runtime_src:	null,
 		frame_width:	null,
 		frame_height:	null,
-		animations:		[]
-});	
+		animations:		[],	
+		children:		{}
+		}
+);	
 				var __audio2;
 				global_package.events.addListener("loaded", function()
 				{
@@ -498,8 +528,9 @@ g_sequence_manager);
             btnMute.set_width(40);
             btnMute.set_height(40);
             set_material_alpha(plane_material, 50);
-            camera_1.position = ;
-            cube_1.position = ;
+            camera_1.position.y = 150;
+            camera_1.position.z = 500;
+            cube_1.position.y = 150;
             application.x_target_rotation = 0;
             application.x_target_rotation_on_mouse_down = 0;
             application.mouse_x = 0;
