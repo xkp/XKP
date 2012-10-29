@@ -1,0 +1,41 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace <xss:e v="application.name"/>
+{
+    public partial class <xss:e v="application.name"/>_Form : Form
+    {
+        public <xss:e v="application.name"/>_Form()
+        {
+            InitializeComponent();
+        }
+
+        <xss:code>
+            //render app object
+            var app = application.root;
+			for(var prop in app.properties)
+			{
+                if (!prop.own)
+                    continue;
+
+                compiler.xss("..\common\property.xss", prop);
+			}
+
+			for(var mthd in app.methods)
+			{
+                compiler.xss("..\common\method.xss", mthd);
+			}
+
+			for(var evimpl in app.evimpl)
+			{
+                compiler.xss("..\common\evimpl.xss", evimpl, owner = app);
+			}
+        </xss:code>
+    }
+}

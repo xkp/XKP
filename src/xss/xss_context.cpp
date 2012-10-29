@@ -5,6 +5,10 @@
 #include "xss/lang/base.h"
 #include "xss/xss_expression.h"
 
+//td: move inline_renderer together with these two
+#include "xss/brace_parser.h"
+#include "xss/xss_renderer.h"
+
 using namespace xkp;
 
 const str STypeMismatch("type-mismatch");
@@ -23,7 +27,7 @@ const str SGetterNotReturning("property getters must return a value");
 const str SGetterTypeMismatch("property getters must return the same type as its property");
 const str SMethodReturnTypeMismatch("a method returns a different type than its declaration");
 
-str xss_utils::var_to_string(variant& v)
+str xss_utils::var2string(variant& v)
   {
     if (v.is<str>())
       return variant_cast<str>(v, str());
@@ -52,6 +56,24 @@ str xss_utils::var_to_string(variant& v)
       return "null";
 
     return variant_cast<str>(v, str());
+  }
+
+bool xss_utils::var2bool(variant& v) 
+  {
+    if (v.is<bool>())
+      return v;
+
+    try 
+      {
+        DynamicObject obj = v;
+        return obj? true : false;
+      }
+    catch(type_mismatch)
+      {
+        //not an object
+      }
+
+    return variant_cast<bool>(v, false);
   }
 
 fs::path xss_utils::relative_path(fs::path& src, fs::path& dst)
@@ -610,7 +632,7 @@ bool xss_context::add_instance(XSSObject instance)
             str id = instance->id();
             if (!id.empty())
               register_symbol(RESOLVE_INSTANCE, id, instance);
-            break;
+            return true;
           }
         default:
           {
@@ -1303,7 +1325,6 @@ void xss_object::copy(XSSObject obj)
         XSSEvent my_ev = XSSEvent(new xss_event);
 
         my_ev->copy(XSSObject(obj_ev));
-        my_ev->impls = obj_ev->impls;
         events_->push_back(my_ev);
       }
 
@@ -1458,9 +1479,9 @@ void xss_object::set_idiom(XSSObject id)
     idiom_ = id;
   }
 
-void xss_object::add_event_impl(XSSEvent ev, XSSCode code)
+void xss_object::add_event_impl(XSSEvent ev, XSSCode code, XSSSignature sig, XSSObject instance, XSSExpression instance_path)
   {
-    assert(false); //td:
+    event_impl_.push_back(XSSEventImpl(new xss_event_impl(ev, sig, code, instance, instance_path)));
   }
 
 bool xss_object::context_resolve(const str& id, resolve_info& info)
@@ -1699,52 +1720,67 @@ DynamicArray xss_object::find_by_type(const str& which)
     return result;
   }
 
-DynamicArray xss_object::get_event_impl(const str& event_name, XSSEvent& ev)
+//0.9.5
+//DynamicArray xss_object::get_event_impl(const str& event_name, XSSEvent& ev)
+//  {
+//    for(size_t i = 0; i < events_->size(); i++)
+//      {
+//        ev = events_->at(i);
+//        if (ev->id() == event_name)
+//          return ev->impls;
+//      }
+//
+//    //not implemented, create
+//    ev = XSSEvent(new xss_event(event_name, variant()));
+//    XSSEvent type_ev = type_? type_->get_event(event_name) : XSSEvent();
+//    if (type_ev)
+//      {
+//        ev->copy(XSSObject(type_ev));
+//      }
+//
+//    ev->set_id(event_name);
+//
+//    events_->push_back(ev);
+//    return ev->impls;
+//  }
+//
+//DynamicArray xss_object::get_event_code(const str& event_name)
+//  {
+//    for(size_t i = 0; i < events_->size(); i++)
+//      {
+//        XSSEvent ev = events_->at(i);
+//        if (ev->id() == event_name)
+//          return ev->impls;
+//      }
+//    
+//    return DynamicArray(new dynamic_array);
+//  }
+//
+//variant xss_object::get_event_args(const str& event_name)
+//  {
+//    for(size_t i = 0; i < events_->size(); i++)
+//      {
+//        XSSEvent ev = events_->at(i);
+//        if (ev->id() == event_name)
+//          return ev->args;
+//      }
+//    
+//    return variant();
+//  }
+//
+
+DynamicArray xss_object::get_evimpl()
   {
-    for(size_t i = 0; i < events_->size(); i++)
-      {
-        ev = events_->at(i);
-        if (ev->id() == event_name)
-          return ev->impls;
-      }
+    DynamicArray result(new dynamic_array);
+    event_implementors::iterator it = event_impl_.begin();
+    event_implementors::iterator nd = event_impl_.end();
 
-    //not implemented, create
-    ev = XSSEvent(new xss_event(event_name, variant()));
-    XSSEvent type_ev = type_? type_->get_event(event_name) : XSSEvent();
-    if (type_ev)
-      {
-        ev->copy(XSSObject(type_ev));
-      }
+    for(; it != nd; it++)
+      result->push_back(*it);
 
-    ev->set_id(event_name);
-
-    events_->push_back(ev);
-    return ev->impls;
+    return result;
   }
 
-DynamicArray xss_object::get_event_code(const str& event_name)
-  {
-    for(size_t i = 0; i < events_->size(); i++)
-      {
-        XSSEvent ev = events_->at(i);
-        if (ev->id() == event_name)
-          return ev->impls;
-      }
-    
-    return DynamicArray(new dynamic_array);
-  }
-
-variant xss_object::get_event_args(const str& event_name)
-  {
-    for(size_t i = 0; i < events_->size(); i++)
-      {
-        XSSEvent ev = events_->at(i);
-        if (ev->id() == event_name)
-          return ev->args;
-      }
-    
-    return variant();
-  }
 DynamicArray xss_object::get_attributes()
   {
     DynamicArray result(new dynamic_array);
@@ -1838,11 +1874,6 @@ void xss_object::insert_event(XSSEvent ev)
 void xss_object::insert_property(XSSProperty prop)
   {
     //td: !!! check dups
-    if (prop->id() == "array_property")
-      {
-        _asm nop;
-      }
-
     properties_->push_back(prop);
   }
 
@@ -2123,13 +2154,7 @@ XSSProperty xss_object::instantiate_property(const str& prop_name)
         result = XSSProperty(new xss_property());
         result->copy(XSSObject(type_prop));
         
-        if (prop_name == "array_property")
-          {
-            _asm nop;
-          }
-        
         properties_->push_back(result);
-
         return result;
       }
 
@@ -2145,12 +2170,54 @@ void xss_object::register_method(const str &name, XSSMethod new_mthd)
       }
   }
 
-void xss_object::register_event_impl(const str &name, XSSEvent new_evt)
+//parent_policy
+bool parent_policy::match(XSSObject obj, bool& is_fixup)
   {
-    assert(false); //td:
-  }
+    is_fixup = false;
 
-//xss_type
+    if (type)
+      {
+        XSSType child_type = obj->type(); assert(child_type);
+        XSSType curr = child_type;
+        bool    found = false;
+        while(!found && curr)
+          {
+            if (curr == type)
+              return action != PCA_REJECT;
+
+            curr = curr->type();
+          }
+      }
+    else if (match_all)
+      {
+        return action != PCA_REJECT;
+      }
+    else if (condition)
+      {
+        param_list args;
+        args.add("it", obj);
+
+        execution_context ec(condition, variant(), &args);
+        variant result = ec.execute();
+
+        if (xss_utils::var2bool(result))
+          return action != PCA_REJECT;
+        else 
+          return false;
+      }
+    else if (fixup)
+      {
+        is_fixup = true;
+      }
+    else
+      {
+        assert(false); //use case check
+      }
+    
+    return true;
+  }
+  
+  //xss_type
 xss_type::xss_type():
   xss_object(),
   xs_type_(null),
@@ -2389,28 +2456,20 @@ bool xss_type::accepts_child(XSSObject child, PARENT_CHILD_ACTION& result)
 
     for(; it != nd; it++)
       {
-        if (it->match_all)
+        bool fixup = false;
+        if (it->match(child, fixup))
           {
-            result = it->action;
+            if (fixup)
+              result = PCA_FIXUP;
+            else
+              result = it->action;
+            
             return result != PCA_REJECT;
           }
-
-        if (it->type)
-          {
-            XSSType curr = child_type;
-            bool    found = false;
-            while(!found && curr)
-              {
-                if (curr == it->type)
-                  {
-                    result = it->action;
-                    return result != PCA_REJECT;
-                  }
-
-                curr = curr->type();
-              }
-          }
       }
+
+    if (type_)
+      return type_->accepts_child(child, result);
 
     return false;
   }
@@ -2426,28 +2485,20 @@ bool xss_type::accepts_parent(XSSObject parent, PARENT_CHILD_ACTION& result)
 
     for(; it != nd; it++)
       {
-        if (it->match_all)
+        bool fixup = false;
+        if (it->match(parent, fixup))
           {
-            result = it->action;
+            if (fixup)
+              result = PCA_FIXUP;
+            else
+              result = it->action;
+            
             return result != PCA_REJECT;
           }
-
-        if (it->type)
-          {
-            XSSType curr = parent_type;
-            bool    found = false;
-            while(!found && curr)
-              {
-                if (curr->type() == it->type)
-                  {
-                    result = it->action;
-                    return result != PCA_REJECT;
-                  }
-
-                curr = curr->type();
-              }
-          }
       }
+
+    if (type_)
+      return type_->accepts_parent(parent, result);
 
     return false;
   }
@@ -2537,8 +2588,25 @@ void xss_type::set_language(Language lang)
   }
 
 //inline_renderer
-inline_renderer::inline_renderer(str text, bool global)
+inline_renderer::inline_renderer():
+  global_(false)
   {
+  }
+
+bool inline_renderer::compile(const str& text, bool global, param_list& params)
+  {
+    global_ = global;
+    XSSContext ctx(new xss_context(XSSContext()));
+    //ctx->set_args(params);
+
+    xss_renderer* result = new xss_renderer(XSSCompiler(), ctx, fs::path());
+    result->context()->set_args(params);
+
+    brace_parser parser;
+    parser.parse(text, result);
+    XSSRenderer renderer(result);
+    renderer_ = renderer;
+    return true;
   }
 
 bool inline_renderer::render(param_list& pl, std::ostringstream& result)
@@ -2550,7 +2618,8 @@ bool inline_renderer::render(param_list& pl, std::ostringstream& result)
 
 //xss_property
 xss_property::xss_property():
-	flags(0)
+	flags(0),
+  is_const_(false)
   {
     DYNAMIC_INHERITANCE(xss_property)
   }
@@ -2561,7 +2630,8 @@ xss_property::xss_property(const xss_property& other):
 	set_(other.set_),
 	flags(other.flags),
 	this_(other.this_),
-	value_(other.value_)
+	value_(other.value_),
+  is_const_(other.is_const_)
   {
     DYNAMIC_INHERITANCE(xss_property)
 	  id_ = other.id_;
@@ -2570,7 +2640,8 @@ xss_property::xss_property(const xss_property& other):
 
 xss_property::xss_property(const str& _name, XSSExpression _value, XSSObject _this_):
 	this_(_this_),
-	expr_value_(_value)
+	expr_value_(_value),
+  is_const_(false)
   {
     DYNAMIC_INHERITANCE(xss_property)
 	  id_ = _name;
@@ -2581,7 +2652,8 @@ xss_property::xss_property(const str& _name, XSSExpression _value, variant _get,
 	get_(_get),
 	set_(_set),
 	this_(_this_),
-	expr_value_(_value)
+	expr_value_(_value),
+  is_const_(false)
   {
     DYNAMIC_INHERITANCE(xss_property)
 	  id_ = _name;
@@ -2747,12 +2819,12 @@ XSSCode xss_property::code_setter()
 
 void xss_property::as_const()
   {
-    assert(false); //td:
+    is_const_ = true;
   }
 
 bool xss_property::is_const()
   {
-    return false; 
+    return is_const_; 
   }
 
 void xss_property::property_type(XSSType type)
@@ -2884,22 +2956,22 @@ XSSType xss_property::type()
   }
 
 //xss_event
-xss_event::xss_event():
-  impls(new dynamic_array)
+xss_event::xss_event()
   {
     DYNAMIC_INHERITANCE(xss_event)
   }
 
 xss_event::xss_event(const xss_event& other):
-  impls(other.impls),
-  args(other.args)
+  dispatcher_(other.dispatcher_),
+  signature_(other.signature_)
   {
     DYNAMIC_INHERITANCE(xss_event)
     id_ = other.id_;
   }
 
-xss_event::xss_event(const str& _name, variant args):
-  impls(new dynamic_array)
+xss_event::xss_event(const str& _name, XSSSignature signature, InlineRenderer dispatcher):
+  dispatcher_(dispatcher),
+  signature_(signature)
   {
     DYNAMIC_INHERITANCE(xss_event)
     id_ = _name;
@@ -2909,11 +2981,6 @@ str xss_event::get_name()
   {
     return id_;
   }
-
-bool xss_event::implemented()
-	{
-		return impls->size() > 0;
-	}
 
 void xss_event::set_dispatcher(InlineRenderer dispatcher)
   {
@@ -2936,6 +3003,88 @@ void xss_event::bind(XSSContext ctx)
     signature_->bind(ctx);
 
     //td: !!! implemented events
+  }
+
+//xss_event_impl
+xss_event_impl::xss_event_impl()
+  {
+  }
+
+xss_event_impl::xss_event_impl(const xss_event_impl& other):
+  ev_(other.ev_), 
+  code_(other.code_), 
+  signature_(other.signature_),
+  instance_(other.instance_)
+  {
+  }
+
+xss_event_impl::xss_event_impl(XSSEvent ev, XSSSignature sig, XSSCode code, XSSObject instance, XSSExpression instance_path):
+  ev_(ev), 
+  code_(code), 
+  signature_(sig),
+  instance_(instance),
+  instance_path_(instance_path)
+  {
+  }
+
+void xss_event_impl::set_ev(XSSEvent ev)
+  {
+    ev_ = ev;
+  }
+
+XSSEvent xss_event_impl::ev()
+  {
+    return ev_;
+  }
+
+void xss_event_impl::set_code(XSSCode code)
+  {
+    code_ = code;
+  }
+
+XSSCode xss_event_impl::code()
+  {
+    return code_;
+  }
+
+void xss_event_impl::set_signature(XSSSignature sig)
+  {
+    signature_ = sig;
+  }
+
+XSSSignature xss_event_impl::signature()
+  {
+    return signature_;
+  }
+
+void xss_event_impl::set_instance(XSSObject instance)
+  {
+    instance_ = instance;
+  }
+
+XSSObject xss_event_impl::instance()
+  {
+    return instance_;
+  }
+
+void xss_event_impl::set_instance_path(XSSExpression instance_path)
+  {
+    instance_path_ = instance_path;
+  }
+
+XSSExpression xss_event_impl::instance_path()
+  {
+    return instance_path_;
+  }
+
+void xss_event_impl::bind(XSSContext ctx)
+  {
+    if (signature_)
+      signature_->bind(ctx);
+
+    code_->bind(ctx);
+
+    xss_object::bind(ctx);
   }
 
 //xss_method

@@ -127,7 +127,7 @@ void test_object_model(fs::path target)
             for(size_t i = 0; i < it->info.size(); i++)
               {
                 str name  = it->info.get_name(i);
-                str value = xss_utils::var_to_string(it->info.get(i));  
+                str value = xss_utils::var2string(it->info.get(i));  
                 std::cout << '\t' << name << " : " << value << '\n';
               }
           }

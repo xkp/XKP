@@ -1,0 +1,7 @@
+<classes>
+    <class id="testComponent" super="div">
+        <button id="btn1" caption="Hello, component">
+            <position x="10" y="10" width="153" height="61"/>
+        </button>
+    </class>
+</classes>

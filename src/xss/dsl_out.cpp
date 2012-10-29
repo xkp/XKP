@@ -89,7 +89,7 @@ struct out_expr_renderer : item_renderer
     virtual str render(XSSObject this_, param_list* args)
       {
         variant v = args->get(idx_);
-        return xss_utils::var_to_string(v);
+        return xss_utils::var2string(v);
       }
     private:
       int idx_;

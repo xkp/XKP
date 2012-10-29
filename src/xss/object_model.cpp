@@ -38,6 +38,8 @@ const str SIdiomFileNotFound("Idiom not found");
 const str SFileNotFound("File not found");
 const str SMissingArgType("Argument must have a type");
 const str SInvalidChild("An instance of this type is not insertable on this parent");
+const str SEventNotFound("Event not found");
+
 
 //utils
 struct text_utils
@@ -299,8 +301,10 @@ fs::path application::app_path()
 
 void application::build()
   {
-    JsonOutput   json; 
-    XSSCompiler compiler(new xss_compiler(&json));
+    //JsonOutput out; 
+    ConsoleOutput out;
+    
+    XSSCompiler compiler(new xss_compiler(&out));
     compiler->file_system(fs_);
     compiler->set_output_path(output_path_);
     
@@ -334,6 +338,33 @@ void application::output_path(const fs::path& path)
 fs::path application::output_path()
   {
     return output_path_;
+  }
+
+str application::random_id(XSSObject instance)
+  {
+    XSSType type = instance->type();
+    str type_id = type? type->id() : "object"; 
+    return type_id + "__" + boost::lexical_cast<str>( instance.get() ); 
+  }
+
+void application::add_instance(XSSObject instance)
+  {
+    assert(instance);
+    str  id  = instance->id();
+    bool add = true; 
+    if (id.empty())
+      {
+        add = false;
+        if (instance->output_id().empty())
+          {
+            instance->set_output_id(random_id(instance));
+          }
+      }
+
+    instances_.push_back(instance);
+
+    if (add)
+      ctx_->register_symbol(RESOLVE_INSTANCE, id, instance);
   }
 
 XSSObject application::root()
@@ -643,10 +674,10 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
     Application result(new application(base_path));
 	  result->file_system(fs_);
 
-    DataEntity  prj = assure_unique_root(project);
-
     om_context octx;
     octx.application = result;
+
+    DataEntity  prj = assure_unique_root(project, octx);
 
     //setup
     str appname = prj->attr("name");
@@ -662,7 +693,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
     result->output_path(output_path);
 
     //create the global context for this application
-    Language   lang   = read_language(prj);
+    Language   lang   = read_language(prj, result);
     XSSContext global = lang->create_context();
     global->set_path(base_path);
     global->set_language(lang);
@@ -692,7 +723,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
         str pid = param->id();
         if (pid.empty())
           {
-            add_error(SNamelessProjectParameter, null, file_location());
+            add_error(result, SNamelessProjectParameter, null, file_location());
             continue;
           }
 
@@ -707,7 +738,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
         ep = fs_->locate(ep_filename, base_path);
 
         if (ep.empty())
-          add_error(SMustProvideEntryPointForApplicationType, null, file_location());
+          add_error(result, SMustProvideEntryPointForApplicationType, null, file_location());
       }
     
     result->entry_point(ep);
@@ -730,7 +761,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
           {
             param_list error;
             error.add("file", idiom_src);
-            add_error(SIdiomFileNotFound, &error, file_location());
+            add_error(result, SIdiomFileNotFound, &error, file_location());
           }
 
         Idiom idiom = find_idiom(idiom_path.string());
@@ -738,8 +769,8 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
         if (!idiom)
           {
             DataReader idiom_data = fs_->load_data(idiom_path);
-            idiom = read_idiom(assure_unique_root(idiom_data), octx);
-            register_idiom(idiom_path.string(), idiom);
+            idiom = read_idiom(assure_unique_root(idiom_data, octx), octx);
+            register_idiom(idiom_path.string(), result, idiom);
           }
 
         assert(idiom);
@@ -852,6 +883,8 @@ void object_model::update_document(const str& fname, om_response& response)
 	  document* doc = get_document(fname);
 	  if (doc)
 	    {
+        Application app = response.data.application; assert(app);
+
         //bail on errors
         ErrorHandler eh = response.ctx->errors();
         if (eh && eh->has_errors())
@@ -864,13 +897,11 @@ void object_model::update_document(const str& fname, om_response& response)
             for(; it != nd; it++)
 			        {
                 it->loc.file = fname;
-                add_error(it->desc, &it->info, it->loc);
+                add_error(app, it->desc, &it->info, it->loc);
 			        }
 
             return;
           }
-
-        Application app = response.data.application; assert(app);
 
         response.ctx->errors(ErrorHandler()); //let them go thru
 		    response.ctx->set_parent(app->context());
@@ -930,12 +961,12 @@ void object_model::add_include(Application app, const str& def, const str& src)
     bind_it_up(global, octx);
   }
 
-Language object_model::read_language(DataEntity project)
+Language object_model::read_language(DataEntity project, Application app)
   {
     str language_name = project->attr("language");
     if (language_name.empty())
       {
-        add_error(SMustProvideLanguageForApplicationType, null, file_location());
+        add_error(app, SMustProvideLanguageForApplicationType, null, file_location());
         return Language();
       }
 
@@ -1017,68 +1048,6 @@ Idiom object_model::read_idiom(DataEntity de, om_context& ctx)
 
     ctx.idiom = Idiom();
     return result; 
-
-    //td: !!! reader
-    //if (iid.empty())
-    //  ctx.xss_ctx->error(SIdiomsMustHaveId, null, file_position(), file_position());
-
-    //str _namespace = de->attr("namespace");
-    //if (_namespace.empty())
-    //  _namespace = iid;
-
-    //result->set_namespace(_namespace);
-    //
-    ////read enums
-    //entity_list           enums = de->find_all("enum");
-    //entity_list::iterator eit   = enums.begin();
-    //entity_list::iterator end   = enums.end();
-
-    //for(; eit != end; eit++)
-    //  {
-    //    DataEntity ed = *eit;
-    //    assure_id(ed);
-
-    //    XSSType type = read_enum(ed, ctx);
-    //    result->add_type(type);
-    //  }
-    //
-    ////read imports
-    //entity_list imports = de->find_all("import");
-    //entity_list::iterator iit = imports.begin();
-    //entity_list::iterator ind = imports.end();
-
-    //for(; eit != end; eit++)
-    //  {
-    //    DataEntity ed = *eit;
-    //    assure_id(ed);
-
-    //    str super = ed->attr("super");
-    //    if (!super.empty())
-    //      {
-    //        param_list error;
-    //        error.add("import", ed->id());
-    //        ctx.xss_ctx->error(SImportCannotInherit, &error, file_position(), file_position()); //td: !!! data entity file pos
-    //      }
-
-    //    XSSType type = read_type(ed, result, ctx);
-    //    result->add_import(type);
-    //  }
-
-    ////read types
-    //entity_list           types = de->find_all("class");
-    //entity_list::iterator it    = types.begin();
-    //entity_list::iterator nd    = types.end();
-
-    //for(; it != nd; it++)
-    //  {
-    //    DataEntity td = *it;
-    //    assure_id(td);
-    //    
-    //    XSSType type = read_type(td, result, ctx);
-    //    result->add_type(type);
-    //  }
-
-    //return result;
   }
 
 void object_model::handle_include(Application app, const str& def_file, const str& src_file, om_context& ctx)
@@ -1087,7 +1056,7 @@ void object_model::handle_include(Application app, const str& def_file, const st
     if (!def_file.empty())
       {
         DataReader def      = fs_->load_data(def_file, ctx.xss_ctx->path());
-        DataEntity def_root = assure_unique_root(def);
+        DataEntity def_root = assure_unique_root(def, ctx);
 
         om_entity_visitor oev(this, variant(), ctx);
         oev.child_handler("class",    &object_model::r_include_class);
@@ -1104,7 +1073,7 @@ void object_model::handle_include(Application app, const str& def_file, const st
           { 
             param_list error;
             error.add("file", src_file);
-            add_error(SFileNotFound, &error, file_location());
+            add_error(ctx.application, SFileNotFound, &error, file_location());
             return;
           }
 
@@ -1126,7 +1095,7 @@ void object_model::handle_instance(Application app, XSSObject instance, const st
     if (!def_file.empty())
       {
         DataReader def      = fs_->load_data(def_file, ctx.xss_ctx->path());
-        DataEntity def_root = assure_unique_root(def);
+        DataEntity def_root = assure_unique_root(def, ctx);
 
         om_entity_visitor oev(this, instance, ctx);
         oev.attribute_handler("*",        &object_model::r_object_attr);
@@ -1145,7 +1114,7 @@ void object_model::handle_instance(Application app, XSSObject instance, const st
           { 
             param_list error;
             error.add("file", src_file);
-            add_error(SFileNotFound, &error, file_location());
+            add_error(ctx.application, SFileNotFound, &error, file_location());
             return;
           }
 
@@ -1219,16 +1188,20 @@ struct fixup_return_type
 
 struct fix_instance_event
   {
-    fix_instance_event(std::vector<str>& _instance, XSSSignature _sig, XSSCode _code):
+    fix_instance_event(XSSObject _target, XSSContext _ctx, std::vector<str>& _instance, XSSSignature _sig, XSSCode _code):
       instance(_instance),
       sig(_sig),
-      code(_code)
+      code(_code),
+      target(_target),
+      ctx(_ctx)
       {
       }
 
+    XSSObject        target;
     std::vector<str> instance;
     XSSSignature     sig;
     XSSCode          code;
+    XSSContext       ctx;
   };
 
 struct fixup_super
@@ -1267,6 +1240,20 @@ struct fixup_obj_child
 
     XSSObject  parent;
     DataEntity de;
+  };
+
+struct fixup_policy_type
+  {
+    fixup_policy_type(const str& _type, XSSType _owner, PARENT_CHILD_ACTION _pca):
+      type(_type),
+      owner(_owner),
+      pca(_pca)
+      {
+      }
+
+    str                 type;
+    XSSType             owner;
+    PARENT_CHILD_ACTION pca;
   };
 
 //visitors
@@ -1355,7 +1342,7 @@ struct object_visitor : xs_visitor
 
         if (info.name.size() > 1)
           {
-            fixup_.push_back(fixup_data(FIXUP_INSTANCE_EVENT, fix_instance_event(info.name, sig, code)));
+            fixup_.push_back(fixup_data(FIXUP_INSTANCE_EVENT, fix_instance_event(target_, ctx_, info.name, sig, code)));
             return;
           }
 
@@ -1376,7 +1363,7 @@ struct object_visitor : xs_visitor
             ctx_->error(SBadEventSignature, &error, info.begin, info.end);
           }
 
-        target_->add_event_impl(ev, code);
+        target_->add_event_impl(ev, code, ev->signature());
       }
 
     virtual void event_decl_(xs_event_decl& info)
@@ -1611,22 +1598,22 @@ bool object_model::compile_instance(XSSObject instance, const str& text, XSSCont
     return true;
   }
 
-void object_model::assure_id(DataEntity de)
+void object_model::assure_id(DataEntity de, om_context& octx)
   {
     str id = de->id();
     if (id.empty())
       {
         param_list error;
         error.add("type", de->type());
-        add_error(SNeedsId, &error, file_location()); //td: de->position
+        add_error(octx.application, SNeedsId, &error, file_location()); //td: de->position
       }
   }
 
-DataEntity object_model::assure_unique_root(DataReader dr)
+DataEntity object_model::assure_unique_root(DataReader dr, om_context& octx)
   {
     if (dr->root().size() != 1)
       {
-        add_error(SApplicationsMustHaveOnlyOneRoot, null, file_location());
+        add_error(octx.application, SApplicationsMustHaveOnlyOneRoot, null, file_location());
 
         if (dr->root().empty())
           return DataEntity();
@@ -1652,7 +1639,7 @@ void object_model::r_invalid_idiom_attr(const str& attr, const str& value, const
 
 void object_model::r_idiom_enum(DataEntity de, const variant& this_, om_context& ctx)
   {
-    assure_id(de);
+    assure_id(de, ctx);
 
     XSSType int_type = ctx.xss_ctx->get_type("int");
 
@@ -1670,27 +1657,12 @@ void object_model::r_idiom_enum(DataEntity de, const variant& this_, om_context&
 
     de->visit(&oev);
 
-    //td: !!! reader
-    //entity_list items = de->find_all("item");
-    //entity_list::iterator it = items.begin();
-    //entity_list::iterator nd = items.end();
-
-    //int idx = 0;
-    //for(; it != nd; it++)
-    //  {
-    //    DataEntity de = *it;
-    //    assure_id(de);
-
-    //    XSSProperty item(new xss_property(de->id(), int_type, idx, XSSObject())); //td: 0.9.5 rid of last parameter
-    //    result->insert_property(item);
-    //  }
-
     ctx.xss_ctx->add_type(result, str()); //td: namespaces
   }
 
 void object_model::r_idiom_import(DataEntity de, const variant& this_, om_context& ctx)
   {
-    assure_id(de);
+    assure_id(de, ctx);
 
     XSSType type = this_;
 
@@ -1713,7 +1685,7 @@ void object_model::r_type_super(const str& attr, const str& value, const variant
       {
         param_list error;
         error.add("type", value);
-        add_error(SUnkownType, &error, file_location());
+        add_error(ctx.application, SUnkownType, &error, file_location());
       }
 
     XSSType type = this_;
@@ -1722,7 +1694,7 @@ void object_model::r_type_super(const str& attr, const str& value, const variant
 
 void object_model::r_type_import(DataEntity de, const variant& this_, om_context& ctx)
   {
-    assure_id(de);
+    assure_id(de, ctx);
 
     XSSType import = ctx.idiom->import(de->id());
     if (!import)
@@ -1747,7 +1719,7 @@ void object_model::r_type_constructor(DataEntity de, const variant& this_, om_co
 
 void object_model::r_object_property(DataEntity de, const variant& this_, om_context& ctx)
   {
-    assure_id(de);
+    assure_id(de, ctx);
     XSSObject obj = this_;
 
     XSSProperty prop     = read_property(de, obj, ctx);
@@ -1762,7 +1734,7 @@ void object_model::r_object_property(DataEntity de, const variant& this_, om_con
 
 void object_model::r_object_method(DataEntity de, const variant& this_, om_context& ctx)
   {
-    assure_id(de);
+    assure_id(de, ctx);
 
     XSSMethod mthd = read_method(de, ctx);
     XSSObject obj = this_;
@@ -1771,7 +1743,7 @@ void object_model::r_object_method(DataEntity de, const variant& this_, om_conte
 
 void object_model::r_object_event(DataEntity de, const variant& this_, om_context& ctx)
   {
-    assure_id(de);
+    assure_id(de, ctx);
 
     XSSEvent ev = read_event(de, ctx);
     XSSObject obj = this_;
@@ -1795,23 +1767,52 @@ bool object_model::parse_pca(const str& action, PARENT_CHILD_ACTION& result)
     return true;
   }
 
-bool object_model::parse_policy(const str& type_name, parent_policy& result, om_context& ctx)
+bool object_model::parse_policy(DataEntity de, XSSType owner, parent_policy& result, om_context& ctx, bool& fixup)
   {
-    if (type_name == "*")
-      result.match_all = true;
-    else if (!type_name.empty())
-      {
-        XSSType policy_type = variant_cast<XSSType>(ctx.xss_ctx->get_type(type_name), XSSType());
-        if (policy_type)
-          result.type = policy_type;
-        else
-          assert(false); //td: error
-      }
-    else
+    fixup = false;
+
+    //check wha to do when objects of this type are accepted
+    str                 action = de->attr("append");
+    PARENT_CHILD_ACTION pca;
+    if (!parse_pca(action, pca))
       {
         assert(false); //td: error
+        return false;
       }
 
+    str by_type   = de->attr("type");
+    str condition = de->attr("when");
+     
+    if (!by_type.empty())
+      {
+        if (by_type == "*")
+          result.match_all = true;
+        else 
+          {
+            XSSType policy_type = variant_cast<XSSType>(ctx.xss_ctx->get_type(by_type), XSSType());
+            if (policy_type)
+              result.type = policy_type;
+            else
+              {
+                fixup = true;
+                ctx.fixup.push_back(fixup_data(FIXUP_POLICY_TYPE, fixup_policy_type(by_type, owner, pca)));
+              }
+          }
+      }
+    else if (!condition.empty())
+      {
+        xs_utils xs;
+        code_context code_ctx = ctx.xss_ctx->get_compile_context();
+        
+        param_list args;
+        args.add("it", variant());
+        code_ctx.args_ = &args;
+
+        ByteCode bc = xs.compile_code("return " + condition + ";", code_ctx, fs::path());
+        result.condition = bc;
+      }
+
+    result.action = pca;
     return true;
   }
 
@@ -1830,8 +1831,8 @@ variant object_model::str2var(const str& value)
   {
     try
       {
-        int value = boost::lexical_cast<int>( value );
-        return value;
+        int result = boost::lexical_cast<int>( value );
+        return result;
       }
     catch(boost::bad_lexical_cast&)
       {
@@ -1839,8 +1840,8 @@ variant object_model::str2var(const str& value)
 
     try
       {
-        float value = boost::lexical_cast<float>( value );
-        return value;
+        float result = boost::lexical_cast<float>( value );
+        return result;
       }
     catch(boost::bad_lexical_cast&)
       {
@@ -1848,8 +1849,8 @@ variant object_model::str2var(const str& value)
 
     try
       {
-        double value = boost::lexical_cast<double>( value );
-        return value;
+        double result = boost::lexical_cast<double>( value );
+        return result;
       }
     catch(boost::bad_lexical_cast&)
       {
@@ -1922,76 +1923,82 @@ void object_model::r_type_child_policy(DataEntity de, const variant& this_, om_c
   {
     XSSType type = this_;
 
-    //check wha to do when objects of this type are accepted
-    str                 action = de->attr("append");
-    PARENT_CHILD_ACTION pca;
-    if (!parse_pca(action, pca))
-      {
-        assert(false); //td: error
-        return;
-      }
-
     parent_policy result;
-    if (!parse_policy(de->attr("type"), result, ctx))
+    bool fixup = false;
+    if (parse_policy(de, type, result, ctx, fixup))
       {
-        assert(false); //td: error
-        return;
+        if (fixup)
+          {
+            parent_policy fixup_result(true);
+            type->add_child_policy(fixup_result);
+          }
+        else
+          {
+            type->add_child_policy(result);
+          }
       }
-    
-    result.action = pca;
-    type->add_child_policy(result);
   }
 
 void object_model::r_type_reject_child(DataEntity de, const variant& this_, om_context& ctx)
   {
     XSSType type = this_;
-    parent_policy result;
-    if (!parse_policy(de->attr("type"), result, ctx))
-      {
-        assert(false); //td: error
-        return;
-      }
 
-    result.action = PCA_REJECT;
-    type->add_child_policy(result);
+    parent_policy result;
+    bool fixup = false;
+    if (parse_policy(de, XSSType(), result, ctx, fixup))
+      {
+        result.action = PCA_REJECT;
+        if (fixup)
+          {
+            parent_policy fixup_result(true);
+            type->add_child_policy(fixup_result);
+          }
+        else
+          {
+            type->add_child_policy(result);
+          }
+      }
   }
 
 void object_model::r_type_parent_policy(DataEntity de, const variant& this_, om_context& ctx)
   {
     XSSType type = this_;
 
-    //check wha to do when objects of this type are accepted
-    str                 action = de->attr("append");
-    PARENT_CHILD_ACTION pca;
-    if (!parse_pca(action, pca))
-      {
-        assert(false); //td: error
-        return;
-      }
-
     parent_policy result;
-    if (!parse_policy(de->attr("type"), result, ctx))
+    bool fixup = false;
+    if (parse_policy(de, XSSType(), result, ctx, fixup))
       {
-        assert(false); //td: error
-        return;
+        if (fixup)
+          {
+            parent_policy fixup_result(true);
+            type->add_parent_policy(fixup_result);
+          }
+        else
+          {
+            type->add_parent_policy(result);
+          }
       }
-    
-    result.action = pca;
-    type->add_parent_policy(result);
   }
 
 void object_model::r_type_reject_parent(DataEntity de, const variant& this_, om_context& ctx)
   {
     XSSType type = this_;
-    parent_policy result;
-    if (!parse_policy(de->attr("type"), result, ctx))
-      {
-        assert(false); //td: error
-        return;
-      }
 
-    result.action = PCA_REJECT;
-    type->add_child_policy(result);
+    parent_policy result;
+    bool fixup = false;
+    if (parse_policy(de, XSSType(), result, ctx, fixup))
+      {
+        result.action = PCA_REJECT;
+        if (fixup)
+          {
+            parent_policy fixup_result(true);
+            type->add_parent_policy(fixup_result);
+          }
+        else
+          {
+            type->add_parent_policy(result);
+          }
+      }
   }
 
 void object_model::r_invalid_type_item(DataEntity de, const variant& this_, om_context& ctx)
@@ -2005,6 +2012,10 @@ void object_model::r_include_class(DataEntity de, const variant& this_, om_conte
     result->set_id(de->id());
     result->set_output_id(de->attr("output_id"));
     
+    XSSContext old_ctx = ctx.xss_ctx;
+    XSSContext type_ctx(new xss_context(CTXID_TYPE, result, old_ctx));
+    
+    ctx.xss_ctx = type_ctx;
     om_entity_visitor oev(this, result, ctx);
     oev.attribute_handler("super", &object_model::r_type_super);
     oev.attribute_handler("*",     &object_model::r_object_attr);
@@ -2016,6 +2027,7 @@ void object_model::r_include_class(DataEntity de, const variant& this_, om_conte
 
     de->visit(&oev);
 
+    ctx.xss_ctx = old_ctx;
     ctx.classes.insert(std::pair<str, XSSType>(de->id(), result));
   }
 
@@ -2172,7 +2184,7 @@ void object_model::r_invalid_idiom_child(DataEntity de, const variant& this_, om
 
 void object_model::r_enum_item(DataEntity de, const variant& this_, om_context& ctx)
   {
-    assure_id(de);
+    assure_id(de, ctx);
 
     XSSType type = this_;
     int     idx  = type->properties()->size();
@@ -2201,7 +2213,8 @@ void object_model::r_object_attr(const str& attr, const str& value_str, const va
     else
       {
         //not a property, add it as an attribute
-        obj->add_attribute(attr, str2var(value_str));
+        variant vv = str2var(value_str);
+        obj->add_attribute(attr, vv);
       }
   }
 
@@ -2309,34 +2322,6 @@ XSSType object_model::read_type(DataEntity de, Idiom parent, XSSContext ctx)
     //return result;
   }
 
-XSSType object_model::read_enum(DataEntity de, XSSContext ctx)
-  {
-    assert(false); //td: !!! cleanup
-
-    XSSType int_type = ctx->get_type("int");
-
-    XSSType result(new xss_type);
-    result->set_id(de->id());
-    result->set_output_id(de->attr("output_id"));
-    result->as_enum();
-    
-    entity_list items = de->find_all("item");
-    entity_list::iterator it = items.begin();
-    entity_list::iterator nd = items.end();
-
-    int idx = 0;
-    for(; it != nd; it++)
-      {
-        DataEntity de = *it;
-        assure_id(de);
-
-        //XSSProperty item(new xss_property(de->id(), int_type, idx, XSSObject())); //td: 0.9.5 rid of last parameter
-        //result->insert_property(item);
-      }
-
-    return result;
-  }
-
 XSSSignature object_model::read_signature(DataEntity de, om_context& ctx)
   {
     XSSSignature result(new xss_signature);
@@ -2349,7 +2334,7 @@ XSSSignature object_model::read_signature(DataEntity de, om_context& ctx)
     for(; it != nd; it++)
       {
         DataEntity ade = *it;
-        assure_id(ade);
+        assure_id(ade, ctx);
 
         str id    = ade->id();
         str stype = ade->attr("type");
@@ -2433,14 +2418,21 @@ XSSProperty object_model::read_property(DataEntity de, XSSObject recipient, om_c
         DataEntity ge = de->get("get");
         if (ge)
           {
-            InlineRenderer getter = read_inline_renderer(ge);
+            param_list iparams;
+            iparams.add("path", variant());
+            
+            InlineRenderer getter = read_inline_renderer(ge, iparams);
             result->getter(getter);
           }
 
         DataEntity se = de->get("set");
         if (se)
           {
-            InlineRenderer setter = read_inline_renderer(se);
+            param_list iparams;
+            iparams.add("path",  str());
+            iparams.add("value", str());
+
+            InlineRenderer setter = read_inline_renderer(se, iparams);
             result->setter(setter);
           }
       }
@@ -2518,7 +2510,11 @@ XSSMethod object_model::read_method(DataEntity de, om_context& ctx)
     DataEntity ce = de->get("call");
     if (ce)
       {
-        InlineRenderer caller = read_inline_renderer(ce);
+        param_list iparams;
+        iparams.add("path",  str());
+        iparams.add("args",  str());
+
+        InlineRenderer caller = read_inline_renderer(ce, iparams);
         result->renderer(caller);
       }
 
@@ -2537,7 +2533,11 @@ XSSEvent object_model::read_event(DataEntity de, om_context& ctx)
     DataEntity dse = de->get("dispatch");
     if (dse)
       {
-        InlineRenderer dispatcher = read_inline_renderer(dse);
+        param_list iparams;
+        iparams.add("path",  str());
+        iparams.add("args",  str());
+
+        InlineRenderer dispatcher = read_inline_renderer(dse, iparams);
         result->set_dispatcher(dispatcher);
       }
 
@@ -2547,22 +2547,25 @@ XSSEvent object_model::read_event(DataEntity de, om_context& ctx)
     return result;
   }
 
-InlineRenderer object_model::read_inline_renderer(DataEntity de)
+InlineRenderer object_model::read_inline_renderer(DataEntity de, param_list& params)
   {
     bool global = de->attr("global") == "true";
     str  text   = de->attr("text");
 
-    return InlineRenderer(new inline_renderer(text, global));
+    InlineRenderer result(new inline_renderer());
+    result->compile(text, global, params);
+    return result;
   }
 
-void object_model::register_idiom(const str& id, Idiom idiom)
+void object_model::register_idiom(const str& id, Application app, Idiom idiom)
   {
     idiom_list::iterator it = idioms_.find(id);
     if (it != idioms_.end())
       {
         param_list error;
         error.add("import", id);
-        add_error(SDupIdiom, &error, file_location());
+        add_error(app, SDupIdiom, &error, file_location());
+        return;
       }
 
     idioms_.insert(std::pair<str, Idiom>(id, idiom));
@@ -2643,8 +2646,8 @@ void object_model::fix_it_up(XSSContext ctx, om_context& octx)
   {
     fixup_list process = octx.fixup;
     octx.fixup.clear();
-
-    while (!process.empty())
+    int count = 0;
+    while (!process.empty() && count < 5)
       {
         fixup_list::iterator it = process.begin();
         fixup_list::iterator nd = process.end();
@@ -2679,15 +2682,66 @@ void object_model::fix_it_up(XSSContext ctx, om_context& octx)
                   }
                 case FIXUP_INSTANCE_EVENT:
                   {
-                    assert(false); //td:
+                    fix_instance_event fu = it->data;
+                    std::ostringstream expr_str;
+                    
+                    //td: move this by itself, may need it somewhere else
+                    std::vector<str>::iterator it = fu.instance.begin();
+                    std::vector<str>::iterator nd = fu.instance.end();
+                    
+                    bool first = true;
+                    str  event_id;
+                    for(; it != nd; it++)
+                      {
+                        bool last = (it + 1) == nd;
+                        if (last)
+                          {
+                            event_id = *it;   
+                            break;
+                          }
+
+                        if (first)
+                          first = false;
+                        else
+                          expr_str << '.';
+
+                        expr_str << *it;
+                      }
+
+                    XSSExpression instance = xss_expression_utils::compile_expression(expr_str.str()); assert(instance);
+                    instance->bind(fu.ctx);
+                    value_operation vop = instance->value()->get_last();
+                    if (vop.bound())
+                      {
+                        if (vop.resolve_id() != RESOLVE_INSTANCE)
+                          {
+                            assert(false); //td: error
+                          }
+                        else
+                          {
+                            XSSObject owner = vop.resolve_value();
+                            XSSEvent  ev = owner->get_event(event_id);
+                            if (!ev)
+                              {
+                                param_list error;
+                                error.add("object", owner->id());
+                                error.add("event", event_id);
+                                ctx->error(SEventNotFound, &error, file_position(), file_position());
+                              }
+                            else
+                              {
+                                fu.target->add_event_impl(ev, fu.code, ev->signature(), owner, instance);
+                              }
+                          }
+                      }
                     break;
                   }
                 case FIXUP_SUPER_TYPE: 
                   {
-                    fixup_type fu = it->data;
-                    XSSType type = ctx->get_type(fu.type_name);
-                    if (check_type(type, fu.type_name, ctx))
-                      fu.target->set_type(type);
+                    fixup_super fu = it->data;
+                    XSSType type = ctx->get_type(fu.super);
+                    if (check_type(type, fu.super, ctx))
+                      fu.type->set_type(type);
                     break;
                   }
                 case FIXUP_ARGUMENT_TYPE:
@@ -2716,6 +2770,8 @@ void object_model::fix_it_up(XSSContext ctx, om_context& octx)
 
         process = octx.fixup;
         octx.fixup.clear();
+
+        count++;
       }
   }
 
@@ -2790,9 +2846,21 @@ bool object_model::changed()
 	return result;
   }
 
-void object_model::add_error(const str& desc, param_list* info, file_location& loc)
+void object_model::add_error(Application app, const str& desc, param_list* info, file_location& loc)
   {
-    Application app = app_by_file(loc.file); assert(app);
+    ////find out who's error is it
+    //Application app;
+    //if (loc.file.empty())
+    //  {
+    //    if (apps_.size() != 1)
+    //      return; //should I assert this? 
+    //  }
+    //else
+    //  {
+    //    app = app_by_file(loc.file); 
+    //  }
+
+    assert(app);
     app->add_error(desc, info, loc);
   }
 
@@ -2853,9 +2921,9 @@ void object_model::parent_child_action(PARENT_CHILD_ACTION action, XSSObject par
       }
 
     //we also must decide what to do with the child entity
-    //this code is here since the child instance has just being created
-    //if (!ctx.xss_ctx->add_instance(child))
-    ctx.xss_ctx->add_instance(child);
+    //this code is here since the child instance has just been created
+    if (!ctx.xss_ctx->add_instance(child))
+      ctx.application->add_instance(child);
   }
 
 void object_model::resolve_parent_child(XSSObject parent, XSSObject child, om_context& ctx)

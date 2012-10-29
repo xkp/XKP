@@ -1,0 +1,16 @@
+﻿<xss:code>
+    compiler.xss("AssemblyInfo.xss",       output_file = "Properties/AssemblyInfo.cs");
+    compiler.xss("Resources.Designer.xss", output_file = "Properties/Resources.Designer.cs");
+    compiler.xss("Resources.resx.xss",     output_file = "Properties/Resources.resx");
+    compiler.xss("Settings.Designer.xss",  output_file = "Properties/Settings.Designer.cs");
+    compiler.xss("Settings.settings.xss",  output_file = "Properties/Settings.settings");
+
+    compiler.xss("Form1.xss",          output_file = application.name + "_Form.cs");
+    compiler.xss("Form1.Designer.xss", output_file = application.name + "_Form.Designer.cs");
+    compiler.xss("Form1.resx.xss",     output_file = application.name + "_Form.resx");
+
+    compiler.xss("Program.xss", output_file = "Program.cs");
+    compiler.xss("csproj.xss",  output_file = application.name + ".csproj");
+
+    compiler.xss("sln.xss", output_file = application.name + ".sln");
+</xss:code>

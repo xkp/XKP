@@ -16,6 +16,7 @@
 #include "xs/linker.h"
 #include "xs/compiler.h"
 #include "xs/xs_error.h"
+#include "xs/runtime_error.h"
 
 #include <boost/regex.hpp>
 #include <boost/functional/hash.hpp>
@@ -457,7 +458,7 @@ void ConsoleOutput::out(const str& cat, const str& text, param_list* params)
         for(int i = 0; i < params->size(); i++)
           {
             variant param = params->get(i);
-            std::cout << "\n\t" << params->get_name(i) << " = " << xss_utils::var_to_string(param);
+            std::cout << "\n\t" << params->get_name(i) << " = " << xss_utils::var2string(param);
           }
       }
   }
@@ -481,7 +482,7 @@ void ConsoleOutput::error(param_list& data)
           continue;
 
         variant value = data.get(i);
-        str     value_str = xss_utils::var_to_string(value);
+        str     value_str = xss_utils::var2string(value);
 
         std::cout  << "\n\t" << name << " = " << value_str;
       }
@@ -513,7 +514,7 @@ void JsonOutput::out(const str& cat, const str& text, param_list* params)
           {
             str name   = params->get_name(i);
             variant param = params->get(i);
-            jparams[name] = xss_utils::var_to_string(param);
+            jparams[name] = xss_utils::var2string(param);
           }
       }
 
@@ -556,7 +557,7 @@ void JsonOutput::error(param_list& data)
           continue;
 
         variant value = data.get(i);
-        str     value_str = xss_utils::var_to_string(value);
+        str     value_str = xss_utils::var2string(value);
 
         Json::Value jparam(Json::objectValue);
         jparam["id"]    = name;
@@ -997,6 +998,10 @@ void xss_compiler::xss(const param_list params)
 	    {
 		    error_info = xse.data; 
 	    }
+    catch(runtime_error rte)
+	    {
+		    error_info = rte.data; 
+	    }
     catch(...)
 	    {
 		    error_info.add("desc", SSnafu); 
@@ -1139,7 +1144,7 @@ void xss_compiler::log(const param_list params)
         str param_name = params.get_name(i);
         variant value  = params.get(i);
 
-        str string_value = xss_utils::var_to_string(value);
+        str string_value = xss_utils::var2string(value);
 				if (value.empty())
 					{
             string_value = "null";
@@ -1447,7 +1452,7 @@ DynamicArray xss_compiler::find_files(const xkp::str &init_path, const xkp::str 
 void xss_compiler::out(variant w)
   {
     XSSRenderer rend = current_renderer();
-    rend->append(xss_utils::var_to_string(w));
+    rend->append(xss_utils::var2string(w));
   }
 
 XSSType xss_compiler::get_type(const str& type)
@@ -1522,7 +1527,7 @@ str xss_compiler::render_value(variant value)
         return '"' + result + '"';
       }
 
-    return xss_utils::var_to_string(value);
+    return xss_utils::var2string(value);
   }
 
 //0.9.5

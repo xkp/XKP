@@ -475,8 +475,8 @@ void xs_container::visit(xs_visitor* visitor)
           }
         else if (curr.is<xs_const>())
           {
-            xs_event_decl info = curr;
-            visitor->event_decl_(info);
+            xs_const info = curr;
+            visitor->const_(info);
           }
         else if (curr.is<xs_instance>())
           {

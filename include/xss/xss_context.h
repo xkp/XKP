@@ -21,6 +21,7 @@ class   xss_operator;
 class   xss_arguments;
 class   xss_property;
 class   xss_event;
+class   xss_event_impl;
 class   xss_method;
 class   xss_dsl;
 struct  inline_renderer;
@@ -47,6 +48,7 @@ typedef reference<xss_arguments>        XSSArguments;
 typedef reference<xss_property>         XSSProperty;
 typedef reference<xss_method>		        XSSMethod;
 typedef reference<xss_event>		        XSSEvent;
+typedef reference<xss_event_impl>		    XSSEventImpl;
 typedef reference<xss_type>		          XSSType;
 typedef reference<xss_dsl>		          XSSDSL;
 typedef reference<xss_signature>		    XSSSignature;
@@ -100,6 +102,7 @@ enum PARENT_CHILD_ACTION
     PCA_INDEPENDENT_CHILD,
     PCA_DEFAULT,
     PCA_REJECT,
+    PCA_FIXUP,
   };
 
 //context
@@ -257,7 +260,7 @@ class xss_object : public editable_object<xss_object>,
 			virtual void      set_idiom(XSSObject id);
 
       //0.9.5
-      void add_event_impl(XSSEvent ev, XSSCode code);
+      void add_event_impl(XSSEvent ev, XSSCode code, XSSSignature sig, XSSObject instance = XSSObject(), XSSExpression instance_path = XSSExpression());
       bool context_resolve(const str& id, resolve_info& info);
       void context_visit(context_visitor* visitor);
       XSSProperty instantiate_property(const str& prop_name);
@@ -288,6 +291,7 @@ class xss_object : public editable_object<xss_object>,
       DynamicArray           find_by_type(const str& which);
       DynamicArray           get_event_impl(const str& event_name, XSSEvent& ev);
       DynamicArray           get_event_code(const str& event_name);
+      DynamicArray           get_evimpl();
       variant                get_event_args(const str& event_name);
       DynamicArray           get_attributes();
 		  bool                   is_injected(const str& name);
@@ -309,7 +313,6 @@ class xss_object : public editable_object<xss_object>,
       XSSProperty add_property(const str& name, XSSExpression value);
       void register_property(const str& name, XSSProperty new_prop = XSSProperty());
       void register_method(const str& name, XSSMethod new_mthd = XSSMethod());
-      void register_event_impl(const str& name, XSSEvent new_evt = XSSEvent());
 
 			XSSProperty get_property(const str& name);
       XSSProperty get_shallow_property(const str& name);
@@ -331,6 +334,9 @@ class xss_object : public editable_object<xss_object>,
 
       //0.9.5
       //td: !!! finish the job
+      typedef std::vector<XSSEventImpl> event_implementors;
+      event_implementors event_impl_;
+
       virtual void bind(XSSContext ctx);
 	};
 
@@ -341,7 +347,8 @@ struct parent_policy
   {
     parent_policy():
       action(PCA_DEFAULT),
-      match_all(false)
+      match_all(false),
+      fixup(false)
       {
       }
 
@@ -352,12 +359,23 @@ struct parent_policy
       {
       }
 
+    parent_policy(bool _fixup):
+      fixup(_fixup),
+      action(PCA_DEFAULT),
+      match_all(false)
+      {
+      }
+
     //what to do
     PARENT_CHILD_ACTION action;
 
     //info
-    XSSType type;
-    bool    match_all;
+    XSSType  type;
+    bool     match_all;
+    ByteCode condition;
+    bool     fixup; 
+
+    bool match(XSSObject obj, bool& fixup);
   };
 
 typedef std::vector<parent_policy> parent_policy_list;
@@ -1043,9 +1061,14 @@ struct ILanguage
 //rendering helper
 struct inline_renderer
   {
-    inline_renderer(str text, bool global);
+    inline_renderer();
 
     bool render(param_list& pl, std::ostringstream& result);
+    bool compile(const str& text, bool global, param_list& params);
+
+    private:
+      variant renderer_; //shame
+      bool    global_;
   };
 
 //constructs
@@ -1105,7 +1128,7 @@ class xss_property : public xss_object
       XSSCode        code_setter_;
       XSSType        prop_type_;
       XSSObject      instance_value_;
-
+      bool           is_const_;
   };
 
 class xss_event : public xss_object
@@ -1113,14 +1136,15 @@ class xss_event : public xss_object
 		public:
 			xss_event();
 			xss_event(const xss_event& other);
-			xss_event(const str& name, variant args);
+			xss_event(const str& name, XSSSignature signature, InlineRenderer dispatcher = InlineRenderer());
 
 			str get_name();
 
-			DynamicArray impls;
-			variant			 args;
+			//0.9.5
+      //DynamicArray impls;
+			//variant			 args;
 
-			bool implemented();
+			//bool implemented();
 
       //0.9.5
       void         set_dispatcher(InlineRenderer dispatcher);
@@ -1132,6 +1156,35 @@ class xss_event : public xss_object
       InlineRenderer dispatcher_;
       XSSSignature   signature_;
   };
+
+class xss_event_impl : public xss_object
+  {
+		public:
+			xss_event_impl();
+			xss_event_impl(const xss_event_impl& other);
+			xss_event_impl(XSSEvent ev, XSSSignature sig, XSSCode code, XSSObject instance = XSSObject(), XSSExpression instance_path = XSSExpression());
+
+			void          set_ev(XSSEvent ev); 
+			XSSEvent      ev(); 
+      void          set_code(XSSCode code);
+      XSSCode       code();
+      void          set_signature(XSSSignature sig);
+      XSSSignature  signature();
+      void          set_instance(XSSObject instance);
+      XSSObject     instance();
+      void          set_instance_path(XSSExpression instance_path);
+      XSSExpression instance_path();
+
+      virtual void bind(XSSContext ctx);
+    private:
+			XSSEvent      ev_; 
+      XSSCode       code_;
+      XSSSignature  signature_;
+      XSSObject     instance_;
+      XSSExpression instance_path_;
+  };
+
+typedef std::vector<signature_item> signature_items;
 
 class xss_method : public xss_object
   {
@@ -1173,7 +1226,8 @@ class xss_method : public xss_object
 //utils
 struct xss_utils
   {
-    static str var_to_string(variant& v);
+    static str var2string(variant& v);
+    static bool var2bool(variant& v);
     static fs::path relative_path(fs::path& src, fs::path& dst);
   };
 
@@ -1192,8 +1246,10 @@ struct xss_object_schema : editable_object_schema<T>
 				this->template property_<str>         ("type_name",		&T::type_name_);
 				this->template property_<str>         ("class_name",	&T::type_name_);
         this->template property_<XSSType>     ("type",        &T::type,       &T::set_type);
-        this->template readonly_property<XSSObject> ("parent", &T::parent );
         this->template property_<XSSObject>   ("idiom",       &T::idiom_);
+
+        this->template readonly_property<XSSObject>    ("parent", &T::parent );
+        this->template readonly_property<DynamicArray> ("evimpl", &T::get_evimpl );
 
         this->template method_<DynamicArray, 1>("query_properties", &T::query_properties);
         this->template method_<XSSProperty,  1>("get_property",     &T::get_property);
@@ -1205,11 +1261,13 @@ struct xss_object_schema : editable_object_schema<T>
         this->template method_<void,         2>("add_method",       &T::add_method);
         this->template method_<DynamicArray, 1>("find_by_type",     &T::find_by_type);
         this->template method_<XSSObject,    1>("find",             &T::find);
-        this->template method_<DynamicArray, 1>("get_event_code",   &T::get_event_code);
-        this->template method_<variant,      1>("get_event_args",   &T::get_event_args);
         this->template method_<variant,      1>("attribute_value",  &T::attribute_value);
         this->template method_<bool,         0>("empty",            &T::empty);
         this->template method_<DynamicArray, 0>("get_attributes",   &T::get_attributes);
+
+        //0.9.5
+        //this->template method_<DynamicArray, 1>("get_event_code",   &T::get_event_code);
+        //this->template method_<variant,      1>("get_event_args",   &T::get_event_args);
 		  }
   };
 
@@ -1242,12 +1300,28 @@ struct xss_event_schema : xss_object_schema<xss_event>
 				xss_object_schema<xss_event>::declare();
 
 				inherit_from<xss_object>();
+        readonly_property<str> ("name",       &xss_event::get_name);
+        property_<XSSSignature>("signature",  &xss_event::signature, &xss_event::set_signature);
 
-        readonly_property<str>("name", &xss_event::get_name);
+    //    property_("args",  &xss_event::args);
+    //    property_("impls", &xss_event::impls);
+				//readonly_property<bool>("implemented", &xss_event::implemented);
+      }
+  };
 
-        property_("args",  &xss_event::args);
-        property_("impls", &xss_event::impls);
-				readonly_property<bool>("implemented", &xss_event::implemented);
+struct xss_event_impl_schema : xss_object_schema<xss_event_impl>
+  {
+    virtual void declare()
+      {
+				xss_object_schema<xss_event_impl>::declare();
+
+				inherit_from<xss_object>();
+
+        property_<XSSExpression>("ev",            &xss_event_impl::ev,             &xss_event_impl::set_ev);
+        property_<XSSCode>      ("code",          &xss_event_impl::code,           &xss_event_impl::set_code);
+        property_<XSSSignature> ("signature",     &xss_event_impl::signature,      &xss_event_impl::set_signature);
+        property_<XSSObject>    ("instance",      &xss_event_impl::instance,       &xss_event_impl::set_instance);
+        property_<XSSExpression>("instance_path", &xss_event_impl::instance_path,  &xss_event_impl::set_instance_path);
       }
   };
 
@@ -1292,13 +1366,12 @@ struct xss_property_schema : xss_object_schema<xss_property>
         //0.9.5
         readonly_property<XSSType>      ("property_type", &xss_property::prop_type_);
         readonly_property<XSSExpression>("value",         &xss_property::expr_value_);
+        readonly_property<XSSCode>      ("get_code",      &xss_property::code_getter_);
+        readonly_property<XSSCode>      ("set_code",      &xss_property::code_setter_);
       
         //td: !!! do property interface, its a mess
-      //XSSExpression  expr_value_;
       //InlineRenderer getter_;
       //InlineRenderer setter_;
-      //XSSCode        code_getter_;
-      //XSSCode        code_setter_;
       }
   };
 
@@ -1326,6 +1399,7 @@ struct xss_value_schema : object_schema<xss_value>
 register_complete_type(xss_object,      xss_object_schema<xss_object>);
 register_complete_type(xss_type,        xss_type_schema);
 register_complete_type(xss_event,		    xss_event_schema);
+register_complete_type(xss_event_impl,	xss_event_impl_schema);
 register_complete_type(xss_property,    xss_property_schema);
 register_complete_type(xss_method,	    xss_method_schema);
 register_complete_type(xss_signature,	  xss_signature_schema);

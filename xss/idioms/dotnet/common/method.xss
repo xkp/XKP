@@ -1,0 +1,17 @@
+<xss:parameter id="mthd"/>
+<xss:code>
+//declares an object method
+string type_name = compiler.type_to_string(mthd.return_type);
+out()
+{
+	private <xss:e v="type_name"/> <xss:e v="mthd.id"/>(<xss:e v="compiler.signature_to_string(mthd.signature)"/>)
+	<xss:open_brace/>
+}
+
+compiler.render_code(mthd.code);
+
+out()
+{
+	<xss:close_brace/>
+}
+</xss:code>

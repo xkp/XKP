@@ -1,0 +1,16 @@
+<idiom id="winforms">
+    <class id="component" output_id="System.Windows.Forms.Component">
+        <accept_parent when="it.container" append="as_child"/>
+    </class>
+
+    <class id="div" super="component" container="true" output_id="System.Windows.Forms.Panel">
+	</class>
+
+    <class id="button" super="component" output_id="System.Windows.Forms.Button">
+        <event id="click"/>
+    </class>
+
+    <class id="Application">
+        <accept_child type="component" append="independent"/>
+    </class>
+</idiom>

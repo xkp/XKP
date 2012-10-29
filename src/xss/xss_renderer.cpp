@@ -93,7 +93,7 @@ struct xss_expression_renderer : item_renderer
         execution_context ctx(code_, this_, args);
         variant res = ctx.execute();
 
-		    str result = xss_utils::var_to_string(res);
+		    str result = xss_utils::var2string(res);
 		    if (result == "@@Error")
 		      {
 				      param_list error;
@@ -282,7 +282,8 @@ renderer_parameter_list& xss_renderer::params()
 str xss_renderer::render(XSSObject this_, param_list* args)
   {
     XSSRenderer me(shared_from_this());
-    compiler_->push_renderer(me);
+    if (compiler_)
+      compiler_->push_renderer(me);
 
     //reset first
     assert(!busy_);
@@ -332,7 +333,8 @@ str xss_renderer::render(XSSObject this_, param_list* args)
 				result_.insert(result_.begin() + pos, bit->second.begin(), bit->second.end());
 			}
 
-    compiler_->pop_renderer();
+    if (compiler_)
+      compiler_->pop_renderer();
 
     busy_   = false;
     return result_;

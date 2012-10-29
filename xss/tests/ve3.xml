@@ -1,0 +1,9 @@
+<application>
+    <div>
+        <position x="100" y="100" width="200" height="200"/>
+
+        <button id="btn1" caption="Hello, world">
+            <position x="10" y="10" width="153" height="61"/>
+        </button>
+    </div>
+</application>

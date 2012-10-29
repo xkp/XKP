@@ -115,6 +115,7 @@ class application : public boost::enable_shared_from_this<application>
       void              file_system(FileSystem fs);
       void              output_path(const fs::path& fname);
       fs::path          output_path();
+      void              add_instance(XSSObject instance);
     public:
       XSSObject root(); 
       void      set_root(XSSObject r); 
@@ -133,8 +134,11 @@ class application : public boost::enable_shared_from_this<application>
       FileSystem   fs_;
       str          app_name_; 
 
-      document_map documents_;
-      error_list   errors_;
+      document_map  documents_;
+      error_list    errors_;
+      instance_list instances_;
+
+      str random_id(XSSObject instance);
   };
 
 struct document
@@ -190,7 +194,8 @@ enum FIXUP_TYPE
     FIXUP_INSTANCE_EVENT,
     FIXUP_SUPER_TYPE, 
     FIXUP_ARGUMENT_TYPE, 
-    FIXUP_OBJECT_CHILD
+    FIXUP_OBJECT_CHILD,
+    FIXUP_POLICY_TYPE,
   };
 
 struct fixup_data
@@ -265,7 +270,7 @@ class object_model
 	    document*   get_document(const str& fname);
 	    void		    update_document(const str& fname, om_response& data);
       void        add_include(Application app, const str& def, const str& src);
-      void        add_error(const str& desc, param_list* info, file_location& loc);
+      void        add_error(Application app, const str& desc, param_list* info, file_location& loc);
       void        visit_errors(const fs::path& fname, error_visitor* visitor);
       Application app_by_file(const fs::path& path);
       bool        changed();
@@ -278,9 +283,9 @@ class object_model
       idiom_list      idioms_;
 	    bool			      changed_;	
 
-      void            assure_id(DataEntity de);
-      DataEntity      assure_unique_root(DataReader dr);
-      void            register_idiom(const str& id, Idiom idiom);
+      void            assure_id(DataEntity de, om_context& octx);
+      DataEntity      assure_unique_root(DataReader dr, om_context& octx);
+      void            register_idiom(const str& id, Application app, Idiom idiom);
       Idiom           find_idiom(const str& idiom);
       void            handle_include(Application app, const str& def, const str& src, om_context& ctx);
       void            handle_instance(Application app, XSSObject instance, const str& def_file, const str& src_file, om_context& octx);
@@ -290,16 +295,15 @@ class object_model
       static bool compile_instance(XSSObject instance, const str& text, XSSContext ctx, om_context& octx);
     private:
       //data reader
-      Language        read_language(DataEntity project);
+      Language        read_language(DataEntity project, Application app);
       variant         read_value(DataEntity de);
       Idiom           read_idiom(DataEntity de, om_context& ctx);
       XSSType         read_type(DataEntity de, Idiom parent, XSSContext ctx);
-      XSSType         read_enum(DataEntity de, XSSContext ctx);
       XSSSignature    read_signature(DataEntity de, om_context& ctx);
       XSSProperty     read_property(DataEntity de, XSSObject recipient, om_context& ctx);
       XSSMethod       read_method(DataEntity de, om_context& ctx);
       XSSEvent        read_event(DataEntity de, om_context& ctx);
-      InlineRenderer  read_inline_renderer(DataEntity de);
+      InlineRenderer  read_inline_renderer(DataEntity de, param_list& params);
       XSSExpression   read_expression(DataEntity de, XSSType type, const str& attribute);
       XSSObject       read_object(DataEntity de, om_context& ctx, XSSObject instance = XSSObject(), XSSType type = XSSType());
       XSSObject       read_object_instance(DataEntity de, XSSObject parent, om_context& ctx);
@@ -355,7 +359,7 @@ class object_model
       void resolve_parent_child(XSSObject parent, XSSObject child, om_context& ctx);
       void parent_child_action(PARENT_CHILD_ACTION action, XSSObject parent, XSSObject child, om_context& ctx);
       bool parse_pca(const str& action, PARENT_CHILD_ACTION& result);
-      bool parse_policy(const str& type_name, parent_policy& result, om_context& ctx);
+      bool parse_policy(DataEntity de, XSSType owner, parent_policy& result, om_context& ctx, bool& fixup);
       XSSExpression compile_expression(const str& expr, XSSType type);
       variant str2var(const str& value);
       void merge_property(XSSProperty dest, XSSProperty incoming, XSSObject owner, om_context& ctx);

@@ -915,7 +915,7 @@ bool typed_lang::render_assignment(XSSExpression expr, XSSValue left_value, XSSE
 
 bool typed_lang::render_constant(variant& value, XSSContext ctx, std::ostringstream& result)
   {
-    str vv = xss_utils::var_to_string(value);
+    str vv = xss_utils::var2string(value);
     if (value.is<str>())
       result << '"' << vv << '"';
     else

@@ -1,0 +1,23 @@
+<xss:parameter id="prop"/>
+<xss:code>
+//declares an object property
+string prop_name = prop.output_id;
+string type_name = compiler.type_to_string(prop.property_type);
+
+string getter = ";";
+if (prop.get_code)
+    getter = "{" + compiler.code_to_string(prop.get_code) + "}";
+
+string setter = ";";
+if (prop.set_code)
+    setter = "{" + compiler.code_to_string(prop.set_code) + "}";
+
+out()
+{
+    public <xss:e v="type_name"/> <xss:e v="prop_name"/>
+    {
+        get <xss:e v="getter"/>
+        set <xss:e v="setter"/>
+    }
+}
+</xss:code>

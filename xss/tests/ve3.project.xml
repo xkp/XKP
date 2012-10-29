@@ -1,0 +1,7 @@
+<project name="VE3" entry_point="idioms/dotnet/winforms/entry.xss" language="cs" src="ve3.xs" def="ve3.xml" output_path="../../../XKP_BIN/dotnet/ve3">
+    <idiom src="idioms/dotnet/winforms/winforms.xml"/>
+
+    <include def="ve3.classes.xml" src="ve3.classes.xs"/>    
+</project>
+           
+         
