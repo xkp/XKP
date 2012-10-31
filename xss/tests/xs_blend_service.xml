@@ -1,10 +1,10 @@
 <application src="xs_blend_service.xs">
     <page id="home" home="true" src="xs_blend_service.html"/>
-    <page id="edit_page" application="blend_xs.project.xml">
-        <element id="initial_script"/>
+	<page id="edit_page" application="blend_xs.project.xml">
+		<element id="initial_script"/>
     </page>
     
-    <page id="blend" post="true" upload_dir="./upload"/>
+    <page id="blend" post="true" upload_dir="D:/Pabli/Trabajo/Excess/Projects/file_server/upload"/>
 
-    <file_server webroot="C:\Users\Pablo"/>
+    <file_server webroot="D:/Pabli/Trabajo/Excess/Projects/file_server"/>
 </application>
