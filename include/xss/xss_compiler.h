@@ -344,6 +344,11 @@ namespace xkp
 
         void add_dependency(const str& href, XSSObject obj, XSSObject idiom);
         void collect_dependencies(XSSType type, XSSType context = XSSType());
+      public:
+        //glue
+        str  __instantiation(const param_list params);
+        str  __assignment(const str& path, variant left, variant right);
+        void __render_assignment(const str& path, variant left, variant right);
 		};
 
   class xss_string
@@ -383,17 +388,20 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         dynamic_function_<str>        ("instantiate",         &xss_compiler::instantiate);
         dynamic_function_<str>        ("render_ctor_args",    &xss_compiler::render_ctor_args);
         dynamic_function_<str>        ("build",               &xss_compiler::build_project);
+        dynamic_function_<str>        ("instantiation_to_string", &xss_compiler::__instantiation);
 
         readonly_property<XSSObject>("options", &xss_compiler::options_);
 
         //0.9.5
-        method_<void, 1>("render_code",	        &xss_compiler::render_code);
-        method_<str,  1>("code_to_string",      &xss_compiler::code_to_string);
-        method_<void, 1>("render_signature",	  &xss_compiler::render_signature);
-        method_<str,  1>("signature_to_string", &xss_compiler::signature_to_string);
-        method_<str,  1>("type_to_string",      &xss_compiler::type_to_string);
-        method_<void, 1>("render_expression",   &xss_compiler::render_expression);
-        method_<str,  1>("expression_to_string",&xss_compiler::expression_to_string);
+        method_<void, 1>("render_code",	         &xss_compiler::render_code);
+        method_<str,  1>("code_to_string",       &xss_compiler::code_to_string);
+        method_<void, 1>("render_signature",	   &xss_compiler::render_signature);
+        method_<str,  1>("signature_to_string",  &xss_compiler::signature_to_string);
+        method_<str,  1>("type_to_string",       &xss_compiler::type_to_string);
+        method_<void, 1>("render_expression",    &xss_compiler::render_expression);
+        method_<str,  1>("expression_to_string", &xss_compiler::expression_to_string);
+        method_<void, 3>("render_assignment",    &xss_compiler::__render_assignment);
+        method_<str,  3>("assignment_to_string", &xss_compiler::__assignment);
 
 
         //0.9.5

@@ -152,6 +152,7 @@
     <ClCompile Include="..\..\..\src\xss\dsl_out.cpp" />
     <ClCompile Include="..\..\..\src\xss\html_parser.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\csharp.cpp" />
+    <ClCompile Include="..\..\..\src\xss\lang\java.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang\typed.cpp" />
     <ClCompile Include="..\..\..\src\xss\lang_factory.cpp" />
     <ClCompile Include="..\..\..\src\xss\localfs.cpp" />

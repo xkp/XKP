@@ -347,6 +347,20 @@ str application::random_id(XSSObject instance)
     return type_id + "__" + boost::lexical_cast<str>( instance.get() ); 
   }
 
+DynamicArray application::__instances()
+  {
+    DynamicArray result(new dynamic_array);
+
+    instance_list::iterator it = instances_.begin();
+    instance_list::iterator nd = instances_.end();
+    for(; it != nd; it++)
+      {
+        result->push_back(*it);
+      }
+
+    return result;
+  }
+
 void application::add_instance(XSSObject instance)
   {
     assert(instance);
@@ -2105,7 +2119,10 @@ XSSObject object_model::read_object_instance(DataEntity de, XSSObject parent, om
             if (inst)
               read_object(de, ctx, inst);
             else
-              inst = read_object(de, ctx, XSSObject(), type);
+              {
+                inst = read_object(de, ctx, XSSObject(), type);
+                prop->instance_value(inst);
+              }
 
             return inst;
           }

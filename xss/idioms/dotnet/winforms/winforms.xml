@@ -1,6 +1,16 @@
 <idiom id="winforms">
+
+    <class id="component_position">
+        <property id="x"      type="int"/>
+        <property id="y"      type="int"/>
+        <property id="width"  type="int"/>
+        <property id="height" type="int"/>
+    </class>
+    
     <class id="component" output_id="System.Windows.Forms.Component">
         <accept_parent when="it.container" append="as_child"/>
+
+        <property id="position" type="component_position"/>
     </class>
 
     <class id="div" super="component" container="true" output_id="System.Windows.Forms.Panel">

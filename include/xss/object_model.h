@@ -139,6 +139,9 @@ class application : public boost::enable_shared_from_this<application>
       instance_list instances_;
 
       str random_id(XSSObject instance);
+    public:
+      //glue
+      DynamicArray __instances();
   };
 
 struct document
@@ -422,6 +425,8 @@ struct application_schema : object_schema<application>
       {
         readonly_property<XSSObject>("root",  &application::root);
         readonly_property<XSSObject>("name",  &application::name);
+
+        readonly_property<DynamicArray>("instances",  &application::__instances);
       }
   };
 

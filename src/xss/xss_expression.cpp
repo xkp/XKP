@@ -984,6 +984,11 @@ operator_type xss_expression::op()
     return op_;
   }
 
+void xss_expression::op(operator_type val)
+  {
+    op_ = val;
+  }
+
 bool xss_expression::is_assign()
   {
     return is_assign_;
@@ -994,9 +999,19 @@ XSSExpression xss_expression::left()
     return arg1_;
   }
 
+void xss_expression::left(XSSExpression val)
+  {
+    arg1_ = val;
+  }
+
 XSSExpression xss_expression::right()
   {
     return arg2_;
+  }
+
+void xss_expression::right(XSSExpression val)
+  {
+    arg2_ = val;
   }
 
 XSSExpression xss_expression::third()
@@ -1004,9 +1019,19 @@ XSSExpression xss_expression::third()
     return arg3_;
   }
 
+void xss_expression::third(XSSExpression val)
+  {
+    arg3_ = val;
+  }
+
 XSSOperator xss_expression::xop()
   {
     return xop_;
+  }
+
+void xss_expression::xop(XSSOperator val)
+  {
+    xop_ = val;
   }
 
 void xss_expression::as_array(XSSArguments items)
@@ -1023,6 +1048,11 @@ void xss_expression::as_array(XSSArguments items)
 XSSValue xss_expression::value()
   {
     return value_;
+  }
+
+void xss_expression::value(XSSValue val)
+  {
+    value_ = val;
   }
 
 void xss_expression::set_extents(file_position& begin, file_position& end)

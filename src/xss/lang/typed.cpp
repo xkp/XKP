@@ -813,7 +813,7 @@ bool typed_lang::render_throw(IStatementExpression* info, XSSContext ctx, std::o
     return true;
   }
 
-bool typed_lang::render_assignment(XSSExpression expr, XSSValue left_value, XSSExpression right, XSSContext ctx, std::ostringstream& result)
+bool typed_lang::render_assignment(XSSExpression expr, XSSValue left_value, XSSExpression right, XSSContext ctx, std::ostringstream& result, const str& path)
   {
 	  //check for array operations
     XSSType is_array_type = left_value->type();
