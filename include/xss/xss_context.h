@@ -681,25 +681,19 @@ typedef std::vector<value_operation> value_operations;
 class xss_value
   {
     public:
-      xss_value()                       {assert(false);} //forced by variants
-      xss_value(const xss_value& other) {assert(false);}
-
-      xss_value(file_position& begin, file_position& end) :
-        state_(BS_UNBOUND),
-        begin_(begin),
-        end_(end)
-        {
-        }
+      xss_value();
+      xss_value(const xss_value& other);
+      xss_value(file_position& begin, file_position& end);
     public:
       void              bind(XSSContext ctx, bool as_setter);
       XSSType           type();
-	  void              type(XSSType type);
+	    void              type(XSSType type);
       bool              bound();
       value_operations& operations();      
       void              add_operation(value_operation& op);
       value_operation&  get_last();
       bool              is_constant();
-	  bool              is_array();
+	    bool              is_array();
       variant           constant();
       file_position&    begin(); 
       file_position&    end(); 

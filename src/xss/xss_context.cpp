@@ -2842,6 +2842,7 @@ bool xss_property::is_const()
 void xss_property::property_type(XSSType type)
   {
     prop_type_ = type;
+    type_ = type; //blah
   }
 
 XSSType xss_property::property_type()

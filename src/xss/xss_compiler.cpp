@@ -3683,7 +3683,7 @@ str xss_compiler::__assignment(const str& path, variant left, variant right)
     if (left.is<XSSProperty>())
       {
         XSSProperty prop = left;
-        value_operation vop(OP_WRITE, prop->output_id());
+        value_operation vop(OP_WRITE, prop->id());
         vop.bind(RESOLVE_PROPERTY, prop);
 
         XSSValue vv(new xss_value);

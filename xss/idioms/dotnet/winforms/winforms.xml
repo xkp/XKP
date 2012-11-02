@@ -13,11 +13,13 @@
         <property id="position" type="component_position"/>
     </class>
 
-    <class id="div" super="component" container="true" output_id="System.Windows.Forms.Panel">
+    <class id="div" super="component" container="true" output_id="System.Windows.Forms.Panel" hasLayout="true">
 	</class>
 
     <class id="button" super="component" output_id="System.Windows.Forms.Button">
-        <event id="click"/>
+        <property id="caption" type="string" output_id="Text" designer="true"/>
+        
+        <event id="click" output_id="Click"/>
     </class>
 
     <class id="Application">

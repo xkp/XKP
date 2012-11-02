@@ -317,6 +317,7 @@ class object_model
     public:
       //readers, public for access
       void r_attr_nop(const str& attr, const str& value, const variant& this_, om_context& ctx);
+      void r_child_nop(DataEntity de, const variant& this_, om_context& ctx);
 
       void r_idiom_namespace(const str& attr, const str& value, const variant& this_, om_context& ctx);
       void r_invalid_idiom_attr(const str& attr, const str& value, const variant& this_, om_context& ctx);
@@ -350,6 +351,8 @@ class object_model
       void r_invalid_array_attr(const str& attr, const str& value, const variant& this_, om_context& ctx);
       void r_array_item(DataEntity de, const variant& this_, om_context& ctx);
       void r_invalid_array_item(DataEntity de, const variant& this_, om_context& ctx);
+
+      void r_invalid_property_child(DataEntity de, const variant& this_, om_context& ctx);
     private:
       //document model
       application_list apps_;

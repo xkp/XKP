@@ -595,6 +595,27 @@ void value_operation::set_constant(variant constant)
   }
 
 //xss_value
+xss_value::xss_value():
+  state_(BS_UNBOUND)
+  {
+  }
+
+xss_value::xss_value(const xss_value& other):
+  type_(other.type_),
+  operations_(other.operations_),      
+  begin_(other.begin_),
+  end_(other.end_),
+  state_(other.state_)
+  {
+  }
+
+xss_value::xss_value(file_position& begin, file_position& end) :
+  state_(BS_UNBOUND),
+  begin_(begin),
+  end_(end)
+  {
+  }
+
 void xss_value::bind(XSSContext ctx, bool as_setter)
   {
     assert(state_ != BS_BOUND);

@@ -138,6 +138,7 @@
                     
                     string path = "this." + inst.output_id;
                     compiler.render_assignment(path, prop, prop.value);
+                    compiler.out(";");
                 }
 
                 //render events
@@ -156,6 +157,21 @@
 			    }
             }
 
+            //render form
+            out()
+            {
+                // 
+                // Form1
+                // 
+                this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+                this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+                this.ClientSize = new System.Drawing.Size(1196, 562);
+                this.Controls.Add(this.userControl11);
+                this.Controls.Add(this.panel1);
+                this.Name = "<xss:e v="application.name"/>";
+                this.Text = "<xss:e v="application.name"/>";
+            }
+
             //resume layout
             for(var layout in layouts)
             {
@@ -163,6 +179,12 @@
                 {
                     this.<xss:e v="layout.output_id"/>.ResumeLayout();
                 }
+            }
+
+            //Form
+            out()
+            {
+                this.ResumeLayout();
             }
             </xss:code>
         }

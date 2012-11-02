@@ -1641,6 +1641,11 @@ void object_model::r_attr_nop(const str& attr, const str& value, const variant& 
     //no op
   }
 
+void object_model::r_child_nop(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    //no op
+  }
+
 void object_model::r_idiom_namespace(const str& attr, const str& value, const variant& this_, om_context& ctx)
   {
     ctx.idiom->set_namespace(value);
@@ -1737,14 +1742,36 @@ void object_model::r_object_property(DataEntity de, const variant& this_, om_con
     assure_id(de, ctx);
     XSSObject obj = this_;
 
+    XSSProperty result;
     XSSProperty prop     = read_property(de, obj, ctx);
     XSSProperty obj_prop = obj->instantiate_property(de->id());
     if (obj_prop)
       {
         merge_property(obj_prop, prop, obj, ctx);
+        result = obj_prop;
       }
     else
-      obj->insert_property(prop);  
+      {
+        obj->insert_property(prop);
+        result = prop;
+      }
+      
+    //read property includes all loading logic, bue we still hace to search
+    //for metadata, so we'll ignore all of the attributes/nodes already loaded
+
+    om_entity_visitor oev(this, result, ctx);
+    oev.attribute_handler("output_id",     &object_model::r_attr_nop);
+    oev.attribute_handler("type",          &object_model::r_attr_nop);
+    oev.attribute_handler("value",         &object_model::r_attr_nop);
+    oev.attribute_handler("*",             &object_model::r_object_attr);
+
+    oev.child_handler    ("get",           &object_model::r_child_nop);
+    oev.child_handler    ("set",           &object_model::r_child_nop);
+    oev.child_handler    ("value",         &object_model::r_child_nop);
+    oev.child_handler    ("*",             &object_model::r_invalid_property_child);
+
+    de->visit(&oev);
+  
   }
 
 void object_model::r_object_method(DataEntity de, const variant& this_, om_context& ctx)
@@ -2103,6 +2130,10 @@ void object_model::r_invalid_array_item(DataEntity de, const variant& this_, om_
     assert(false); //td: error
   }
 
+void object_model::r_invalid_property_child(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    assert(false); //td: error
+  }
 
 XSSObject object_model::read_object_instance(DataEntity de, XSSObject parent, om_context& ctx)
   {
@@ -2228,12 +2259,10 @@ void object_model::r_object_attr(const str& attr, const str& value_str, const va
         XSSExpression value = compile_expression(value_str, prop_type);
         prop->expr_value(value);
       }
-    else
-      {
-        //not a property, add it as an attribute
-        variant vv = str2var(value_str);
-        obj->add_attribute(attr, vv);
-      }
+    
+    //add as a object attribute regardless
+    variant vv = str2var(value_str);
+    obj->add_attribute(attr, vv);
   }
 
 XSSType object_model::read_type(DataEntity de, Idiom parent, XSSContext ctx)

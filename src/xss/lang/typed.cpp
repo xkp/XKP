@@ -323,6 +323,7 @@ bool typed_lang::render_value(XSSValue val, XSSContext ctx, std::ostringstream& 
                 break;
               }
             case OP_READ:
+            case OP_WRITE: 
               {
                 if (it->bound())
                   {
@@ -340,11 +341,6 @@ bool typed_lang::render_value(XSSValue val, XSSContext ctx, std::ostringstream& 
 
                     my_value << id;
                   }
-                break;
-              }
-            case OP_WRITE: 
-              {
-                assert(false); //should not get here
                 break;
               }
             case OP_CALL:
@@ -829,12 +825,15 @@ bool typed_lang::render_assignment(XSSExpression expr, XSSValue left_value, XSSE
       {
         if (left_value->bound())
           {
-            XSSValue path = left_value->path();
-            str           path_str;
-            if (path)
+            XSSValue path_value = left_value->path();
+            str      path_str = path;
+            if (path_value)
               {
                 std::ostringstream path_;
-                if (!render_value(path, ctx, path_))
+                if (!path.empty())
+                  path_ << path << '.';
+
+                if (!render_value(path_value, ctx, path_))
                   return false;
 
                 path_str = path_.str();
@@ -857,7 +856,7 @@ bool typed_lang::render_assignment(XSSExpression expr, XSSValue left_value, XSSE
                           return false;
                     
                         param_list params;
-                        params.add("path", path);
+                        params.add("path", path_str);
                         params.add("value", value_.str());
 
                         prop_setter->render(params, result);
@@ -868,14 +867,20 @@ bool typed_lang::render_assignment(XSSExpression expr, XSSValue left_value, XSSE
                         if (code_setter)
                           {
                             //td: !! generalize this
-                            result << path << '.' << prop->id() << "__set("; 
+                            if (!path_str.empty())
+                              result << path_str << '.';  
+                            
+                            result << prop->output_id() << "__set("; 
                             if (!render_expression(right, ctx, result))
                               return false;
                             result << ")";
                           }
                         else 
                           {
-                            result << path << "." << prop->output_id() << " = ";
+                            if (!path_str.empty())
+                              result << path_str << '.';  
+
+                            result << prop->output_id() << " = ";
                             if (!render_expression(right, ctx, result))
                               return false;
                           }
@@ -895,6 +900,9 @@ bool typed_lang::render_assignment(XSSExpression expr, XSSValue left_value, XSSE
           }
         else
           {
+            if (!path.empty())
+              result << path << '.';  
+
             if (!render_value(left_value, ctx, result))
               return false;
         
@@ -957,6 +965,14 @@ bool typed_lang::render_read_operation(value_operation& op, XSSContext ctx, std:
                           result << '.';
                         
                         result<< prop->id() << "__get()";
+                        return true;
+                      }
+                    else
+                      {
+                        if (!path.empty())
+                          result << '.';
+                        
+                        result << prop->output_id();
                         return true;
                       }
                   }
