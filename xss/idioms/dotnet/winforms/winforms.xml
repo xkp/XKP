@@ -19,7 +19,7 @@
     <class id="button" super="component" output_id="System.Windows.Forms.Button">
         <property id="caption" type="string" output_id="Text" designer="true"/>
         
-        <event id="click" output_id="Click"/>
+        <event id="click" output_id="Click" native_signature="object __sender, EventArgs __e"/>
     </class>
 
     <class id="Application">

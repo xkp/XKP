@@ -969,8 +969,11 @@ class xss_signature
 
       void bind(XSSContext ctx);
       void arg_type(int idx, XSSType type);
+      void native(const str& s);
+      str  native(); 
     private:
       signature_items items_;
+      str             native_;
   };
 
 class xss_operator

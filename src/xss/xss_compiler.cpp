@@ -1925,6 +1925,10 @@ void xss_compiler::render_signature(XSSSignature sig)
 
 str xss_compiler::signature_to_string(XSSSignature sig)
   {
+    str native = sig->native();
+    if (!native.empty())
+      return native; //no need to render
+
     Language    lang = ctx_->get_language();
     XSSRenderer rend = current_renderer();
 

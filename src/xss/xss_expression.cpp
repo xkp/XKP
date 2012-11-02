@@ -1306,6 +1306,16 @@ void xss_signature::arg_type(int idx, XSSType type)
     items_[idx].type = type;
   }
 
+void xss_signature::native(const str& s)
+  {
+    native_ = s;
+  }
+
+str xss_signature::native()
+  {
+    return native_;
+  }
+
 //xss_operator
 xss_operator::xss_operator(operator_type op, XSSType result):
   op_(op),

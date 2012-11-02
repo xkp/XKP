@@ -2372,6 +2372,9 @@ XSSType object_model::read_type(DataEntity de, Idiom parent, XSSContext ctx)
 XSSSignature object_model::read_signature(DataEntity de, om_context& ctx)
   {
     XSSSignature result(new xss_signature);
+    str native = de->attr("native_signature");
+    if (!native.empty())
+      result->native(native);
 
     entity_list items = de->find_all("argument");
     entity_list::iterator it = items.begin();
@@ -2566,6 +2569,7 @@ XSSMethod object_model::read_method(DataEntity de, om_context& ctx)
       }
 
     XSSSignature sig = read_signature(de, ctx);
+
     result->signature(sig);
 
     return result;

@@ -158,6 +158,15 @@
             }
 
             //render form
+            int app_width  = app.width;
+            int app_height = app.app_height;
+
+            if (!app_width)
+                app_width = 800;
+
+            if (!app_height)
+                app_height = 600;
+
             out()
             {
                 // 
@@ -165,12 +174,22 @@
                 // 
                 this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
                 this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-                this.ClientSize = new System.Drawing.Size(1196, 562);
-                this.Controls.Add(this.userControl11);
-                this.Controls.Add(this.panel1);
+                this.ClientSize = new System.Drawing.Size(<xss:e v="app_width"/>, <xss:e v="app_height"/>);
                 this.Name = "<xss:e v="application.name"/>";
                 this.Text = "<xss:e v="application.name"/>";
             }
+
+            for(var app_child in application.instances)
+            {
+                if (app_child.parent.id != "application")
+                    continue; //only top level
+
+                out()
+                {
+                    this.Controls.Add(this.<xss:e v="app_child.output_id"/>);
+                }
+            }
+
 
             //resume layout
             for(var layout in layouts)
