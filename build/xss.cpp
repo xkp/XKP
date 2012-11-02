@@ -90,6 +90,9 @@ int main(int argc, char* argv[])
 		
     XSSCompiler compiler(new xss_compiler(out));
 
+    fs::path exepath = fs::complete(argv[0]).parent_path();
+    compiler->exe_path(exepath);
+
     //handle errors 
     int        error_number = 0;
     param_list error;

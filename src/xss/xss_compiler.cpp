@@ -2037,7 +2037,7 @@ void xss_compiler::read_application_types(std::vector<XSSObject>& applications, 
             xss_throw(error);
           }
 
-        fs::path path = fs::system_complete(entry_point);
+        fs::path path = exepath_ / entry_point;
         if (!fs::exists(path))
           path = fs::complete(base_path_ / entry_point);
 
@@ -2096,7 +2096,7 @@ void xss_compiler::read_application_types(std::vector<XSSObject>& applications, 
 
 XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, XSSObject module)
   {
-    fs::path path = fs::system_complete(src);
+    fs::path path = exepath_ / src;
     if (!fs::exists(path))
       path = base_path_ / src;
 
@@ -3209,6 +3209,11 @@ str xss_compiler::escape_file(const str& filename)
     boost::replace_all (result, "\n", "\\n");
     boost::replace_all (result, "\"", "\\\"");
     return result;
+  }
+
+void xss_compiler::exe_path(fs::path exepath)
+  {
+    exepath_ = exepath;
   }
 
 void xss_compiler::collect_dependencies(XSSType type, XSSType context)
