@@ -595,6 +595,27 @@ void value_operation::set_constant(variant constant)
   }
 
 //xss_value
+xss_value::xss_value():
+  state_(BS_UNBOUND)
+  {
+  }
+
+xss_value::xss_value(const xss_value& other):
+  type_(other.type_),
+  operations_(other.operations_),      
+  begin_(other.begin_),
+  end_(other.end_),
+  state_(other.state_)
+  {
+  }
+
+xss_value::xss_value(file_position& begin, file_position& end) :
+  state_(BS_UNBOUND),
+  begin_(begin),
+  end_(end)
+  {
+  }
+
 void xss_value::bind(XSSContext ctx, bool as_setter)
   {
     assert(state_ != BS_BOUND);
@@ -941,7 +962,10 @@ void xss_expression::bind(XSSContext ctx)
 
             arg2_->bind(ctx);
 
-            notification nfy(NOTID_ASSIGN, this);
+            XSSExpression expr = XSSExpression(new xss_expression(op_, arg1_, arg2_, arg3_));
+            expr->set_extents(begin_, end_);
+
+            notification nfy(NOTID_ASSIGN, expr);
             ctx->notify(nfy);
           }
         else
@@ -987,6 +1011,11 @@ operator_type xss_expression::op()
     return op_;
   }
 
+void xss_expression::op(operator_type val)
+  {
+    op_ = val;
+  }
+
 bool xss_expression::is_assign()
   {
     return is_assign_;
@@ -997,9 +1026,19 @@ XSSExpression xss_expression::left()
     return arg1_;
   }
 
+void xss_expression::left(XSSExpression val)
+  {
+    arg1_ = val;
+  }
+
 XSSExpression xss_expression::right()
   {
     return arg2_;
+  }
+
+void xss_expression::right(XSSExpression val)
+  {
+    arg2_ = val;
   }
 
 XSSExpression xss_expression::third()
@@ -1007,9 +1046,19 @@ XSSExpression xss_expression::third()
     return arg3_;
   }
 
+void xss_expression::third(XSSExpression val)
+  {
+    arg3_ = val;
+  }
+
 XSSOperator xss_expression::xop()
   {
     return xop_;
+  }
+
+void xss_expression::xop(XSSOperator val)
+  {
+    xop_ = val;
   }
 
 void xss_expression::as_array(XSSArguments items)
@@ -1026,6 +1075,11 @@ void xss_expression::as_array(XSSArguments items)
 XSSValue xss_expression::value()
   {
     return value_;
+  }
+
+void xss_expression::value(XSSValue val)
+  {
+    value_ = val;
   }
 
 void xss_expression::set_extents(file_position& begin, file_position& end)
@@ -1256,6 +1310,16 @@ void xss_signature::bind(XSSContext ctx)
 void xss_signature::arg_type(int idx, XSSType type)
   {
     items_[idx].type = type;
+  }
+
+void xss_signature::native(const str& s)
+  {
+    native_ = s;
+  }
+
+str xss_signature::native()
+  {
+    return native_;
   }
 
 //xss_operator

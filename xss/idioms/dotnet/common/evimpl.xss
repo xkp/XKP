@@ -1,21 +1,23 @@
-<xss:parameter id="impl"/>
+<xss:parameter id="it"/>
 <xss:parameter id="owner"/>
 
 <xss:code>
 //declares an event implementation
 string impl_name;
-if (impl.instance)
-    impl_name = impl.instance.id + "_" + impl.ev.id;
+if (it.instance)
+    impl_name = it.instance.id + "_" + it.ev.id;
 else
-    impl_name = owner.id + "_" + impl.ev.id;
+    impl_name = owner.id + "_" + it.ev.id;
+    
+it.impl_method = impl_name;
 
 out()
 {
-	private void <xss:e v="impl_name"/>(<xss:e v="compiler.signature_to_string(impl.ev.signature)"/>)
+	private void <xss:e v="impl_name"/>(<xss:e v="compiler.signature_to_string(it.ev.signature)"/>)
 	<xss:open_brace/>
 }
 
-compiler.render_code(impl.code);
+compiler.render_code(it.code);
 
 out()
 {

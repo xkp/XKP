@@ -139,6 +139,9 @@ class application : public boost::enable_shared_from_this<application>
       instance_list instances_;
 
       str random_id(XSSObject instance);
+    public:
+      //glue
+      DynamicArray __instances();
   };
 
 struct document
@@ -314,6 +317,7 @@ class object_model
     public:
       //readers, public for access
       void r_attr_nop(const str& attr, const str& value, const variant& this_, om_context& ctx);
+      void r_child_nop(DataEntity de, const variant& this_, om_context& ctx);
 
       void r_idiom_namespace(const str& attr, const str& value, const variant& this_, om_context& ctx);
       void r_invalid_idiom_attr(const str& attr, const str& value, const variant& this_, om_context& ctx);
@@ -347,6 +351,8 @@ class object_model
       void r_invalid_array_attr(const str& attr, const str& value, const variant& this_, om_context& ctx);
       void r_array_item(DataEntity de, const variant& this_, om_context& ctx);
       void r_invalid_array_item(DataEntity de, const variant& this_, om_context& ctx);
+
+      void r_invalid_property_child(DataEntity de, const variant& this_, om_context& ctx);
     private:
       //document model
       application_list apps_;
@@ -422,6 +428,8 @@ struct application_schema : object_schema<application>
       {
         readonly_property<XSSObject>("root",  &application::root);
         readonly_property<XSSObject>("name",  &application::name);
+
+        readonly_property<DynamicArray>("instances",  &application::__instances);
       }
   };
 

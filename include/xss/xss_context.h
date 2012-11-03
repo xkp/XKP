@@ -700,25 +700,19 @@ typedef std::vector<value_operation> value_operations;
 class xss_value
   {
     public:
-      xss_value()                       {assert(false);} //forced by variants
-      xss_value(const xss_value& other) {assert(false);}
-
-      xss_value(file_position& begin, file_position& end) :
-        state_(BS_UNBOUND),
-        begin_(begin),
-        end_(end)
-        {
-        }
+      xss_value();
+      xss_value(const xss_value& other);
+      xss_value(file_position& begin, file_position& end);
     public:
       void              bind(XSSContext ctx, bool as_setter);
       XSSType           type();
-	  void              type(XSSType type);
+	    void              type(XSSType type);
       bool              bound();
       value_operations& operations();      
       void              add_operation(value_operation& op);
       value_operation&  get_last();
       bool              is_constant();
-	  bool              is_array();
+	    bool              is_array();
       variant           constant();
       file_position&    begin(); 
       file_position&    end(); 
@@ -759,16 +753,22 @@ class xss_expression
       void    bind(XSSContext ctx);
     public:
       operator_type op();
+      void          op(operator_type val);
       XSSValue      value();
+      void          value(XSSValue val);
       XSSType       type();
       void          type(XSSType t);
       bool          is_constant();
       variant       constant_value();
       bool          is_assign();
       XSSExpression left();
+      void          left(XSSExpression val);
       XSSExpression right();
+      void          right(XSSExpression val);
       XSSExpression third();
+      void          third(XSSExpression val);
       XSSOperator   xop();
+      void          xop(XSSOperator val);
 
       void as_array(XSSArguments items);
     public:
@@ -988,8 +988,11 @@ class xss_signature
 
       void bind(XSSContext ctx);
       void arg_type(int idx, XSSType type);
+      void native(const str& s);
+      str  native(); 
     private:
       signature_items items_;
+      str             native_;
   };
 
 class xss_operator
@@ -1061,7 +1064,7 @@ struct ILanguage
     virtual bool render_throw(IStatementExpression* info, XSSContext ctx, std::ostringstream& result)          = 0;
 
     //expression rendering
-    virtual bool render_assignment(XSSExpression expr, XSSValue left_value, XSSExpression right, XSSContext ctx, std::ostringstream& result) = 0;
+    virtual bool render_assignment(XSSExpression expr, XSSValue left_value, XSSExpression right, XSSContext ctx, std::ostringstream& result, const str& path = str()) = 0;
     virtual bool render_array_assignment(XSSExpression expr, XSSArguments index, XSSContext ctx, std::ostringstream& result)                 = 0;
     virtual bool render_operator(XSSExpression expr, XSSContext ctx, std::ostringstream& result)                                             = 0;
     virtual bool render_constant(variant& value, XSSContext ctx, std::ostringstream& result)                                                 = 0; 
@@ -1383,10 +1386,11 @@ struct xss_property_schema : xss_object_schema<xss_property>
         //method_<str, 0>("render_value", &xss_property::render_value);
 
         //0.9.5
-        readonly_property<XSSType>      ("property_type", &xss_property::prop_type_);
-        readonly_property<XSSExpression>("value",         &xss_property::expr_value_);
-        readonly_property<XSSCode>      ("get_code",      &xss_property::code_getter_);
-        readonly_property<XSSCode>      ("set_code",      &xss_property::code_setter_);
+        readonly_property<XSSType>      ("property_type",  &xss_property::prop_type_);
+        readonly_property<XSSExpression>("value",          &xss_property::expr_value_);
+        readonly_property<XSSObject>    ("instance_value", &xss_property::instance_value_);
+        readonly_property<XSSCode>      ("get_code",       &xss_property::code_getter_);
+        readonly_property<XSSCode>      ("set_code",       &xss_property::code_setter_);
       
         //td: !!! do property interface, its a mess
       //InlineRenderer getter_;

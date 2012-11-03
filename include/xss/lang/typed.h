@@ -33,7 +33,7 @@ struct typed_lang : ILanguage
     virtual bool render_throw(IStatementExpression* info, XSSContext ctx, std::ostringstream& result);
 
     //expression rendering
-    virtual bool render_assignment(XSSExpression expr, XSSValue left_value, XSSExpression right, XSSContext ctx, std::ostringstream& result);
+    virtual bool render_assignment(XSSExpression expr, XSSValue left_value, XSSExpression right, XSSContext ctx, std::ostringstream& result, const str& path = str());
     virtual bool render_array_assignment(XSSExpression expr, XSSArguments index, XSSContext ctx, std::ostringstream& result); //handled as a separate case, for complications
     virtual bool render_operator(XSSExpression expr, XSSContext ctx, std::ostringstream& result);
     virtual bool render_constant(variant& value, XSSContext ctx, std::ostringstream& result); 

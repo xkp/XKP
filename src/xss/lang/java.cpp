@@ -42,9 +42,9 @@ XSSContext java_lang::create_context()
         sz_prop->set_id("size");
         sz_prop->set_type(result->get_type("int"));
 
-        param_list iparams;
-        InlineRenderer getter(new inline_renderer());
-        getter->compile("size()", false, iparams);
+        InlineRenderer getter = InlineRenderer(new inline_renderer);
+        param_list pl;
+        getter->compile("size()", false, pl);
 
         sz_prop->getter(getter);
 

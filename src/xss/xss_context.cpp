@@ -656,9 +656,10 @@ void xss_context::notify(notification nfy)
       {
         case NOTID_ASSIGN:
           {
-            XSSExpression expr = nfy.data;
+            XSSExpression expr;
+            expr = variant_cast<XSSExpression>(nfy.data, XSSExpression());
 
-            // process assigns notification
+            //td: process assigns notification
 
             XSSContext pctx = parent_.lock();
             if (pctx->identity() == CTXID_CODE)
@@ -2469,7 +2470,19 @@ void xss_type::import(XSSType import)
 
 XSSArguments xss_type::get_constructor(XSSArguments args)
   {
-    assert(false); //td:
+    std::vector<XSSSignature>::iterator it = constructors_.begin();
+    std::vector<XSSSignature>::iterator nd = constructors_.end();
+
+    for(; it != nd; it++)
+      {
+        XSSSignature sig = *it;
+        if (sig->match(args))
+          return args;
+      }
+
+    if (constructors_.empty() && args->size() == 0)
+      return args;
+
     return XSSArguments();
   }
 
@@ -2858,6 +2871,7 @@ bool xss_property::is_const()
 void xss_property::property_type(XSSType type)
   {
     prop_type_ = type;
+    type_ = type; //blah
   }
 
 XSSType xss_property::property_type()

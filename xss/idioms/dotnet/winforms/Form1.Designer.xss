@@ -29,17 +29,195 @@
         private void InitializeComponent()
         {
             <xss:code>
-            //instantiate
+            var app = application.root;
+            
+            //instantiate and collect next step
+            array layouts = [];
+
+            for(var cmp in application.instances)
+            {
+                out()
+                {
+                    this.<xss:e v="cmp.output_id"/> = <xss:e v="compiler.instantiation_to_string(cmp.type)"/>;
+                }
+
+                if (cmp.hasLayout)
+                    layouts += cmp;
+            }
+
             //suspend layout
+            for(var lyout in layouts)
+            {
+                out()
+                {
+                    this.<xss:e v="lyout.output_id"/>.SuspendLayout();
+                }
+            }
+
+            //Form
+            out()
+            {
+                this.SuspendLayout();
+            }
+
             //render instances
+            for(var inst in application.instances)
+            {
+                out()
+                {
+                // 
+                // <xss:e v="inst.output_id"/>
+                // 
+                }
+                
+                //add children 
+                for(var child in inst.children)
+                {
+                    out()
+                    {
+                        this.<xss:e v="inst.output_id"/>.Controls.Add(this.<xss:e v="child.output_id"/>);
+                    }
+                }
+
+                //render custom properties
+                out()
+                {
+                    this.<xss:e v="inst.output_id"/>.Name = "<xss:e v="inst.output_id"/>";
+                }
+
+                var position = inst.get_property("position").instance_value;
+                if (position)
+                {
+                    var x = position.get_property("x");
+                    var y = position.get_property("y");
+
+                    if (x || y)
+                    {
+                        string xs = "0";
+                        if (x && x.value)
+                            xs = compiler.expression_to_string(x.value);
+
+                        string ys = "0";
+                        if (y && y.value)
+                            ys = compiler.expression_to_string(y.value);
+                        
+                        out()
+                        {
+                            this.<xss:e v="inst.output_id"/>.Location = new System.Drawing.Point(<xss:e v="xs"/>, <xss:e v="ys"/>);
+                        }
+                    }
+
+                    var width  = position.get_property("width");
+                    var height = position.get_property("height");
+
+                    if (width || height)
+                    {
+                        string ws = "100";
+                        if (width && width.value)
+                            ws = compiler.expression_to_string(width.value);
+
+                        string hs = "100";
+                        if (height && height.value)
+                            hs = compiler.expression_to_string(height.value);
+                        
+                        out()
+                        {
+                            this.<xss:e v="inst.output_id"/>.Size = new System.Drawing.Size(<xss:e v="ws"/>, <xss:e v="hs"/>);
+                        }
+                    }
+                }
+
+                //render designer properties
+                for(var prop in inst.properties)
+                {
+                    if (!prop.designer)
+                        continue;
+
+                    if (!prop.value)
+                        continue;
+                    
+                    string path = "this." + inst.output_id;
+                    compiler.render_assignment(path, prop, prop.value);
+                    compiler.out(";");
+                }
+
+                //render events
+			    for(var evimpl in app.evimpl)
+			    {
+                    if (!evimpl.impl_method || !evimpl.instance)
+                        continue;
+
+                    if (inst.output_id != evimpl.instance.output_id)
+                        continue;
+
+                    out()
+                    {
+                        this.<xss:e v="inst.output_id"/>.<xss:e v="evimpl.ev.output_id"/> += <xss:e v="evimpl.impl_method"/>;
+                    }
+			    }
+            }
+
+            //render form
+            int app_width  = app.width;
+            int app_height = app.app_height;
+
+            if (!app_width)
+                app_width = 800;
+
+            if (!app_height)
+                app_height = 600;
+
+            out()
+            {
+                // 
+                // Form1
+                // 
+                this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+                this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+                this.ClientSize = new System.Drawing.Size(<xss:e v="app_width"/>, <xss:e v="app_height"/>);
+                this.Name = "<xss:e v="application.name"/>";
+                this.Text = "<xss:e v="application.name"/>";
+            }
+
+            for(var app_child in application.instances)
+            {
+                if (app_child.parent.id != "application")
+                    continue; //only top level
+
+                out()
+                {
+                    this.Controls.Add(this.<xss:e v="app_child.output_id"/>);
+                }
+            }
+
+
             //resume layout
+            for(var layout in layouts)
+            {
+                out()
+                {
+                    this.<xss:e v="layout.output_id"/>.ResumeLayout();
+                }
+            }
+
+            //Form
+            out()
+            {
+                this.ResumeLayout();
+            }
             </xss:code>
         }
 
         #endregion
 
         <xss:code>
-        //declare variables
+        for(var cmp in application.instances)
+        {
+            out()
+            {
+                private <xss:e v="cmp.type.output_id"/> <xss:e v="cmp.output_id"/>;
+            }
+        }
         </xss:code>
     }
 }

@@ -1925,6 +1925,10 @@ void xss_compiler::render_signature(XSSSignature sig)
 
 str xss_compiler::signature_to_string(XSSSignature sig)
   {
+    str native = sig->native();
+    if (!native.empty())
+      return native; //no need to render
+
     Language    lang = ctx_->get_language();
     XSSRenderer rend = current_renderer();
 
@@ -3650,7 +3654,90 @@ XSSContext xss_compiler::current_context()
       return app_->context();
 
     return XSSContext();
- }
+  }
+
+str xss_compiler::__instantiation(const param_list params)
+  {
+    XSSType type = variant_cast<XSSType>(params.get(0), XSSType());
+    if (!type)
+      {
+        return str(); //td: error        
+      }
+
+    XSSArguments args(new xss_arguments); 
+    //td: !!! constructor arguments, get from params
+
+    XSSContext ctx  = current_context();
+    Language   lang = ctx->get_language(); 
+    
+    std::ostringstream result;
+    lang->render_instantiation(type, args, ctx, result);
+    
+    return result.str();
+  }
+
+str xss_compiler::__assignment(const str& path, variant left, variant right)
+  {
+    XSSContext ctx  = current_context();
+    Language   lang = ctx->get_language(); 
+    
+    XSSExpression left_value(new xss_expression);
+    XSSExpression right_value;
+
+    if (left.is<XSSProperty>())
+      {
+        XSSProperty prop = left;
+        value_operation vop(OP_WRITE, prop->id());
+        vop.bind(RESOLVE_PROPERTY, prop);
+
+        XSSValue vv(new xss_value);
+        vv->add_operation(vop);
+        left_value->value(vv);
+
+        if (right.empty())
+          {
+            right_value = prop->expr_value();
+          }
+      }
+    else 
+      {
+        assert(false); //td: error
+      }
+
+    if (right.empty())
+      {
+        //ignore
+      }
+    else if (right.is<XSSExpression>())
+      right_value = right;
+    else if (right.is<XSSValue>())
+      {
+        right_value = XSSExpression(new xss_expression);
+        right_value->value(right);
+      }
+
+
+    if (!right_value)
+      {
+        //td: error
+      }
+
+    XSSExpression main_exp(new xss_expression);
+    main_exp->op(op_assign);
+    main_exp->left(left_value);
+    main_exp->right(right_value);
+
+    std::ostringstream result;
+    lang->render_assignment(main_exp, left_value->value(), right_value, ctx, result, path);
+    return result.str();
+  }
+
+void xss_compiler::__render_assignment(const str& path, variant left, variant right)
+  {
+    str         result = __assignment(path, left, right);
+    XSSRenderer rend   = current_renderer();
+    rend->append(result);
+  }
 
 //xss_string
 int xss_string::size(const str& s)
