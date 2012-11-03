@@ -305,6 +305,11 @@ XSSType xss_context::get_array_type(XSSType type)
     new_type = XSSType(new xss_type);
     new_type->set_id(array_type_name);
     new_type->as_array(type);
+
+    //copy from native array
+    XSSType native_arr_type = get_type("array");
+    new_type->copy(XSSObject(native_arr_type));
+    
     add_type(array_type_name, new_type, true);
 
     return new_type;
@@ -643,6 +648,29 @@ bool xss_context::add_instance(XSSObject instance)
       }
 
     return false;
+  }
+
+void xss_context::notify(notification nfy)
+  {
+    switch(nfy.id)
+      {
+        case NOTID_ASSIGN:
+          {
+            XSSExpression expr = nfy.data;
+
+            // process assigns notification
+
+            XSSContext pctx = parent_.lock();
+            if (pctx->identity() == CTXID_CODE)
+              pctx->notify(nfy);
+
+            break;
+          }
+        case NOTID_RETURN_TYPE:
+          {
+            break;
+          }
+      }
   }
 
 variant xss_context::resolve(const str& id, RESOLVE_ITEM item_type)

@@ -315,18 +315,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_3AABE72094234F55B8D576F843FF08F4"
-        "OwnerKey" = "8:_04F90B774D1541F3A1F3275A36C4B5E1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3AABE72094234F55B8D576F843FF08F4"
-        "OwnerKey" = "8:_BC5272DA59A647FCA3C38880A289DB3F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_3CC0C56AEADC41FA92009188472C2EBD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -789,18 +777,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9F6A09C567E74B99BB3BE18D7F0E70FA"
-        "OwnerKey" = "8:_04F90B774D1541F3A1F3275A36C4B5E1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9F6A09C567E74B99BB3BE18D7F0E70FA"
-        "OwnerKey" = "8:_BC5272DA59A647FCA3C38880A289DB3F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_A0813E8165331F80AF290158BB5D6F9F"
         "OwnerKey" = "8:_3F88B7D72DDB4C349F82A41E9F062C15"
         "MsmSig" = "8:_UNDEFINED"
@@ -1053,6 +1029,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_DC78026D976241A9B990DB6741C65DDE"
+        "OwnerKey" = "8:_04F90B774D1541F3A1F3275A36C4B5E1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DC78026D976241A9B990DB6741C65DDE"
+        "OwnerKey" = "8:_BC5272DA59A647FCA3C38880A289DB3F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_DD9F3E0A7F08433A904C5440F7174E3D"
         "OwnerKey" = "8:_3F88B7D72DDB4C349F82A41E9F062C15"
         "MsmSig" = "8:_UNDEFINED"
@@ -1115,12 +1103,6 @@
         {
         "MsmKey" = "8:_FB4F49FFBABD5050B668BE8C35C92382"
         "OwnerKey" = "8:_0EF0C151D7A55B41BE300A307CAA65E6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FC885A7211AF4A379B7862A6BB0D7D10"
-        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -2497,7 +2479,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ExcessCompiler, Version=1.0.4678.32177, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:ExcessCompiler, Version=1.0.4685.39060, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_6E3ED9C5E9C4F0B2DE9FCD4DB208125A"
@@ -3349,26 +3331,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FC885A7211AF4A379B7862A6BB0D7D10"
-            {
-            "SourcePath" = "8:..\\Debug\\Extensions\\Application\\Excess\\ProjectTemplates\\Excess\\1033\\xsWPFApp.zip"
-            "TargetName" = "8:xsWPFApp.zip"
-            "Tag" = "8:"
-            "Folder" = "8:_E4EBCCFE1CD94906A6701FC7CDE3D098"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
         }
         "FileType"
         {
@@ -3625,7 +3587,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ExcessIDE"
         "ProductCode" = "8:{3EA28B1F-71C7-4E7D-91EC-F151274BF301}"
-        "PackageCode" = "8:{D4DDAB95-FA33-41D2-83E6-1431612B9133}"
+        "PackageCode" = "8:{29CCF1E6-7E5A-452E-8EE8-32D7FA3BB980}"
         "UpgradeCode" = "8:{DE445DA7-18B3-49B9-96C9-D6A1C39AD040}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -4241,7 +4203,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_3AABE72094234F55B8D576F843FF08F4"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_DC78026D976241A9B990DB6741C65DDE"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"

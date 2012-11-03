@@ -518,6 +518,24 @@ struct IErrorHandler
     virtual error_list& errors()                                                          = 0;
   };
 
+enum NOTIFIED
+  {
+    NOTID_ASSIGN,
+    NOTID_RETURN_TYPE
+  };
+
+struct notification
+  {
+    notification(NOTIFIED _id, variant _data):
+      id(_id),
+      data(_data)
+      {
+      }
+
+    NOTIFIED  id;
+    variant   data;
+  };
+
 //code scope, this should not be public
 //td: 0.9.5 separate exec and data context
 struct xss_context_scope : scope
@@ -608,6 +626,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
 			void           visit(context_visitor* visitor);
 	    variant        identity_value();
       bool           add_instance(XSSObject instance);
+      void           notify(notification nfy);
     public:
       variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
       bool    resolve(const str& id, resolve_info& info);

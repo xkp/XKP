@@ -42,8 +42,13 @@ XSSContext java_lang::create_context()
         sz_prop->set_id("size");
         sz_prop->set_type(result->get_type("int"));
 
-        InlineRenderer getter = InlineRenderer(new inline_renderer("size()", false));
+        param_list iparams;
+        InlineRenderer getter(new inline_renderer());
+        getter->compile("size()", false, iparams);
+
         sz_prop->getter(getter);
+
+        type->register_property("size", sz_prop);
       }
 
     //td: remember: Byte(byte), Character(char), Short(short), Long(long)

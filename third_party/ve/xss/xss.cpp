@@ -171,7 +171,7 @@ class xss_object_model : public IObjectModel
 							ss << ", ";
 
 						std::string name  = err.info.get_name(i);
-						std::string value = xss_utils::var_to_string(err.info.get(i));
+            std::string value = xss_utils::var2string(err.info.get(i));
 						ss << name << " : " << value;
 					}
 

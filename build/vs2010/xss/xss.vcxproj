@@ -140,6 +140,7 @@
     <ClInclude Include="..\..\..\include\xss\lang\typed.h" />
     <ClInclude Include="..\..\..\include\xss\lang\waxjs.h" />
     <ClInclude Include="..\..\..\include\xss\lang_factory.h" />
+    <ClInclude Include="..\..\..\include\xss\object_model.h" />
     <ClInclude Include="..\..\..\include\xss\xss_compiler.h" />
     <ClInclude Include="..\..\..\include\xss\xss_context.h" />
     <ClInclude Include="..\..\..\include\xss\xss_error.h" />
@@ -161,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\third_party\gold\xs.grm" />
+    <None Include="diagrams1.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

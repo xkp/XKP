@@ -940,6 +940,9 @@ void xss_expression::bind(XSSContext ctx)
 		          ctx->error(SCannotAssigningNonValue, null, begin_, end_);
 
             arg2_->bind(ctx);
+
+            notification nfy(NOTID_ASSIGN, this);
+            ctx->notify(nfy);
           }
         else
           {
