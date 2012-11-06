@@ -21,6 +21,11 @@
 
 #include "boost/filesystem.hpp"
 
+#if defined(_WIN32) || defined(_WIN64) || defined(__WIN32__)
+#include <windows.h>
+EXTERN_C IMAGE_DOS_HEADER __ImageBase;
+#endif
+
 using namespace xkp;
 
 const str SProjectError("project");
@@ -91,6 +96,15 @@ int main(int argc, char* argv[])
     XSSCompiler compiler(new xss_compiler(out));
 
     fs::path exepath = fs::complete(argv[0]).parent_path();
+
+    #if defined(_WIN32) || defined(_WIN64) || defined(__WIN32__)
+    LPSTR  strDLLPath1 = new char[_MAX_PATH];
+    ::GetModuleFileNameA((HINSTANCE)&__ImageBase, strDLLPath1, _MAX_PATH);    
+
+    exepath = fs::path(strDLLPath1).parent_path();
+    std::cout << exepath.string() << '\n';
+    #endif
+
     compiler->exe_path(exepath);
 
     //handle errors 
