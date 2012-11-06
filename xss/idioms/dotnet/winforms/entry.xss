@@ -5,6 +5,21 @@
     compiler.xss("Settings.Designer.xss",  output_file = "Properties/Settings.Designer.cs");
     compiler.xss("Settings.settings.xss",  output_file = "Properties/Settings.settings");
 
+    var plain_types = [];
+    for(var ut in application.user_types)
+    {
+        bool is_uc = ut.as_user_control;
+        if (is_uc)
+        {
+            compiler.xss("UserControl1.xss", ut);
+            continue;
+        }
+        
+        plain_types += ut;
+    }
+    
+    compiler.xss("..\common\class_file.xss", plain_types, output_file = application.name + "_Types.cs");
+    
     compiler.xss("Form1.xss",          output_file = application.name + "_Form.cs");
     compiler.xss("Form1.Designer.xss", output_file = application.name + "_Form.Designer.cs");
     compiler.xss("Form1.resx.xss",     output_file = application.name + "_Form.resx");

@@ -1,0 +1,20 @@
+<xss:parameter id="it"/>
+<xss:code>
+    for(var prop in it.properties)
+    {
+        if (!prop.original)
+            continue;
+
+        compiler.xss("property.xss", prop);
+    }
+
+    for(var mthd in it.methods)
+    {
+        compiler.xss("method.xss", mthd);
+    }
+
+    for(var evimpl in it.evimpl)
+    {
+        compiler.xss("evimpl.xss", evimpl, owner = it);
+    }
+</xss:code>

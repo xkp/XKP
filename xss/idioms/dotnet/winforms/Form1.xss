@@ -19,23 +19,7 @@ namespace <xss:e v="application.name"/>
         <xss:code>
             //render app object
             var app = application.root;
-			for(var prop in app.properties)
-			{
-                if (!prop.own)
-                    continue;
-
-                compiler.xss("..\common\property.xss", prop);
-			}
-
-			for(var mthd in app.methods)
-			{
-                compiler.xss("..\common\method.xss", mthd);
-			}
-
-			for(var evimpl in app.evimpl)
-			{
-                compiler.xss("..\common\evimpl.xss", evimpl, owner = app);
-			}
+            compiler.xss("..\common\instance.xss", app);
         </xss:code>
     }
 }

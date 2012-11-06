@@ -361,6 +361,20 @@ DynamicArray application::__instances()
     return result;
   }
 
+DynamicArray application::__user_types()
+  {
+    DynamicArray result(new dynamic_array);
+
+    type_list::iterator it = user_types_.begin();
+    type_list::iterator nd = user_types_.end();
+    for(; it != nd; it++)
+      {
+        result->push_back(*it);
+      }
+
+    return result;
+  }
+
 void application::add_instance(XSSObject instance)
   {
     assert(instance);
@@ -379,6 +393,11 @@ void application::add_instance(XSSObject instance)
 
     if (add)
       ctx_->register_symbol(RESOLVE_INSTANCE, id, instance);
+  }
+
+void application::add_class(XSSType result)
+  {
+    user_types_.push_back(result);
   }
 
 XSSObject application::root()
@@ -2071,6 +2090,8 @@ void object_model::r_include_class(DataEntity de, const variant& this_, om_conte
 
     ctx.xss_ctx = old_ctx;
     ctx.classes.insert(std::pair<str, XSSType>(de->id(), result));
+    
+    ctx.application->add_class(result);
   }
 
 void object_model::r_include_instance(DataEntity de, const variant& this_, om_context& ctx)

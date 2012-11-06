@@ -1,4 +1,6 @@
-﻿using System;
+﻿<xss:parameter id="it"/>
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -7,13 +9,17 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace WindowsFormsApplication1
+namespace <xss:e v="application.name"/>
 {
-    public partial class UserControl1 : UserControl
+    public partial class <xss:e v="it.id"/> : UserControl
     {
         public UserControl1()
         {
             InitializeComponent();
         }
+
+        <xss:code>
+            compiler.xss("..\common\instance.xss", it);
+        </xss:code>
     }
 }

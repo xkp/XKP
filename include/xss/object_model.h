@@ -116,6 +116,8 @@ class application : public boost::enable_shared_from_this<application>
       void              output_path(const fs::path& fname);
       fs::path          output_path();
       void              add_instance(XSSObject instance);
+      void              add_class(XSSType result);
+
     public:
       XSSObject root(); 
       void      set_root(XSSObject r); 
@@ -137,11 +139,13 @@ class application : public boost::enable_shared_from_this<application>
       document_map  documents_;
       error_list    errors_;
       instance_list instances_;
+      type_list     user_types_;
 
       str random_id(XSSObject instance);
     public:
       //glue
       DynamicArray __instances();
+      DynamicArray __user_types();
   };
 
 struct document
@@ -429,7 +433,8 @@ struct application_schema : object_schema<application>
         readonly_property<XSSObject>("root",  &application::root);
         readonly_property<XSSObject>("name",  &application::name);
 
-        readonly_property<DynamicArray>("instances",  &application::__instances);
+        readonly_property<DynamicArray>("instances",   &application::__instances);
+        readonly_property<DynamicArray>("user_types",  &application::__user_types);
       }
   };
 
