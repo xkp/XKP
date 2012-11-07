@@ -5,20 +5,26 @@
     compiler.xss("Settings.Designer.xss",  output_file = "Properties/Settings.Designer.cs");
     compiler.xss("Settings.settings.xss",  output_file = "Properties/Settings.settings");
 
-    var plain_types = [];
+    var  plain_types = [];
+    bool has_types   = false;
     for(var ut in application.user_types)
     {
         bool is_uc = ut.as_user_control;
         if (is_uc)
         {
-            compiler.xss("UserControl1.xss", ut);
+            compiler.xss("UserControl1.xss", ut, output_file = ut.id + ".cs");
+            compiler.xss("UserControl1.Designer.xss", ut, output_file = ut.id + ".cs");
+            compiler.xss("UserControl1.resx.xss", ut, output_file = ut.id + ".cs");
             continue;
         }
         
+        compiler.log("Has it");
+        has_types = true;
         plain_types += ut;
     }
     
-    compiler.xss("..\common\class_file.xss", plain_types, output_file = application.name + "_Types.cs");
+    if (has_types)
+        compiler.xss("..\common\class_file.xss", plain_types, output_file = application.name + "_Types.cs");
     
     compiler.xss("Form1.xss",          output_file = application.name + "_Form.cs");
     compiler.xss("Form1.Designer.xss", output_file = application.name + "_Form.Designer.cs");

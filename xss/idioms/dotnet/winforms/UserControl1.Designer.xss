@@ -1,0 +1,10 @@
+﻿<xss:parameter id="it"/>
+namespace <xss:e v="application.name"/>
+{
+    partial class <xss:e v="it.output_id"/>
+    {
+        <xss:code>
+        compiler.xss("Designer.xss", it, instances = it.instances, name = it.output_id);
+        </xss:code>
+    }
+}

@@ -1,7 +1,7 @@
-﻿namespace <xss:e v="application.name"/>
-{
-    partial class <xss:e v="application.name"/>_Form
-    {
+﻿<xss:parameter id="it"/>
+<xss:parameter id="instances"/>
+<xss:parameter id="name"/>
+
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -29,12 +29,10 @@
         private void InitializeComponent()
         {
             <xss:code>
-            var app = application.root;
-            
             //instantiate and collect next step
             array layouts = [];
 
-            for(var cmp in application.instances)
+            for(var cmp in instances)
             {
                 out()
                 {
@@ -61,7 +59,7 @@
             }
 
             //render instances
-            for(var inst in application.instances)
+            for(var inst in instances)
             {
                 out()
                 {
@@ -158,8 +156,8 @@
             }
 
             //render form
-            int app_width  = app.width;
-            int app_height = app.app_height;
+            int app_width  = it.width;
+            int app_height = it.height;
 
             if (!app_width)
                 app_width = 800;
@@ -170,18 +168,18 @@
             out()
             {
                 // 
-                // <xss:e v="application.name"/>_Form
+                // <xss:e v="name"/>
                 // 
                 this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
                 this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
                 this.ClientSize = new System.Drawing.Size(<xss:e v="app_width"/>, <xss:e v="app_height"/>);
-                this.Name = "<xss:e v="application.name"/>";
-                this.Text = "<xss:e v="application.name"/>";
+                this.Name = "<xss:e v="name"/>";
+                this.Text = "<xss:e v="name"/>";
             }
 
-            for(var app_child in application.instances)
+            for(var app_child in instances)
             {
-                if (app_child.parent.id != "application")
+                if (app_child.parent.id != it.id)
                     continue; //only top level
 
                 out()
@@ -211,7 +209,7 @@
         #endregion
 
         <xss:code>
-        for(var cmp in application.instances)
+        for(var cmp in instances)
         {
             out()
             {
@@ -219,6 +217,4 @@
             }
         }
         </xss:code>
-    }
-}
 
