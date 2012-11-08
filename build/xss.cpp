@@ -102,7 +102,6 @@ int main(int argc, char* argv[])
     ::GetModuleFileNameA((HINSTANCE)&__ImageBase, strDLLPath1, _MAX_PATH);    
 
     exepath = fs::path(strDLLPath1).parent_path();
-    std::cout << exepath.string() << '\n';
     #endif
 
     compiler->exe_path(exepath);
