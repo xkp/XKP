@@ -8,12 +8,12 @@
     <AssemblyName>$safeprojectname$</AssemblyName>
     <MainFile>project.xml</MainFile>
     <TargetFrameworkVersion>v$targetframeworkversion$</TargetFrameworkVersion>
-    <TargetPlatform>v4</TargetPlatform>
+    <TargetPlatform>v4</TargetPlatform>    
   </PropertyGroup>
   <PropertyGroup>
     <!-- Set the IronPythonPath property by proving in different locations where Iron Python could be installed -->
     <!-- Regular LocalAppData -->
-    <ExcessPath Condition=" '$(ExcessPath)' == '' ">$(EXCESS_INSTALL_PATH)\Extensions\Application\Excess</ExcessPath>
+    <ExcessPath Condition=" '$(ExcessPath)' == '' ">$(EXCESS_INSTALL_PATH)\Extensions\Application\Excess</ExcessPath>    
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
