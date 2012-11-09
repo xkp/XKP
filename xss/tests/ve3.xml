@@ -6,4 +6,8 @@
             <position x="10" y="10" width="153" height="61"/>
         </button>
     </div>
+
+    <testComponent id="myCmp">
+        <position x="300" y="100" width="200" height="200"/>
+    </testComponent>
 </application>

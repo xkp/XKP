@@ -357,6 +357,7 @@ class object_model
       void r_invalid_array_item(DataEntity de, const variant& this_, om_context& ctx);
 
       void r_invalid_property_child(DataEntity de, const variant& this_, om_context& ctx);
+      void r_invalid_event_child(DataEntity de, const variant& this_, om_context& ctx);
     private:
       //document model
       application_list apps_;

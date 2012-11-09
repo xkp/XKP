@@ -7,31 +7,44 @@
 
     var  plain_types = [];
     bool has_types   = false;
+    var  deps        = [];
     for(var ut in application.user_types)
     {
+        compiler.log(ut.id);
+
         bool is_uc = ut.as_user_control;
         if (is_uc)
         {
-            compiler.xss("UserControl1.xss", ut, output_file = ut.id + ".cs");
-            compiler.xss("UserControl1.Designer.xss", ut, output_file = ut.id + ".cs");
-            compiler.xss("UserControl1.resx.xss", ut, output_file = ut.id + ".cs");
+            var dep = object();
+            dep.user_control = true;
+            dep.file_name = ut.id;
+            deps += dep;
+            
+            compiler.xss("UserControl1.xss",          ut, output_file = ut.id + ".cs");
+            compiler.xss("UserControl1.Designer.xss", ut, output_file = ut.id + ".Designer.cs");
+            compiler.xss("UserControl1.resx.xss",     ut, output_file = ut.id + ".resx");
             continue;
         }
         
-        compiler.log("Has it");
         has_types = true;
         plain_types += ut;
     }
     
     if (has_types)
+    {
+        var types_dep = object();
+        types_dep.file_name = application.name + "_Types";
+        deps += types_dep;
+
         compiler.xss("..\common\class_file.xss", plain_types, output_file = application.name + "_Types.cs");
+    }
     
     compiler.xss("Form1.xss",          output_file = application.name + "_Form.cs");
     compiler.xss("Form1.Designer.xss", output_file = application.name + "_Form.Designer.cs");
     compiler.xss("Form1.resx.xss",     output_file = application.name + "_Form.resx");
 
     compiler.xss("Program.xss", output_file = "Program.cs");
-    compiler.xss("csproj.xss",  output_file = application.name + ".csproj");
+    compiler.xss("csproj.xss",  dependencies = deps, output_file = application.name + ".csproj");
 
     compiler.xss("sln.xss", output_file = application.name + ".sln");
 </xss:code>

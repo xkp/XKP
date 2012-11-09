@@ -31,7 +31,7 @@
             <xss:code>
             //instantiate and collect next step
             array layouts = [];
-
+            
             for(var cmp in instances)
             {
                 out()
@@ -140,7 +140,7 @@
                 }
 
                 //render events
-			    for(var evimpl in app.evimpl)
+			    for(var evimpl in it.evimpl)
 			    {
                     if (!evimpl.impl_method || !evimpl.instance)
                         continue;
@@ -150,7 +150,7 @@
 
                     out()
                     {
-                        this.<xss:e v="inst.output_id"/>.<xss:e v="evimpl.ev.output_id"/> += <xss:e v="evimpl.impl_method"/>;
+                        this.<xss:e v="inst.output_id"/>.<xss:e v="evimpl.ev.output_id"/> += new <xss:e v="evimpl.ev.native_type"/>(<xss:e v="evimpl.impl_method"/>);
                     }
 			    }
             }

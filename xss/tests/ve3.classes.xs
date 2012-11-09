@@ -8,3 +8,13 @@ class testComponent : div
         btn1.height += increment;
     }
 }
+
+class testClass
+{
+    property x : int;
+
+    method xx(int z, int r) : int
+    {
+        return x + z + r;
+    }
+}

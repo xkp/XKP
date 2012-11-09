@@ -13,7 +13,7 @@ namespace <xss:e v="application.name"/>
 {
     public partial class <xss:e v="it.id"/> : UserControl
     {
-        public UserControl1()
+        public <xss:e v="it.id"/>()
         {
             InitializeComponent();
         }

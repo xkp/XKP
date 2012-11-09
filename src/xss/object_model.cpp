@@ -252,7 +252,7 @@ void application::add_error(const str& desc, param_list* info, file_location& lo
           {
             //avoid dups
             it->loc.begin.column = loc.begin.column;
-			it->desc = desc; 
+			      it->desc = desc; 
             return;
           }
       }
@@ -839,6 +839,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
     for(; cit != cnd; cit++)
       {
         global->add_type(cit->first, cit->second);
+        result->add_class(cit->second);
       }
 
     //load application
@@ -1432,6 +1433,7 @@ struct object_visitor : xs_visitor
         result = XSSProperty(new xss_property);
         
         XSSExpression value = xss_expression_utils::compile_expression(info.value);
+        result->set_id(info.name);
         result->expr_value(value);
         result->as_const();
 
@@ -2090,8 +2092,6 @@ void object_model::r_include_class(DataEntity de, const variant& this_, om_conte
 
     ctx.xss_ctx = old_ctx;
     ctx.classes.insert(std::pair<str, XSSType>(de->id(), result));
-    
-    ctx.application->add_class(result);
   }
 
 void object_model::r_include_instance(DataEntity de, const variant& this_, om_context& ctx)
@@ -2152,6 +2152,11 @@ void object_model::r_invalid_array_item(DataEntity de, const variant& this_, om_
   }
 
 void object_model::r_invalid_property_child(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    assert(false); //td: error
+  }
+
+void object_model::r_invalid_event_child(DataEntity de, const variant& this_, om_context& ctx)
   {
     assert(false); //td: error
   }
@@ -2615,6 +2620,15 @@ XSSEvent object_model::read_event(DataEntity de, om_context& ctx)
 
     XSSSignature sig = read_signature(de, ctx);
     result->set_signature(sig);
+
+    om_entity_visitor oev(this, XSSObject(result), ctx);
+    oev.attribute_handler("output_id",     &object_model::r_attr_nop);
+    oev.attribute_handler("*",             &object_model::r_object_attr);
+
+    oev.child_handler    ("dispatch",      &object_model::r_child_nop);
+    oev.child_handler    ("*",             &object_model::r_invalid_event_child);
+
+    de->visit(&oev);
 
     return result;
   }

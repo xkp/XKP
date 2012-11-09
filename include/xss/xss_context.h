@@ -1120,6 +1120,8 @@ class xss_property : public xss_object
       XSSType         property_type();
       XSSObject       instance_value();
       void            instance_value(XSSObject value);
+      bool            original();
+      void            original(bool value);
       
       virtual void bind(XSSContext ctx);
     public:
@@ -1132,6 +1134,7 @@ class xss_property : public xss_object
       XSSType        prop_type_;
       XSSObject      instance_value_;
       bool           is_const_;
+      bool           original_;
   };
 
 class xss_event : public xss_object
@@ -1372,6 +1375,9 @@ struct xss_property_schema : xss_object_schema<xss_property>
         readonly_property<XSSObject>    ("instance_value", &xss_property::instance_value_);
         readonly_property<XSSCode>      ("get_code",       &xss_property::code_getter_);
         readonly_property<XSSCode>      ("set_code",       &xss_property::code_setter_);
+        readonly_property<bool>         ("is_const",       &xss_property::is_const_);
+        property_("original",                              &xss_property::original_);
+        
       
         //td: !!! do property interface, its a mess
       //InlineRenderer getter_;
