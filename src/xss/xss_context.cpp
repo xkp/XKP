@@ -685,8 +685,11 @@ void xss_context::notify(notification ntfy) //qva
                 else
                   {
                     param_list pl;
-                    pl.add("type1", ltype->id());
-                    pl.add("type2", rtype->id());
+                    str type_id;
+                    type_id = ltype ? ltype->id() : "unknown";
+                    pl.add("type1", type_id);
+                    type_id = ltype ? rtype->id() : "unknown";
+                    pl.add("type2", type_id);
                     error(STypeMismatch, &pl, begin_, end_);
                   }
 

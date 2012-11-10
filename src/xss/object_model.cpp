@@ -2750,11 +2750,11 @@ void object_model::fix_it_up(XSSContext ctx, om_context& octx)
     while (!process.empty() && count < 3) //now magic number is 3, no longer 5 :)
       {
         fixup_list::iterator it = process.begin();
-        fixup_list::iterator nd = process.end();
+        //fixup_list::iterator nd = process.end();
 
         size_t process_sz = process.size();
     
-        for(; it != nd; )
+        for(; it != process.end(); )
           {
             XSSType type;
             switch(it->id)
@@ -2886,7 +2886,7 @@ void object_model::fix_it_up(XSSContext ctx, om_context& octx)
 
             // when fixup is solved, erase it
             if (type && !type->is_variant())
-              process.erase(it);
+              it = process.erase(it);
             else
               it++;
           }
@@ -2900,7 +2900,7 @@ void object_model::fix_it_up(XSSContext ctx, om_context& octx)
         bind_it_up(ctx, octx);
       }
 
-    // ensure to bind almost any time
+    // ensure to bind almost any time, it's neccessary? i think no, but...
     bind_it_up(ctx, octx);
   }
 

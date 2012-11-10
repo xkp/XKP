@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Enum Name="xkp::APPLICATION_ITEM">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAAAAgAAAACAAAAAEA=</HashCode>
+      <FileName>D:\xkp\include\xss\object_model.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::CONTEXT_IDENTITY">
+    <Position X="2.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAgQAAAAAAAAAAACAAAAAAAAAABEAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::FIXUP_TYPE">
+    <Position X="4.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAgAAAIQCAQAAgEAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\xkp\include\xss\object_model.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::instruction_type">
+    <Position X="0.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CCQRDIAAAIAIAAAAAAAQAEAAICAACAIAIBAAABCAAKA=</HashCode>
+      <FileName>D:\xkp\include\xs\vm.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::MARKER_SOURCE">
+    <Position X="15.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAgAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::NOTIFIED">
+    <Position X="17.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::operator_type">
+    <Position X="2.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQQEhIBIqCAgAZEEAAICAAkAAABIIElkMCEAAQgABAA=</HashCode>
+      <FileName>D:\xkp\include\xs\operators.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::PARENT_CHILD_ACTION">
+    <Position X="6.25" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAIEAAAAAAAAAAAAAIiAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::RESOLVE_ITEM">
+    <Position X="8.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAgIiAAAAAAAAAIAEAAEAAAIAAAACAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::schema_item_flags">
+    <Position X="4" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAACCAAAAAAAAEAABAACAAAAABQE=</HashCode>
+      <FileName>D:\xkp\include\base.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::schema_options">
+    <Position X="5.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAgAEBAAAQIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\xkp\include\base.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::STATEMENT_TYPE">
+    <Position X="10.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAIAAAAAABFAAAQAAAgAACAAAAAAQCQAQ=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::TYPE_MATCH">
+    <Position X="12" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAQAAAI=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::VALUE_OPERATION">
+    <Position X="13.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABEAAAAAAIEAAAoAAAAAAAIABAAAAAAAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::xs_adjetive">
+    <Position X="7.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAAAAgAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>D:\xkp\include\xs\ast.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xs_rules">
+    <Position X="9.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>SHCEwjUkAGHEBDxFCVbAUZKtBJBBCZkRgHiezkVFbiQ=</HashCode>
+      <FileName>D:\xkp\src\xs\compiler.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xs_smallrules">
+    <Position X="11" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAACAAAIAACAAAGBAgBAABABAAAACAgCAAAQACIAA=</HashCode>
+      <FileName>D:\xkp\src\xs\compiler.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xs_terminals">
+    <Position X="12.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAQAAAAAEAIAAAAABAQAIICAAAAAQCgAAABAAAA=</HashCode>
+      <FileName>D:\xkp\src\xs\compiler.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
