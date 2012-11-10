@@ -255,7 +255,9 @@
     <Content Include="Templates\Items\Class\class.xml" />
     <Content Include="Templates\Items\Class\__TemplateIcon.ico" />
     <None Include="Templates\Items\WPFClass\wclass.xs" />
-    <None Include="Templates\Projects\ConsoleApp\project.xml" />
+    <None Include="Templates\Projects\ConsoleApp\project.xml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Templates\Items\Class\class.xs" />
     <None Include="Templates\Projects\ConsoleApp\__TemplateIcon.ico" />
     <None Include="Templates\Projects\ConsoleApp\application.xs" />
@@ -271,6 +273,18 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="Project.jpg" />
+    <None Include="Templates\Projects\jQueryApp\application.xs" />
+    <None Include="Templates\Projects\jQueryApp\jQueryApp.xsproj">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Templates\Projects\WebGLApp\application.xs" />
+    <None Include="Templates\Projects\WebGLApp\xsWebGLApp.xsproj">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Templates\Projects\ThreeJSApp\application.xs" />
+    <None Include="Templates\Projects\ThreeJSApp\xsThreeJSApp.xsproj">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Templates\Projects\WPFApp\WPFApp.xs" />
     <None Include="Templates\Projects\WPFApp\xsWPFApp.xsproj">
       <SubType>Designer</SubType>
@@ -282,6 +296,80 @@
     <VSTemplate Include="Templates\Items\WPFClass\WPFClass.vstemplate" />
     <Content Include="Templates\Items\WPFClass\wclass.xml" />
     <Content Include="Templates\Items\WPFClass\WPFClass.ico" />
+    <None Include="Templates\Projects\ThreeJSApp\threejsIcon.ico" />
+    <Content Include="Templates\Projects\jQueryApp\application.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Templates\Projects\jQueryApp\project.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Templates\Projects\jQueryApp\jqueryIcon.ico" />
+    <VSTemplate Include="Templates\Projects\jQueryApp\jQueryApp.vstemplate">
+      <SubType>Designer</SubType>
+    </VSTemplate>
+    <Content Include="Templates\Projects\ThreeJSApp\application.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Templates\Projects\ThreeJSApp\project.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <VSTemplate Include="Templates\Projects\ThreeJSApp\xsThreeJSApp.vstemplate">
+      <SubType>Designer</SubType>
+    </VSTemplate>
+    <None Include="Templates\Projects\WebGLApp\webglIcon.ico" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\Box2dWeb-2.1.a.3.min.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\colors.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\event.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\joint.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\jquery-1.4.2.min.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\jquery-1.7.1.min.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\jquery-idiom.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\jquery-ui-1.8.18.custom.min.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\jquery.easing.min.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\jquery.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\jquery.ui.map.min.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\jquery.utils.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\jquery\jquery-ui.css" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\jquery\jquery-ui.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\jquery\jquery.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\jsmanipulate\jsm-manager.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\jsmanipulate\jsm-utils.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\jsmanipulate\jsmanipulate.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\keys.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\prototype.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\resig.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\scene_loader.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\sequence.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\spawner.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\state.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\streamer.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\three\Detector.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\three\fonts.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\three\loaders\ColladaLoader.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\three\postprocessing\BloomPass.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\three\postprocessing\DotScreenPass.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\three\postprocessing\EffectComposer.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\three\postprocessing\FilmPass.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\three\postprocessing\MaskPass.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\three\postprocessing\RenderPass.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\three\postprocessing\SavePass.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\three\postprocessing\ShaderPass.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\three\postprocessing\TexturePass.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\three\ShaderExtras.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\three\Stats.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\three\Three.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\three\Utils.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\ui.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\js\utils.js" />
+    <Content Include="Templates\Projects\WebGLApp\application.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Templates\Projects\WebGLApp\project.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <VSTemplate Include="Templates\Projects\WebGLApp\xsWebGLApp.vstemplate">
+      <SubType>Designer</SubType>
+    </VSTemplate>
     <Content Include="Templates\Projects\WPFApp\WPFApp.ico" />
     <Content Include="Templates\Projects\WPFApp\WPFApp.xml" />
     <Content Include="VSIXProject_large.png">

@@ -1,0 +1,25 @@
+﻿<xss:parameter id="it"/>
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace <xss:e v="application.name"/>
+{
+    public partial class <xss:e v="it.id"/> : UserControl
+    {
+        public <xss:e v="it.id"/>()
+        {
+            InitializeComponent();
+        }
+
+        <xss:code>
+            compiler.xss("..\common\instance.xss", it);
+        </xss:code>
+    }
+}

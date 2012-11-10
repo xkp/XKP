@@ -1,0 +1,26 @@
+﻿<xss:parameter id="classes"/>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace <xss:e v="application.name"/>
+{
+    <xss:code>
+    for(var c in classes)
+    {
+        out()
+        {
+            class <xss:e v="c.output_id"/>
+            <xss:open_brace/>
+        }
+
+        compiler.xss("instance.xss", c);
+
+        out()
+        {
+            <xss:close_brace/>
+        }
+    }
+    </xss:code>
+}

@@ -1,0 +1,5 @@
+﻿<application id="$safeprojectname$" src="application.xs" title="$safeprojectname$">
+    
+    <!-- components declaration here -->
+  
+</application>

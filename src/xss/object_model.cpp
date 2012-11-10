@@ -252,7 +252,7 @@ void application::add_error(const str& desc, param_list* info, file_location& lo
           {
             //avoid dups
             it->loc.begin.column = loc.begin.column;
-			it->desc = desc; 
+			      it->desc = desc; 
             return;
           }
       }
@@ -361,6 +361,20 @@ DynamicArray application::__instances()
     return result;
   }
 
+DynamicArray application::__user_types()
+  {
+    DynamicArray result(new dynamic_array);
+
+    type_list::iterator it = user_types_.begin();
+    type_list::iterator nd = user_types_.end();
+    for(; it != nd; it++)
+      {
+        result->push_back(*it);
+      }
+
+    return result;
+  }
+
 void application::add_instance(XSSObject instance)
   {
     assert(instance);
@@ -379,6 +393,11 @@ void application::add_instance(XSSObject instance)
 
     if (add)
       ctx_->register_symbol(RESOLVE_INSTANCE, id, instance);
+  }
+
+void application::add_class(XSSType result)
+  {
+    user_types_.push_back(result);
   }
 
 XSSObject application::root()
@@ -820,6 +839,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
     for(; cit != cnd; cit++)
       {
         global->add_type(cit->first, cit->second);
+        result->add_class(cit->second);
       }
 
     //load application
@@ -1427,6 +1447,7 @@ struct object_visitor : xs_visitor
         result = XSSProperty(new xss_property);
         
         XSSExpression value = xss_expression_utils::compile_expression(info.value);
+        result->set_id(info.name);
         result->expr_value(value);
         result->as_const();
 
@@ -2149,6 +2170,11 @@ void object_model::r_invalid_property_child(DataEntity de, const variant& this_,
     assert(false); //td: error
   }
 
+void object_model::r_invalid_event_child(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    assert(false); //td: error
+  }
+
 XSSObject object_model::read_object_instance(DataEntity de, XSSObject parent, om_context& ctx)
   {
     if (parent->has_property(de->type())) //use case, the node refers to a property
@@ -2608,6 +2634,15 @@ XSSEvent object_model::read_event(DataEntity de, om_context& ctx)
 
     XSSSignature sig = read_signature(de, ctx);
     result->set_signature(sig);
+
+    om_entity_visitor oev(this, XSSObject(result), ctx);
+    oev.attribute_handler("output_id",     &object_model::r_attr_nop);
+    oev.attribute_handler("*",             &object_model::r_object_attr);
+
+    oev.child_handler    ("dispatch",      &object_model::r_child_nop);
+    oev.child_handler    ("*",             &object_model::r_invalid_event_child);
+
+    de->visit(&oev);
 
     return result;
   }

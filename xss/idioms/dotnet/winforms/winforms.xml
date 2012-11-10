@@ -11,15 +11,17 @@
         <accept_parent when="it.container" append="as_child"/>
 
         <property id="position" type="component_position"/>
+        <property id="width" output_id="Width" type="int"/>
+        <property id="height" output_id="Height" type="int"/>
     </class>
 
-    <class id="div" super="component" container="true" output_id="System.Windows.Forms.Panel" hasLayout="true">
+    <class id="div" super="component" container="true" output_id="System.Windows.Forms.Panel" hasLayout="true" as_user_control="true">
 	</class>
 
     <class id="button" super="component" output_id="System.Windows.Forms.Button">
         <property id="caption" type="string" output_id="Text" designer="true"/>
         
-        <event id="click" output_id="Click" native_signature="object __sender, EventArgs __e"/>
+        <event id="click" output_id="Click" native_type="System.EventHandler" native_signature="object __sender, EventArgs __e"/>
     </class>
 
     <class id="Application">

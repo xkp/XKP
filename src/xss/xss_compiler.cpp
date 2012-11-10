@@ -933,6 +933,15 @@ void xss_compiler::xss(const param_list params)
         //  file = file.parent_path() / file_name;
 
         file = fs_->locate(file_name, rctx->path());
+
+        if (file.empty())
+          {
+            param_list error;
+            error.add("id", SProjectError);
+            error.add("desc", SFileNotFound);
+            error.add("file", file_name);
+            xss_throw(error);
+          }
       }
 
     if (!ctx)

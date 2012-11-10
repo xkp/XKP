@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,11 +9,17 @@ using Microsoft.Build.Framework;
 using Microsoft.Build.BuildEngine;
 using ExcessCompiler;
 using System.Xml.Linq;
+using Newtonsoft.Json;
 
 namespace Excess.CompilerTasks
-{
+{   
 	/////////////////////////////////////////////////////////////////////////////
-	// My MSBuild Task
+	// My MSBuild Task  
+    public class Log
+    {       
+        public string text { get; set; }
+        public string type { get; set; }
+    }
 	public class ExcessCompilerTask : Task
 	{
 		#region Constructors
@@ -154,8 +161,33 @@ namespace Excess.CompilerTasks
             bool old_version = version != null && version.Value == "0.9.4";
             if (old_version)
             {
-                //call xss.exe
-                return true;
+                //call xss.exe                
+                Process proc = new Process();
+                proc.StartInfo = new ProcessStartInfo("xss.exe");
+                proc.StartInfo.Arguments = filePath + " json";
+                proc.StartInfo.RedirectStandardOutput = true;
+                proc.StartInfo.UseShellExecute = false;
+
+                bool success_ = proc.Start();
+                
+                string output_string = proc.StandardOutput.ReadToEnd();
+
+                List<Log> logs = JsonConvert.DeserializeObject<List<Log>>(output_string);
+
+                foreach (Log l in logs)
+                {
+                    if (l.type == "error")
+                    {
+                        Log.LogError(l.text);
+                        success_ = false;
+                    }
+                    if (l.type == "msg")
+                        Log.LogMessage(l.text);
+                    if (l.type == "log")
+                        Log.LogMessage(l.text);
+                }                
+
+                return success_;
             }
 
             ExcessModelService service = ExcessModelService.getInstance();
@@ -196,7 +228,7 @@ namespace Excess.CompilerTasks
                     Console.WriteLine(@"Build failed. View C:\temp\build.log for details");
                 
                 return true;
-            }
+            }            
 
             //foreach (ExcessErrorInfo error in errors)
             //{

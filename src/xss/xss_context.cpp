@@ -1372,12 +1372,18 @@ void xss_object::copy(XSSObject obj)
             my_prop = XSSProperty(new xss_property);
             
             XSSProperty type_prop = get_property(prop_id);
+            bool  original = true;
             if (type_prop)
               {
                 my_prop->copy(XSSObject(type_prop));
+                original = false;
               }
 
+
             my_prop->copy(XSSObject(obj_prop));
+
+            if (!original)
+              my_prop->original(false);
           }
         
         if (add)
@@ -1959,6 +1965,7 @@ void xss_object::insert_event(XSSEvent ev)
 void xss_object::insert_property(XSSProperty prop)
   {
     //td: !!! check dups
+    prop->original(true);
     properties_->push_back(prop);
   }
 
@@ -2137,6 +2144,13 @@ void xss_object::bind(XSSContext ctx)
       }
 
     //td: !!! event implementation
+    event_implementors::iterator eit = event_impl_.begin();
+    event_implementors::iterator end = event_impl_.end();
+    for(; eit != end; eit++)
+      {
+        XSSEventImpl evimpl = *eit;
+        evimpl->bind(ctx);
+      }
   }
 
 void xss_object::add_property_(XSSProperty prop)
@@ -2209,7 +2223,10 @@ XSSProperty xss_object::add_property(const str& name, XSSExpression value)
       }
 
     if (!result)
-      result = XSSProperty(new xss_property(name, value, shared_from_this()));
+      {
+        result = XSSProperty(new xss_property(name, value, shared_from_this()));
+        result->original(true);
+      }
 
     //do 'this' of xss_object the parent of property
     result->set_parent(shared_from_this());
@@ -2223,6 +2240,7 @@ void xss_object::register_property(const str& name, XSSProperty new_prop)
     XSSProperty prop = get_property(name);
     if (!prop)
       {
+        new_prop->original(true);
         properties_->push_back(new_prop);
       }
   }
@@ -2239,6 +2257,7 @@ XSSProperty xss_object::instantiate_property(const str& prop_name)
         result = XSSProperty(new xss_property());
         result->copy(XSSObject(type_prop));
         
+        result->original(false);
         properties_->push_back(result);
         return result;
       }
@@ -2716,7 +2735,8 @@ bool inline_renderer::render(param_list& pl, std::ostringstream& result)
 //xss_property
 xss_property::xss_property():
 	flags(0),
-  is_const_(false)
+  is_const_(false),
+  original_(false)
   {
     DYNAMIC_INHERITANCE(xss_property)
   }
@@ -2728,7 +2748,8 @@ xss_property::xss_property(const xss_property& other):
 	flags(other.flags),
 	this_(other.this_),
 	value_(other.value_),
-  is_const_(other.is_const_)
+  is_const_(other.is_const_),
+  original_(other.original_)
   {
     DYNAMIC_INHERITANCE(xss_property)
 	  id_ = other.id_;
@@ -2738,7 +2759,8 @@ xss_property::xss_property(const xss_property& other):
 xss_property::xss_property(const str& _name, XSSExpression _value, XSSObject _this_):
 	this_(_this_),
 	expr_value_(_value),
-  is_const_(false)
+  is_const_(false), 
+  original_(false)
   {
     DYNAMIC_INHERITANCE(xss_property)
 	  id_ = _name;
@@ -2750,7 +2772,8 @@ xss_property::xss_property(const str& _name, XSSExpression _value, variant _get,
 	set_(_set),
 	this_(_this_),
 	expr_value_(_value),
-  is_const_(false)
+  is_const_(false), 
+  original_(false)
   {
     DYNAMIC_INHERITANCE(xss_property)
 	  id_ = _name;
@@ -2943,6 +2966,16 @@ XSSObject xss_property::instance_value()
 void xss_property::instance_value(XSSObject value)
   {
     instance_value_ = value;
+  }
+
+bool xss_property::original()
+  {
+    return original_;
+  }
+
+void xss_property::original(bool value)
+  {
+    original_ = value;
   }
 
 void xss_property::bind(XSSContext ctx)
