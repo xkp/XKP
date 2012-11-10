@@ -52,7 +52,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;XSS_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(XSS_INCLUDE);$(BOOST_INCLUDE);$(JSON_INCLUDE);$(TINY_XML_INCLUDE)</AdditionalIncludeDirectories>
-      <AdditionalOptions>-Zm134 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-Zm147 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

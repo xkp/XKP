@@ -156,79 +156,89 @@ namespace Excess.CompilerTasks
 		/// <returns></returns>
 		public override bool Execute()
 		{
-            string filePath = Path.Combine(projectPath, MainFile);
-            XAttribute version = XElement.Load(filePath).Attribute("version");
-            bool old_version = version != null && version.Value == "0.9.4";
-            if (old_version)
+            bool success = false;
+            try
             {
-                //call xss.exe                
-                Process proc = new Process();
-                proc.StartInfo = new ProcessStartInfo("xss.exe");
-                proc.StartInfo.Arguments = filePath + " json";
-                proc.StartInfo.RedirectStandardOutput = true;
-                proc.StartInfo.UseShellExecute = false;
-
-                bool success_ = proc.Start();
-                
-                string output_string = proc.StandardOutput.ReadToEnd();
-
-                List<Log> logs = JsonConvert.DeserializeObject<List<Log>>(output_string);
-
-                foreach (Log l in logs)
+                string filePath = Path.Combine(projectPath, MainFile);
+                XAttribute version = XElement.Load(filePath).Attribute("version");
+                bool old_version = version != null && version.Value == "0.9.4";
+                if (old_version)
                 {
-                    if (l.type == "error")
-                    {
-                        Log.LogError(l.text);
-                        success_ = false;
-                    }
-                    if (l.type == "msg")
-                        Log.LogMessage(l.text);
-                    if (l.type == "log")
-                        Log.LogMessage(l.text);
-                }                
+                    //call xss.exe                
+                    Process proc = new Process();
+                    proc.StartInfo = new ProcessStartInfo("xss.exe");
+                    proc.StartInfo.Arguments = filePath + " json";
+                    proc.StartInfo.RedirectStandardOutput = true;
+                    proc.StartInfo.UseShellExecute = false;
 
-                return success_;
+                    bool success_ = proc.Start();
+
+                    string output_string = proc.StandardOutput.ReadToEnd();
+
+                    List<Log> logs = JsonConvert.DeserializeObject<List<Log>>(output_string);
+
+                    foreach (Log l in logs)
+                    {
+                        if (l.type == "error")
+                        {
+                            Log.LogError(l.text);
+                            success_ = false;
+                        }
+                        if (l.type == "msg")
+                            Log.LogMessage(l.text);
+                        if (l.type == "log")
+                            Log.LogMessage(l.text);
+                    }
+
+                    return success_;
+                }
+
+                ExcessModelService service = ExcessModelService.getInstance();
+                List<ExcessErrorInfo> errors = new List<ExcessErrorInfo>();
+                success = service.Model.buildProject(filePath, errors);
+                if (errors.Count == 0)
+                {
+                    Engine engine = new Engine();
+                    engine.DefaultToolsVersion = "4.0";
+
+                    // Instantiate a new FileLogger to generate build log
+                    myLogger logger = new myLogger(Log);
+
+                    // Set the logfile parameter to indicate the log destination
+                    logger.Parameters = @"logfile=C:\dev\XKP_BIN\build.log";
+
+                    // Register the logger with the engine
+                    engine.RegisterLogger(logger);
+
+                    // Build a project file
+                    string appName = service.Model.getAppName(filePath);
+                    string slnPath = Path.Combine(projectPath, @"bin\debug\" + appName + ".sln");
+                    try
+                    {
+                        success = engine.BuildProjectFile(slnPath);
+                    }
+                    catch (Exception e)
+                    {
+                        success = false;
+                    }
+
+                    //Unregister all loggers to close the log file
+                    engine.UnregisterAllLoggers();
+
+                    if (success)
+                        Console.WriteLine("Build succeeded.");
+                    else
+                        Console.WriteLine(@"Build failed. View C:\temp\build.log for details");
+
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                success = false;
+                Log.LogError("Build crash \n" + e.ToString());
             }
 
-            ExcessModelService service = ExcessModelService.getInstance();
-            List<ExcessErrorInfo> errors = new List<ExcessErrorInfo>();
-            bool success = service.Model.buildProject(filePath, errors);
-            if (errors.Count == 0)
-            {
-                Engine engine = new Engine();
-                engine.DefaultToolsVersion = "4.0";
-
-                // Instantiate a new FileLogger to generate build log
-                myLogger logger = new myLogger(Log);
-
-                // Set the logfile parameter to indicate the log destination
-                logger.Parameters = @"logfile=C:\dev\XKP_BIN\build.log";
-
-                // Register the logger with the engine
-                engine.RegisterLogger(logger);
-
-                // Build a project file
-                string appName = service.Model.getAppName(filePath);
-                string slnPath = Path.Combine(projectPath, @"bin\debug\" + appName + ".sln");
-                try
-                {
-                    success = engine.BuildProjectFile(slnPath);
-                }
-                catch (Exception e)
-                {
-                    success = false;        
-                }
-
-                //Unregister all loggers to close the log file
-                engine.UnregisterAllLoggers();
-
-                if (success)
-                    Console.WriteLine("Build succeeded.");
-                else
-                    Console.WriteLine(@"Build failed. View C:\temp\build.log for details");
-                
-                return true;
-            }            
 
             //foreach (ExcessErrorInfo error in errors)
             //{

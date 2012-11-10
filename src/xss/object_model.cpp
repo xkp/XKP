@@ -2249,6 +2249,8 @@ void object_model::r_idiom_type(DataEntity de, const variant& this_, om_context&
     oev.child_handler    ("*",             &object_model::r_object_instance);
 
     de->visit(&oev);
+
+	ctx.idiom->add_type(result);
     ctx.xss_ctx->add_type(result, str());
   }
 
@@ -3155,21 +3157,37 @@ void object_model_thread::do_work()
                             }
                         }
 
-                      XSSContext ictx(new xss_context(CTXID_INSTANCE, octx.instance, ctx));
-                      object_model::compile_instance(octx.instance, code, ictx, octx);
+                      try
+                        {
+                          XSSContext ictx(new xss_context(CTXID_INSTANCE, octx.instance, ctx));
+                          object_model::compile_instance(octx.instance, code, ictx, octx);
 
-						          //assign the whole file to this instance
-					            file_position b, e;
-						          text_utils::text_extents(code, b, e);
-						          ictx->set_extents(b, e);
+						              //assign the whole file to this instance
+					                file_position b, e;
+						              text_utils::text_extents(code, b, e);
+						              ictx->set_extents(b, e);
 
-		                  octx.contexts.insert(std::pair<str, XSSContext>(octx.instance->id(), ictx));
-                      octx.instances.insert(std::pair<str, XSSObject>(octx.instance->id(), octx.instance));
+		                      octx.contexts.insert(std::pair<str, XSSContext>(octx.instance->id(), ictx));
+                          octx.instances.insert(std::pair<str, XSSObject>(octx.instance->id(), octx.instance));
+                        }
+                      catch(...)
+                        {
+                          param_list error;
+                          ctx->error("Crash", &error, file_position(), file_position());
+                        }
                       break;
                     }
                   case AI_CLASS:
                     {
-                      object_model::compile_class(code, ctx, octx);
+                      try
+                        {
+                          object_model::compile_class(code, ctx, octx);
+                        }
+                      catch(...)
+                        {
+                          param_list error;
+                          ctx->error("Crash", &error, file_position(), file_position());
+                        }
                       break;
                     }
                   default: assert(false);
