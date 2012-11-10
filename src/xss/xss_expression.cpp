@@ -962,11 +962,9 @@ void xss_expression::bind(XSSContext ctx)
 
             arg2_->bind(ctx);
 
-            XSSExpression expr = XSSExpression(new xss_expression(op_, arg1_, arg2_, arg3_));
-            expr->set_extents(begin_, end_);
-
-            notification nfy(NOTID_ASSIGN, expr);
-            ctx->notify(nfy);
+            XSSExpression expr = XSSExpression(shared_from_this());
+            notification ntfy(NOTID_ASSIGN, expr);
+            ctx->notify(ntfy);
           }
         else
           {

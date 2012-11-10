@@ -296,6 +296,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\third_party\gold\xs.grm" />
-    <None Include="diagrams1.cd" />
+    <None Include="conglomerate.cd" />
+    <None Include="enumerators.cd" />
   </ItemGroup>
 </Project>

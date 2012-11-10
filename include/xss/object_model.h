@@ -191,6 +191,7 @@ struct document
 //lazy eval
 enum FIXUP_TYPE
   {
+    FIXUP_VARIABLE_TYPE,
     FIXUP_OBJECT_TYPE,
     FIXUP_PROPERTY_TYPE,
     FIXUP_RETURN_TYPE,

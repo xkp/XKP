@@ -838,7 +838,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
 
     //compile
     fix_it_up(global, octx);
-    bind_it_up(global, octx);
+    //bind_it_up(global, octx);
 
     fs::path ap = fs_->locate(src, base_path);
     result->app_path(ap);
@@ -1165,6 +1165,20 @@ void object_model::handle_instance(Application app, XSSObject instance, const st
   }
 
 //fixer uppers
+struct fixup_variable_type
+  {
+    fixup_variable_type(const str& _var_name, XSSExpression _expr, XSSContext _ctx):
+      var_name(_var_name),
+      expr(_expr),
+      ctx(_ctx)
+      {
+      }
+
+    str           var_name;
+    XSSExpression expr;
+    XSSContext    ctx;
+  };
+
 struct fixup_type
   {
     fixup_type(const str& _type_name, XSSObject _target):
@@ -2698,35 +2712,50 @@ void object_model::fix_it_up(XSSContext ctx, om_context& octx)
     fixup_list process = octx.fixup;
     octx.fixup.clear();
     int count = 0;
-    while (!process.empty() && count < 5)
+    while (!process.empty() && count < 3) //now magic number is 3, no longer 5 :)
       {
         fixup_list::iterator it = process.begin();
         fixup_list::iterator nd = process.end();
+
+        size_t process_sz = process.size();
     
-        for(; it != nd; it++)
+        for(; it != nd; )
           {
+            XSSType type;
             switch(it->id)
               {
+                case FIXUP_VARIABLE_TYPE: //qva
+                  {
+                    fixup_variable_type fu  = it->data;
+
+                    XSSExpression expr = fu.expr;
+                    bool is_assign = xss_expression_utils::is_assignment(expr->op());
+                    assert(is_assign); //make sure expr is an assignment expression
+
+                    XSSExpression right_expr  = expr->right();
+                    type = right_expr->type();
+                    break;
+                  }
                 case FIXUP_OBJECT_TYPE:
                   {
-                    fixup_type fu   = it->data;
-                    XSSType type = ctx->get_type(fu.type_name);
+                    fixup_type fu = it->data;
+                    type = ctx->get_type(fu.type_name);
                     if (check_type(type, fu.type_name, ctx))
                       fu.target->set_type(type);
                     break;
                   }
                 case FIXUP_PROPERTY_TYPE:
                   {
-                    fixup_property_type fu = it->data;
-                    XSSType type = ctx->get_type(fu.type_name);
+                    fixup_property_type fu  = it->data;
+                    type = ctx->get_type(fu.type_name);
 				            if (check_type(type, fu.type_name.name, ctx))
                       fu.target->property_type(type);
                     break;
                   }
                 case FIXUP_RETURN_TYPE:
                   {
-                    fixup_return_type fu = it->data;
-                    XSSType type = ctx->get_type(fu.type_name);
+                    fixup_return_type fu  = it->data;
+                    type = ctx->get_type(fu.type_name);
                     if (check_type(type, fu.type_name, ctx))
                       fu.target->return_type(type);
                     break;
@@ -2785,12 +2814,13 @@ void object_model::fix_it_up(XSSContext ctx, om_context& octx)
                               }
                           }
                       }
+                    //td: erase fixup if it's solved
                     break;
                   }
                 case FIXUP_SUPER_TYPE: 
                   {
-                    fixup_super fu = it->data;
-                    XSSType type = ctx->get_type(fu.super);
+                    fixup_super fu  = it->data;
+                    type = ctx->get_type(fu.super);
                     if (check_type(type, fu.super, ctx))
                       fu.type->set_type(type);
                     break;
@@ -2798,7 +2828,7 @@ void object_model::fix_it_up(XSSContext ctx, om_context& octx)
                 case FIXUP_ARGUMENT_TYPE:
                   {
                     fixup_arg_type fu = it->data;
-                    XSSType type = ctx->get_type(fu.type);
+                    type = ctx->get_type(fu.type);
                     if (check_type(type, fu.type, ctx))
                       fu.args->arg_type(fu.idx, type);
                     break;
@@ -2812,18 +2842,31 @@ void object_model::fix_it_up(XSSContext ctx, om_context& octx)
                       {
                         //td: error
                       }
+                    //td: erase fixup if it's solved
                     break;
                   }
                 default:
                   assert(false); //what am I missing?
               }
+
+            // when fixup is solved, erase it
+            if (type && !type->is_variant())
+              process.erase(it);
+            else
+              it++;
           }
 
-        process = octx.fixup;
+        if (process.size() == process_sz) 
+          count++;
+
+        process.insert(process.end(), octx.fixup.begin(), octx.fixup.end());
         octx.fixup.clear();
 
-        count++;
+        bind_it_up(ctx, octx);
       }
+
+    // ensure to bind almost any time
+    bind_it_up(ctx, octx);
   }
 
 void object_model::bind_it_up(XSSContext ctx, om_context& octx)

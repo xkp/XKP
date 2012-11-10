@@ -735,7 +735,7 @@ class xss_value
       BIND_STATE state_;
   };
 
-class xss_expression
+class xss_expression : public boost::enable_shared_from_this<xss_expression>
   {
     public:
       xss_expression():
