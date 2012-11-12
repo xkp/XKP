@@ -961,6 +961,10 @@ void xss_expression::bind(XSSContext ctx)
 		          ctx->error(SCannotAssigningNonValue, null, begin_, end_);
 
             arg2_->bind(ctx);
+
+            XSSExpression expr = XSSExpression(shared_from_this());
+            notification ntfy(NOTID_ASSIGN, expr);
+            ctx->notify(ntfy);
           }
         else
           {

@@ -106,6 +106,7 @@
     <ClInclude Include="..\..\..\include\xss\dsl\vm_base.h" />
     <ClInclude Include="..\..\..\include\xss\dsl\vm_shell.h" />
     <ClInclude Include="..\..\..\include\xss\dsl_out.h" />
+    <ClInclude Include="..\..\..\include\xss\fixups.h" />
     <ClInclude Include="..\..\..\include\xss\html_parser.h" />
     <ClInclude Include="..\..\..\include\xss\language.h" />
     <ClInclude Include="..\..\..\include\xss\lang\base.h" />

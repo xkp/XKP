@@ -17,6 +17,7 @@ namespace xkp{
 
 //forwards
 class  idiom;
+class  idiom_instance;
 class  application;
 class  object_model;
 class  object_model_thread;
@@ -28,6 +29,7 @@ class IFileSystem;
 
 //references
 typedef reference<idiom>			         Idiom;
+typedef reference<idiom_instance>			 IdiomInstance;
 typedef reference<application>		     Application;
 typedef reference<object_model>		     ObjectModel;
 typedef reference<object_model_thread> ObjectModelThread;
@@ -72,19 +74,36 @@ enum APPLICATION_ITEM
   };
 
 //classes
+class idiom_instance : public xss_object
+  {
+    public:
+    private:
+      DynamicArray instances_;
+      DynamicArray types_;
+  };
+
 class idiom
   {
     public:
-      void    bind(XSSContext ctx);
-      void    set_namespace(const str& _namespace);
-      void    add_type(XSSType type);
-      void    add_import(XSSType import);
-      XSSType import(const str& id);
-      str     get_namespace();
+      str           id();
+      void          set_id(const str& it);
+      void          bind(XSSContext ctx);
+      void          set_namespace(const str& _namespace);
+      void          add_type(XSSType type);
+      void          add_import(XSSType import);
+      XSSType       import(const str& id);
+      str           get_namespace();
+      IdiomInstance instance();
+      IdiomInstance create_instance();
+      void          set_path(const fs::path& path);
+      fs::path&     path(); 
     private:
-      type_list types_;
-      type_list imports_;
-      str       namespace_;
+      str           id_;
+      type_list     types_;
+      type_list     imports_;
+      str           namespace_;
+      IdiomInstance instance_;
+      fs::path      path_;
   };
 
 class application : public boost::enable_shared_from_this<application>
@@ -117,7 +136,7 @@ class application : public boost::enable_shared_from_this<application>
       fs::path          output_path();
       void              add_instance(XSSObject instance);
       void              add_class(XSSType result);
-
+      void              add_idiom(const str& id, Idiom it);
     public:
       XSSObject root(); 
       void      set_root(XSSObject r); 
@@ -140,6 +159,7 @@ class application : public boost::enable_shared_from_this<application>
       error_list    errors_;
       instance_list instances_;
       type_list     user_types_;
+      instance_map  idioms_;
 
       str random_id(XSSObject instance);
     public:
@@ -195,6 +215,7 @@ struct document
 //lazy eval
 enum FIXUP_TYPE
   {
+    FIXUP_VARIABLE_TYPE,
     FIXUP_OBJECT_TYPE,
     FIXUP_PROPERTY_TYPE,
     FIXUP_RETURN_TYPE,
@@ -304,7 +325,7 @@ class object_model
       //data reader
       Language        read_language(DataEntity project, Application app);
       variant         read_value(DataEntity de);
-      Idiom           read_idiom(DataEntity de, om_context& ctx);
+      Idiom           read_idiom(DataEntity de, const fs::path& path, om_context& ctx);
       XSSType         read_type(DataEntity de, Idiom parent, XSSContext ctx);
       XSSSignature    read_signature(DataEntity de, om_context& ctx);
       XSSProperty     read_property(DataEntity de, XSSObject recipient, om_context& ctx);
@@ -324,6 +345,7 @@ class object_model
       void r_child_nop(DataEntity de, const variant& this_, om_context& ctx);
 
       void r_idiom_namespace(const str& attr, const str& value, const variant& this_, om_context& ctx);
+      void r_idiom_code(const str& attr, const str& value, const variant& this_, om_context& ctx);
       void r_invalid_idiom_attr(const str& attr, const str& value, const variant& this_, om_context& ctx);
       void r_idiom_enum(DataEntity de, const variant& this_, om_context& ctx);
       void r_idiom_import(DataEntity de, const variant& this_, om_context& ctx);
@@ -358,12 +380,22 @@ class object_model
 
       void r_invalid_property_child(DataEntity de, const variant& this_, om_context& ctx);
       void r_invalid_event_child(DataEntity de, const variant& this_, om_context& ctx);
+    public:
+      //fixups
+      BIND_STATE f_property_type(fixup_data& it, om_context& ctx);
+      BIND_STATE f_return_type(fixup_data& it, om_context& ctx);
+      BIND_STATE f_instance_event(fixup_data& it, om_context& ctx);
+      BIND_STATE f_super_type(fixup_data& it, om_context& ctx);
+      BIND_STATE f_argument_type(fixup_data& it, om_context& ctx);
+      BIND_STATE f_object_type(fixup_data& it, om_context& ctx);
+      BIND_STATE f_object_child(fixup_data& it, om_context& ctx);
+      BIND_STATE f_variable_type(fixup_data& it, om_context& ctx);
     private:
       //document model
       application_list apps_;
 
       document* create_document(Application app, const str& src_file, XSSContext ctx);
-      void fix_it_up(XSSContext ctx, om_context& octx);
+      void fix_idioms(om_context& octx);
       void bind_it_up(XSSContext ctx, om_context& octx);
       bool check_type(XSSType type, const str& type_name, XSSContext ctx);
       void clear_file_errors(const str& fname);

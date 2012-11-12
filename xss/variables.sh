@@ -17,8 +17,8 @@ ORIGIN_PATH=`pwd`
 FILTER=$1
 
 #for windows
-#XSS_FILENAME=$ABSOLUTE_PATH/../bin/debug/xss.exe
-XSS_FILENAME=$ABSOLUTE_PATH/../bin/release/xss.exe
+XSS_FILENAME=$ABSOLUTE_PATH/../bin/debug/xss.exe
+#XSS_FILENAME=$ABSOLUTE_PATH/../bin/release/xss.exe
 
 #TODO: linux
 #XSS_FILENAME=$ABSOLUTE_PATH/../bin/debug/xss

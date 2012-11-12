@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="xkp::xss_code">
+    <Position X="17.5" Y="9" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAECAAACAIAABAgAAAAAAAAWAAAQAAQAAAAAAAACAAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xkp::xss_compiler" Collapsed="true">
+    <Position X="3" Y="0.5" Width="3" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>TEUKAlnADABAPQagIAEIyg0BX0ihKyQDdIoAgQpNIFA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_compiler.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xkp::xss_expression" Collapsed="true">
+    <Position X="9.25" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>DgEhAAQCAKAAhAAIAAAAAACQAAAJACAAQEAYAAAAgAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xkp::xss_object" Collapsed="true">
+    <Position X="14.25" Y="0.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>ElIAqDwgEeAABBbQ0AUEQAGmUCUFCAKBCSTASABBIkg=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xkp::xss_operator">
+    <Position X="17.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAABAACAAAAAAAABAAAAgCAIAAAAgAI=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xkp::xss_event" Collapsed="true">
+    <Position X="13" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAYAAAIAAAAAAEAAAAAAAAAAEAAAAACAAAIABAAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xkp::xss_method" Collapsed="true">
+    <Position X="14.75" Y="2.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQCAAIAAAAAAAAAAAAAAMAARAAAAACAAAAAAgAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xkp::xss_property" Collapsed="true">
+    <Position X="16.75" Y="2.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAANAAAAAAAICgIESAQAABACIAAAgAAJgAgAw=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xkp::xss_signature">
+    <Position X="22" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EQQAAAAAAIAAgIAAAAoAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xkp::xss_type" Collapsed="true">
+    <Position X="11" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>kFAgaIgBIAhAACBUyAQAEKQACRwyJAAAABAgJDAIAJA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xkp::xss_value">
+    <Position X="19.75" Y="9" Width="2" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="xkp::xss_value::BIND_STATE">
+        <TypeIdentifier>
+          <NewMemberFileName>D:\xkp\include\xss\xss_context.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAIAACAKBAhgAAAAAKAAAQAAABAAAEAABKAAAAAAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xkp::xss_statement">
+    <Position X="23.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAIBABAAAAAAAQAAQAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xkp::xss_renderer" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>gAEGAAACAAhSAAABAQUAQACQAgAQAIAAhAEAAAAQAAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_renderer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xkp::xss_parameter">
+    <Position X="19" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABFACAAAAAAAAAAIAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xkp::xss_arguments">
+    <Position X="25.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACACAKACAAAAAIAAQAAQAAABAAAAAAAAAAACAAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xkp::value_operation">
+    <Position X="27.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAEIACgAAAAAAABCAAAANgIABAEAAKEAAACgA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="xkp::object_model" Collapsed="true">
+    <Position X="14.75" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>gAAEIQCEkdZhgEAJwTBIQwQkkDaJtAgAgd+48AsgIwU=</HashCode>
+      <FileName>D:\xkp\include\xss\object_model.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="xkp::xss_context">
+    <Position X="6.25" Y="0.5" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Typedef Name="xkp::xss_context::type_list" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>D:\xkp\include\xss\xss_context.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="xkp::xss_context::type_list_pair" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>D:\xkp\include\xss\xss_context.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="xkp::xss_context::symbol_list" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>D:\xkp\include\xss\xss_context.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="xkp::xss_context::symbol_list_pair" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>D:\xkp\include\xss\xss_context.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="xkp::xss_context::xss_dsl_list" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>D:\xkp\include\xss\xss_context.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="xkp::xss_context::xss_dsl_pair" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>D:\xkp\include\xss\xss_context.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AEGA4AgKIBCCFiBAgA0GYAzSgCmCAAhAEAEwwIZIgAE=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="xkp::xss_error" Collapsed="true">
+    <Position X="0.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAQAAAAAAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_error.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="xkp::typed_lang" Collapsed="true">
+    <Position X="22" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAFQAAAAAAkAAACAIAJABgDkCAAhAAAAhAJBIAEIBAA=</HashCode>
+      <FileName>D:\xkp\include\xss\lang\typed.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="xkp::param_list" Collapsed="true">
+    <Position X="25" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAIQAQAACAAAEAAAAAAEAAIACAIA=</HashCode>
+      <FileName>D:\xkp\include\base.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="xkp::inline_renderer" Collapsed="true">
+    <Position X="27.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAQkAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="ActionStruct" Collapsed="true">
+    <Position X="2.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>D:\xkp\include\xs\engine.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="fixup_arg_type">
+    <Position X="30.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAACgA=</HashCode>
+      <FileName>D:\xkp\src\xss\object_model.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="fixup_obj_child">
+    <Position X="32.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAgAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>D:\xkp\src\xss\object_model.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="fixup_policy_type">
+    <Position X="34.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAACAAAAAAgAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\xkp\src\xss\object_model.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="fixup_property_type">
+    <Position X="36" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAIAAAAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>D:\xkp\src\xss\object_model.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="fixup_return_type">
+    <Position X="37.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAEAAAg=</HashCode>
+      <FileName>D:\xkp\src\xss\object_model.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="fixup_super">
+    <Position X="39.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAIAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\xkp\src\xss\object_model.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="fixup_type">
+    <Position X="41.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAEAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>D:\xkp\src\xss\object_model.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="xkp::fixup_data">
+    <Position X="35" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAhA=</HashCode>
+      <FileName>D:\xkp\include\xss\object_model.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="xkp::VALUE_OPERATION">
+    <Position X="25.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABEAAAAAAIEAAAoAAAAAAAIABAAAAAAAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::TYPE_MATCH">
+    <Position X="24" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAQAAAI=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::RESOLVE_ITEM">
+    <Position X="27.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAgIiAAAAAAAAAIAEAAEAAAIAAAACAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::STATEMENT_TYPE">
+    <Position X="29.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAIAAAAAABFAAAQAAAgAACAAAAAAQCQAQ=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::xs_adjetive">
+    <Position X="22.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAAAAgAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>D:\xkp\include\xs\ast.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::PARENT_CHILD_ACTION">
+    <Position X="31" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIEAAAAAAAAAAAAAIiAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::MARKER_SOURCE">
+    <Position X="34.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAgAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::FIXUP_TYPE">
+    <Position X="32.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAgAAAIQCAQAAgEAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>D:\xkp\include\xss\object_model.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::CONTEXT_IDENTITY">
+    <Position X="36.25" Y="5.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAgQAAAAAAAAAAACAAAAAAAAAABEAA=</HashCode>
+      <FileName>D:\xkp\include\xss\xss_context.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="xkp::APPLICATION_ITEM">
+    <Position X="38.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAAAAgAAAACAAAAAEA=</HashCode>
+      <FileName>D:\xkp\include\xss\object_model.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

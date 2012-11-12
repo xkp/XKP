@@ -7,6 +7,7 @@
 #include <xss/xss_code.h>
 #include <xss/xss_compiler.h>
 #include <xss/xss_expression.h>
+#include <xss/fixups.h>
 
 #include <xs/compiler.h>
 #include <xs/xs_error.h>
@@ -123,7 +124,72 @@ struct om_entity_visitor : data_entity_visitor
       child_handler_map     children_;
   };
 
+struct fixup_resolver
+  {
+    public:
+      //handlers
+      typedef BIND_STATE (object_model::* handler_func)(fixup_data& it, om_context& ctx);
+
+      //handler registration
+      void handler(FIXUP_TYPE f, handler_func handler)
+        {
+          handler_map::iterator it = fix_.find(f); assert(it == fix_.end());
+          fix_.insert(std::pair<FIXUP_TYPE, handler_func>(f, handler));
+        }
+
+      BIND_STATE resolve(om_context& ctx)
+        {
+          it_ = ctx.fixup;
+
+          while (!it_.empty())
+            {
+              //whatever fixups happen on every pass will
+              //replace the current list
+              ctx.fixup.clear();
+
+              int count  = it_.size();
+              int solved = count;
+              
+              fixup_list::iterator it = it_.begin();
+              fixup_list::iterator nd = it_.end();
+
+              for(; it != nd; it++)
+                {
+                  handler_map::iterator handler = fix_.find(it->id);
+                  if (handler != fix_.end())
+                    {
+                      BIND_STATE result = (owner_->*(handler->second))(*it, ctx);  
+                      if (result == BS_BOUND || result == BS_ERROR)
+                        solved--;
+                    }
+                }
+
+              it_ = ctx.fixup;
+              if (solved == count)
+                return BS_FIXUP; //couldn;t resolve anything
+            }
+
+          return BS_BOUND;
+        }
+    private:
+      typedef std::map<FIXUP_TYPE, handler_func> handler_map;
+
+      object_model* owner_;
+      handler_map   fix_;
+      fixup_list    it_;
+  };
+
 //idiom
+str idiom::id()
+  {
+    return id_;
+  }
+
+void idiom::set_id(const str& it)
+  {
+    id_ = it;
+  }
+
 void idiom::bind(XSSContext ctx)
   {
     type_list::iterator it = types_.begin();
@@ -166,6 +232,31 @@ XSSType idiom::import(const str& id)
 str idiom::get_namespace()
   {
     return namespace_;
+  }
+
+IdiomInstance idiom::instance()
+  {
+    if (!instance_)
+      instance_ = IdiomInstance(new idiom_instance);
+    
+    return instance_;
+  }
+
+IdiomInstance idiom::create_instance()
+  {
+    IdiomInstance result(new idiom_instance);
+    result->copy(XSSObject(instance_));
+    return result;
+  }
+
+void idiom::set_path(const fs::path& p)
+  {
+    path_ = p;
+  }
+
+fs::path& idiom::path()
+  {
+    return path_;
   }
 
 //application
@@ -398,6 +489,12 @@ void application::add_instance(XSSObject instance)
 void application::add_class(XSSType result)
   {
     user_types_.push_back(result);
+  }
+
+void application::add_idiom(const str& id, Idiom it)
+  {
+      //instance_map  
+    idioms_.insert(std::pair<str, XSSObject>(id, it->create_instance()));
   }
 
 XSSObject application::root()
@@ -803,7 +900,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
         if (!idiom)
           {
             DataReader idiom_data = fs_->load_data(idiom_path);
-            idiom = read_idiom(assure_unique_root(idiom_data, octx), octx);
+            idiom = read_idiom(assure_unique_root(idiom_data, octx), idiom_path.parent_path(), octx);
             register_idiom(idiom_path.string(), result, idiom);
           }
 
@@ -857,7 +954,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
     octx.xss_ctx = old_ctx;
 
     //compile
-    fix_it_up(global, octx);
+    fix_idioms(octx);
     bind_it_up(global, octx);
 
     fs::path ap = fs_->locate(src, base_path);
@@ -947,7 +1044,8 @@ void object_model::update_document(const str& fname, om_response& response)
         //the code compiled successfully, lets clear errors
         clear_file_errors(fname);
 
-		fix_it_up(response.ctx, response.data);
+        //td: !!! what kinda fixing?
+		    //fix_it_up(response.ctx, response.data);
 
         //then bind
         type_map::iterator it = response.data.classes.begin();
@@ -992,7 +1090,7 @@ void object_model::add_include(Application app, const str& def, const str& src)
     octx.xss_ctx = include_ctx;
     handle_include(app, def, src, octx);
 
-    fix_it_up(global, octx);
+    fix_idioms(octx);
     bind_it_up(global, octx);
   }
 
@@ -1056,7 +1154,7 @@ variant object_model::read_value(DataEntity de)
     return value; //as string
   }
 
-Idiom object_model::read_idiom(DataEntity de, om_context& ctx)
+Idiom object_model::read_idiom(DataEntity de, const fs::path& path, om_context& ctx)
   {
     Idiom result(new idiom);
     str iid = de->id();
@@ -1064,12 +1162,14 @@ Idiom object_model::read_idiom(DataEntity de, om_context& ctx)
     if (iid.empty())
       ctx.xss_ctx->error(SIdiomsMustHaveId, null, file_position(), file_position());
 
+    result->set_id(iid);
+    result->set_path(path);
     //read
     ctx.idiom = result;
 
     om_entity_visitor oev(this, result, ctx);
     oev.attribute_handler("namespace",  &object_model::r_idiom_namespace);
-    oev.attribute_handler("src",        &object_model::r_attr_nop); //td: !!! idioms
+    oev.attribute_handler("src",        &object_model::r_idiom_code); 
 
     oev.child_handler("enum",   &object_model::r_idiom_enum);
     oev.child_handler("import", &object_model::r_idiom_import);
@@ -1183,113 +1283,6 @@ void object_model::handle_instance(Application app, XSSObject instance, const st
         ctx.xss_ctx = old_ctx;
 			}
   }
-
-//fixer uppers
-struct fixup_type
-  {
-    fixup_type(const str& _type_name, XSSObject _target):
-      type_name(_type_name),
-      target(_target)
-      {
-      }
-
-    str       type_name;
-    XSSObject target;
-  };
-
-struct fixup_property_type
-  {
-    fixup_property_type(const xs_type& _type_name, XSSProperty _target):
-      type_name(_type_name),
-      target(_target)
-      {
-      }
-
-    xs_type     type_name;
-    XSSProperty target;
-  };
-
-struct fixup_return_type
-  {
-    fixup_return_type(const str& _type_name, XSSMethod _target):
-      type_name(_type_name),
-      target(_target)
-      {
-      }
-
-    str       type_name;
-    XSSMethod target;
-  };
-
-struct fix_instance_event
-  {
-    fix_instance_event(XSSObject _target, XSSContext _ctx, std::vector<str>& _instance, XSSSignature _sig, XSSCode _code):
-      instance(_instance),
-      sig(_sig),
-      code(_code),
-      target(_target),
-      ctx(_ctx)
-      {
-      }
-
-    XSSObject        target;
-    std::vector<str> instance;
-    XSSSignature     sig;
-    XSSCode          code;
-    XSSContext       ctx;
-  };
-
-struct fixup_super
-  {
-    fixup_super(const str& _super, XSSType _type):
-      super(_super), 
-      type(_type)
-      {
-      }
-
-    str     super;
-    XSSType type;
-  };
-
-struct fixup_arg_type
-  {
-    fixup_arg_type(const str& _type, XSSSignature _args, int _idx):
-      args(_args), 
-      type(_type),
-      idx(_idx)
-      {
-      }
-
-    str          type;
-    XSSSignature args;
-    int          idx;
-  };
-
-struct fixup_obj_child
-  {
-    fixup_obj_child(XSSObject _parent, DataEntity _de):
-      parent(_parent), 
-      de(_de)
-      {
-      }
-
-    XSSObject  parent;
-    DataEntity de;
-  };
-
-struct fixup_policy_type
-  {
-    fixup_policy_type(const str& _type, XSSType _owner, PARENT_CHILD_ACTION _pca):
-      type(_type),
-      owner(_owner),
-      pca(_pca)
-      {
-      }
-
-    str                 type;
-    XSSType             owner;
-    PARENT_CHILD_ACTION pca;
-  };
 
 //visitors
 struct object_visitor : xs_visitor
@@ -1670,6 +1663,17 @@ void object_model::r_child_nop(DataEntity de, const variant& this_, om_context& 
 void object_model::r_idiom_namespace(const str& attr, const str& value, const variant& this_, om_context& ctx)
   {
     ctx.idiom->set_namespace(value);
+  }
+
+void object_model::r_idiom_code(const str& attr, const str& value, const variant& this_, om_context& ctx)
+  {
+    xs_utils xs;
+
+    code_context code_ctx;
+    code_ctx = ctx.xss_ctx->get_compile_context();
+    fs::path file = fs_->locate(value, ctx.idiom->path());
+    
+    xs.compile_implicit_instance(fs_->load_file(file), DynamicObject(ctx.idiom->instance()), code_ctx, file);
   }
 
 void object_model::r_invalid_idiom_attr(const str& attr, const str& value, const variant& this_, om_context& ctx)
@@ -2730,137 +2734,167 @@ document* object_model::create_document(Application app, const str& src_file, XS
     return app->create_document(src, ctx);
   }
 
-void object_model::fix_it_up(XSSContext ctx, om_context& octx)
+BIND_STATE object_model::f_property_type(fixup_data& it, om_context& ctx)
   {
-    fixup_list process = octx.fixup;
-    octx.fixup.clear();
-    int count = 0;
-    while (!process.empty() && count < 5)
+    fixup_property_type fu  = it.data;
+    XSSType type = ctx.xss_ctx->get_type(fu.type_name);
+		if (check_type(type, fu.type_name.name, ctx.xss_ctx))
+      fu.target->property_type(type);
+    else
+      return BS_ERROR;
+
+    return BS_BOUND;
+  }
+
+BIND_STATE object_model::f_return_type(fixup_data& it, om_context& ctx)
+  {
+    fixup_return_type fu  = it.data;
+    XSSType type = ctx.xss_ctx->get_type(fu.type_name);
+    if (check_type(type, fu.type_name, ctx.xss_ctx))
+      fu.target->return_type(type);
+    else
+      return BS_ERROR;
+
+    return BS_BOUND;
+  }
+
+BIND_STATE object_model::f_instance_event(fixup_data& it, om_context& ctx)
+  {
+    fix_instance_event fu = it.data;
+    std::ostringstream expr_str;
+                    
+    //td: move this by itself, may need it somewhere else
+    std::vector<str>::iterator iit = fu.instance.begin();
+    std::vector<str>::iterator ind = fu.instance.end();
+                    
+    bool first = true;
+    str  event_id;
+    for(; iit != ind; iit++)
       {
-        fixup_list::iterator it = process.begin();
-        fixup_list::iterator nd = process.end();
-    
-        for(; it != nd; it++)
+        bool last = (iit + 1) == ind;
+        if (last)
           {
-            switch(it->id)
-              {
-                case FIXUP_OBJECT_TYPE:
-                  {
-                    fixup_type fu   = it->data;
-                    XSSType type = ctx->get_type(fu.type_name);
-                    if (check_type(type, fu.type_name, ctx))
-                      fu.target->set_type(type);
-                    break;
-                  }
-                case FIXUP_PROPERTY_TYPE:
-                  {
-                    fixup_property_type fu = it->data;
-                    XSSType type = ctx->get_type(fu.type_name);
-				            if (check_type(type, fu.type_name.name, ctx))
-                      fu.target->property_type(type);
-                    break;
-                  }
-                case FIXUP_RETURN_TYPE:
-                  {
-                    fixup_return_type fu = it->data;
-                    XSSType type = ctx->get_type(fu.type_name);
-                    if (check_type(type, fu.type_name, ctx))
-                      fu.target->return_type(type);
-                    break;
-                  }
-                case FIXUP_INSTANCE_EVENT:
-                  {
-                    fix_instance_event fu = it->data;
-                    std::ostringstream expr_str;
-                    
-                    //td: move this by itself, may need it somewhere else
-                    std::vector<str>::iterator it = fu.instance.begin();
-                    std::vector<str>::iterator nd = fu.instance.end();
-                    
-                    bool first = true;
-                    str  event_id;
-                    for(; it != nd; it++)
-                      {
-                        bool last = (it + 1) == nd;
-                        if (last)
-                          {
-                            event_id = *it;   
-                            break;
-                          }
-
-                        if (first)
-                          first = false;
-                        else
-                          expr_str << '.';
-
-                        expr_str << *it;
-                      }
-
-                    XSSExpression instance = xss_expression_utils::compile_expression(expr_str.str()); assert(instance);
-                    instance->bind(fu.ctx);
-                    value_operation vop = instance->value()->get_last();
-                    if (vop.bound())
-                      {
-                        if (vop.resolve_id() != RESOLVE_INSTANCE)
-                          {
-                            assert(false); //td: error
-                          }
-                        else
-                          {
-                            XSSObject owner = vop.resolve_value();
-                            XSSEvent  ev = owner->get_event(event_id);
-                            if (!ev)
-                              {
-                                param_list error;
-                                error.add("object", owner->id());
-                                error.add("event", event_id);
-                                ctx->error(SEventNotFound, &error, file_position(), file_position());
-                              }
-                            else
-                              {
-                                fu.target->add_event_impl(ev, fu.code, ev->signature(), owner, instance);
-                              }
-                          }
-                      }
-                    break;
-                  }
-                case FIXUP_SUPER_TYPE: 
-                  {
-                    fixup_super fu = it->data;
-                    XSSType type = ctx->get_type(fu.super);
-                    if (check_type(type, fu.super, ctx))
-                      fu.type->set_type(type);
-                    break;
-                  }
-                case FIXUP_ARGUMENT_TYPE:
-                  {
-                    fixup_arg_type fu = it->data;
-                    XSSType type = ctx->get_type(fu.type);
-                    if (check_type(type, fu.type, ctx))
-                      fu.args->arg_type(fu.idx, type);
-                    break;
-                  }
-                case FIXUP_OBJECT_CHILD:
-                  {
-                    fixup_obj_child fu    = it->data;
-                    XSSObject       child = read_object_instance(fu.de, fu.parent, octx);
-
-                    if (!child)
-                      {
-                        //td: error
-                      }
-                    break;
-                  }
-                default:
-                  assert(false); //what am I missing?
-              }
+            event_id = *iit;   
+            break;
           }
 
-        process = octx.fixup;
-        octx.fixup.clear();
+        if (first)
+          first = false;
+        else
+          expr_str << '.';
 
-        count++;
+        expr_str << *iit;
       }
+
+    XSSExpression instance = xss_expression_utils::compile_expression(expr_str.str()); assert(instance);
+    instance->bind(fu.ctx);
+    value_operation vop = instance->value()->get_last();
+    if (vop.bound())
+      {
+        if (vop.resolve_id() != RESOLVE_INSTANCE)
+          {
+            assert(false); //td: error
+            return BS_ERROR;
+          }
+        else
+          {
+            XSSObject owner = vop.resolve_value();
+            XSSEvent  ev = owner->get_event(event_id);
+            if (!ev)
+              {
+                param_list error;
+                error.add("object", owner->id());
+                error.add("event", event_id);
+                ctx.xss_ctx->error(SEventNotFound, &error, file_position(), file_position());
+                return BS_ERROR;
+              }
+            else
+              {
+                fu.target->add_event_impl(ev, fu.code, ev->signature(), owner, instance);
+              }
+          }
+      }
+    else
+      return BS_ERROR;
+
+    return BS_BOUND;
+  }
+
+BIND_STATE object_model::f_super_type(fixup_data& it, om_context& ctx)
+  {
+    fixup_super fu  = it.data;
+    XSSType type = ctx.xss_ctx->get_type(fu.super);
+    if (check_type(type, fu.super, ctx.xss_ctx))
+      fu.type->set_type(type);
+    else
+      return BS_ERROR;
+
+    return BS_BOUND;
+  }
+
+BIND_STATE object_model::f_argument_type(fixup_data& it, om_context& ctx)
+  {
+    fixup_arg_type fu = it.data;
+    XSSType type = ctx.xss_ctx->get_type(fu.type);
+    if (check_type(type, fu.type, ctx.xss_ctx))
+      fu.args->arg_type(fu.idx, type);
+    else
+      return BS_ERROR;
+
+    return BS_BOUND;
+  }
+
+BIND_STATE object_model::f_object_type(fixup_data& it, om_context& ctx)
+  {
+    fixup_type fu = it.data;
+    XSSType type = ctx.xss_ctx->get_type(fu.type_name);
+    if (check_type(type, fu.type_name, ctx.xss_ctx))
+      fu.target->set_type(type);
+    else
+      return BS_ERROR;
+
+    return BS_BOUND;
+  }
+
+BIND_STATE object_model::f_object_child(fixup_data& it, om_context& ctx)
+  {
+    fixup_obj_child fu    = it.data;
+    XSSObject       child = read_object_instance(fu.de, fu.parent, ctx);
+
+    if (!child)
+      {
+        //td: error
+        return BS_ERROR;
+      }
+
+    return BS_BOUND;
+  }
+
+BIND_STATE object_model::f_variable_type(fixup_data& it, om_context& ctx)
+  {
+    fixup_variable_type fu  = it.data;
+
+    XSSExpression expr = fu.expr;
+    bool is_assign = xss_expression_utils::is_assignment(expr->op());
+    assert(is_assign); //make sure expr is an assignment expression
+
+    XSSExpression right_expr  = expr->right();
+    XSSType type = right_expr->type();
+    
+    return BS_ERROR; //td: !!! qva
+  }
+
+void object_model::fix_idioms(om_context& octx)
+  {
+    fixup_resolver resolver;
+    resolver.handler(FIXUP_PROPERTY_TYPE,   &object_model::f_property_type);
+    resolver.handler(FIXUP_RETURN_TYPE,     &object_model::f_return_type);
+    resolver.handler(FIXUP_INSTANCE_EVENT,  &object_model::f_instance_event);
+    resolver.handler(FIXUP_SUPER_TYPE,      &object_model::f_super_type);
+    resolver.handler(FIXUP_ARGUMENT_TYPE,   &object_model::f_argument_type);
+    resolver.handler(FIXUP_OBJECT_CHILD,    &object_model::f_object_child);
+
+    resolver.resolve(octx);
   }
 
 void object_model::bind_it_up(XSSContext ctx, om_context& octx)

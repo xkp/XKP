@@ -305,6 +305,11 @@ XSSType xss_context::get_array_type(XSSType type)
     new_type = XSSType(new xss_type);
     new_type->set_id(array_type_name);
     new_type->as_array(type);
+
+    //copy from native array
+    XSSType native_arr_type = get_type("array");
+    new_type->copy(XSSObject(native_arr_type));
+    
     add_type(array_type_name, new_type, true);
 
     return new_type;
@@ -645,6 +650,82 @@ bool xss_context::add_instance(XSSObject instance)
     return false;
   }
 
+void xss_context::notify(notification ntfy) //qva
+  {
+    switch(ntfy.id)
+      {
+        case NOTID_ASSIGN:
+          {
+            XSSExpression expr;
+            expr = variant_cast<XSSExpression>(ntfy.data, XSSExpression());
+            assert(expr);
+
+            //processing assigns notification
+            //td: move this instructions to another struct 
+            //    to handle type resolver with recursive iteration & fixup_it
+            bool is_assign = xss_expression_utils::is_assignment(expr->op());
+            assert(is_assign); //make sure not called from another location
+
+            XSSValue value = expr->left()->value();
+            if (value)
+              {
+                XSSType ltype = value->type();
+                XSSType rtype = expr->right()->type();
+
+                TYPE_MATCH tm;
+                if (match_types(ltype, rtype, tm))
+                  {
+                    if (tm == VARIANT && !rtype->is_variant())
+                      ltype = rtype;
+                    else
+                      {
+                        //td: create assign fixup
+                      }
+                  }
+                else
+                  {
+                    param_list pl;
+                    str type_id;
+                    type_id = ltype ? ltype->id() : "unknown";
+                    pl.add("type1", type_id);
+                    type_id = ltype ? rtype->id() : "unknown";
+                    pl.add("type2", type_id);
+                    error(STypeMismatch, &pl, begin_, end_);
+                  }
+
+                value_operation vo = value->get_last();
+                
+                // how is the correct kind, this?
+                vo.bind(vo.resolve_id(), ltype);
+                // or this o maybe both?
+                if (vo.resolve_id() == RESOLVE_VARIABLE)
+                  register_symbol(vo.resolve_id(), vo.identifier(), ltype, true);
+
+                XSSContext ctx = XSSContext(shared_from_this());
+                //value->bind(ctx, true);
+                value->type(ltype);
+
+                XSSType ltq = vo.resolve_value();
+                XSSType ltp = value->type();
+
+              }
+
+            XSSContext pctx = parent_.lock();
+            if (pctx->identity() == CTXID_CODE)
+              pctx->notify(ntfy);
+
+            break;
+          }
+        case NOTID_RETURN_TYPE:
+          {
+            XSSObject obj   = variant_cast<XSSObject>(ntfy.data, XSSObject());
+            xss_method* mthd = dynamic_cast<xss_method*>(obj.get());
+            assert(mthd);
+            break;
+          }
+      }
+  }
+
 variant xss_context::resolve(const str& id, RESOLVE_ITEM item_type)
   {
     resolve_info si;
@@ -915,13 +996,13 @@ bool xss_context::resolve(const str& id, resolve_info& info)
     if (identity_search(id, info))
       return true;
 
-	XSSType type = get_type(id);
-	if (type)
-	  {
-		  info.what = RESOLVE_TYPE;
-		  info.value = type;
-		  return true;
-	  }
+	  XSSType type = get_type(id);
+	  if (type)
+	    {
+		    info.what = RESOLVE_TYPE;
+		    info.value = type;
+		    return true;
+	    }
 
     if (info.shallow)
       return false;
@@ -1058,6 +1139,13 @@ void xss_context::register_symbol(RESOLVE_ITEM type, const str& id, variant symb
           {
             assert(false); //check outside
           }
+      }
+    else
+    if (overrite) //qva
+      {
+        XSSContext pctx = parent_.lock();
+        if (pctx)
+          pctx->register_symbol(type, id, symbol, overrite);
       }
 
     symbols_.insert(symbol_list_pair(id, symbol_data(type, symbol)));
@@ -2058,7 +2146,6 @@ void xss_object::bind(XSSContext ctx)
         ev->bind(ctx);
       }
 
-    //td: !!! event implementation
     event_implementors::iterator eit = event_impl_.begin();
     event_implementors::iterator end = event_impl_.end();
     for(; eit != end; eit++)
@@ -3239,7 +3326,7 @@ void xss_method::bind(XSSContext ctx)
         for(; it != nd; it++)
           {
             code_ctx->register_symbol(RESOLVE_VARIABLE, it->name, it->type);
-          }        
+          }
 
         code_->bind(ctx);
         XSSType rt = code_->return_type();
@@ -3247,6 +3334,10 @@ void xss_method::bind(XSSContext ctx)
             return_type_ = rt;
         else if (rt && (return_type_ != rt))
 		      ctx->error(SMethodReturnTypeMismatch, null, code_->begin(), code_->end());
+
+        XSSObject obj = XSSObject(shared_from_this());
+        notification ntfy(NOTID_RETURN_TYPE, obj); //qva
+        ctx->notify(ntfy);
       }
   }
 

@@ -290,8 +290,13 @@
     <ClInclude Include="..\..\..\include\xss\lang\java.h">
       <Filter>Header Files\xss\lang</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\object_model.h">
+      <Filter>Header Files\xss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\third_party\gold\xs.grm" />
+    <None Include="conglomerate.cd" />
+    <None Include="enumerators.cd" />
   </ItemGroup>
 </Project>

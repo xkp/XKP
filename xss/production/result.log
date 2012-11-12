@@ -1,2885 +1,554 @@
 
 ===[ animtest.project.xml ]================
 
+ERROR: Project:  animtest.project.xml
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Sequence Types...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: lbl1
-log: Rendering instance: lbl2
-log: Rendering instance: lbl3
-log: Rendering instance: btn1
-log: Rendering instance: btn2
-log: Rendering instance: btn3
-log: Rendering instance: anim1
-log: Rendering instance: anim1
-log: Rendering instance: anim2
-log: Rendering instance: anim2
-log: Rendering instance: anim3
-log: Rendering instance: anim3
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Copying files...
-log: Rendering Android Manifest...
-
-Success are greateful
 ===[ characters.project.xml ]================
 
+ERROR: Project:  characters.project.xml
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering class: character
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: aladdin
-log: Rendering instance: mickey
-log: Rendering instance: pluto
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: i_aladdin
-log: Rendering instance: i_mickey
-log: Rendering instance: i_pluto
-log: Rendering instance: a_audio1
-log: Rendering instance: a_audio2
-log: Rendering instance: v_mickey
-log: Rendering instance: v_pluto
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
-
-Success are greateful
 ===[ contacts.project.xml ]================
 
+ERROR: Project:  contacts.project.xml
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: __div1
-log: Rendering instance: btnLeft
-log: Rendering instance: btnRight
-log: Rendering instance: swtStates
-log: Rendering instance: divAdd
-log: Rendering instance: lblFullName
-log: Rendering instance: lblPhone
-log: Rendering instance: edtFullName
-log: Rendering instance: edtPhoneNumber
-log: Rendering instance: chkVerifier
-log: Rendering instance: btnAddContact
-log: Rendering instance: divFind
-log: Rendering instance: lblFindType
-log: Rendering instance: rdbByName
-log: Rendering instance: rdbByPhone
-log: Rendering instance: lblCriterion
-log: Rendering instance: edtCriterion
-log: Rendering instance: divAbout
-log: Rendering instance: lblName
-log: Rendering instance: lblContact
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
-
-Success are greateful
 ===[ animationsink.project.xml ]================
 
+ERROR: Project:  animationsink.project.xml
 
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Sequence Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: lbl1
-log: Rendering instance: lbl2
-log: Rendering instance: lbl3
-log: Rendering instance: btn1
-log: Rendering instance: btn2
-log: Rendering instance: btn3
-log: Rendering instance: anim1
-log: Rendering instance: anim1
-log: Rendering instance: anim2
-log: Rendering instance: anim2
-log: Rendering instance: anim3
-log: Rendering instance: anim3
-log: Copying resource files...
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Copying files...
-log: Rendering Android Manifest...
-
-Success are greateful
 ===[ androidcollisions.project.xml ]================
 
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/android/demos/androidcollisions/../../../idioms/android/classes.xmlERROR: Project:  androidcollisions.project.xml
+ERROR: Project:  androidcollisions.project.xml
 
 ===[ androidcomponents.project.xml ]================
 
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/android/demos/androidcomponents/../../../idioms/android/classes.xmlERROR: Project:  androidcomponents.project.xml
+ERROR: Project:  androidcomponents.project.xml
 
 ===[ androidkitchensink.project.xml ]================
 
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/android/demos/androidkitchensink/../../../idioms/android/classes.xmlERROR: Project:  androidkitchensink.project.xml
+ERROR: Project:  androidkitchensink.project.xml
 
 ===[ androidmaps.project.xml ]================
 
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/android/demos/androidmaps/../../../idioms/android/classes.xmlERROR: Project:  androidmaps.project.xml
+ERROR: Project:  androidmaps.project.xml
 
 ===[ androidcollisions.project.xml ]================
 
+ERROR: Project:  androidcollisions.project.xml
 
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering class: smiley_ball
-log: Rendering Sequence Types...
-log: Rendering Java Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: __img1
-log: Rendering instance: __img2
-log: Rendering instance: __img3
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: __image1
-log: Rendering instance: __image2
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Copying files...
-log: [jbox2d] Copying default files...
-log: Rendering Android Manifest...
-
-Success are greateful
 ===[ maps.project.xml ]================
 
-
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Sequence Types...
-log: Rendering Java Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: __div1
-log: Rendering instance: btnGallery
-log: Rendering instance: btnMaps
-log: Rendering instance: lblStatus
-log: Rendering instance: lblInformation
-log: Rendering instance: swtScene
-log: Rendering instance: lblSwicherInformation
-log: Rendering instance: imgGallery
-log: Rendering instance: mapController
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: ico_gallery
-log: Rendering instance: ico_maps
-log: Rendering instance: photos
-log: Rendering instance: worth_1
-log: Rendering instance: worth_2
-log: Rendering instance: worth_3
-log: Rendering instance: worth_4
-log: Rendering instance: worth_5
-log: Rendering instance: worth_6
-log: Rendering instance: worth_7
-log: Rendering instance: maps
-log: Rendering instance: holguin
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Copying files...
-log: [jbox2d] Copying default files...
-log: Rendering Android Manifest...
-Error [idiom] Environment variable is not defined
-	variable_name = ANDROID_SDK
-	file = d:/xkp/xss/idioms/android/main.xssERROR: Project:  maps.project.xml
+ERROR: Project:  maps.project.xml
 
 ===[ figures2d.project.xml ]================
 
+ERROR: Project:  figures2d.project.xml
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: div1
-log: Rendering instance: c1
-log: Rendering instance: r1
-log: Rendering instance: p1
-log: Rendering instance: point1
-log: Rendering instance: point2
-log: Rendering instance: point3
-log: Rendering instance: point4
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
-
-Success are greateful
 ===[ gallery.project.xml ]================
 
+ERROR: Project:  gallery.project.xml
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: gallery
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: img01
-log: Rendering instance: img02
-log: Rendering instance: img03
-log: Rendering instance: img04
-log: Rendering instance: img05
-log: Rendering instance: img06
-log: Rendering instance: img07
-log: Rendering instance: img08
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
-
-Success are greateful
 ===[ images.project.xml ]================
 
+ERROR: Project:  images.project.xml
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: album
-log: Rendering instance: changer
-log: Rendering instance: identifier
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: img1
-log: Rendering instance: img2
-log: Rendering instance: img3
-log: Rendering instance: img4
-log: Rendering instance: img5
-log: Rendering instance: img6
-log: Rendering instance: img7
-log: Rendering instance: img8
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
-
-Success are greateful
 ===[ box2d1.project.xml ]================
 
+ERROR: Project:  box2d1.project.xml
 
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: [jbox2d] Copying default files...
-log: Rendering Android Manifest...
-
-Success are greateful
 ===[ box2d2.project.xml ]================
 
+ERROR: Project:  box2d2.project.xml
 
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: btn1
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: __image1
-log: Rendering instance: __image2
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: [jbox2d] Copying default files...
-log: Rendering Android Manifest...
-
-Success are greateful
 ===[ box2d3.project.xml ]================
 
+ERROR: Project:  box2d3.project.xml
 
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering class: smiley_ball
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: __img1
-log: Rendering instance: __img2
-log: Rendering instance: __img3
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: __image1
-log: Rendering instance: __image2
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: [jbox2d] Copying default files...
-log: Rendering Android Manifest...
-
-Success are greateful
 ===[ box2d4.project.xml ]================
 
+ERROR: Project:  box2d4.project.xml
 
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering instance: move_around
-log: Rendering instance: move_around
-log: Rendering instance: fade_out
-log: Rendering instance: fade_out
-log: Rendering class: bad_guy
-log: Rendering Android Imports...
-log: Rendering instance: move_around
-log: Rendering instance: move_around
-log: Rendering class: good_guy
-log: Rendering Android Imports...
-log: Rendering class: bullet
-log: Rendering Android Imports...
-log: Rendering class: floor
-log: Rendering Sequence Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: hero
-log: Rendering instance: __floor1
-log: Rendering instance: game_over
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: __image1
-log: Rendering instance: __image2
-log: Rendering instance: __image3
-log: Rendering instance: __image4
-log: Rendering instance: __image5
-log: Rendering instance: __image6
-log: Rendering instance: __audio1
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: [jbox2d] Copying default files...
-log: Copying files...
-log: Rendering Android Manifest...
-
-
-
-
-
-
-
-
-package xkp.android.jBox2d_4
-	
-public class move_action extends Sequence {
-	
-
-
-
-
-                var this__ = this;
-            
-
-
-
-
-
-			private Float speed = 130.000000f;
-		
-
-
-
-
-
-			private Double vx = Math.random();
-		
-
-
-
-
-
-			private Double vy = Math.random();
-		
-
-
-
-
-
-			private XKPImage target;
-		
-
-
-
-
-
-			private void tick(Object delta) {
-		
-				target.setLeft(target.getX1() + vx * speed * delta);
-target.setTop(target.getY1() + vy * speed * delta);
-if (target.getX1() < 10 || target.getX1() > 570)
-{
-	vx = vx * -1;
-}
-if (target.getY1() < 10 || target.getY1() > 200)
-{
-	vy = vy * -1;
-}
-			
-			}
-		
-
-}
-
-
-
-Success are greateful
 ===[ box2d5.project.xml ]================
 
+ERROR: Project:  box2d5.project.xml
 
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering class: body_1
-log: Rendering Android Imports...
-log: Rendering class: body_2
-log: Rendering Android Imports...
-log: Rendering class: body_3
-log: Rendering Android Imports...
-log: Rendering class: floor
-log: Rendering Android Imports...
-log: Rendering class: my_body
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: __label1
-log: Rendering instance: __label2
-log: Rendering instance: __label3
-log: Rendering instance: __label4
-log: Rendering instance: __label5
-log: Rendering instance: btn1
-log: Rendering instance: btn2
-log: Rendering instance: btn3
-log: Rendering instance: btn4
-log: Rendering instance: btn5
-log: Rendering instance: btn6
-log: Rendering instance: __floor1
-log: Rendering instance: __floor2
-log: Rendering instance: __floor3
-log: Rendering instance: __floor4
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: __image1
-log: Rendering instance: __image2
-log: Rendering instance: __image3
-log: Rendering instance: __image4
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: [jbox2d] Copying default files...
-log: Rendering Android Manifest...
-
-Success are greateful
 ===[ kitchensink.project.xml ]================
 
+ERROR: Project:  kitchensink.project.xml
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: kitchen
-log: Rendering instance: __div1
-log: Rendering instance: btn1
-log: Rendering instance: toggle1
-log: Rendering instance: imgbtn1
-log: Rendering instance: lbl1
-log: Rendering instance: edit1
-log: Rendering instance: chkb1
-log: Rendering instance: __scroller1
-log: Rendering instance: rdgTab3
-log: Rendering instance: radio1
-log: Rendering instance: radio2
-log: Rendering instance: radio3
-log: Rendering instance: radio4
-log: Rendering instance: radio5
-log: Rendering instance: radio6
-log: Rendering instance: radio7
-log: Rendering instance: radio8
-log: Rendering instance: radio9
-log: Rendering instance: __scroller2
-log: Rendering instance: img1
-log: Rendering instance: __div2
-log: Rendering instance: prgbar1
-log: Rendering instance: prgbar2
-log: Rendering instance: prgbar3
-log: Rendering instance: prgbar4
-log: Rendering instance: seekb1
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: dialog
-log: Rendering instance: emulator
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
-
-Success are greateful
 ===[ maps.project.xml ]================
 
+ERROR: Project:  maps.project.xml
 
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: __div1
-log: Rendering instance: btnGallery
-log: Rendering instance: btnMaps
-log: Rendering instance: lblStatus
-log: Rendering instance: lblInformation
-log: Rendering instance: swtScene
-log: Rendering instance: lblSwicherInformation
-log: Rendering instance: imgGallery
-log: Rendering instance: mapController
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: ico_gallery
-log: Rendering instance: ico_maps
-log: Rendering instance: photos
-log: Rendering instance: worth_1
-log: Rendering instance: worth_2
-log: Rendering instance: worth_3
-log: Rendering instance: worth_4
-log: Rendering instance: worth_5
-log: Rendering instance: worth_6
-log: Rendering instance: worth_7
-log: Rendering instance: maps
-log: Rendering instance: holguin
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
-
-Success are greateful
 ===[ simple.project.xml ]================
 
+ERROR: Project:  simple.project.xml
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: lblFirstName
-log: Rendering instance: edtFirstName
-log: Rendering instance: lblLastName
-log: Rendering instance: edtLastName
-log: Rendering instance: btnFullName
-log: Rendering instance: lblFullName
-log: Rendering instance: edtContainer
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
-
-Success are greateful
 ===[ touchme.project.xml ]================
 
+ERROR: Project:  touchme.project.xml
 
-log: Rendering Android project...
-log: API Level = 4
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: btnTouchme
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Rendering Android Manifest...
-
-Success are greateful
 ===[ kitchensink.project.xml ]================
 
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/kitchensink/../../../idioms/jquery/classes.xmlERROR: Project:  kitchensink.project.xml
+ERROR: Project:  kitchensink.project.xml
 
 ===[ pairs.project.xml ]================
 
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/pairs/../../../idioms/jquery/classes.xmlERROR: Project:  pairs.project.xml
+ERROR: Project:  pairs.project.xml
 
 ===[ simple.project.xml ]================
 
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/jquery/simpletest/../../../idioms/jquery/classes.xmlERROR: Project:  simple.project.xml
+ERROR: Project:  simple.project.xml
 
 ===[ 3js-ms.project.xml ]================(Tests)
 
+ERROR: Project:  3js-ms.project.xml
 
-log: Rendering Resources...
-log: Rendering 3js Types...
-log: Rendering Sequence Types...
-log: Rendering UI Types...
-log: Rendering UI...
-log: vector3d
-log: vector3d
-log: rotation_class
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ 3js-ui.project.xml ]================(Tests)
 
+ERROR: Project:  3js-ui.project.xml
 
-log: Rendering Resources...
-log: Rendering 3js Types...
-log: Rendering UI Types...
-log: Rendering UI...
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ 3js_carousel.project.xml ]================(Tests)
 
+ERROR: Project:  3js_carousel.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: rotation_class
-log: vector3d
-log: vector3d
-log: rotation_class
-log: Rendering UI...
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ 3js_class_test_1.project.xml ]================(Tests)
 
+ERROR: Project:  3js_class_test_1.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering UI...
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ 3js_class_test_2.project.xml ]================(Tests)
 
+ERROR: Project:  3js_class_test_2.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering UI...
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ 3js_cube.project.xml ]================(Tests)
 
+ERROR: Project:  3js_cube.project.xml
 
-log: Rendering 3js Types...
-log: Rendering UI Types...
-log: Rendering UI...
-log: vector3d
-log: vector3d
-Success are greateful
 ===[ 3js_geometries.project.xml ]================(Tests)
 
+ERROR: Project:  3js_geometries.project.xml
 
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering UI...
-log: vector3d
-log: vector3d
-log: vector3d
-log: rotation_class
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-Success are greateful
 ===[ 3js_lights.project.xml ]================(Tests)
 
+ERROR: Project:  3js_lights.project.xml
 
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering UI...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-Success are greateful
 ===[ 3js_materials.project.xml ]================(Tests)
 
+ERROR: Project:  3js_materials.project.xml
 
-log: Rendering Resources...
-log: Rendering 3js Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ 3js_package.project.xml ]================(Tests)
 
+ERROR: Project:  3js_package.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering UI...
-log: vector3d
-log: vector3d
-log: rotation_class
-log: vector3d
-log: rotation_class
-log: vector3d
-log: rotation_class
-log: vector3d
-log: rotation_class
-log: vector3d
-log: rotation_class
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ 3js_particle.project.xml ]================(Tests)
 
+ERROR: Project:  3js_particle.project.xml
 
-log: Rendering 3js Types...
-log: vector3d
-log: vector3d
-log: vector3d
-Success are greateful
 ===[ 3js_particle_system.project.xml ]================(Tests)
 
+ERROR: Project:  3js_particle_system.project.xml
 
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering UI...
-log: vector3d
-Success are greateful
 ===[ 3js_transform.project.xml ]================(Tests)
 
+ERROR: Project:  3js_transform.project.xml
 
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering UI...
-log: vector3d
-log: vector3d
-log: rotation_class
-log: vector3d
-log: vector3d
-log: rotation_class
-log: vector3d
-Success are greateful
 ===[ animtest.project.xml ]================(Tests)
 
+ERROR: Project:  animtest.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering Sequence Types...
-log: Rendering UI...
-log: sequence
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ blend_xs.project.xml ]================(Tests)
 
+ERROR: Project:  blend_xs.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: rotation_class
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ blend_xs_wgl.project.xml ]================(Tests)
 
+ERROR: Project:  blend_xs_wgl.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: rotation_class
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/loaders/ColladaLoader.js
-Success are greateful
 ===[ box2d3.project.xml ]================(Tests)
 
+ERROR: Project:  box2d3.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ box2d4.project.xml ]================(Tests)
 
+ERROR: Project:  box2d4.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering Sequence Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ box2d5.project.xml ]================(Tests)
 
+ERROR: Project:  box2d5.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ box2dcar.project.xml ]================(Tests)
 
+ERROR: Project:  box2dcar.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ cube_ui.project.xml ]================(Tests)
 
+ERROR: Project:  cube_ui.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering Sequence Types...
-log: Rendering UI...
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ dd.project.xml ]================(Tests)
 
+ERROR: Project:  dd.project.xml
 
-log: Rendering Resources...
-log: Rendering Sequence Types...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: rotation_class
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: Rendering UI...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ fbtest.project.xml ]================(Tests)
 
+ERROR: Project:  fbtest.project.xml
 
-Success are greateful
 ===[ g_anim.project.xml ]================(Tests)
 
+ERROR: Project:  g_anim.project.xml
 
-log: Rendering Resources...
-log: Rendering Sequence Types...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering UI...
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ java1.project.xml ]================(Tests)
 
+ERROR: Project:  java1.project.xml
 
-
-Success are greateful
 ===[ java2.project.xml ]================(Tests)
 
+ERROR: Project:  java2.project.xml
 
-
-Success are greateful
 ===[ java3.project.xml ]================(Tests)
 
+ERROR: Project:  java3.project.xml
 
-
-
-
-
-		public Object check_type() {
-			Integer a;
-a = 1;
-Object b;
-typing = a;
-return a;
-		}
-	
-
-
-
-
-
-		public String foobar(Integer v) {
-			t1.foo = t2.foo + 10;
-t2.set_bar(t1.foo + t1.get_bar() + "++");
-set_complex(t1, t2.get_bar() + t1.get_bar() + this.foo + "--");
-set_some_int(t1, t1.get_some_int() - 1);
-set_some_int(t2, t2.get_some_int() + 1);
-set_some_int(t1, t1.get_some_int() + 20);
-set_more(t1).complex(get_more(t1).complex() + 1);
-set_more(t2).complex(get_more(t2).complex() - 1);
-ArrayList arr = new ArrayList(Arrays.asList( new Object [] {} ));
-arr.add(10);
-writable_set(read_only_get() + simple + mixed_get());
-mixed_set(writable_get());
-return t1.get_bar();
-		}
-	
-
-
-
-
-
-			private void onClick() {
-		
-				ArrayList<Object> list = new ArrayList(Arrays.asList( new Object [] {1, 2, "item", 3.140000f, "vowel"} ));
-for(Object i : list)
-{
-	System.out.println(i);
-}
-			
-			}
-		
-
-
-
-
-
-
-
-
-
-
-			private Integer typing;
-		
-
-
-
-
-
-			private Integer simple = 50;
-		
-
-
-
-
-
-			public Float read_only_get() {
-				return 10.000000f;
-			}
-		
-
-
-
-
-
-			private Object writable;
-			
-			public void writable_set(Object value) {
-				writable = value;
-				console.log(value);
-			}
-		
-
-
-
-
-
-			public Integer mixed_get() {
-				return 10;
-			}
-			
-			public void mixed_set(Object value) {
-				console.log("Something");
-			}
-		
-
-
-
-
-
-
-
-Success are greateful
 ===[ java4.project.xml ]================(Tests)
 
+ERROR: Project:  java4.project.xml
 
-
-
-
-
-			JavaClass jar = new JavaClass( this, defaulting, "some_component" ); 
-				jar.setX(10);
-			
-				jar.setY(10);
-			
-				jar.setWidth(100);
-			
-				jar.setHeight(50);
-			
-				jar.setGuest("some_component");
-			
-
-
-Success are greateful
 ===[ java5.project.xml ]================(Tests)
 
+ERROR: Project:  java5.project.xml
 
-log: Rendering Java Types...
-log: Rendering instance: cx
+===[ java6.project.xml ]================(Tests)
 
-Success are greateful
+
 ===[ jquery-3js.project.xml ]================(Tests)
 
+ERROR: Project:  jquery-3js.project.xml
 
-log: Rendering Resources...
-log: Rendering 3js Types...
-log: Rendering UI Types...
-log: Rendering UI...
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ jquery-3js1.project.xml ]================(Tests)
 
+ERROR: Project:  jquery-3js1.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: rotation_class
-log: vector3d
-log: vector3d
-log: rotation_class
-log: Rendering UI...
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ jquery-webgl.project.xml ]================(Tests)
 
+ERROR: Project:  jquery-webgl.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ jquery1.project.xml ]================(Tests)
 
 ERROR: Project:  jquery1.project.xml
 
 ===[ jquery2.project.xml ]================(Tests)
 
+ERROR: Project:  jquery2.project.xml
 
-Success are greateful
 ===[ jquery3.project.xml ]================(Tests)
 
+ERROR: Project:  jquery3.project.xml
 
-Success are greateful
 ===[ jquery4.project.xml ]================(Tests)
 
+ERROR: Project:  jquery4.project.xml
 
-Success are greateful
 ===[ jquery5.project.xml ]================(Tests)
 
+ERROR: Project:  jquery5.project.xml
 
-Success are greateful
 ===[ jquery6.project.xml ]================(Tests)
 
+ERROR: Project:  jquery6.project.xml
 
-log: Rendering property: enabled
-Success are greateful
 ===[ jquery7.project.xml ]================(Tests)
 
+ERROR: Project:  jquery7.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering Sequence Types...
-log: Rendering UI...
-log: component
-log: component
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ jquery8.project.xml ]================(Tests)
 
+ERROR: Project:  jquery8.project.xml
 
-log: Rendering property: src
-log: Rendering property: alpha
-log: Rendering property: visible
-log: 4
-Success are greateful
 ===[ jquery9.project.xml ]================(Tests)
 
+ERROR: Project:  jquery9.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering Sequence Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ jquery_pp.project.xml ]================(Tests)
 
+ERROR: Project:  jquery_pp.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ jsmanip.project.xml ]================(Tests)
 
+ERROR: Project:  jsmanip.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering UI...
-log: vector3d
-log: vector3d
-log: rotation_class
-log: vector3d
-log: rotation_class
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ jsmanipulate.project.xml ]================(Tests)
 
+ERROR: Project:  jsmanipulate.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering UI...
-log: vector3d
-log: vector3d
-log: rotation_class
-log: vector3d
-log: rotation_class
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ ms4.project.xml ]================(Tests)
 
+ERROR: Project:  ms4.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering Sequence Types...
-log: Rendering UI...
-log: component
-log: component
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ ms5.project.xml ]================(Tests)
 
+ERROR: Project:  ms5.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering Sequence Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ ms6.project.xml ]================(Tests)
 
+ERROR: Project:  ms6.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering Sequence Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ paintings.project.xml ]================(Tests)
 
-
-Error [language] Unknown identifier
-	identifier = resourceERROR: Project:  paintings.project.xml
+ERROR: Project:  paintings.project.xml
 
 ===[ pixastic.project.xml ]================(Tests)
 
+ERROR: Project:  pixastic.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ query_properties.project.xml ]================(Tests)
 
+ERROR: Project:  query_properties.project.xml
 
-log: Rendering test query_properties...
-			Instance: name = "application", type = "Application"
-		
-				property "brackground" = null			
-				property "config" = null			
-			Instance: name = "t1", type = "t_arrays"
-		
-			Instance: name = "t2", type = "t_arrays1"
-		
-			Instance: name = "t3", type = "t_super_derived"
-		
-				property "title" = null			
-				property "name" = null			
-			Instance: name = "t4", type = "t_super_merged"
-		
-				property "test_2" = null			
-				property "test_1" = null			
-			Instance: name = "application", type = "Application"
-		
-				property "brackground" = null			
-				property "config" = null			
-
-Success are greateful
 ===[ replicator.project.xml ]================(Tests)
 
+ERROR: Project:  replicator.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ ui_audio.project.xml ]================(Tests)
 
+ERROR: Project:  ui_audio.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ ui_audio_1.project.xml ]================(Tests)
 
+ERROR: Project:  ui_audio_1.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ ui_class_test.project.xml ]================(Tests)
 
+ERROR: Project:  ui_class_test.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ ui_kitchen_sink.project.xml ]================(Tests)
 
+ERROR: Project:  ui_kitchen_sink.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ ui_painter.project.xml ]================(Tests)
 
+ERROR: Project:  ui_painter.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ ui_placement.project.xml ]================(Tests)
 
+ERROR: Project:  ui_placement.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ ui_ripple.project.xml ]================(Tests)
 
+ERROR: Project:  ui_ripple.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering Sequence Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ ui_sprite.project.xml ]================(Tests)
 
+ERROR: Project:  ui_sprite.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ ui_video.project.xml ]================(Tests)
 
+ERROR: Project:  ui_video.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering UI...
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
 ===[ uibuffer_test.project.xml ]================(Tests)
 
+ERROR: Project:  uibuffer_test.project.xml
 
-log: Rendering Resources...
-log: Rendering UI Types...
-log: Rendering 3js Types...
-log: Rendering UI...
-log: vector3d
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
+===[ ve1.project.xml ]================(Tests)
+
+
+===[ ve2.project.xml ]================(Tests)
+
+ERROR: Project:  ve2.project.xml
+
+===[ ve3.project.xml ]================(Tests)
+
+ERROR: Project:  ve3.project.xml
+
 ===[ wax1.project.xml ]================(Tests)
 
 ERROR: Project:  wax1.project.xml
 
 ===[ wax2.project.xml ]================(Tests)
 
+ERROR: Project:  wax2.project.xml
 
-log: object
-Success are greateful
 ===[ wax3.project.xml ]================(Tests)
 
+ERROR: Project:  wax3.project.xml
 
-Success are greateful
 ===[ wax4.project.xml ]================(Tests)
 
+ERROR: Project:  wax4.project.xml
 
-Success are greateful
 ===[ webgl_particle.project.xml ]================(Tests)
 
+ERROR: Project:  webgl_particle.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-Success are greateful
 ===[ wgl_coll_anim_2.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_coll_anim_2.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/loaders/ColladaLoader.js
-Success are greateful
 ===[ wgl_coll_anim_3.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_coll_anim_3.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: rotation_class
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/loaders/ColladaLoader.js
-Success are greateful
 ===[ wgl_collada.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_collada.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: rotation_class
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/loaders/ColladaLoader.js
-Success are greateful
 ===[ wgl_collada1.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_collada1.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/loaders/ColladaLoader.js
-Success are greateful
 ===[ wgl_collada2.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_collada2.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/loaders/ColladaLoader.js
-Success are greateful
 ===[ wgl_collada3.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_collada3.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: rotation_class
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/loaders/ColladaLoader.js
-Success are greateful
 ===[ wgl_cube_img.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_cube_img.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-Success are greateful
 ===[ wgl_firstperson.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_firstperson.project.xml
 
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: rotation_class
-log: vector3d
-log: rotation_class
-log: vector3d
-log: vector3d
-log: rotation_class
-log: vector3d
-log: rotation_class
-log: vector3d
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-Success are greateful
 ===[ wgl_flamingo.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_flamingo.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/loaders/ColladaLoader.js
-Success are greateful
 ===[ wgl_head.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_head.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/loaders/ColladaLoader.js
-Success are greateful
 ===[ wgl_icosahedron.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_icosahedron.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-Success are greateful
 ===[ wgl_materials.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_materials.project.xml
 
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-Success are greateful
 ===[ wgl_monster.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_monster.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/loaders/ColladaLoader.js
-Success are greateful
 ===[ wgl_package.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_package.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: rotation_class
-log: vector3d
-log: rotation_class
-log: vector3d
-log: rotation_class
-log: vector3d
-log: rotation_class
-log: vector3d
-log: rotation_class
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-Success are greateful
 ===[ wgl_postprocessing.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_postprocessing.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/loaders/ColladaLoader.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
-Success are greateful
 ===[ wgl_postprocessing_cl.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_postprocessing_cl.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/loaders/ColladaLoader.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
-Success are greateful
 ===[ wgl_pp_embedded.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_pp_embedded.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-log: dependency: ../js/three/loaders/ColladaLoader.js
-log: dependency: ../js/three/ShaderExtras.js
-log: dependency: ../js/three/postprocessing/EffectComposer.js
-log: dependency: ../js/three/postprocessing/RenderPass.js
-log: dependency: ../js/three/postprocessing/ShaderPass.js
-log: dependency: ../js/three/postprocessing/BloomPass.js
-log: dependency: ../js/three/postprocessing/FilmPass.js
-log: dependency: ../js/three/postprocessing/DotScreenPass.js
-log: dependency: ../js/three/postprocessing/TexturePass.js
-log: dependency: ../js/three/postprocessing/MaskPass.js
-Success are greateful
 ===[ wgl_reflection_cube.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_reflection_cube.project.xml
 
-log: Rendering WebGL Types...
-log: vector3d
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-Success are greateful
 ===[ wgl_refraction_cube.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_refraction_cube.project.xml
 
-log: Rendering WebGL Types...
-log: vector3d
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-Success are greateful
 ===[ wgl_shader.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_shader.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-Success are greateful
 ===[ wgl_shader_cl.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_shader_cl.project.xml
 
-log: Rendering Resources...
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: dependency: ../js/streamer.js
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-Success are greateful
 ===[ wgl_shader_fresnel.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_shader_fresnel.project.xml
 
-log: Rendering WebGL Types...
-log: vector3d
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-Success are greateful
 ===[ wgl_shader_fresnel_cl.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_shader_fresnel_cl.project.xml
 
-log: Rendering WebGL Types...
-log: vector3d
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-Success are greateful
 ===[ wgl_text.project.xml ]================(Tests)
 
+ERROR: Project:  wgl_text.project.xml
 
-log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: rotation_class
-log: dependency: ../js/three/Three.js
-log: dependency: ../js/three/Stats.js
-log: dependency: ../js/three/Utils.js
-log: dependency: ../js/three/Detector.js
-log: dependency: ../js/three/fonts.js
-Success are greateful
 ===[ xs_blend_service.project.xml ]================(Tests)
 
+ERROR: Project:  xs_blend_service.project.xml
 
-Success are greateful
 ===[ xs_zip_service.project.xml ]================(Tests)
 
+ERROR: Project:  xs_zip_service.project.xml
 
-Success are greateful
 ===[ xs_zip_session.project.xml ]================(Tests)
 
+ERROR: Project:  xs_zip_session.project.xml
 
-Success are greateful
 ===[ xs_zip_users.project.xml ]================(Tests)
 
+ERROR: Project:  xs_zip_users.project.xml
 
-log: object
-Success are greateful
 ===[ xss1.project.xml ]================(Tests)
 
+ERROR: Project:  xss1.project.xml
 
-hello, darling
-this is Louis
-
-
-		Darling
-	
-		Im glad to see you back where you belong
-	
-
-            Thats all folks
-            It was a pleasure
-        
-Success are greateful
 ===[ xss10.project.xml ]================(Tests)
 
+ERROR: Project:  xss10.project.xml
 
-log: instance: it1
-log: instance: it2
-log: instance: application
-log: Instance it1...
-log: Instance it2...
-log: Instance application...
-			== Instance it1 ==
-		
-
-
-
-
-			public Integer prop_it1_getting_get() {
-				return prop_application_counter * 10;
-			}
-		
-
-
-
-
-
-			private void event_it1_create() {
-		
-				prop_application_counter = prop_it1_getting_get();
-int boole = Bool.falsest;
-if (boole == Bool.truest)
-{
-	print("never occur");
-}
-			
-			}
-		
-
-			== Instance it2 ==
-		
-
-
-
-
-			private Integer prop_it2_counter = 0;
-		
-
-
-
-
-
-			public Integer prop_it2_getting_get() {
-				return prop_application_counter / 10;
-			}
-		
-
-
-
-
-
-			private Object prop_it2_setting;
-			
-			public void prop_it2_setting_set(Object value) {
-				prop_it2_setting = value;
-				prop_it2_counter = value + prop_it2_getting_get();
-it2.mthd_1();
-			}
-		
-
-
-
-
-
-			private void event_it2_click() {
-		
-				prop_it2_setting_set(prop_it1_getting_get() - 12);
-			
-			}
-		
-
-
-
-
-
-		public Integer mthd_it2_returning() {
-			it1.mthd_1();
-if (it1.size() > it2.size())
-{
-	it1.setSize(it2.size());
-	return prop_application_counter;
-}
-else
-{
-	return 0;
-}
-		}
-	
-
-			== Instance application ==
-		
-
-
-
-
-			private Integer prop_application_counter = 0;
-		
-
-
-Success are greateful
 ===[ xss11.project.xml ]================(Tests)
 
+ERROR: Project:  xss11.project.xml
 
-		Math.sin(PI);
-String foo = Singleton.get_foo();
-
-	
-
-Success are greateful
 ===[ xss12.project.xml ]================(Tests)
 
+ERROR: Project:  xss12.project.xml
 
-log: myMarker<html>
-<body>
-
-<h1>My Markers</h1>
-
-<p id="myMarker">
-Hey, here is myMarker
-</p>
-
-<style>
-
-</style>
-<script type="text/javascript">
-
-</script>
-</body>
-</html>
-
-
-Success are greateful
 ===[ xss13.project.xml ]================(Tests)
 
+ERROR: Project:  xss13.project.xml
 
-log: property: p1
-log: property: p2
-log: property: p3
-log: property: p4
-log: method: foo
-log: method: bar
-log: method: foobar
-            var a = 0;
-var b = 2;
-var c = -1;
-if ((a > b) || (b < c))
-{
-a += 10;
-}
-else
-{
-a -= 10;
-}
-switch(a)
-{
-case 1 :
-case 2 :
-{
-a += 10;
-break;
-}
-case 3 :
-{
-a -= 10;
-break;
-}
-}
-        
-            var yy = {};
-var zz = {};
-try
-{
-some.dangerous();
-}
-catch(__exception)
-{
-var id = __exception;
-console.log("error: " + id);
-}
-finally
-{
-console.log("finally!");
-}
-if (yy.z > 4)
-{
-throw yy;
-}
-        
-            var x = {color : "blue",eyes : false};
-        
-
-Success are greateful
 ===[ xss14.project.xml ]================(Tests)
 
-
-log: <Dependencies>
-log: /usr/lib/test_idiom
-log: /use/bin/xss14
-log: /use/bin/xss14_1
-log: /use/bin/xss14_11
-log: /use/bin/xss14_2
-log: <childrens>
-log: myimport_1 = some_value1
-log: myimport_2 = some_value2
-log: </childrens>
-log: </Dependencies>
-log: <User Classes>
-log: </User Classes>
-
-
-
-
-
-
-        var test_class = Class.extend(
-    {
-    init: function(
-	 )
-    {
-		       
-        this.events = new ev.EventHolder(); 
-        
-        var this__  = this;
-        
-            this.events.dispatch("init", [this]);
-            },
-});
-
-
-
-
-
-
-
-
-        var test_class1 = test_class.extend(
-    {
-    init: function(
-	 )
-    {
-		
-			this._super(	
-			);       
-        this.events = new ev.EventHolder(); 
-        
-        var this__  = this;
-        
-
-
-
-
-
-        this.some_prop_get = function ()
-        {
-            return 10;
-        };
-
-        this.some_prop_set = function (value)
-        {
-            value++;
-        };
-    
-
-            this.events.dispatch("init", [this]);
-            },
-});
-
-
-
-
-
-
-
-
-        var test_class2 = test_class1.extend(
-    {
-    init: function(
-	 )
-    {
-		
-			this._super(	
-			);       
-        this.events = new ev.EventHolder(); 
-        
-        var this__  = this;
-        
-
-
-
-
-
-        this.some_prop_get = function ()
-        {
-            return 10;
-        };
-
-        this.some_prop_set = function (value)
-        {
-            value++;
-        };
-    
-
-
-
-
-
-
-	this.foo = function() 
-	{
-		this.some_prop_set(this.some_prop_get() + 1);
-	};
-
-            this.events.dispatch("init", [this]);
-            },
-});
-
-
-
-log: /usr/lib/source.xxx
-Error [vm] Cannot resolve
-	object = null
-	property = begin
-	file = d:/xkp/xss/tests/xss14.project.xmlERROR: Project:  xss14.project.xml
+ERROR: Project:  xss14.project.xml
 
 ===[ xss15.project.xml ]================(Tests)
 
+ERROR: Project:  xss15.project.xml
 
-log: Application
-log: id: application type: Application
-		Rendering main instance: application (application) (xss15_app)
-	
-			property id = some_property
-		
-			event name = KeyDown
-        
-				rendering extra code on "keydown.event.xss"
-			
-				childrens... (1)
-			
-				child = "args_object"
-			
-		[Begin rendering Array] (2)
-	
-		[Begin rendering Object] (2)
-	
-			id: type
-			type: string
-			value: int
-		
-			id: name
-			type: string
-			value: keycode
-		
-		[End rendering Object]
-	
-		[Begin rendering Object] (2)
-	
-			id: type
-			type: string
-			value: KeyEvent
-		
-			id: name
-			type: string
-			value: event
-		
-		[End rendering Object]
-	
-		[End rendering Array]
-	
-				Object keycode,Object value			
-
-Success are greateful
 ===[ xss2.project.xml ]================(Tests)
 
+ERROR: Project:  xss2.project.xml
 
-		instance id: t1
-	
-				something_
-			
-				something
-			
-		instance id: t2
-	
-				something_
-			
-				something
-			
-				something2
-			
-				something3
-			
-		instance id: t3
-	
-				event id: click
-				event output_id: onClick
-			
-					Interface: IClick
-				
-		instance id: t4
-	
-				something_
-			
-				something
-			
-				exploit
-			
-				something3
-			
-		Application 
-	
-			id: keydown output_id: KeyDown
-		
-		t_arrays 
-	
-			id: touch output_id: touch
-		
-		t_arrays1 
-	
-		t_arrays2 
-	
-		t_arrays3 
-	
-			id: touch output_id: touch
-		
-		t_base_import 
-	
-			id: create output_id: create
-		
-				Interface: ICreate
-			
-		t_derived_import 
-	
-			id: click output_id: onClick
-		
-				Interface: IClick
-			
-			id: up output_id: onMouseUp
-		
-				Interface: IMouseUp
-			
-			id: down output_id: create
-		
-			id: click output_id: onClick
-		
-				Interface: IKeyClick
-			
-			id: up output_id: onMouseUp
-		
-			id: down output_id: create
-		
-		t_keyb_import 
-	
-			id: click output_id: onClick
-		
-				Interface: IKeyClick
-			
-			id: up output_id: onMouseUp
-		
-			id: down output_id: create
-		
-		t_mouse_import 
-	
-			id: click output_id: onClick
-		
-				Interface: IClick
-			
-			id: up output_id: onMouseUp
-		
-				Interface: IMouseUp
-			
-			id: down output_id: create
-		
-		t_super_derived 
-	
-		t_super_merged 
-	
-		t_xss14 
-	
-		t_xss14_1 
-	
-		t_xss14_2 
-	
-		t_xss5 
-	
-		t_xss5_1 
-	
-		t_xss8 
-	
-			id: click output_id: onClick
-		
-				Interface: IClick
-			
-			id: up output_id: onMouseUp
-		
-				Interface: IMouseUp
-			
-			id: down output_id: create
-		
-		t_xss9_1 
-	
-		t_xss9_2 
-	
-
-Success are greateful
 ===[ xss3.project.xml ]================(Tests)
 
+ERROR: Project:  xss3.project.xml
 
-
-Success are greateful
 ===[ xss4.project.xml ]================(Tests)
 
+ERROR: Project:  xss4.project.xml
 
-				Even = 2
-			
-				Even = 4
-			
-				Even = 6
-			
-
-
-        Before? Hello
-    
-				Odd = 1
-			
-				Odd = 3
-			
-				Odd = 5
-			
-
-AFter! 
-		object
-	
-Is this after "After!"? World
-
-
-
-
-
-
-
-Success are greateful
 ===[ xss5.project.xml ]================(Tests)
 
-
-Error [syntax-error] Error while compiling xs
-	line = 4
-	column = 1
-	file = d:/xkp/xss/tests/xss5.xssERROR: Project:  xss5.project.xml
+ERROR: Project:  xss5.project.xml
 
 ===[ xss6.project.xml ]================(Tests)
 
+ERROR: Project:  xss6.project.xml
 
-			event id: click event output_id: onClick
-		
-				Interface: IClick
-			
-
-Success are greateful
 ===[ xss7.project.xml ]================(Tests)
 
+ERROR: Project:  xss7.project.xml
 
-log: btn
-log: null
-log: btn
-log: null
-log: application
-log: null
-log: application
-log: null
-			instance id: application
-			instance class: application
-		
-			instance id: btn
-			instance class: button
-		
-				property id: caption - output_id: property:text
-					namespace = android
-			
-					value = "ArrayType"				
-				property id: width - output_id: property:layout_width
-					namespace = android
-			
-					value = 200				
-				property id: height - output_id: property:layout_height
-					namespace = android
-			
-					value = 43				
-				property id: enabled - output_id: property:enabled
-					namespace = android
-			
-					value = false				
-				property id: placement - output_id: property:placement
-					namespace = xkp
-			
-					value = XKPLayout.PL_TOP				
-				property id: states - output_id: property:states
-					namespace = xkp
-			
-					** No render property "states" **
-				
-			==[Begin rendering Array]======
-		
-				id =  && type = string
-				value = value0
-			
-				id =  && type = string
-				value = value1
-			
-			==[Begin rendering Object]======
-		
-				id = attr0 && type = int
-				value = 0
-			
-				id = attr1 && type = string
-				value = v1
-			
-			==[End rendering Object]======
-		
-			==[End rendering Array]======
-		
-				property id: x - output_id: property:layout_x
-					namespace = xkp
-			
-				property id: y - output_id: property:layout_y
-					namespace = xkp
-			
-				property id: visible - output_id: property:visible
-					namespace = android
-			
-
-Success are greateful
 ===[ xss8.project.xml ]================(Tests)
 
+ERROR: Project:  xss8.project.xml
 
-            method id: check_type
-			code: 
-			var a;
-a = 1;
-return a;
-
-		
-            method id: foobar
-			code: 
-			this.foo = t2.foo + "++";
-t2.set_bar(this.foo + this.get_bar() + "++");
-set_complex(this, t2.get_bar() + this.get_bar() + this.foo + "--");
-set_some_int(this, this.get_some_int() - 1);
-set_some_int(t2, t2.get_some_int() + 1);
-set_some_int(this, this.get_some_int() + 20);
-var arr = [];
-arr.push(10);
-this.writable_set(this.read_only_get() + this.simple + this.mixed_get());
-this.mixed_set(this.writable);
-set_more(this).complex(get_more(this).complex() + 1);
-set_more(t2).complex(get_more(t2).complex() - 1);
-
-		
-
-Success are greateful
 ===[ xss9.project.xml ]================(Tests)
 
+ERROR: Project:  xss9.project.xml
 
-log: Return type: t_xss9_2
-		class test_class2 : t_xss9_2
-		childrens 1
-	
-			property some_prop
-		
-			method foo
-		
-			instance base {
-			properties 1
-			methods 1
-			events 1
-		
-				property collect
-			
-				event create
-			
-				method bar
-			
-			}
-		
-		class test_class : t_xss9_1
-		childrens 0
-	
-		class test_class1 : t_xss9_2
-		childrens 0
-	
-			property some_prop
-		
-		var a = new t_xss9_1(myManager, 10, null);
-var b = new t_xss9_1(myManager, 10, 20);
-var c = new t_xss9_2();
-return c;
-
-	
-
-Success are greateful
 ===[ xssY.project.xml ]================(Tests)
 
-
-		Rendering User Types on xssY.idiom (1)...
-	
-			USER CLAZZ: my_class_1  IDIOM: xssY_idiom1
-			SUPER USER CLAZZ: c_xssY1_i1  IDIOM: xssY_idiom1
-		
-		==[IDIOM 1]=====================
-		INSTANCE: clazz_1  
-		TYPE: c_xssY2_i1  
-		PARENT: my_class_1  
-		IDIOM: xssY_idiom1  
-	
-		==[IDIOM 2]=====================
-		INSTANCE: clazz_2  
-		TYPE: c_xssY1_i2  
-		PARENT: my_class_1  
-		IDIOM: xssY_idiom2  
-	
-		Rendering User Types on xssY.idiom (2)...
-	
-			USER CLAZZ: my_class_2  IDIOM: xssY_idiom2
-			SUPER USER CLAZZ: c_xssY1_i2  IDIOM: xssY_idiom2
-		
-		==[IDIOM 1]=====================
-		INSTANCE: clazz_1  
-		TYPE: c_xssY1_i1  
-		PARENT: my_class_2  
-		IDIOM: xssY_idiom1  
-	
-		==[IDIOM 2]=====================
-		INSTANCE: clazz_2  
-		TYPE: c_xssY2_i2  
-		PARENT: my_class_2  
-		IDIOM: xssY_idiom2  
-	
-		Rendering Instances on xssY_idiom (1)
-	
-		==[IDIOM 1]=====================
-		INSTANCE: ci1  
-		TYPE: c_xssY1_i1  
-		PARENT: application  
-		IDIOM: xssY_idiom1  
-	
-		==[IDIOM 1]=====================
-		INSTANCE: clazzing  
-		TYPE: my_class_1  
-		PARENT: application  
-		IDIOM: xssY_idiom1  
-	
-		Rendering Instances on xssY_idiom (2)
-	
-		==[IDIOM 2]=====================
-		INSTANCE: ci2  
-		TYPE: c_xssY1_i2  
-		PARENT: application  
-		IDIOM: xssY_idiom2  
-	
-
-Success are greateful
+ERROR: Project:  xssY.project.xml

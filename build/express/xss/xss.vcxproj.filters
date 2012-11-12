@@ -213,6 +213,9 @@
     <ClInclude Include="..\..\..\include\xss\lang\csharp.h">
       <Filter>Header Files\xss\lang</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\fixups.h">
+      <Filter>Header Files\xss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

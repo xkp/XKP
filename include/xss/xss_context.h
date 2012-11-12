@@ -518,6 +518,24 @@ struct IErrorHandler
     virtual error_list& errors()                                                          = 0;
   };
 
+enum NOTIFIED
+  {
+    NOTID_ASSIGN,
+    NOTID_RETURN_TYPE
+  };
+
+struct notification
+  {
+    notification(NOTIFIED _id, variant _data):
+      id(_id),
+      data(_data)
+      {
+      }
+
+    NOTIFIED  id;
+    variant   data;
+  };
+
 //code scope, this should not be public
 //td: 0.9.5 separate exec and data context
 struct xss_context_scope : scope
@@ -560,6 +578,14 @@ enum TYPE_MATCH
     MATCH,
     VARIANT,
     TYPECAST
+  };
+
+enum BIND_STATE
+  {
+    BS_UNBOUND,
+    BS_FIXUP,
+    BS_ERROR,
+    BS_BOUND,
   };
 
 struct xss_context : boost::enable_shared_from_this<xss_context>
@@ -608,6 +634,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
 			void           visit(context_visitor* visitor);
 	    variant        identity_value();
       bool           add_instance(XSSObject instance);
+      void           notify(notification nfy);
     public:
       variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
       bool    resolve(const str& id, resolve_info& info);
@@ -704,19 +731,10 @@ class xss_value
       file_position    begin_;
       file_position    end_;
     private:
-      //bind state
-      enum BIND_STATE
-        {
-          BS_UNBOUND,
-          BS_FIXUP,
-          BS_ERROR,
-          BS_BOUND,
-        };
-
       BIND_STATE state_;
   };
 
-class xss_expression
+class xss_expression : public boost::enable_shared_from_this<xss_expression>
   {
     public:
       xss_expression():
