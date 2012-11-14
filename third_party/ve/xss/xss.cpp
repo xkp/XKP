@@ -261,7 +261,7 @@ class xss_object_model : public IObjectModel
 		{
 			Application result(new application(fs::path(filename)));
 			return result;
-		}
+		} 
 
 		Application load_project(const std::string& filename, xss_error_info_list& errors)
 		{

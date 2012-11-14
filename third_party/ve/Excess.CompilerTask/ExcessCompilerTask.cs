@@ -164,7 +164,7 @@ namespace Excess.CompilerTasks
                 bool old_version = version != null && version.Value == "0.9.4";
                 if (old_version)
                 {
-                    //call xss.exe                
+                    //call xss.exe
                     Process proc = new Process();
                     proc.StartInfo = new ProcessStartInfo("xss.exe");
                     proc.StartInfo.Arguments = filePath + " json";
