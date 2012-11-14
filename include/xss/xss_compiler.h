@@ -279,6 +279,7 @@ namespace xkp
         XSSRenderer previous_renderer();
         //XSSRenderer entry_renderer();
         XSSContext  current_context();
+		fs::path	current_output_file();	
       public:
         XSSObject options_;
 		  private:

@@ -272,8 +272,13 @@ class xss_object_model : public IObjectModel
 			Application result;
 			try
 			  {
-				DataReader prj		   = model_->filesystem()->load_data(filepath);
-				bool	   old_version = prj->root()[0]->attr("version") == "0.9.4";	
+				DataReader prj	 = model_->filesystem()->load_data(filepath);
+				entity_list root_list = prj->root();
+				if (root_list.empty())
+					return Application();
+				
+				DataEntity root		   = root_list[0];
+				bool	   old_version = root->attr("version") == "0.9.4";	
 				if (old_version)
 					result = create_placeholder(filename);
 				else
@@ -282,6 +287,10 @@ class xss_object_model : public IObjectModel
 			catch(xss_error err)
 			  {
 				//td: notify these sort of errors					  
+			  }
+			catch(...)
+			  {
+				  result.reset();
 			  }
 
 			return result;

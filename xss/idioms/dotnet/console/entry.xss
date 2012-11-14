@@ -1,7 +1,9 @@
 ﻿<xss:code>
-    string proj_file = application.name + ".csproj";
+    var types = application.user_types;
+    compiler.xss("..\common\class_file.xss", types, output_file = "Types.cs");
+
     compiler.xss("sln.xss", output_file = application.name + ".sln");
-    compiler.xss("csproj.xss", output_file = proj_file);
+    compiler.xss("csproj.xss", output_file = application.name + ".csproj");
     compiler.xss("Program.xss", output_file = "Program.cs");
     compiler.xss("AssemblyInfo.xss", output_file = "Properties/AssemblyInfo.cs");
 </xss:code>

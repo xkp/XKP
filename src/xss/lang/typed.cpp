@@ -397,7 +397,7 @@ bool typed_lang::render_value(XSSValue val, XSSContext ctx, std::ostringstream& 
               {
                 if (it->bound())
                   {
-                    if (!render_index_operation(*it, ctx, my_value))
+                    if (!render_instantiation(it->resolve_value(), it->args(), ctx, result))
                       return false;
                   }
                 else
@@ -870,10 +870,10 @@ bool typed_lang::render_assignment(XSSExpression expr, XSSValue left_value, XSSE
                             if (!path_str.empty())
                               result << path_str << '.';  
                             
-                            result << prop->output_id() << "__set("; 
+                            result << prop->output_id() << " = "; 
                             if (!render_expression(right, ctx, result))
                               return false;
-                            result << ")";
+                            result << "";
                           }
                         else 
                           {

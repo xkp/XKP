@@ -954,6 +954,7 @@ void xss_compiler::xss(const param_list params)
     ctx->output_file(the_output_file);
 
     XSSRenderer result = compile_xss_file(file, ctx, html_template);
+	result->context()->output_file(the_output_file);
 
     //match the parameters
     renderer_parameter_list& result_args = result->params();
@@ -1909,7 +1910,7 @@ str xss_compiler::code_to_string(XSSCode code)
     XSSContext ctx(new xss_context(CTXID_RUNTIME_CODE, code, ctx_));
     
     fs::path src = code->context()->source_file();
-    fs::path dst = rend->context()->output_file();
+    fs::path dst = current_output_file(); //rend->context()->output_file();
     
     ctx->source_file(src);
     ctx->set_path(dst);
@@ -1919,6 +1920,10 @@ str xss_compiler::code_to_string(XSSCode code)
         fs::path src_map = xss_utils::relative_path(src, dst);
         ctx->register_symbol(RESOLVE_CONST, "#src_map", src_map.string());
       }
+	else
+	  {
+		_asm nop;
+	  }
 
     std::ostringstream result;
     lang->render_code(code, ctx, result);
@@ -3663,6 +3668,21 @@ XSSContext xss_compiler::current_context()
       return app_->context();
 
     return XSSContext();
+  }
+
+fs::path xss_compiler::current_output_file()
+  {
+	std::vector<XSSRenderer>::reverse_iterator it = renderers_.rbegin();
+	std::vector<XSSRenderer>::reverse_iterator nd = renderers_.rend();
+	for(; it != nd; it++)
+	  {
+		XSSRenderer rend = *it;
+		fs::path    path = rend->context()->output_file();
+		if (!path.empty())
+		  return path;
+	  }
+
+	return fs::path();
   }
 
 str xss_compiler::__instantiation(const param_list params)
