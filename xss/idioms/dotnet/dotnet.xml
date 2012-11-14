@@ -1,4 +1,4 @@
-<idiom id="dotnet" src="ws-node.xs">
+<idiom id="dotnet">
     <enum id="test_enum">
         <item id="te1"/>
         <item id="te2"/>

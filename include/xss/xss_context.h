@@ -1153,6 +1153,10 @@ class xss_property : public xss_object
       XSSObject      instance_value_;
       bool           is_const_;
       bool           original_;
+
+      bool has_code_getter() {return code_getter_; }
+      bool has_code_setter() {return code_setter_; }
+
   };
 
 class xss_event : public xss_object
@@ -1393,6 +1397,8 @@ struct xss_property_schema : xss_object_schema<xss_property>
         readonly_property<XSSObject>    ("instance_value", &xss_property::instance_value_);
         readonly_property<XSSCode>      ("get_code",       &xss_property::code_getter_);
         readonly_property<XSSCode>      ("set_code",       &xss_property::code_setter_);
+        readonly_property<bool>         ("has_get_code",   &xss_property::has_code_getter);
+        readonly_property<bool>         ("has_set_code",   &xss_property::has_code_setter);
         readonly_property<bool>         ("is_const",       &xss_property::is_const_);
         property_("original",                              &xss_property::original_);
         

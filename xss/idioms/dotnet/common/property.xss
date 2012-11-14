@@ -13,20 +13,58 @@ if (prop.is_const)
 }
 else
 {
-    string getter = ";";
-    if (prop.get_code)
-        getter = "{" + compiler.code_to_string(prop.get_code) + "}";
+	string getter	 = "";
+	string setter	 = "";
+    bool   has_field = false;
+	
+    if (prop.value)
+        has_field = true;
+    
+	if (prop.has_get_code && prop.has_set_code)
+    {
+        getter = "get {" + compiler.code_to_string(prop.get_code) + "}";
+        setter = "set {" + compiler.code_to_string(prop.set_code) + "}";
+    }
+    else if (prop.has_get_code)
+    {
+        getter = "get {" + compiler.code_to_string(prop.get_code) + "}";
+        setter = "";
+    }
+    else if (prop.has_set_code)
+    {
+        has_field = true;
+        getter = "get { return __" + prop_name + ";}";
+        setter = "set {" + compiler.code_to_string(prop.set_code) + " __" + prop_name + " = value;}";
+    }
+    else
+    {
+        //plain
+        if (has_field)
+        {
+            getter = "get { return __" + prop_name + ";}";
+            setter = "set { __" + prop_name + " = value;}";
+        }
+        else
+        {
+            getter = "get;";
+            setter = "set;";
+        }
+    }
 
-    string setter = ";";
-    if (prop.set_code)
-        setter = "{" + compiler.code_to_string(prop.set_code) + "}";
+    if (has_field)
+    {
+        out()
+        {
+            private <xss:e v="type_name"/> __<xss:e v="prop_name"/> = <xss:e v="compiler.expression_to_string(prop.value)"/>;
+        }
+    }
 
     out()
     {
         public <xss:e v="type_name"/> <xss:e v="prop_name"/>
         {
-            get <xss:e v="getter"/>
-            set <xss:e v="setter"/>
+            <xss:e v="getter"/>
+            <xss:e v="setter"/>
         }
     }
 }

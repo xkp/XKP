@@ -27,11 +27,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="application.xml" />
     <Compile Include="application.xs" />
+    <Compile Include="application.xml">
+      <DependentUpon>application.xs</DependentUpon>
+    </Compile>
     <Compile Include="project.xml">
+      <DependentUpon>application.xs</DependentUpon>
       <xs_project>true</xs_project>
-    </Compile>    
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="js" />
@@ -39,7 +42,7 @@
     <Folder Include="js\jquery" />
     <Folder Include="js\three" />
     <Folder Include="js\three\loaders" />
-    <Folder Include="js\three\postprocessing" />
+    <Folder Include="js\three\postprocessing"/>
   </ItemGroup>
   <ItemGroup>
     <Content Include="js\Box2dWeb-2.1.a.3.min.js">

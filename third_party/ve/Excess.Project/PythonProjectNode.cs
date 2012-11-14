@@ -317,16 +317,23 @@ namespace Excess.Project
             }
 
             ExcessModelService service = ExcessModelService.getInstance();
-            service.Model.loadProject(xsPath, Path.GetDirectoryName(xsPath));
 
-            // WAP ask the designer service for the CodeDomProvider corresponding to the project node.
-            this.OleServiceProvider.AddService(typeof(SVSMDCodeDomProvider), new OleServiceProvider.ServiceCreatorCallback(this.CreateServices), false);
-            this.OleServiceProvider.AddService(typeof(System.CodeDom.Compiler.CodeDomProvider), new OleServiceProvider.ServiceCreatorCallback(this.CreateServices), false);
+            try
+            {
+                service.Model.loadProject(xsPath, Path.GetDirectoryName(xsPath));
 
-            //If this is a WPFFlavor-ed project, then add a project-level DesignerContext service to provide
-            //event handler generation (EventBindingProvider) for the XAML designer.
-            this.OleServiceProvider.AddService(typeof(DesignerContext), new OleServiceProvider.ServiceCreatorCallback(this.CreateServices), false);
+                // WAP ask the designer service for the CodeDomProvider corresponding to the project node.
+                this.OleServiceProvider.AddService(typeof(SVSMDCodeDomProvider), new OleServiceProvider.ServiceCreatorCallback(this.CreateServices), false);
+                this.OleServiceProvider.AddService(typeof(System.CodeDom.Compiler.CodeDomProvider), new OleServiceProvider.ServiceCreatorCallback(this.CreateServices), false);
 
+                //If this is a WPFFlavor-ed project, then add a project-level DesignerContext service to provide
+                //event handler generation (EventBindingProvider) for the XAML designer.
+                this.OleServiceProvider.AddService(typeof(DesignerContext), new OleServiceProvider.ServiceCreatorCallback(this.CreateServices), false);
+            }
+            catch (Exception)
+            {
+                canceled = 1;
+            }
         }
         /// <summary>
         /// Overriding to provide project general property page

@@ -4,7 +4,7 @@
 string type_name = compiler.type_to_string(mthd.return_type);
 out()
 {
-	private <xss:e v="type_name"/> <xss:e v="mthd.id"/>(<xss:e v="compiler.signature_to_string(mthd.signature)"/>)
+	public <xss:e v="type_name"/> <xss:e v="mthd.id"/>(<xss:e v="compiler.signature_to_string(mthd.signature)"/>)
 	<xss:open_brace/>
 }
 
