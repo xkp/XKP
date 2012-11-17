@@ -95,3 +95,9 @@ str local_filesystem::load_file(fs::path file)
 
     return result;
   }
+
+void local_filesystem::add_search_path(fs::path path)
+  {
+    if (!path.empty())
+		  search_path_.push_back(path);
+  }

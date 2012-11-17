@@ -204,8 +204,8 @@ class xss_object_model : public IObjectModel
 			bool success = _errors.empty();
 			if (success)
 			  {
-				app->build();
-				_errors = app->errors();
+          app->build();
+          _errors = app->errors();
 			  }
 			
 			success = _errors.empty();
@@ -219,6 +219,11 @@ class xss_object_model : public IObjectModel
 			model_->register_app(fname, app);
 			return success;
 		}
+
+    void addSearchPath(const std::string& path)
+    {
+      model_->filesystem()->add_search_path(path);
+    }
 
 	private:
 		ObjectModel				 model_;

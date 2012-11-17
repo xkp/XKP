@@ -900,6 +900,12 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
         if (!idiom)
           {
             DataReader idiom_data = fs_->load_data(idiom_path);
+
+            //td: manipulate error... this is temporally patch
+            //assert(idiom_data);
+            if (!idiom_data) //qva
+              continue;
+
             idiom = read_idiom(assure_unique_root(idiom_data, octx), idiom_path.parent_path(), octx);
             register_idiom(idiom_path.string(), result, idiom);
           }
