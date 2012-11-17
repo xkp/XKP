@@ -1,0 +1,417 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>BlendXS</title>
+<meta http-equiv="Content-Language" content="English" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="blend_xs.css" media="screen" />
+</head>
+<body>
+<script type="text/javascript" src="../js/XMLWriter.js"></script>
+<script id="initial_script" type="text/javascript"></script>
+<div id="wrap">
+<div id="header">
+<h1><a href="#">BlendXS</a></h1>
+<h2>A new way to process your 3d models</h2>
+</div>
+<div class="left"> 
+	<div id="left-container">
+				<canvas id="app"
+			>
+				</canvas>
+	</div>
+</div>
+<div class="right"> 
+	<div id="right-container">
+<div id="__div1">
+<div id="acc1">
+            <h3><a href="#">Translate</a></h3>
+<div id="__div2">
+				<label id="lbl_xt"
+			>
+					X: 
+				</label>
+				<input id="edit_xt"
+						type="text" 
+						name="edit_xt" 
+						value="0" 
+					>
+				</input>
+<br/>
+<br/>
+				<label id="lbl_yt"
+			>
+					Y: 
+				</label>
+				<input id="edit_yt"
+						type="text" 
+						name="edit_yt" 
+						value="0" 
+					>
+				</input>
+<br/>
+<br/>
+				<label id="lbl_zt"
+			>
+					X: 
+				</label>
+				<input id="edit_zt"
+						type="text" 
+						name="edit_zt" 
+						value="0" 
+					>
+				</input>
+<br/>
+<br/>
+</div>
+            <h3><a href="#">Rotate</a></h3>
+<div id="__div3">
+				<label id="lbl_xr"
+			>
+					X: 
+				</label>
+				<input id="edit_xr"
+						type="text" 
+						name="edit_xr" 
+						value="0" 
+					>
+				</input>
+<br/>
+<br/>
+				<label id="lbl_yr"
+			>
+					Y: 
+				</label>
+				<input id="edit_yr"
+						type="text" 
+						name="edit_yr" 
+						value="0" 
+					>
+				</input>
+<br/>
+<br/>
+				<label id="lbl_zr"
+			>
+					Z: 
+				</label>
+				<input id="edit_zr"
+						type="text" 
+						name="edit_zr" 
+						value="0" 
+					>
+				</input>
+<br/>
+<br/>
+</div>
+            <h3><a href="#">Scale</a></h3>
+<div id="__div4">
+				<label id="lbl_xs"
+			>
+					X: 
+				</label>
+				<input id="edit_xs"
+						type="text" 
+						name="edit_xs" 
+						value="1" 
+					>
+				</input>
+<br/>
+<br/>
+				<label id="lbl_ys"
+			>
+					Y: 
+				</label>
+				<input id="edit_ys"
+						type="text" 
+						name="edit_ys" 
+						value="1" 
+					>
+				</input>
+<br/>
+<br/>
+				<label id="lbl_zs"
+			>
+					Z: 
+				</label>
+				<input id="edit_zs"
+						type="text" 
+						name="edit_zs" 
+						value="1" 
+					>
+				</input>
+<br/>
+<br/>
+</div>
+</div>
+</div>
+	</div>
+</div>
+<div style="clear: both;"> </div>
+<div id="footer">
+Supported by <a href="http://www.codexcess.com/"> XS Programming Base </a>, Thanks to <a href="http://www.codexcess.com/about">The XS Team</a>
+</div>
+</div>
+<form action="/apply" enctype="multipart/form-data" method="post">
+	<p>		
+		<input type="submit" value="Apply" size="40">
+	</p>
+</form>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+            <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
+            <script type="text/javascript" src="../js/jquery-idiom.js"></script>
+            <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css"></link>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/Detector.js"></script>
+            <script type="text/javascript" src="../js/three/loaders/ColladaLoader.js"></script>
+<style>
+#acc1 {height : 360px}
+#edit_xt {width : 100px}
+#edit_yt {width : 100px}
+#edit_zt {width : 100px}
+#edit_xr {width : 100px}
+#edit_yr {width : 100px}
+#edit_zr {width : 100px}
+#edit_xs {width : 100px}
+#edit_ys {width : 100px}
+#edit_zs {width : 100px}
+#app {width : 500px;height : 300px}
+</style>
+<script type="text/javascript">
+        var application = {};
+			var __div1 = $("#__div1");
+			var acc1 = $("#acc1");
+			var __div2 = $("#__div2");
+			var lbl_xt = $("#lbl_xt");
+			var edit_xt = $("#edit_xt");
+			var __br1 = $("#__br1");
+			var __br2 = $("#__br2");
+			var lbl_yt = $("#lbl_yt");
+			var edit_yt = $("#edit_yt");
+			var __br3 = $("#__br3");
+			var __br4 = $("#__br4");
+			var lbl_zt = $("#lbl_zt");
+			var edit_zt = $("#edit_zt");
+			var __br5 = $("#__br5");
+			var __br6 = $("#__br6");
+			var __div3 = $("#__div3");
+			var lbl_xr = $("#lbl_xr");
+			var edit_xr = $("#edit_xr");
+			var __br7 = $("#__br7");
+			var __br8 = $("#__br8");
+			var lbl_yr = $("#lbl_yr");
+			var edit_yr = $("#edit_yr");
+			var __br9 = $("#__br9");
+			var __br10 = $("#__br10");
+			var lbl_zr = $("#lbl_zr");
+			var edit_zr = $("#edit_zr");
+			var __br11 = $("#__br11");
+			var __br12 = $("#__br12");
+			var __div4 = $("#__div4");
+			var lbl_xs = $("#lbl_xs");
+			var edit_xs = $("#edit_xs");
+			var __br13 = $("#__br13");
+			var __br14 = $("#__br14");
+			var lbl_ys = $("#lbl_ys");
+			var edit_ys = $("#edit_ys");
+			var __br15 = $("#__br15");
+			var __br16 = $("#__br16");
+			var lbl_zs = $("#lbl_zs");
+			var edit_zs = $("#edit_zs");
+			var __br17 = $("#__br17");
+			var __br18 = $("#__br18");
+			var app = $("#app");
+            acc1.accordion({
+        });
+            app.application = (function (host)
+{
+if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+			var canvasElement = document.getElementById("app");	
+			var renderer = new THREE.WebGLRenderer({canvas:canvasElement, antialias: false});
+			renderer.domElement.width = renderer.domElement.offsetWidth;
+			renderer.domElement.height = renderer.domElement.offsetHeight;
+		var ui_;
+var canvas_position = {x:0, y:0};
+var g_elapsed;
+var g_delta;	
+var scene = new THREE.Scene();
+scene.mouse_thru = true;
+var streamer = {};
+var manager = new threejs.Manager(scene, renderer, null, canvas_position);
+var three_utils = new threejs.Utils();
+manager.events = new ev.EventHolder();
+manager.events.parent = manager;
+manager.c_anims = [];
+manager.js_anims = [];
+manager.c_skins = [];
+var app_width = canvasElement.width;
+var app_height = canvasElement.height;
+var application = {};
+var clock = new THREE.Clock();
+application.events = new ev.EventHolder();
+		var streamer = new stream.Streamer();		
+		var ResourceUtils = new stream.ResourceUtils();
+	streamer.manager = manager;
+// --------RESOURCES---------
+		var global_package = new stream.Package(streamer);	
+                global_package.add_item(
+		{
+		id:				"res_model",
+		resource_type:	RESOURCE_COLLADA_MODEL,
+		src:			"null",
+		runtime_src:	dynamic_src,
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var res_model;
+				global_package.events.addListener("loaded", function()
+				{
+					res_model = streamer.get_resource("res_model");
+				});
+		global_package.add_item({
+			id:				"invalid_res",
+			resource_type:	RESOURCE_IMAGE,
+			src:			"images/no_res.png",
+			frame_width:	null,
+			frame_height:	null,
+			animations:		[]
+		});		
+		global_package.load();	
+    // --------RESOURCES---------
+renderer.setSize( app_width, app_height );
+manager.streamer = streamer;
+function render() {
+manager.canvas_position = getElementPosition(renderer.domElement);
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+	g_delta = 0; //first update
+else
+	g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+if(!g_delta) g_delta = 0;
+manager.delta = g_delta;
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+				manager.scene.add(camera_1);
+				set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+var camera_1;var a_ligth;var d_ligth_1;var model1;
+threejs_load_resources(manager, function()
+{
+		    camera_1 = 
+		    new THREE.PerspectiveCamera(75, 1.5, 0.100000001, 1000, null) ;	
+			manager.active_camera = camera_1;
+			camera_1.manager = manager;
+	    a_ligth = 
+	    new THREE.AmbientLight(ivory) ;
+	    manager.scene.add(a_ligth);
+			a_ligth.manager = manager;
+	    d_ligth_1 = 
+	    new THREE.DirectionalLight(White, 2, 0, null) ;
+	    manager.scene.add(d_ligth_1);
+			d_ligth_1.manager = manager;
+		model1 = clone3jsObject( manager.streamer.get_resource('res_model').data, manager );	
+		manager.scene.add(model1);
+		model1.events = new ev.EventHolder();			
+			model1.manager = manager;
+            manager.events.addListener('update', function(){if(camera_1)camera_1.lookAt(scene.position)});
+            camera_1.position.y = 50;
+            camera_1.position.z = 500;
+            a_ligth.position.y = 5000;
+            a_ligth.position.z = 5000;
+            d_ligth_1.position.y = 5000;
+            d_ligth_1.position.z = 5000;
+            model1.scale.x = 20;
+            model1.scale.y = 20;
+            model1.scale.z = 20;
+            set_rotation_x(model1.rotation, -90);
+            model1.position.y = -50;
+var event_manager = new ev.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(manager, ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(manager, ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(manager, ev.keyCode);                  
+};
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(delta, elapsed)
+{    
+	application.events.dispatch("update", [delta, elapsed]);
+});
+application.events.dispatch("init", []);
+animate();
+});
+function animate() {	
+	requestAnimationFrame( animate );
+	render();	
+}
+})(application);
+                    if (application.init)
+                        application.init();
+</script>
+</body>
+</html>
