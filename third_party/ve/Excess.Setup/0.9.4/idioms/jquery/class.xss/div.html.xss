@@ -1,0 +1,453 @@
+<xss:parameter id="it"/>
+
+<div id="<xss:e value="it.output_id"/>">
+<xss:class>
+    public int direction_south  = 0;
+    public int direction_north  = 1;
+    public int direction_east   = 2;
+    public int direction_west   = 3;
+    public int direction_client = 4;
+    public int direction_float  = 5;
+    
+    private var result_     = [];
+    private var floating_   = [];
+    private var table_      = null;
+    
+    void add_operation(op)
+    {
+        var container = null;
+        if (table_) container = table_;
+        else        container = result_;
+        
+        if ((op.direction == direction_north || 
+             op.direction == direction_west) && !op.ordered)   
+        {
+            //to follow the table's layout the componentes must be inverted
+            var newcomps = [];
+            for(int i = op.components.size - 1; i >= 0; i--)
+                newcomps += op.components[i];
+            
+            op.components = newcomps;
+        }
+        
+        container += op;
+    }
+    
+    int get_direction(cmp)
+    {
+        if (cmp.placement == "float")
+            return direction_float;    
+        if (cmp.placement == "top")
+            return direction_south;    
+        if (cmp.placement == "bottom")
+            return direction_north;    
+        if (cmp.placement == "left")
+            return direction_east;    
+        if (cmp.placement == "right")
+            return direction_west;    
+        if (cmp.placement == "client" || cmp.placement == "center")
+            return direction_client;
+        
+        if (cmp.have_value("x") && cmp.have_value("y"))
+        {
+            return direction_float;    
+        }
+            
+        return null;
+    }
+    
+    int get_operation(cmp, int idx, object result)
+    {
+        var child = cmp.children[idx];
+        if (child.idiom.id != "jquery")
+        {
+            result.ignore = true;
+            return idx + 1;
+        }
+        
+        result.direction  = get_direction(child);
+        if (result.direction == null)
+        {
+            compiler.error("Invalid layout, all components must have a placement", pl = cmp.placement, cmp = cmp.id);
+        }
+        
+        
+        if (result.direction == direction_client)
+        {
+            result.component = child;
+            return idx + 1;
+        }
+        
+        if (result.direction == direction_float)
+        {
+            floating_ += child;
+            result.ignore = true;
+            return idx + 1;
+        }
+        
+        //non client
+        result.components = [];
+        var pl = child.placement;  
+
+        while(child.placement == pl)
+        {
+            result.components += child;
+            idx++;
+            
+            if (idx >= cmp.children.size)
+                return -1;
+            
+            child = cmp.children[idx];
+        }
+        
+        return idx;
+    }
+    
+    object swap_last(op)
+    {
+        var container = null;
+        if (table_) container = table_;
+        else        container = result_;
+
+        var tmp  = object();
+        var last = container[container.size - 1];
+        tmp.direction = last.direction;
+        tmp.components = last.components;
+        
+        last.direction = op.direction;
+        last.components = op.components;
+        
+        return tmp;
+    }
+    
+    string get_operation_width(op, cmp)
+    {
+        if (op.direction == direction_east || op.direction == direction_west)
+        {
+            if (cmp.width == null)
+                compiler.error("placemtent left and right require 'width'");
+            
+            return cmp.width + "px";
+        }
+        
+        return null;
+    }
+    
+    string get_operation_height(op, cmp)
+    {
+        if (op.direction == direction_south || op.direction == direction_north)
+        {
+            if (cmp.height == null)
+                compiler.error("placemtent left and right require 'height'");
+            
+            return cmp.height + "px";
+        }
+
+        return null;
+    }
+    
+    string get_size_string(width, height)
+    {
+        string result = "";
+        if (width != null)
+            result += ' width = "' + width + '" ';
+
+        if (height != null)
+            result += ' height = "' + height + '" ';
+        
+        return result;
+    }
+    
+    method generate_layout(cmp)
+    {
+        var  direction   = null;
+        int  idx         = 0;
+        var  need_client = null;
+        var  full        = false;
+        
+        while(idx >= 0 && idx < cmp.children.size)
+        {
+            var child = cmp.children[idx];
+            var op    = object();
+            idx       = get_operation(cmp, idx, op); 
+            
+            if (op.ignore)
+            {
+                continue;
+            }
+                
+            if (full)
+                compiler.error("Invalid layout, adding components after it is full", component = child.id);
+
+            if (direction == null)
+            {
+                add_operation(op);
+            }
+            else
+            {
+                //case handling
+                if ((direction == direction_south && op.direction == direction_north) ||
+                    (direction == direction_east && op.direction == direction_west))    
+                {
+                    //no need to split the table, but we do need to trap
+                    //the next direction change
+                    var client_op = object();
+                    client_op.direction = direction_client;
+                    need_client = client_op;
+                    
+                    //and so the client op go before the "bottom" components
+                    add_operation(client_op);
+                    add_operation(op);
+                }
+                else if ((direction == direction_north && op.direction == direction_south) ||
+                          (direction == direction_west && op.direction == direction_east))  
+                {
+                    //swap operations, so the components on the left hand are rendered first
+                    var bottom = swap_last(op);
+                    bottom.ordered = true; //the components were already swapped
+                    
+                    //now wait for change
+                    var client_op1 = object();
+                    client_op1.direction = direction_client;
+                    need_client = client_op1;
+                    
+                    //and add
+                    add_operation(client_op1);
+                    add_operation(bottom);
+                }
+                else if (op.direction == direction_client)
+                {
+                    if (need_client)
+                    {
+                        need_client.component = op.component;
+                        need_client = null;
+                    }
+                    else
+                        add_operation(op);
+                    
+                    full = true;
+                }
+                else
+                {
+                    //collision, add a new table
+                    var table = [];
+                    
+                    var table_op = object();
+                    table_op.table = table;
+                    
+                    if (need_client)
+                    {
+                        need_client.table = table;
+                        need_client = null;
+                    }
+                    else
+                        add_operation(table_op);
+                    
+                    table_ = table; 
+                    add_operation(op); //add the breaking op to the new table
+                }
+            }
+            
+            direction  = op.direction;
+        }
+        
+        return result_;
+    }
+    
+    method render_component(cmp)
+    {
+        compiler.xss("../component.xss", cmp);
+    }
+    
+    method render_client(cmp, parent)
+    {
+        if (cmp.placement == "center")
+        {
+            compiler.add_object_property(cmp.css, "display",      value = "block", as_plain_text = true);
+            compiler.add_object_property(cmp.css, "margin-left",  value = "auto",  as_plain_text = true);
+            compiler.add_object_property(cmp.css, "margin-right", value = "auto",  as_plain_text = true);
+        }
+        
+        render_component(cmp);
+    }
+    
+    method special_layout(layout, parent)
+    {
+        if (layout.size == 0)
+            return true;
+            
+        if (layout.size == 1)
+        {
+            var cl = layout[0];
+            if (cl.direction == direction_client)
+                render_client(cl.component, parent);
+            else if (cl.direction == direction_float)
+                return false;
+            else
+                compiler.error("Layout not implemented, single components must be either client or centered");
+            
+            return true;
+        }
+        
+        return false;
+    }
+    
+    method render_layout(var layout, object root)
+    {
+        if (special_layout(layout, root))
+            return;
+    
+        string attributes = "";
+        if (root)
+            attributes = get_size_string(root.width, root.height);
+
+        out()
+        {
+            <table border="0" <xss:e v="attributes"/>>
+        }
+        
+        var  tag = null;
+        bool close_row = false; 
+        for(var op in layout)
+        {
+            if (tag == null)
+            {
+                if (op.direction == direction_south || op.direction == direction_north)
+                    tag = "tr";
+                else if (op.direction == direction_east || op.direction == direction_west)
+                {
+                    tag = "td";
+                    close_row = true;
+                    
+                    out() {<tr>}
+                }
+                else compiler.error("Unimplmented layout " + op.direction);
+            }
+            
+            if (op.table)
+            {
+                out() {<<xss:e v="tag"/>>}
+                
+                render_layout(op.table);
+                
+                out() {</<xss:e v="tag"/>>}
+            }
+            else if (op.direction == direction_client)
+            {
+                string align_str = "vertical-align:top";
+                if (op.component.placement == "center")
+                    align_str = "vertical-align:middle";
+
+                out() {<<xss:e v="tag"/> style="<xss:e v="align_str"/>">}
+                
+                render_client(op.component);
+                
+                out() {</<xss:e v="tag"/>>}
+            }
+            else
+            {
+                bool first  = true;
+                int  idx    = 0;
+                
+                for(var cmp in op.components)
+                {
+                    var  width  = get_operation_width(op, cmp);
+                    var  height = get_operation_height(op, cmp);
+                    
+                    string size_str = get_size_string(width, height);
+                    out() {<<xss:e v="tag"/> <xss:e v="size_str"/>  style="vertical-align:top">}
+                    
+                    render_component(cmp);
+                    
+                    out() {</<xss:e v="tag"/>>}
+                }
+            }
+        }
+        
+        if (close_row)
+        {
+            out() {</tr>}
+        }
+                
+        out()
+        {
+            </table>
+        }
+    }
+    
+    method print_layout(var layout, int indent)
+    {
+        string indent_str = "";
+        for(int i = 0; i < indent; i++)
+            indent_str += " ";
+        
+        for(var l in layout)
+        {
+            if (l.table)
+            {
+                compiler.log(indent_str + "Table");
+                print_layout(l.table, indent + 2);
+            }
+            else if (l.direction == direction_client)
+            {
+                compiler.log(indent_str + "Client " + l.component.id);
+            }
+            else
+            {
+                compiler.log(indent_str + "Regular " + l.direction);
+                array components = l.components;
+                for(var ll in components)
+                {
+                    compiler.log(indent_str + "Component " + ll.id);
+                }
+            }
+        }
+    }
+    
+    on render()
+    {
+        if (it.children.empty)
+            return;
+    
+        var  first = it.children[0];
+        var  dir = get_direction(first);        
+        bool do_layout = dir != null;
+        
+        if (!do_layout)
+        {   
+            //just render
+            for(var cmp in it.children)
+            {
+                var ndir = get_direction(cmp);
+                if (ndir != null)
+                {
+                    if (ndir == direction_float)
+                    {
+                        floating_ += cmp;
+                        continue;
+                    }
+                    
+                    compiler.error("Invalid layout, all components must have a placement, or neither of them", pl = cmp.placement, cmp = cmp.id);
+                }
+                compiler.xss("../component.xss", cmp);
+            }
+        }
+        else
+        {
+            array layout = generate_layout(it);
+            render_layout(layout, it);
+        }
+
+        //render floating components last
+        if (floating_.size > 0)
+        {
+            compiler.add_object_property(it.css, "position", value = "relative", as_plain_text = true);
+            for(var fcmp in floating_)
+            {
+                compiler.add_object_property(fcmp.css, "position", value = "absolute", as_plain_text = true);
+                render_component(fcmp);
+            }
+        }
+    }
+</xss:class>
+</div>

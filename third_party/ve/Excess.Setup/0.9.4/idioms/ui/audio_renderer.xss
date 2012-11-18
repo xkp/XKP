@@ -1,0 +1,10 @@
+<xss:parameter id="obj"/>
+
+<xss:code>	
+	out(){
+	var <xss:e value="obj.id"/> = 
+	document.createElement('audio');
+	<xss:e value="obj.id"/>.setAttribute('src', '<xss:e value="obj.src"/>');	
+	}
+	if(obj.play) out(){<xss:e value="obj.id"/>.play();}	
+</xss:code>

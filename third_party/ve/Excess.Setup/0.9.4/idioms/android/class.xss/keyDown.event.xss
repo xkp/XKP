@@ -1,0 +1,1 @@
+<xss:parameter id="it"/><xss:parameter id="e"/>	@Override	public boolean onKeyDown(int keycode, KeyEvent event)	{<xss:code>	if(e.implemented && e.name)	{		for(var impl in e.impls)		{			out(indent = 2)			{				<xss:e>impl.render()</xss:e>			}		}	}</xss:code>		return super.onKeyDown(keycode, event);	}

@@ -1,0 +1,5 @@
+<module id="node_mysql" src="node-mysql.xs">
+    <types>
+        <class id="sql_handler"/>
+    </types>
+</module>

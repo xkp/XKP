@@ -1,0 +1,553 @@
+<module id="webgl" src="module.xs">
+    <dependency href="resig.js" shared="true"/>
+    <dependency href="event.js" shared="true"/>
+    <dependency href="keys.js" shared="true"/>
+    <dependency href="colors.js" shared="true"/>
+
+    <dependency href="../js/three/Three.js"/>	
+    <dependency href="../js/three/Stats.js"/>    
+	<dependency href="../js/three/Utils.js"/>
+	<dependency href="../js/three/Detector.js"/>
+		
+	<types>
+	
+		<class id="vector3d">		
+            <property id="x" type="float" use_plain_value="true"/>
+			<property id="y" type="float" use_plain_value="true"/>
+			<property id="z" type="float" use_plain_value="true"/>		
+		</class>
+
+		<class id="rotation_class">		
+            <property id="x" type="float" use_plain_value="true">	
+				<get text="get_rotation_x({path})" global = "true"/>
+				<set text="set_rotation_x({path}, {value})" global = "true"/>
+            </property>
+			<property id="y" type="float" use_plain_value="true">	
+				<get text="get_rotation_y({path})" global = "true"/>
+				<set text="set_rotation_y({path}, {value})" global = "true"/>
+            </property>
+			<property id="z" type="float" use_plain_value="true">	
+				<get text="get_rotation_z({path})" global = "true"/>
+				<set text="set_rotation_z({path}, {value})" global = "true"/>
+            </property>		
+		</class>		
+		
+		<class id="material" heritable="true" hasimagedata="true">
+			<constructor_params>
+				<parameter id="color" property="color" runtime="true"/> 
+				<parameter id="wireframe" property="wireframe" runtime="true"/>
+				<parameter id="wireframe_linewidth" property="wireframe_linewidth" runtime="true"/>
+				<parameter id="src" property="src" runtime="true"/>	
+				<parameter id="texture_object" property="texture_object" runtime="true"/>
+				<parameter id="shading" property="shading" runtime="true"/>
+				<parameter id="vertex_colors" property="vertex_colors" runtime="true"/>
+				<parameter id="env_map" property="env_map" runtime="true"/>
+				<parameter id="combine" property="combine" runtime="true"/>
+				<parameter id="reflectivity" property="reflectivity" runtime="true"/>
+				<parameter id="shininess" property="shininess" runtime="true"/>
+				<parameter id="specular" property="specular" runtime="true"/>
+				<parameter id="transparent" property="transparent" runtime="true"/>
+				<parameter id="refraction_ratio" property="refraction_ratio" runtime="true"/>
+				<parameter id="ambient" property="ambient" runtime="true"/>
+				<parameter id="blending" property="blending" runtime="true"/>
+				<parameter id="emissive" property="emissive" runtime="true"/>
+				<parameter id="depth_test" property="depth_test" runtime="true"/>
+				<parameter id="skinning" property="skinning" runtime="true"/>
+				<parameter id="morph_targets" property="morph_targets" runtime="true"/>
+				<parameter id="fog" property="fog" runtime="true"/>
+				<parameter id="morph_normals" property="morph_normals" runtime="true"/>
+			</constructor_params>
+			<property id="color" type="string" use_plain_value="true" dont_init="true"/> 			
+			<property id="wireframe" type="bool" dont_init="true"/>
+			<property id="wireframe_linewidth" type="float" output_id="wireframeLinewidth" dont_init="true"/>
+			<property id="alpha" type="float">
+				<set text="set_material_alpha({path}, {value})" global = "true"/>
+            </property>
+			<property id="src" type="string" dont_init="true"/>				
+			<property id="texture_object" type="string" dont_init="true"/>	
+			<property id="shading" type="string" dont_init="true"/>
+			<property id="vertex_colors" type="string" output_id="vertexColors" dont_init="true"/>
+			<property id="env_map" type="string" output_id="envMap" dont_init="true"/>
+			<property id="combine" type="string" dont_init="true"/>
+			<property id="reflectivity" type="float" dont_init="true"/>
+			<property id="shininess" type="string" dont_init="true"/>
+			<property id="specular" type="string" dont_init="true"/>
+			<property id="transparent" type="string" dont_init="true"/>	
+			<property id="refraction_ratio" type="float" output_id="refractionRatio" dont_init="true"/>
+			<property id="ambient" type="string" dont_init="true"/>
+			<property id="blending" type="string" dont_init="true"/>
+			<property id="depth_test" type="bool" output_id="depthTest" dont_init="true"/>
+			<property id="emissive" type="string" use_plain_value="true" dont_init="true"/>
+			<property id="skinning" type="bool" dont_init="true"/>
+			<property id="morph_targets" type="bool" output_id="morphTargets" dont_init="true"/>
+			<property id="fog" type="bool" dont_init="true"/>
+			<property id="imagedata" type="string" use_plain_value="true">
+				<get text="get_image_data({path})" global = "true"/>
+                <set text="put_image({path}, {value})" global = "true"/>
+            </property>			
+			<property id="morph_normals" type="bool" dont_init="true" output_id="morphNormals"/>
+		</class>
+		
+		<class id="composite_material" output_id="Array"/>
+		
+		<class id="particle_canvas_material" renderer="inst_no_params.xss" output_id="THREE.ParticleCanvasMaterial">
+			<constructor_params>
+				<parameter id="color" property="color" runtime="true"/> 
+				<parameter id="program" property="program" runtime="true"/> 
+			</constructor_params>
+			<property id="color" type="string" use_plain_value="true" dont_init="true"/>
+			<property id="program" type="string" use_plain_value="true" dont_init="true"/>
+		</class>
+		
+		<class id="particle_basic_material" super="material" renderer="inst_no_params.xss" output_id="THREE.ParticleBasicMaterial">
+			<constructor_params>				
+				<parameter id="size" property="size" runtime="true"/>	
+				<parameter id="size_attenuation" property="size_attenuation" runtime="true"/>	
+				<parameter id="vertex_colors" property="vertex_colors" runtime="true"/>
+				<parameter id="fog" property="fog" runtime="true"/>
+			</constructor_params>			
+			<property id="size" type="float" dont_init="true"/>	
+			<property id="size_attenuation" type="bool" dont_init="true" output_id="sizeAttenuation"/>	
+			<property id="vertex_colors" type="bool" dont_init="true" output_id="vertexColors"/>
+			<property id="fog" type="bool" dont_init="true"/>
+		</class>	
+		<class id="basic_material" super="material" output_id="THREE.MeshBasicMaterial" renderer="inst_no_params.xss"/>
+				
+		<class id="lambert_material" super="material" output_id="THREE.MeshLambertMaterial" renderer="inst_no_params.xss"/>
+			
+		<class id="phong_material" super="material" output_id="THREE.MeshPhongMaterial" renderer="inst_no_params.xss"/>
+			
+		<class id="normal_material" super="material" output_id="THREE.MeshNormalMaterial" renderer="inst_no_params.xss"/>
+		
+		<class id="depth_material" super="material" output_id="THREE.MeshDepthMaterial" renderer="inst_no_params.xss"/>
+				
+		<class id="shader_material" heritable="true" super="material" output_id="THREE.ShaderMaterial" renderer="shader_renderer.xss">
+			<constructor_params>				
+				<parameter id="lights" property="lights" runtime="true"/>							
+			</constructor_params>			
+			<property id="lights" type="bool" dont_init="true"/>				
+			<property id="fragment_shader" type="string" dont_init="true" output_id="fragmentShader"/>	
+			<property id="vertex_shader" type="string" dont_init="true" output_id="vertexShader"/>			
+		</class>
+		
+		<class id="object3d" hasimagedata="true">			
+            <property id="color" type="string" use_plain_value="true">
+				<set text="material.color.setHex({value})"/>
+            </property>
+			<property id="texture" type="string">					
+				<set text="set_webgl_object_texture({path}, {value})" global = "true"/>
+            </property>		
+			<property id="material" type="string" use_plain_value="true" dont_init="true">
+				<set text="material = {value}"/>
+            </property>
+			<property id="alpha" type="float" use_plain_value="true">	
+				<get text="get_object_alpha({path})" global = "true"/>
+				<set text="set_object_alpha({path}, {value})" global = "true"/>
+            </property>
+			<property id="overdraw" type="bool"/>
+			<property id="mouse_thru" type="bool"/>
+			<property id="double_sided" type="bool" output_id="doubleSided"/>							
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="rotation_class"/>
+			<property id="scale" type="vector3d"/>
+			<property id="imagedata" type="string" use_plain_value="true">
+				<get text="get_image_data({path})" global = "true"/>
+                <set text="put_image({path}, {value})" global = "true"/>
+            </property>
+		</class>
+	
+		<class id="transform" output_id="THREE.Object3D" heritable="true">
+			<property id="texture" type="string" use_plain_value="true">
+				<set text="set_webgl_transform_image({path}, {value})" global = "true"/>
+            </property>
+			<property id="material" type="string" use_plain_value="true">
+				<set text="set_transform_material({path}, {value})" global = "true"/>
+            </property>
+			<property id="mouse_thru" type="bool"/>
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="rotation_class"/>
+			<property id="scale" type="vector3d"/>
+		</class>
+				
+		<class id="light"> 					
+			<property id="color" type="string" dont_init="true" use_plain_value="true"/>			
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="rotation_class"/>
+			<property id="scale" type="vector3d"/>
+		</class>
+		
+		<class id="ambient_light" super="light" output_id="THREE.AmbientLight" renderer="light_renderer.xss">
+			<constructor_params>
+				<parameter id="color" property="color" runtime="true" use_plain_value="true"/>					 				
+			</constructor_params>
+		</class>
+		
+		<class id="directional_light" super="light" output_id="THREE.DirectionalLight" renderer="light_renderer.xss">
+			<constructor_params>
+				<parameter id="color" property="color" runtime="true" use_plain_value="true"/>
+				<parameter id="intensity" property="intensity" runtime="true" default_value="1"/>
+				<parameter id="distance" property="distance" runtime="true" default_value="0"/>
+				<parameter id="cast_shadow" property="cast_shadow" runtime="true"/>  				
+			</constructor_params>			
+			<property id="intensity" type="string" dont_init="true"/>
+			<property id="distance" type="string" dont_init="true"/>
+			<property id="cast_shadow" output_id="castShadow" type="string" dont_init="true"/>
+		</class>
+	
+		<class id="point_light" super="light" output_id="THREE.PointLight" renderer="light_renderer.xss">
+			<constructor_params>
+				<parameter id="color" property="color" runtime="true" use_plain_value="true"/>
+				<parameter id="intensity" property="intensity" runtime="true" default_value="1"/>
+				<parameter id="distance" property="distance" runtime="true" default_value="0"/>           		
+			</constructor_params>				
+			<property id="intensity" type="string" dont_init="true"/>
+			<property id="distance" type="string" dont_init="true"/>
+		</class>
+	
+		<class id="camera" output_id="THREE.PerspectiveCamera" renderer="camera_renderer.xss">
+			<constructor_params>				
+				<parameter property="fov" runtime="true"/>
+				<parameter property="aspect" runtime="true"/>
+				<parameter property="near" runtime="true"/>
+				<parameter property="far" runtime="true"/>     
+				<parameter property="target" runtime="true"/>  			
+			</constructor_params>				
+			<property id="fov" type="float" dont_init="true"/>
+			<property id="aspect" type="float" dont_init="true"/>
+			<property id="near" type="float" dont_init="true"/>
+			<property id="far" type="float" dont_init="true"/>
+			<property id="target" type="string" dont_init="true"/>	
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="rotation_class"/>
+			<property id="scale" type="vector3d"/>
+			<property id="look_at" type="string" use_plain_value="true">
+				<set text="manager.events.addListener('update', function(){if({path}){path}.lookAt({value})})" global="true"/>
+				<get text="lookAt"/>
+			</property>
+		</class>
+	
+		<class id="controls"/>
+		
+		<class id="fly_controls" super="controls" output_id="THREE.FlyControls" renderer="camera_renderer.xss">		
+			<property id="speed" type="float"> 
+				<set text="movementSpeed = {value}"/>
+				<get text="movementSpeed"/>	
+			</property>
+			<property id="roll_speed" type="float">
+				<set text="rollSpeed = {value}"/>
+				<get text="rollSpeed"/>	
+			</property>			
+			<property id="auto_forward" type="bool">	
+				<set text="autoForward = {value}"/>
+				<get text="autoForward"/>	
+			</property>		
+			<property id="drag_to_look" type="bool">	
+				<set text="dragToLook = {value}"/>
+				<get text="dragToLook"/>	
+			</property>				
+		</class>
+		
+		<class id="trackball_controls" super="controls" output_id="THREE.TrackballControls" renderer="camera_renderer.xss">		
+			<property id="rotate_speed" type="float"> 
+				<set text="rotateSpeed = {value}"/>
+				<get text="rotateSpeed"/>	
+			</property>
+			<property id="zoom_speed" type="float">
+				<set text="zoomSpeed = {value}"/>
+				<get text="zoomSpeed"/>	
+			</property>	
+			<property id="pan_speed" type="float">
+				<set text="panSpeed = {value}"/>
+				<get text="panSpeed"/>	
+			</property>	
+			<property id="no_rotate" type="bool">	
+				<set text="noRotate = {value}"/>
+				<get text="noRotate"/>	
+			</property>		
+			<property id="no_zoom" type="bool">	
+				<set text="noZoom = {value}"/>
+				<get text="noZoom"/>	
+			</property>	
+			<property id="no_pan" type="bool">	
+				<set text="noPan = {value}"/>
+				<get text="noPan"/>	
+			</property>	
+		</class>
+		
+		<class id="firstperson_controls" super="controls" output_id="THREE.FirstPersonControls" renderer="camera_renderer.xss">				
+			<property id="speed" type="float"> 
+				<set text="movementSpeed = {value}"/>
+				<get text="movementSpeed"/>	
+			</property>
+			<property id="look_speed" type="float">
+				<set text="lookSpeed = {value}"/>
+				<get text="lookSpeed"/>	
+			</property>
+			<property id="no_fly" type="bool">
+				<set text="noFly = {value}"/>
+				<get text="noFly"/>	
+			</property>
+			<property id="vertical" type="bool">
+				<set text="lookVertical = {value}"/>
+				<get text="lookVertical"/>	
+			</property>
+			<property id="auto_forward" type="bool">	
+				<set text="autoForward = {value}"/>
+				<get text="autoForward"/>	
+			</property>		
+			<property id="move_forward" type="bool">	
+				<set text="moveForward = {value}"/>
+				<get text="moveForward"/>	
+			</property>		
+			<property id="move_backward" type="bool">	
+				<set text="moveBackward = {value}"/>
+				<get text="moveBackward"/>	
+			</property>
+			<property id="move_left" type="bool">	
+				<set text="moveLeft = {value}"/>
+				<get text="moveLeft"/>	
+			</property>
+			<property id="move_right" type="bool">	
+				<set text="moveRight = {value}"/>
+				<get text="moveRight"/>	
+			</property>
+			<property id="freeze" type="bool">	
+				<set text="freeze = {value}"/>
+				<get text="freeze"/>	
+			</property>
+		</class>	
+		
+		<class id="text" output_id="THREE.TextGeometry" renderer="text_renderer.xss" heritable="true">
+			<dependency href="../js/three/fonts.js"/>
+			<constructor_params>
+				<parameter id="size" property="size" runtime="true"/>
+				<parameter id="height" property="height" runtime="true"/>
+				<parameter id="curve_segments" property="curve_segments" runtime="true"/>
+				<parameter id="font" property="font" runtime="true"/>
+				<parameter id="weight" property="weight" runtime="true"/>
+				<parameter id="style" property="style" runtime="true"/>
+				<parameter id="bevel_enabled" property="bevel_enabled" runtime="true"/>
+				<parameter id="bevel_thickness" property="bevel_thickness" runtime="true"/>
+				<parameter id="bevel_size" property="bevel_size" runtime="true"/>
+			</constructor_params>
+			<property id="size" type="float" dont_init="true"/>
+			<property id="height" type="float" dont_init="true"/>
+			<property id="curve_segments" output_id="curveSegments" type="int" dont_init="true"/>
+			<property id="font" type="string" dont_init="true"/>
+			<property id="weight" type="string" dont_init="true"/>
+			<property id="style" type="string" dont_init="true"/>
+			<property id="bevel_enabled" output_id="bevelEnabled" type="bool" dont_init="true"/>
+			<property id="bevel_thickness" output_id="bevelThickness" type="float" dont_init="true"/>
+			<property id="bevel_size" output_id="bevelSize" type="float" dont_init="true"/>
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="rotation_class"/>
+			<property id="scale" type="vector3d"/>
+		</class>
+	
+		<class id="plane" super="object3d" output_id="THREE.PlaneGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="width" property="width" runtime="true"/>
+				<parameter id="height" property="height" runtime="true"/>
+				<parameter id="x_segments" property="x_segments" runtime="true" default_value="1"/>
+				<parameter id="y_segments" property="y_segments" runtime="true" default_value="1"/>
+			</constructor_params>
+			<property id="width" type="float" dont_init="true"/>
+			<property id="height" type="float" dont_init="true"/>
+			<property id="x_segments" output_id="segmentsWidth" type="int" dont_init="true"/>
+			<property id="y_segments" output_id="segmentsHeight" type="int" dont_init="true"/>
+		</class>
+	
+		<class id="tetrahedron" super="object3d" output_id="THREE.TetrahedronGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="radius" property="radius" runtime="true"/>
+				<parameter id="detail" property="detail" runtime="true"/>				
+			</constructor_params>
+			<property id="radius" type="float" dont_init="true"/>
+			<property id="detail" type="float" dont_init="true"/>			
+		</class>
+		
+		<class id="octahedron" super="object3d" output_id="THREE.OctahedronGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="radius" property="radius" runtime="true"/>
+				<parameter id="detail" property="detail" runtime="true"/>				
+			</constructor_params>
+			<property id="radius" type="float" dont_init="true"/>
+			<property id="detail" type="float" dont_init="true"/>			
+		</class>
+		<class id="cube" super="object3d" output_id="THREE.CubeGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="width" property="width" runtime="true"/>
+				<parameter id="height" property="height" runtime="true"/>
+				<parameter id="depth" property="depth" runtime="true"/>      
+				<parameter id="x_segments" property="x_segments" runtime="true"/>
+				<parameter id="y_segments" property="y_segments" runtime="true"/>
+				<parameter id="z_segments" property="z_segments" runtime="true"/>
+				<parameter id="material_array" property="material_array" runtime="true" use_plain_value="true"/>	
+				<parameter id="sides" property="sides" runtime="true"/>				
+			</constructor_params>
+			<property id="width" type="float" dont_init="true"/> 
+			<property id="height" type="float" dont_init="true"/>
+			<property id="depth" type="float" dont_init="true"/>
+			<property id="material_array" type="string" dont_init="true" use_plain_value="true"/>
+			<property id="x_segments" output_id="segmentsWidth" type="int" dont_init="true"/>
+			<property id="y_segments" output_id="segmentsHeight" type="int" dont_init="true"/>
+			<property id="z_segments" output_id="segmentsDepth" type="int" dont_init="true"/>			
+			<property id="sides" type="int" dont_init="true"/>
+		</class>
+	
+		<class id="cylinder" super="object3d" output_id="THREE.CylinderGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>				
+				<parameter id="top_radius" property="top_radius" runtime="true"/>
+				<parameter id="bottom_radius" property="bottom_radius" runtime="true"/>      
+				<parameter id="height" property="height" runtime="true"/>
+				<parameter id="segments_radius" property="segments_radius" runtime="true"/>
+				<parameter id="segments_height" property="segments_height" runtime="true"/>
+				<parameter id="open_ended" property="open_ended" runtime="true"/>			
+			</constructor_params>	
+			<property id="top_radius" type="float" dont_init="true"/>
+			<property id="bottom_radius" type="float" dont_init="true"/>
+			<property id="height" type="float" dont_init="true"/>
+			<property id="segments_radius" type="int" dont_init="true"/>
+			<property id="segments_height" type="int" dont_init="true"/>
+			<property id="open_ended" type="string" dont_init="true"/>			
+		</class>
+	
+		<class id="sphere" super="object3d" output_id="THREE.SphereGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="radius" property="radius" runtime="true"/>
+				<parameter id="x_segments" property="x_segments" runtime="true"/>
+				<parameter id="y_segments" property="y_segments" runtime="true"/>				
+			</constructor_params>
+			<property id="radius" type="float" dont_init="true"/>
+			<property id="x_segments" output_id="segmentsWidth" type="int" dont_init="true"/>
+			<property id="y_segments" output_id="segmentsHeight" type="int" dont_init="true"/>			
+		</class>
+		
+		<class id="torus" super="object3d" output_id="THREE.TorusGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="radius" property="radius" runtime="true"/>
+				<parameter id="tube" property="tube" runtime="true"/>
+				<parameter id="x_segments" property="x_segments" runtime="true"/>
+				<parameter id="y_segments" property="y_segments" runtime="true"/>	
+				<parameter id="arc" property="arc" runtime="true"/>
+			</constructor_params>
+			<property id="radius" type="float" dont_init="true"/>
+			<property id="tube" type="float" dont_init="true"/>
+			<property id="x_segments" output_id="segmentsWidth" type="int" dont_init="true"/>
+			<property id="y_segments" output_id="segmentsHeight" type="int" dont_init="true"/>
+			<property id="arc" type="float" dont_init="true"/>			
+		</class>
+	
+		<class id="torusknot" super="object3d" output_id="THREE.TorusKnotGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="radius" property="radius" runtime="true"/>
+				<parameter id="tube" property="tube" runtime="true"/>
+				<parameter id="x_segments" property="x_segments" runtime="true"/>
+				<parameter id="y_segments" property="y_segments" runtime="true"/>	
+				<parameter id="p" property="p" runtime="true"/>
+				<parameter id="q" property="q" runtime="true"/>
+				<parameter id="height_scale" property="height_scale" runtime="true"/>
+			</constructor_params>
+			<property id="radius" type="float" dont_init="true"/>
+			<property id="tube" type="float" dont_init="true"/>
+			<property id="x_segments" output_id="segmentsWidth" type="int" dont_init="true"/>
+			<property id="y_segments" output_id="segmentsHeight" type="int" dont_init="true"/>
+			<property id="p" type="float" dont_init="true"/>	
+			<property id="q" type="float" dont_init="true"/>	
+			<property id="height_scale" type="float" dont_init="true"/>	
+		</class>
+		
+		<class id="icosahedron" super="object3d" output_id="THREE.IcosahedronGeometry" renderer="object3d_renderer.xss" heritable="true">
+			<constructor_params>
+				<parameter id="radius" property="radius" runtime="true"/>	
+				<parameter id="detail" property="detail" runtime="true"/>
+			</constructor_params>
+			<property id="radius" type="float" dont_init="true"/>
+			<property id="detail" type="float" dont_init="true"/>
+		</class>
+	
+		<class id="particle" renderer="particle_renderer.xss" output_id="THREE.Particle" heritable="true">
+			<constructor_params>
+				<parameter id="material" property="material" runtime="true" use_plain_value="true"/>									
+			</constructor_params>
+			<property id="material" type="string" dont_init="true"/>
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="rotation_class"/>
+			<property id="scale" type="vector3d"/>
+		</class>
+				
+		<class id="particle_system" renderer="particle_renderer.xss" output_id="THREE.Particle" heritable="true">
+			<constructor_params>
+				<parameter id="material" property="material" runtime="true"/>
+				<parameter id="quantity" property="quantity" runtime="true"/>	
+				<parameter id="scale" property="scale" runtime="true"/>
+			</constructor_params>
+			<property id="material" type="string" dont_init="true" use_plain_value="true"/>
+			<property id="quantity" type="int" dont_init="true"/>
+			<property id="scale" type="float" dont_init="true"/>			
+		</class>					
+			
+		<class id="texture_cube" renderer="envmap_renderer.xss">
+			<constructor_params>
+				<parameter property="posx"/>
+				<parameter property="negx"/>
+				<parameter property="posy"/>
+				<parameter property="negy"/>
+				<parameter property="posz"/>
+				<parameter property="negz"/>
+				<parameter property="mapping"/>
+			</constructor_params>
+			<property id="posx" type="string" dont_init="true"/>
+			<property id="negx" type="string" dont_init="true"/>
+			<property id="posy" type="string" dont_init="true"/>
+			<property id="negy" type="string" dont_init="true"/>
+			<property id="posz" type="string" dont_init="true"/>
+			<property id="negz" type="string" dont_init="true"/>
+			<property id="mapping" type="string" use_plain_value="true" dont_init="true"/>
+		</class>
+		
+		<class id="panorama_cube" renderer="envmap_renderer.xss">
+			<constructor_params>
+				<parameter property="size"/>
+				<parameter property="texture_cube"/>				
+			</constructor_params>
+			<property id="size" type="int" dont_init="true"/>
+			<property id="texture_cube" type="string" dont_init="true"/>			
+		</class>		
+					
+		<class id="model" renderer="model_renderer.xss">
+			<dependency href="../js/three/loaders/ColladaLoader.js"/>
+			<property id="src" type="string" use_plain_value="true" dont_init="true">
+				<set text="{path} = createModelSrc({path}, {value}, {path}.manager)" global="true"/>
+            </property>
+			<property id="material" type="string" use_plain_value="true">
+				<set text="children[0].material = {value}"/>
+            </property>
+			<property id="compute_tangents" type="bool" use_plain_value="true">					
+				<set text="if({value}) {path}.children[0].geometry.computeTangents()" global = "true"/>
+            </property>	
+			<property id="position" type="vector3d"/>
+			<property id="rotation" type="rotation_class"/>
+			<property id="scale" type="vector3d"/>
+		</class>
+		
+		<class id="effect_composer" renderer="postproc_renderer.xss" heritable="true">
+			<dependency href="../js/three/ShaderExtras.js"/>	
+			<dependency href="../js/three/postprocessing/EffectComposer.js"/>
+			<dependency href="../js/three/postprocessing/RenderPass.js"/>
+			<dependency href="../js/three/postprocessing/ShaderPass.js"/>
+			<dependency href="../js/three/postprocessing/BloomPass.js"/>
+			<dependency href="../js/three/postprocessing/FilmPass.js"/>
+			<dependency href="../js/three/postprocessing/DotScreenPass.js"/>
+			<dependency href="../js/three/postprocessing/TexturePass.js"/>
+			<dependency href="../js/three/postprocessing/MaskPass.js"/>
+		</class>
+		
+		<class id="effect" renderer="postproc_renderer.xss" heritable="true">			
+			<property id="render_to_screen" output_id="renderToScreen" type="bool"/>
+			<property id="enabled" type="bool"/>
+		</class>	
+		
+	</types>
+	
+</module>

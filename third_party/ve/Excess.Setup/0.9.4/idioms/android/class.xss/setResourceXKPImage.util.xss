@@ -1,0 +1,13 @@
+		public void setResourceXKPImage(int id, String resource) {
+			XKPImage img = (XKPImage) mActivity.findViewById(id);
+			if(img == null) {
+				for (ViewGroup viewgrp : mViewGroup) {
+					img = (XKPImage) viewgrp.findViewById(id);
+					if(img != null) break;
+				}
+			}
+			if(img != null) img.setImageBitmap(getImageFromResource(resource));
+		}
+		public void setResourceXKPImage(XKPImage img, String resource) {
+			if(img != null) img.setImageBitmap(getImageFromResource(resource));
+		}

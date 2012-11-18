@@ -1,0 +1,91 @@
+<xss:parameter id="using_template"/>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title><xss:e value="application.title"/></title>
+
+    <xss:marker id="dependencies"/>
+    
+	<script type="text/javascript">
+		$(document).ready(function() {
+	        <xss:marker id="variables"/>	
+			<xss:code>
+                compiler.inject("render_initialization");
+                compiler.inject("render_instances");
+                
+                compiler.inject("render_updater");
+                out()
+                {
+                    if (application.init)
+                        application.init();
+                }
+            </xss:code>
+		});
+	</script>
+
+	<style>
+        <xss:marker id="css"/>
+    </style>
+</head>
+
+<body>
+    <xss:marker id="body"/>
+    <xss:code>
+        for(var i in application.children)
+        {
+            if (!i.idiom)
+                continue;
+
+            if (i.idiom.id != "jquery")
+                continue;
+                
+            var tag = null;
+            if (using_template)
+            {
+                if (!i.html_id)
+                    compiler.error("jQuery components must have html_id when using a template");   
+                
+                tag = i.html_id;
+            }
+            
+            compiler.xss("component.xss", i, marker = tag);
+        }
+    </xss:code>
+</body>
+</html>
+
+<xss:code>
+    //process dependencies
+    var dependencies = compiler.get_dependencies();
+    var default_path = project.js_path;
+    if (!default_path)
+        default_path = "../js";
+    
+    array non_shared = [];
+    for(var dep in dependencies)
+    {
+        if (dep.shared)
+        {
+            //shared libraries will be assumed to be at the default library path 
+            compiler.xss("../common-js/dependency.xss", dep, path = default_path, marker = "dependencies");
+        }
+        else
+        {
+            //let the idioms decide
+            compiler.inject("compile_dependency", dep);
+            non_shared += dep;
+        }
+    }
+
+    for(var ndep in non_shared)
+    {
+        //it is understood that dependencies will come out of
+        //compile with their full path
+        compiler.xss("../common-js/dependency.xss", ndep, marker = "dependencies");
+    }
+    
+    //css
+    compiler.inject("render_css");
+</xss:code>

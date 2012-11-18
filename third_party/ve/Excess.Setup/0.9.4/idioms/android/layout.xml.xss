@@ -1,0 +1,281 @@
+<xss:parameter id="clazz"/>
+<xss:parameter id="base_namespace"/>
+
+<?xml version="1.0" encoding="utf-8"?>
+<xss:code>
+	if(!compiler.is_type(clazz))
+	{
+		out(indent = 0)
+		{
+			<<xss:e value="base_namespace"/>.libs.Layout.XKPLayout 
+				xmlns:android="http://schemas.android.com/apk/res/android" 
+				xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_namespace"/>.<xss:e value="application.appName"/>" 
+				android:id="@+id/layout<xss:e value="clazz.output_id"/>" 
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				xkp:placement="client"
+		}
+	}
+</xss:code>
+
+<xss:class>
+	on render()
+	{
+		generate_view(clazz, null, 0);
+	}
+	
+	method generate_view(var view, var parent, int ind)
+	{
+		//ERROR: why i can use '!=' operator in view != application?
+		//       if(view != application)
+		
+		string idiom = "";
+		if(view.idiom)
+			idiom = view.idiom.id;
+		
+		//TRACE: log
+		//compiler.log("id: " + view.id + " idiom: " + idiom);
+		
+		if(view == null || view.no_layout || view.no_render)
+			return;
+		
+		//ERROR: operator "!=" is not implement with operand null & string
+		if(view.id != application.id && idiom != "android")
+			return;
+		
+		string strViewName = "";
+		if(view.sub_ns)
+			strViewName = base_namespace + "." + view.sub_ns + ".";
+		
+		if(view.type)
+		{
+			if(view.type.user_defined)
+				strViewName = base_namespace + "." + application.appName + ".";
+			strViewName += view.type.output_id;
+		}
+		
+		if(!view.parent && compiler.is_type(view))
+		{
+			out(indent = ind)
+			{
+				<<xss:e value="strViewName"/> android:id="@+id/layout<xss:e value="clazz.output_id"/>" 
+				xmlns:android="http://schemas.android.com/apk/res/android" 
+				xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_namespace"/>.<xss:e value="application.appName"/>" 
+			}
+		}
+		else
+		if(view.id != application.id)
+		{
+			out(indent = ind)
+			{
+				<<xss:e value="strViewName"/> android:id="@+id/<xss:e value="view.output_id"/>"
+			}
+		}
+		
+		generate_properties(view, ind + 1);
+		
+		out(indent = ind + 1)
+		{
+			>
+		}
+		
+		if(view.def_layout)
+		{
+			object customLayout = view.def_layout;
+			string customLayout_file = "class.xss/" + customLayout.file_name;
+			compiler.xss(customLayout_file, view = view, caller = this, ind = ind);
+			// how return a value from this xss?
+			// when value is returned, it determine if render view.children...
+		}
+		else
+		if(view.children)
+		{
+			// generate all children recursively
+			for(var child in view.children)
+				generate_view(child, view, ind + 2);
+		}
+		
+		if(view.id != application.id)
+		{
+			out(indent = ind)
+			{
+				</<xss:e value="strViewName"/>>
+			}
+		}
+	}
+	
+	method generate_properties(var view, int ind)
+	{
+		var qproperty = view.query_properties("*");
+		for(var prop in qproperty)
+		{
+			//TRACE: log
+			//compiler.log("Generating xml layout. View: " + view.id + " - Property: " + prop.id);
+			
+			if(prop.value == null && prop.default_value != null)
+			{
+				prop.value = prop.default_value;
+				
+				if(prop.type.is_enum)
+				{
+					//prop.value = compiler.render_expression(prop.default_value, prop);
+					prop.value = compiler.compile_expression(prop.value);
+				}
+			}
+					
+			if(prop.parent)
+			{
+				if(prop.parent.type)
+				{
+					if(prop.parent.type.user_defined)
+					{
+						prop.ns = "xkp";
+					}
+				}
+			}
+
+			if(prop.value == null || prop.no_layout || prop.no_render ||
+				prop.ns == null || prop.output_id == null)
+				continue;
+			
+			string assignValue = prop.value;
+			
+			if(prop.res_type == "dimension")
+			{
+				if(prop.value is int)
+				{
+					//assignValue = prop.value + "px";
+					assignValue = prop.value + "dp";
+				}
+			}
+			else
+			if(prop.res_type == "str_reference")
+			{
+				//TIPS: prop.strResourceName come from stringValues.xml.xss 
+				//      that is assigned with the correspond string
+				assignValue = "@string/" + prop.strResourceName;
+			}
+			else
+			if(prop.res_type == "id_reference")
+			{
+				assignValue = "@+id/" + prop.value;
+			}
+			else
+			if(prop.res_type == "color_reference")
+			{
+				if(prop.value is int)
+				{
+					assignValue = "#" + prop.value;
+				}
+				else
+				{
+					assignValue = "@color/" + prop.value;
+				}
+			}
+			else
+			if(prop.res_type == "drawable" || prop.res_type == "raw")
+			{
+				//TIPS: stupid stripped string... live is hard :(
+				string project_path = compiler.project_path() + "/";
+				string output_path = application.appName + "/res/" + prop.res_type + "/";
+				
+				string simg = prop.value;
+				int sz = String.size(simg);
+				
+				int pos = String.find_last(simg, "\\/");
+				int rpos = pos + 1;
+				int npos = sz - pos - 1;
+				string fn_img = String.substr(simg, rpos, npos);
+				
+				pos = String.find_last(fn_img, ".");
+				assignValue = "@" + prop.res_type + "/" + String.substr(fn_img, 0, pos);
+			}
+			else
+			if(prop.type.is_array)
+			{
+				render_array(prop.value);
+				continue;
+			}
+			else
+			if(prop.type.is_enum)
+			{
+				var eval_prop = compiler.evaluate_property(prop);
+				
+				if(eval_prop has "output_xml")
+				{
+					assignValue = eval_prop.output_xml;
+				}
+			}
+			else
+			{
+				if(!(prop.value is string))
+				{
+					assignValue = prop.render_value();
+				
+					int posf = String.find_last(assignValue, "f");
+					assignValue = String.substr(assignValue, 0, posf);
+				}
+			}
+			
+			string ns = prop.ns;
+			if(ns != "")
+			{
+				//ERROR: if i do this:
+				//		ns += ":";
+				//		the colon is pushed before 'ns' string
+				ns = ns + ":";
+			}
+			
+			out(indent = ind)
+			{
+				<xss:e value="ns"/><xss:e value="prop.output_id"/>="<xss:e value="assignValue"/>"
+			}
+		}
+	}
+	
+	method render_array(var prop)
+	{
+		for(var pa in prop.value)
+		{
+			if(pa.type.is_object)
+			{
+				render_object(pa);
+				continue;
+			}
+			
+			out(indent = ind)
+			{
+				id = <xss:e value="pa.id"/> && type = <xss:e value="pa.type.id"/>
+				value = <xss:e value="pa.value"/>
+			}
+		}
+	}
+	
+	method render_object(var obj)
+	{
+		for(var po in obj.children)
+		{
+			if(po.type.is_array)
+			{
+				render_array(po);
+				continue;
+			}
+			
+			out(indent = ind)
+			{
+				id = <xss:e value="po.id"/> && type = <xss:e value="po.type.id"/>
+				value = <xss:e value="po.value"/>
+			}
+		}
+	}
+</xss:class>
+
+<xss:code>
+	if(!compiler.is_type(clazz))
+	{
+		out(indent = 0)
+		{
+			</<xss:e value="base_namespace"/>.libs.Layout.XKPLayout>
+		}
+	}
+</xss:code>

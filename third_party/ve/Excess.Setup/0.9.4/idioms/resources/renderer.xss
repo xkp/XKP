@@ -1,0 +1,25 @@
+<xss:parameter id="res"/>
+
+<xss:code>		
+	if(res.frame_width == null)
+	{
+		res.frame_width = "null";
+	}
+	if(res.frame_height == null)
+	{
+		res.frame_height = "null";
+	}		
+	out()
+	{
+		{
+		id:				"<xss:e v="res.id"/>",
+		resource_type:	<xss:e v="res.resource_type"/>,
+		src:			"<xss:e v="res.src"/>",
+		runtime_src:	<xss:e v="res.runtime_src"/>,
+		frame_width:	<xss:e v="res.frame_width"/>,
+		frame_height:	<xss:e v="res.frame_height"/>,
+		animations:		[],	
+		children:		{}
+		}
+	}	
+</xss:code>

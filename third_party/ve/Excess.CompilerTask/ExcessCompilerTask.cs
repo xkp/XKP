@@ -181,11 +181,11 @@ namespace Excess.CompilerTasks
                         MessageBox.Show("Excess IDE Compiler", "The xss.exe don't exists inside installed path.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return success;
                     }
-
+                    
                     //call xss.exe
                     Process proc = new Process();
                     proc.StartInfo = new ProcessStartInfo(execPath + "xss.exe");
-                    proc.StartInfo.Arguments = filePath + " json";
+                    proc.StartInfo.Arguments = "\"" + filePath + "\" json";
                     proc.StartInfo.RedirectStandardOutput = true;
                     proc.StartInfo.UseShellExecute = false;
 

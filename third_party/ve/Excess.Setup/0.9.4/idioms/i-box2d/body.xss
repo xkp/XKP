@@ -1,0 +1,101 @@
+<xss:parameter id="it"/>
+<xss:parameter id="world"/>
+
+<xss:class>
+    property myidiom; //delegate 
+	property visual_parent : string;
+	
+	method basic_properties()
+	{
+		//fixture properties
+		var density = 1.0;
+		if (it.density)
+			density = it.density;
+		else if (world)
+			density = world.density;
+		
+		var friction = 0.5;
+		if (it.friction)
+			friction = it.friction;
+		else if (world)
+			friction = world.friction;
+		
+		var restitution = 0.2; 
+		if (it.restitution)
+			restitution = it.restitution;
+		else if (world)
+			restitution = world.restitution;
+		
+		var angular_damping;
+		if (it.angular_damping)
+			angular_damping = it.angular_damping;
+		else if (world)
+			angular_damping = world.angular_damping;
+			
+		var linear_damping;
+		if (it.linear_damping)
+			linear_damping = it.linear_damping;	
+		else if (world)
+			linear_damping = world.linear_damping;
+		
+        //body type
+		if (!it.body_type)
+			compiler.error("Physics object must have a body type");
+
+		var body_type = myidiom.get_body_type(it);
+		
+		myidiom.render_basic_properties(it, density, friction, restitution, body_type, angular_damping, linear_damping);
+	}
+
+    method shape()
+    {
+        if (!it.shape)
+            compiler.error("Invalid, bodies must have a shape", object = it.id);
+
+		myidiom.render_shape_definition(it, world, visual_parent);
+    }
+
+    method position()
+    {
+		myidiom.render_position(it, visual_parent);
+    }
+
+    private method foreign_parent(obj)
+    {
+        var foreing = obj.parent;
+        if (foreing)
+        {
+            if (foreing.has_property("x") &&
+                foreing.has_property("y") &&
+                foreing.has_property("width") &&
+                foreing.has_property("height") &&
+				foreing.has_property("rotation") &&
+				foreing.children.size == 1)
+            {
+                return foreing;
+            }
+        }
+        return null;
+    }
+
+    on render()
+    {
+        myidiom = it.idiom;
+        world  = world;
+        var vp = foreign_parent(it);
+        
+		visual_parent = myidiom.get_physical_host(it, vp);
+		
+		myidiom.start_rendering_body(it, world, visual_parent);
+		
+        basic_properties();
+        shape();
+        position();
+
+        //add the body into the world
+		myidiom.create_body(it, visual_parent);
+		
+		myidiom.end_rendering_body(it, world, visual_parent);
+    }
+
+</xss:class>

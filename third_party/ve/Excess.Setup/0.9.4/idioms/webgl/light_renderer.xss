@@ -1,0 +1,13 @@
+<xss:parameter id="obj"/>
+<xss:parameter id="type"/>
+
+<xss:code>	
+	if(!type)
+		type = obj.type;
+	out()
+	{
+	    <xss:e v="obj.id"/> = 
+	    <xss:e v="compiler.instantiate(obj)"/> ;
+	    manager.scene.add(<xss:e value = "obj.id"/>);
+	}			
+</xss:code>

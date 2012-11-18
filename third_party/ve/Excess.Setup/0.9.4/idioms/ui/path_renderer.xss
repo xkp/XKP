@@ -1,0 +1,7 @@
+<xss:parameter id="obj"/>
+
+<xss:code>	
+	out(){
+		<xss:e value="obj.parent.id"/>.points.push({id:"<xss:e value="obj.id"/>", x:<xss:e value="obj.x"/>, y:<xss:e value="obj.y"/>});
+	}	
+</xss:code>

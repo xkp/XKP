@@ -1,0 +1,419 @@
+<module id="jbox2d" src="jbox2d.xs">
+
+	<types>
+	
+		<enum id="EShapeType" output_id="ShapeType" default="EShapeType.circle">
+			<property id="circle" type="EShapeType" output_id="CIRCLE">
+				<get text="ShapeType.CIRCLE" global="true"/>
+			</property>
+			
+			<property id="rect" type="EShapeType" output_id="POLYGON">
+				<get text="ShapeType.POLYGON" global="true"/>
+			</property>
+			
+			<property id="polygon" type="EShapeType" output_id="POLYGON">
+				<get text="ShapeType.POLYGON" global="true"/>
+			</property>
+			
+			<property id="unknown" type="EShapeType" output_id="UNKNOWN">
+				<get text="ShapeType.UNKNOWN" global="true"/>
+			</property>
+		</enum>
+		
+		<enum id="EBodyType" output_id="BodyType" default="EBodyType.dynamic">
+			<property id="dynamic" type="EBodyType" output_id="DYNAMIC">
+				<get text="BodyType.DYNAMIC" global="true"/>
+			</property>
+			
+			<property id="kinematic" type="EBodyType" output_id="KINEMATIC">
+				<get text="BodyType.KINEMATIC" global="true"/>
+			</property>
+			
+			<property id="static" type="EBodyType" output_id="STATIC">
+				<get text="BodyType.STATIC" global="true"/>
+			</property>
+		</enum>
+		
+		<class id="IPhysics">
+			<array id="imports">
+				<object import="org.jbox2d.common.Vec2"/>
+				<object import="org.jbox2d.dynamics.BodyType"/>
+				<object import="org.jbox2d.collision.shapes.ShapeType"/>
+				<object import="xkp.android.libs.JBox2d.XKPPhysicBody"/>
+			</array>
+			
+			<property id="density" type="float">
+				<get text="getDensity()"/>
+				<set text="setDensity({value})"/>
+			</property>
+			
+			<property id="friction" type="float">
+				<get text="getFriction()"/>
+				<set text="setFriction({value})"/>
+			</property>
+			
+			<property id="restitution" type="float">
+				<get text="getRestitution()"/>
+				<set text="setRestitution({value})"/>
+			</property>
+			
+			<property id="angular_damping" type="float">
+				<get text="getAngularDamping()"/>
+				<set text="setAngularDamping({value})"/>
+			</property>
+			
+			<property id="linear_damping" type="float">
+				<get text="getLinearDamping()"/>
+				<set text="setLinearDamping({value})"/>
+			</property>
+		</class>
+		
+		<class id="IJoint">
+			<constructor_params>
+				<parameter property="world" runtime="true"/>
+			</constructor_params>
+			
+			<property id="world" type="string" no_render="true" use_plain_value="true"/>
+			
+			<property id="body_a" type="string" use_plain_value="true">
+				<set text="setBodyA({value})"/>
+			</property>
+			
+			<property id="body_b" type="string" use_plain_value="true">
+				<set text="setBodyB({value})"/>
+			</property>
+			
+			<method id="create" output_id="createJoint"/>
+		</class>
+		
+		<class id="physics_world" super="IPhysics" no_layout="true">
+			<array id="imports">
+				<object import="xkp.android.libs.JBox2d.XKPJBox2d"/>
+				<object import="xkp.android.libs.JBox2d.XKPDDView"/>
+				<object import="xkp.android.libs.JBox2d.XKPDebugDraw"/>
+			</array>
+			
+			<property id="gravity_x" type="int" default_value="0.0"/>
+			<property id="gravity_y" type="int" default_value="10.0"/>
+			<property id="debug_draw" type="bool" default_value="false"/>
+			<property id="scale" type="float" default_value="1.0"/>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPGraphics.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPGraphics.xml"/>
+				
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPDDView.java"/>
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPDebugDraw.java"/>
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPJBox2d.java"/>
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPPhysicBody.java"/>
+			</array>
+		</class>
+
+		<class id="body" super="IPhysics" output_id="XKPPhysicBody" sub_ns="libs.JBox2d" no_layout="true" renderer="body.xss">
+			<constructor_params>
+				<parameter property="world"/>
+				<parameter property="shape"/>
+				<parameter property="host"/>
+			</constructor_params>
+			
+			<property id="world" type="string"/>
+			<property id="host" type="string"/>
+			
+			<property id="shape" type="EShapeType"/>
+			<property id="sensor" type="bool">
+				<get text="isSensor()"/>
+				<set text="setSensor({value})"/>
+			</property>
+			
+			<property id="body_type" type="EBodyType">
+				<get text="getBodyType()"/>
+				<set text="setBodyType({value})"/>
+			</property>
+			
+			<property id="x" type="float">
+				<get text="getPosition().x"/>
+				<set text="setPosition({value}, {path}.getPosition().y)"/>
+			</property>
+			
+			<property id="y" type="float">
+				<get text="getPosition().y"/>
+				<set text="setPosition({path}.getPosition().x, {value})"/>
+			</property>
+			
+			<!--TODO: complete all body properties -->
+			<property id="linear_damping" type="float"/>
+			<property id="angular_damping" type="float"/>
+			
+			<property id="width" type="float"/>
+			<property id="height" type="float"/>
+			<property id="radius" type="float" default_value="0.0"/>
+			
+			<property id="rotation" type="float" default_value="0.0">
+				<get text="getAngle()"/>
+				<set text="setAngle({value})"/>
+			</property>
+			
+			<property id="mouse_joint" type="bool">
+				<get text="getMouseJoint()"/>
+				<set text="setMouseJoint({value})"/>
+			</property>
+		</class>
+
+		<class id="physics" super="body" output_id="XKPPhysicBody" sub_ns="libs.JBox2d" no_render="true" renderer="body.xss"/>
+		
+		<class id="spawner" output_id="XKPSpawner" sub_ns="libs.JBox2d" no_render="true" renderer="spawner.xss">
+			<constructor_params>
+				<parameter id="context" constant="this"/>
+				<parameter id="view_layout" default_value="layoutapplication"/> <!-- td:!! generic -->
+				<parameter property="creator_class" runtime="true"/>
+				<parameter property="x" runtime="true"/>
+				<parameter property="y" runtime="true"/>
+				<parameter property="rotation" runtime="true"/>
+			</constructor_params>
+			
+			<array id="imports">
+				<object import="xkp.android.libs.JBox2d.XKPSpawner"/>
+			</array>
+			
+			<property id="creator_class" type="string" no_render="true"/>
+			<property id="auto_start" type="bool" no_render="true"/>
+			
+			<property id="x" type="int">
+				<get text="getPosition().x"/>
+				<set text="setPosition({value}, {path}.getPosition().y)"/>
+			</property>
+			
+			<property id="y" type="int">
+				<get text="getPosition().y"/>
+				<set text="setPosition({path}.getPosition().x, {value})"/>
+			</property>
+			
+			<property id="frequency" type="float">
+				<get text="getFrequency()"/>
+				<set text="setFrequency({value})"/>
+			</property>
+			
+			<property id="rotation" type="float">
+				<get text="getRotation()"/>
+				<set text="setRotation({value})"/>
+			</property>
+			
+			<property id="velocity" type="float">
+				<get text="getLinearVelocity()"/>
+				<set text="setLinearVelocity({value})"/>
+			</property>
+			
+			<method id="start"/>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPSpawner.java"/>
+			</array>
+		</class>
+		
+		<class id="distance_joint" super="IJoint" output_id="XKPDistanceJoint" sub_ns="libs.JBox2d" renderer="joint.xss">
+			<array id="imports">
+				<object import="xkp.android.libs.JBox2d.XKPDistanceJoint"/>
+			</array>
+			
+			<property id="damping_ratio" type="float">
+				<get text="getDampingRatio()"/>
+				<set text="setDampingRatio({value})"/>
+			</property>
+			
+			<property id="length" type="int">
+				<get text="getLength()"/>
+				<set text="setLength({value})"/>
+			</property>
+			
+			<property id="frequency" type="float">
+				<get text="getFrequencyHz()"/>
+				<set text="setFrecuencyHz({value})"/>
+			</property>
+			
+			<property id="anchor1_x" type="float">
+				<get text="getAnchorA().x"/>
+				<set text="setAnchorA(new Vec2({value}, {path}.getAnchorA().y))"/>
+			</property>
+			
+			<property id="anchor1_y" type="float">
+				<get text="getAnchorA().y"/>
+				<set text="setAnchorA(new Vec2({path}.getAnchorA().x, {value}))"/>
+			</property>
+			
+			<property id="anchor2_x" type="float">
+				<get text="getAnchorB().x"/>
+				<set text="setAnchorB(new Vec2({value}, {path}.getAnchorB().y))"/>
+			</property>
+			
+			<property id="anchor2_y" type="float">
+				<get text="getAnchorB().y"/>
+				<set text="setAnchorB(new Vec2({path}.getAnchorB().x, {value}))"/>
+			</property>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPDistanceJoint.java"/>
+			</array>
+		</class>
+		
+		<class id="revolute_joint" super="IJoint" output_id="XKPRevoluteJoint" sub_ns="libs.JBox2d" renderer="joint.xss">
+			<array id="imports">
+				<object import="xkp.android.libs.JBox2d.XKPRevoluteJoint"/>
+			</array>
+			
+			<property id="enable_limit" type="bool">
+				<get text="getLimit()"/>
+				<set text="setLimit({value})"/>
+			</property>
+			
+			<property id="enable_motor" type="bool">
+				<get text="getMotor()"/>
+				<set text="setMotor({value})"/>
+			</property>
+			
+			<property id="lower_angle" type="float">
+				<get text="getLowerAngle()"/>
+				<set text="setLowerAngle({value})"/>
+			</property>
+			
+			<property id="upper_angle" type="float">
+				<get text="getUpperAngle()"/>
+				<set text="setUpperAngle({value})"/>
+			</property>
+			
+			<property id="joint_angle" type="float">
+				<get text="getAngle()"/>
+				<set text="setAngle({value})"/>
+			</property>
+			
+			<property id="motor_speed" type="float">
+				<get text="getMotorSpeed()"/>
+				<set text="setMotorSpeed({value})"/>
+			</property>
+			
+			<property id="max_motor_torque" type="float">
+				<get text="getMaxMotorTorque()"/>
+				<set text="setMaxMotorTorque({value})"/>
+			</property>
+			
+			<property id="anchor1_x" type="float">
+				<get text="getAnchorA().x"/>
+				<set text="setAnchorA(new Vec2({value}, {path}.getAnchorA().y))"/>
+			</property>
+			
+			<property id="anchor1_y" type="float">
+				<get text="getAnchorA().y"/>
+				<set text="setAnchorA(new Vec2({path}.getAnchorA().x, {value}))"/>
+			</property>
+			
+			<property id="anchor2_x" type="float">
+				<get text="getAnchorB().x"/>
+				<set text="setAnchorB(new Vec2({value}, {path}.getAnchorB().y))"/>
+			</property>
+			
+			<property id="anchor2_y" type="float">
+				<get text="getAnchorB().y"/>
+				<set text="setAnchorB(new Vec2({path}.getAnchorB().x, {value}))"/>
+			</property>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPRevoluteJoint.java"/>
+			</array>
+		</class>
+		
+		<class id="prismatic_joint" super="IJoint" output_id="XKPPrismaticJoint" sub_ns="libs.JBox2d" renderer="joint.xss">
+			<array id="imports">
+				<object import="xkp.android.libs.JBox2d.XKPPrismaticJoint"/>
+			</array>
+
+			<property id="x" type="int">
+				<get text="getAxis().x"/>
+				<set text="setAxis(new Vec2({value}, {path}.getAxis().y))"/>
+			</property>
+			
+			<property id="y" type="int">
+				<get text="getAxis().y"/>
+				<set text="setAxis(new Vec2({path}.getAxis().x, {value}))"/>
+			</property>
+			
+			<property id="enable_limit" type="bool">
+				<get text="getLimit()"/>
+				<set text="setLimit({value})"/>
+			</property>
+			
+			<property id="enable_motor" type="bool">
+				<get text="getMotor()"/>
+				<set text="setMotor({value})"/>
+			</property>
+			
+			<property id="motor_speed" type="float">
+				<get text="getMotorSpeed()"/>
+				<set text="setMotorSpeed({value})"/>
+			</property>
+			
+			<property id="max_motor_force" type="float">
+				<get text="getMaxMotorForce()"/>
+				<set text="setMaxMotorForce({value})"/>
+			</property>
+			
+			<property id="lower_translation" type="float">
+				<get text="getLowerTranslation()"/>
+				<set text="setLowerTranslation({value})"/>
+			</property>
+			<property id="upper_translation" type="float">
+				<get text="getUpperTranslation()"/>
+				<set text="setUpperTranslation({value})"/>
+			</property>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPPrismaticJoint.java"/>
+			</array>
+		</class>
+		
+		<class id="pulley_joint" super="IJoint" output_id="XKPPulleyJoint" sub_ns="libs.JBox2d" renderer="joint.xss">
+			<array id="imports">
+				<object import="xkp.android.libs.JBox2d.XKPPulleyJoint"/>
+			</array>
+
+			<property id="ground_xa" type="int">
+				<get text="getGroundAnchorA().x"/>
+				<set text="setGroundAnchorA(new Vec2({value}, {path}.getGroundAnchorA().y))"/>
+			</property>
+			
+			<property id="ground_ya" type="int">
+				<get text="getGroundAnchorA().y"/>
+				<set text="setGroundAnchorA(new Vec2({path}.getGroundAnchorA().x, {value}))"/>
+			</property>
+			
+			<property id="ground_xb" type="int">
+				<get text="getGroundAnchorB().x"/>
+				<set text="setGroundAnchorB(new Vec2({value}, {path}.getGroundAnchorB().y))"/>
+			</property>
+			
+			<property id="ground_yb" type="int">
+				<get text="getGroundAnchorB().y"/>
+				<set text="setGroundAnchorB(new Vec2({path}.getGroundAnchorB().x, {value}))"/>
+			</property>
+			
+			<property id="ratio" type="float">
+				<get text="getRatio()"/>
+				<set text="setRatio({value})"/>
+			</property>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPPulleyJoint.java"/>
+			</array>
+		</class>
+		
+		<class id="weld_joint" super="IJoint" output_id="XKPWeldJoint" sub_ns="libs.JBox2d" renderer="joint.xss">
+			<array id="imports">
+				<object import="xkp.android.libs.JBox2d.XKPWeldJoint"/>
+			</array>
+
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/JBox2d/" src_filename="XKPWeldJoint.java"/>
+			</array>
+		</class>
+		
+	</types>
+	
+</module>

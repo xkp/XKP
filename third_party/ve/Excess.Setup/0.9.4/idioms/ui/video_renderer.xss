@@ -1,0 +1,33 @@
+<xss:parameter id="obj"/>
+
+<xss:code>	
+	out(marker = "html_body", marker_source = "entry"){
+	<video 
+	}
+	if(obj.controls != null) out(marker = "html_body", marker_source = "entry"){
+	controls
+	}
+	if(obj.autoplay != null) out(marker = "html_body", marker_source = "entry"){
+	autoplay
+	}
+	if(obj.loop != null) out(marker = "html_body", marker_source = "entry"){
+	loop
+	}
+	if(obj.audio != null) out(marker = "html_body", marker_source = "entry"){
+	audio="<xss:e value="obj.audio"/>"
+	}
+	if(obj.width != null) out(marker = "html_body", marker_source = "entry"){
+	width=<xss:e value="obj.width"/>
+	}
+	if(obj.height != null) out(marker = "html_body", marker_source = "entry"){
+	height=<xss:e value="obj.height"/>
+	}
+	out(marker = "html_body", marker_source = "entry"){
+	preload> 
+	}
+	out(marker = "html_body", marker_source = "entry"){
+	<source src="<xss:e value="obj.src"/>"/>		
+	Your browser does not support the video element.
+	</video>
+	}
+</xss:code>

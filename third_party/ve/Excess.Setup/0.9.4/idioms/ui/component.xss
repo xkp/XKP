@@ -1,0 +1,50 @@
+<xss:parameter id="cmp"/>
+<xss:parameter id="is_class" default_value="false"/>
+<xss:parameter id="path"/>
+
+<xss:code>
+    string cmp_id = cmp.output_id;
+	array params = [];
+    
+    if (path)
+        cmp_id = path + "." + cmp_id;
+        
+    if (is_class)
+        cmp_id = "this";
+    
+    if (compiler.application_object(cmp))
+        out(marker = "variables", marker_source = "previous") {var <xss:e v="cmp.output_id"/>;}
+        
+    if (!is_class)
+    {        		
+        string parent_id = "g_ui_root";		
+        if (cmp.parent.class_name != "application")
+            parent_id = cmp.parent.output_id;
+		
+        if(compiler.is_type(cmp.parent))
+			parent_id = "this";
+            
+		var manager_param   = object();
+		manager_param.id    = "manager";
+		manager_param.value = parent_id + ".manager";
+		
+		var parent_param    = object();
+		parent_param.id    = "parent";
+		parent_param.value = parent_id;
+
+		params += manager_param;
+		params += parent_param;	
+				
+		var type = cmp.type;   
+        
+        out()
+	    {
+		    <xss:e value = "cmp_id"/> = <xss:e v="compiler.instantiate(cmp, param_values = params)"/>;
+	    }
+        
+        //TODO: Porque no marcar las clases con algun valor (mouse_thru, quiza?) 
+        if(cmp.type.output_id == "ui.Component" || cmp.type.output_id == "ui.ClipArea"){
+			out() {<xss:e v="cmp_id"/>.mouse_thru = true;}			
+		}        
+    }
+</xss:code>

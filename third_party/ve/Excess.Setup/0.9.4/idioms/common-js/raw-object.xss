@@ -1,0 +1,56 @@
+<xss:parameter id="obj"/>
+<xss:parameter id="only_when_attr"/>
+<xss:parameter id="no_braces"/>
+
+<xss:code>
+    if (!no_braces)
+        compiler.out("{");
+        
+    var props = obj.get_attributes();
+    for(var prop in props)
+    {
+        var type = compiler.type_of(prop.value);
+        if (type.is_array)
+	    {
+		    out()
+		    {
+			    <xss:e value="prop.name"/> : [
+		    }
+
+            for(var array_item in prop.value)
+            {
+                out()
+                {
+                    <xss:file output="inline" src="raw-object.xss">
+                        <parameter name="obj" value="array_item"/>
+                    </xss:file>,
+                }
+            }
+
+		    out()
+		    {
+			    ],
+		    }
+	    }
+	    else if (type.is_object)
+	    {
+		    out()
+		    {
+			    <xss:e value="prop.name"/> : 
+                <xss:file output="inline" src="raw-object.xss">
+                    <parameter name="obj" value="prop.value"/>
+                </xss:file>,
+		    }
+	    }
+	    else
+	    {
+		    out()
+		    {
+			    <xss:e value="prop.name"/> : <xss:e v="compiler.render_value(prop.value)"/>,
+		    }
+	    }
+    }
+
+    if (!no_braces)
+        compiler.out("}");
+</xss:code>

@@ -1,0 +1,24 @@
+<xss:parameter id="res"/>
+
+<xss:code>
+	if(!res.right_to_left)
+		res.right_to_left = false;
+	if(!res.step)
+		res.step = 0;
+	out()
+	{
+		for(var i = 0; i < global_package.items.length; i++)
+        {						
+			if(global_package.items[i].id == "<xss:e v="res.parent.id"/>")
+				global_package.items[i].animations.push
+				({
+					id:			"<xss:e v="res.id"/>",
+					frame_row:	<xss:e v="res.frame_row"/>,
+					frame_col:	<xss:e v="res.frame_col"/>,
+					frames:		<xss:e v="res.frames"/>,
+					step:		<xss:e v="res.step"/>,
+					right_to_left:		<xss:e v="res.right_to_left"/>
+				});
+		}		
+	}
+</xss:code>

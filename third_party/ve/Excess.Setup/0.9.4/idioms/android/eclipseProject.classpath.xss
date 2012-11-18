@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+<xss:code>
+	// render all references libraries 
+	if(application.libraries)
+	{
+		for(var lib in application.libraries)
+		{
+			out(indent = 1)
+			{
+	<classpathentry kind="lib" path="libs/<xss:e value="lib"/>"/>
+			}
+			
+			//TODO: copy libraries files to dest path & remove from idiom.xs
+		}
+		/*
+		out(indent = 1)
+		{
+	<classpathentry kind="lib" path="libs/android-support-v4.jar"/>
+		}
+		*/
+	}
+	
+	out(indent = 1)
+	{
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	}
+</xss:code>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

@@ -1,0 +1,9 @@
+<xss:parameter id="obj"/>
+
+<xss:code>
+	out(){			
+		<xss:e value = "obj.id"/> = clone3jsObject( manager.streamer.get_resource('<xss:e v="obj.src"/>').data, manager );	
+		manager.scene.add(<xss:e v="obj.id"/>);
+		<xss:e v="obj.id"/>.events = new ev.EventHolder();			
+	}
+</xss:code>

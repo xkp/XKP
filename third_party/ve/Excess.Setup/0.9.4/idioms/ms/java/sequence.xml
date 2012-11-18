@@ -1,0 +1,11 @@
+<module id="sequence" src="sequence.xs">
+    <types>
+        <class id="sequence" renderer="../sequence.xss" output_id="Sequence">
+            <property id="loop" type="bool"/>
+            <property id="target" type="object" value_is_expression="true"/>
+
+            <method id="start"/>
+            <method id="stop"/>
+        </class>
+    </types>
+</module>

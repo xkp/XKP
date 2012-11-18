@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title><xss:e value = "application.title"/></title>
+
+</head>
+
+<body>
+<style type="text/css">
+	body{
+	 <xss:marker id="css_style"/>
+	}
+</style>
+<xss:marker id="dependencies"/>
+<xss:code>
+
+if(!application.width) 
+	application.width = "window.innerWidth";
+if(!application.height) 
+	application.height = "window.innerHeight";
+	
+if(application.background)
+	out(marker = "css_style"){
+	background:<xss:e value = "application.background"/>;
+	}
+	
+</xss:code>
+
+<script type="text/javascript">	
+	<xss:code>
+        compiler.xss("threejs_script.xss");
+    </xss:code>
+</script>
+
+</body>
+
+</html>
+
+<xss:code>
+    //process dependencies
+    var dependencies = compiler.get_dependencies();
+    var default_path = project.js_path;
+    if (!default_path)
+        default_path = "../js";
+    
+    array non_shared = [];
+    for(var dep in dependencies)
+    {
+        if (dep.shared)
+        {
+            //shared libraries will be assumed to be at the default library path 
+            compiler.xss("../common-js/dependency.xss", dep, path = default_path, marker = "dependencies");
+        }
+        else
+        {
+            //let the idioms decide
+            compiler.inject("compile_dependency", dep);
+            non_shared += dep;
+        }
+    }
+
+    for(var ndep in non_shared)
+    {
+        //it is understood that dependencies will come out of
+        //compile with their full path
+        compiler.xss("../common-js/dependency.xss", ndep, marker = "dependencies");
+    }
+</xss:code>

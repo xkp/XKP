@@ -1,0 +1,44 @@
+<xss:parameter id="obj"/>
+
+<xss:code>
+	if(obj.class_name == "texture_cube")
+	{
+		out(){
+		var urls = ["<xss:e v="obj.posx"/>", "<xss:e v="obj.negx"/>",
+					"<xss:e v="obj.posy"/>", "<xss:e v="obj.negy"/>",
+					"<xss:e v="obj.posz"/>", "<xss:e v="obj.negz"/>" ];		
+		}	
+		if(obj.mapping)
+			out(){
+			<xss:e v="obj.id"/> = THREE.ImageUtils.loadTextureCube( urls, <xss:e v="obj.mapping"/>);
+			}
+		else
+			out(){
+			<xss:e v="obj.id"/> = THREE.ImageUtils.loadTextureCube( urls );
+			}
+	}
+	else
+	{
+		out(){		
+			var <xss:e v="obj.id"/> = {};
+			var <xss:e v="obj.id"/>_shader = THREE.ShaderUtils.lib[ "cube" ];
+			<xss:e v="obj.id"/>_shader.uniforms[ "tCube" ].texture = <xss:e v="obj.texture_cube"/>;
+
+			var <xss:e v="obj.id"/>_material = new THREE.ShaderMaterial( {
+
+				fragmentShader: <xss:e v="obj.id"/>_shader.fragmentShader,
+				vertexShader: <xss:e v="obj.id"/>_shader.vertexShader,
+				uniforms: <xss:e v="obj.id"/>_shader.uniforms,
+				depthWrite: false
+
+			} ),
+
+			<xss:e v="obj.id"/>_mesh = 
+			new THREE.Mesh( new THREE.CubeGeometry( <xss:e v="obj.size"/>, <xss:e v="obj.size"/>, <xss:e v="obj.size"/> ), <xss:e v="obj.id"/>_material );
+			<xss:e v="obj.id"/>_mesh.flipSided = true;
+			scene.add( <xss:e v="obj.id"/>_mesh );
+		}		
+	}
+</xss:code>
+
+

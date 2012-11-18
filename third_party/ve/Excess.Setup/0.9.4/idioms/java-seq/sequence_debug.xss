@@ -1,0 +1,72 @@
+
+package test;
+import Animation_Library.jar;
+import java.util.*;
+import java.util.*;
+import java.applet.*;
+import java.awt.*;
+import java.beans.*;
+import java.io.*;
+import java.lang.*;
+import java.math.*;
+import java.net.*;
+import java.nio.*;
+import java.rmi.*;
+import java.security.*;
+import java.sql.*;
+import java.text.*;
+
+public class Test {	
+
+ public Object target;	
+ public double g_elapsed = -1;
+ public double g_delta = 0.0;
+
+ public Manager g_sequence_manager=new Manager();
+ //var application = {}  //td ?
+
+ <xss:marker id="variables"/>
+
+ Interpolators default_interpolate=new Interpolators(){
+             public double interpolate(Object from, Object to, double t) {
+                 return (Double)from + ((Double)to - (Double)from)*t;
+             }
+     };
+
+  
+ public void update(){
+
+  <xss:code>
+  compiler.inject("render_types");
+
+  compiler.xss("../common-js/instance.xss", application);
+  compiler.inject("render_instances");
+  </xss:code>
+ }
+
+
+public void start(){
+     float now   = new Date().getTime();
+				if (g_elapsed < 0)
+					g_delta = 0; //first update
+				else
+					g_delta  = now - g_elapsed;
+				g_elapsed = now;
+				g_sequence_manager.update(g_delta);
+     
+ }
+public static void main(String args[]) {
+        final Test t=new Test();
+		t.update();
+		Timer temp=new Timer();
+        TimerTask tas=new TimerTask(){
+            public void run(){
+               t.start();
+            }
+        };
+        GregorianCalendar cal=new GregorianCalendar(2001,1,1);
+        temp.schedule(tas, cal.getTime(), 1000);
+    }
+}
+
+}

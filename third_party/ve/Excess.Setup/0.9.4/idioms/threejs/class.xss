@@ -1,0 +1,146 @@
+<xss:parameter id="clazz"/>
+
+<xss:code>
+    array param_values = [];
+    clazz.instantiator = "instantiator.xss";	
+    bool super_transform = false;
+    out()
+    {
+    function create_<xss:e v="clazz.id"/>(
+    }    
+   
+    var c_params = null; 
+    if (clazz.super)
+    {
+        c_params = clazz.super.constructor_params;
+	    if(!clazz.super.heritable)
+        {
+	        compiler.error("Ancestor class not heritable", class_name = clazz.super.output_id);
+		}
+		
+        if(clazz.super.id == "transform")
+		    super_transform = true;
+    }
+    
+    if (c_params)
+    {				
+        int idx = 0;				
+        for(var p in c_params)
+        {
+            string param_str = p.id;					
+            if (idx > 0) out() {,}                    
+            
+            out() {<xss:e v="param_str"/>}
+			
+            var tmp = object();
+			tmp.id = param_str;
+			tmp.value = param_str;
+			param_values += tmp;
+			idx++;
+        }
+    }    
+									
+    out() { ) <xss:open_brace/> 
+    
+    var <xss:e v="clazz.id"/>;
+    }
+
+    if(super_transform)
+	{		
+		out() 
+		{ 		
+			<xss:e v="clazz.id"/> = new THREE.Object3D();
+			<xss:e v="clazz.id"/>.events = new ev.EventHolder();
+		}
+	}
+	else{
+		string clazz_renderer = clazz.type.renderer;
+        if (!clazz_renderer)
+        {
+            compiler.error("Class not rendereable", class_name = clazz.type_name);
+        }                
+        string clazz_path = compiler.idiom_path(clazz, clazz_renderer);
+        compiler.xss(clazz_path, clazz, params = param_values);			
+	}
+    
+    out()
+    {
+        var this__ = <xss:e v="clazz.id"/>;
+    }
+
+    for(var seq in clazz.instances)
+    {		
+        if (seq.class_name != "sequence") //td: !!!
+            continue; 
+
+        string seq_renderer = seq.type.renderer;
+        
+        out()
+        {
+            var <xss:e v="seq.output_id"/>;
+        }
+
+        string seq_path = compiler.idiom_path(seq, seq_renderer);
+        compiler.xss(seq_path, seq);
+		        
+        out()
+        {
+            <xss:e v="clazz.id"/>.<xss:e v="seq.output_id"/> = <xss:e v="seq.output_id"/>;
+        }
+        
+    }          
+
+    for(var inst in clazz.instances)
+    {				
+        if (inst.class_name == "sequence") //td: !!!
+            continue;             
+		if(inst.type.user_defined)
+		{
+			out()
+			{
+			 var <xss:e v="inst.id"/>;
+			<xss:e v="inst.id"/> = <xss:e v="compiler.instantiate(inst.type, object = inst)"/> ;
+			}			
+		}
+		else
+		{
+			string inst_renderer = inst.type.renderer;				
+				
+			if (!inst_renderer)
+			{
+				compiler.error("Class not rendereable", class_name = inst.type_name);
+			}                
+			out()
+			{
+				var <xss:e v="inst.output_id"/>;
+			}            
+			string inst_path = compiler.idiom_path(inst, inst_renderer);
+			compiler.xss(inst_path, inst);	
+		}
+        if(super_transform)
+			out()
+			{
+				if(<xss:e v="inst.output_id"/> instanceof THREE.Object3D)
+					<xss:e v="clazz.id"/>.add(<xss:e v="inst.output_id"/>);
+			}   
+		else
+			out()
+			{
+				<xss:e v="clazz.id"/>.<xss:e v="inst.output_id"/> = <xss:e v="inst.output_id"/>;
+			}     
+    }  
+	for(var inst_ in clazz.instances)
+    {	
+		if(!inst_.dont_render)
+			compiler.xss("../common-js/instance.xss", inst_);
+	}
+	compiler.xss("../common-js/instance.xss", clazz); 
+    out()
+    {
+		if(<xss:e v="clazz.id"/> instanceof THREE.Object3D)
+			manager.scene.add(<xss:e v="clazz.id"/>);
+		<xss:e v="clazz.id"/>.manager = manager;
+        return <xss:e v="clazz.id"/>;
+        <xss:close_brace/>
+    }
+</xss:code>

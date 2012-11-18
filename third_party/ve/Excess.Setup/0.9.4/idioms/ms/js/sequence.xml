@@ -1,0 +1,19 @@
+<module id="sequence" src="sequence.xs" auto_dependencies="true">
+	<dependency href="resig.js" shared="true"/>
+    <dependency href="event.js" shared="true"/>
+    <dependency href="sequence.js"/>
+
+    <types>
+        <class id="sequence" instantiator="instantiator.xss" renderer="../sequence.xss" output_id="state.Sequence">
+            <constructor_params>
+                <parameter id="manager" constant="g_sequence_manager"/>
+            </constructor_params>
+
+            <property id="loop" type="bool"/>
+            <property id="target" type="object" value_is_expression="true"/>
+
+            <method id="start"/>
+            <method id="stop"/>
+        </class>
+    </types>
+</module>

@@ -1,0 +1,18 @@
+<xss:parameter id="it"/>
+<xss:code>
+	if (it.input)
+    {
+        out()
+		{
+			<input type="text" id="<xss:e v="it.output_id"/>"></input>
+		}
+    }
+    else
+    {
+        out()
+		{
+			<div id="<xss:e v="it.output_id"/>"></div>
+		}
+    }
+
+</xss:code>

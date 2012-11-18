@@ -1,0 +1,19 @@
+<xss:parameter id="it"/>
+<xss:code>
+    var arg = object();
+    arg.id = "datatype";
+    arg.value = "'local'";
+
+    var extra = [arg];
+
+    if (it.height != null)
+    {
+        arg = object();
+        arg.id = "height";
+        arg.value = it.height;
+        
+        extra += arg;
+    }
+
+    compiler.xss("../jquery-object.xss", it, extra = extra);
+</xss:code>

@@ -1,0 +1,27 @@
+<xss:parameter id="obj"/>
+
+<xss:code>
+	if(obj.class_name == "particle"){
+		out(){
+			<xss:e v="obj.id"/> = <xss:e v="compiler.instantiate(obj)"/> ;	
+			manager.scene.add( <xss:e v="obj.id"/> );	
+		}		
+	}else{
+		out(){
+		var geometry = new THREE.Geometry();
+		for ( i = 0; i < <xss:e v="obj.quantity"/>; i ++ ) <xss:open_brace/>
+			var vertex = new THREE.Vector3();								
+		}				
+		for(var p_child in obj.children){
+			out(){
+			vertex.<xss:e v="p_child.class_name"/> = default_interpolate(<xss:e v="p_child.begin"/>, <xss:e v="p_child.end"/>, Math.random());
+			}
+		}			
+		out(){
+			geometry.vertices.push( vertex );			
+		<xss:close_brace/>
+		<xss:e v="obj.id"/> = new THREE.ParticleSystem( geometry, <xss:e v="obj.material"/> );
+		manager.scene.add( <xss:e v="obj.id"/> );	
+		}		
+	}
+</xss:code>

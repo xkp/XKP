@@ -1,0 +1,163 @@
+<xss:code>
+	compiler.log("Rendering Android project...");
+	
+	//ERROR: follow line dispatch assert linker.cpp:1576
+	//compiler.log(compiler.output_path());
+
+	var appOptions = compiler.options;
+	
+	string base_namespace = "xkp.android";
+	string appName = "DefaultAndroidApplication";
+	application.id = String.strip_spaces(application.id);
+
+	if(application.name)
+	{
+		appName = String.strip_spaces(application.name);
+	}
+	else
+	{
+		appName = application.id;
+	}
+	
+	string appOutputPath = compiler.output_path();
+	appOutputPath = appOutputPath + "/" + appName;
+	
+	int targetAPILevel = 6;
+	int minAPILevel = 3;
+	if(appOptions.android_api_level)
+	{
+		int apiL = appOptions.android_api_level;
+		
+		if(apiL >= minAPILevel && apiL < 13)
+		{
+			targetAPILevel = apiL;
+			compiler.log("API Level = " + targetAPILevel);
+		}
+		else
+		{
+			compiler.error("The number of Android API level version is not correct", android_api_level = apiL);
+		}
+	}
+	
+	application.appName = appName;
+	application.targetAPILevel = targetAPILevel;
+	application.base_namespace = base_namespace;
+	
+	string exeExt = "";
+	string batExt = "";
+	
+	string osName = compiler.os();
+	if(osName == "windows")
+	{
+		batExt = ".bat";
+		exeExt = ".exe";
+	}
+
+	shell(working_path = appOutputPath, shell_cmd = true)
+	{
+		rm@exeExt -R @appOutputPath/bin 2> /dev/null
+		rm@exeExt -R @appOutputPath/gen 2> /dev/null
+	}
+
+	//inject idiom event for render types
+	//TRACE: log
+	//compiler.log("-> Begin Rendering all types");
+	compiler.inject("render_types", bns = base_namespace);
+	//TRACE: log
+	//compiler.log("-> End Rendering all types");
+	
+	//render project files
+	string output_filename;
+	output_filename = appName + "/src/xkp/android/" + appName + "/Act" + appName + ".java";
+	compiler.xss("script.java.xss", output_file = output_filename, clazz = android, base_namespace = base_namespace, is_type = false, main = 1);
+	
+	output_filename = appName + "/res/values/strings.xml";
+	compiler.xss("stringValues.xml.xss", output_file = output_filename);
+	
+	//inject idiom event for copy default files
+	string path_libs = "/src/xkp/android/libs/";
+	string abs_path_libs = appName + path_libs;
+	compiler.inject("copy_default_files", bns = base_namespace, plibs = abs_path_libs);
+	
+	output_filename = appName + "/res/layout/main.xml";
+	compiler.xss("layout.xml.xss", output_file = output_filename, base_namespace = base_namespace, clazz = application);
+	
+	output_filename = appName + "/" + "AndroidManifest.xml";
+	compiler.xss("AndroidManifest.xml.xss", output_file = output_filename, base_namespace, minAPILevel, targetAPILevel);
+	
+	//td: organize all this muddy of appOptions
+	// appOptions.android_project_type = enum {eclipse, ant, apk, others, ...}
+	if(appOptions.android_project_type == "eclipse")
+	{
+		output_filename = appName + "/" + ".project";
+		compiler.xss("eclipseProject.project.xss", output_file = output_filename);
+	
+		output_filename = appName + "/" + ".classpath";
+		compiler.xss("eclipseProject.classpath.xss", output_file = output_filename);
+		
+		output_filename = appName + "/" + "project.properties";
+		compiler.xss("eclipseProject.default.prop.xss", output_file = output_filename, targetAPILevel);
+	}
+	else
+	if(appOptions.android_project_type == "apk")
+	{
+		string android_sdk = compiler.get_env_var("ANDROID_SDK");
+		if(android_sdk == "")
+			compiler.error("Environment variable is not defined", variable_name = "ANDROID_SDK");
+
+		application.android_sdk = android_sdk;
+		application.output_classes = "java.lst";
+		application.output_javac_options = "javac.opts";
+
+        string outputClasses = application.output_classes;
+        string outputJavacOpts = application.output_javac_options;
+    
+        if(appOptions.android_project_type != "apk")
+            return;
+
+        compiler.log("Creating .apk bundle file...");
+        
+        string androidSDKPath   = application.android_sdk;
+        string apiPlatform      = androidSDKPath + "/platforms/android-" + targetAPILevel + "/android.jar";
+
+        string output_classes = appName + "/" + application.output_classes;
+        string output_javac_options = appName + "/" + application.output_javac_options;
+    
+        shell(working_path = appOutputPath)
+        {
+            aapt@exeExt package -f -I @apiPlatform -M @appOutputPath/AndroidManifest.xml -A @appOutputPath/assets -S @appOutputPath/res -m -J @appOutputPath/gen -F @appOutputPath/bin/resources.ap_;
+        }
+
+        compiler.xss("javac.options.xss", output_file = output_javac_options, appOutputPath);
+        compiler.xss("java.lst.xss", output_file = output_classes, appOutputPath);
+
+        string dxLibPath = "";
+        if(application.libraries) dxLibPath = appOutputPath + "/libs";
+        
+        shell(working_path = appOutputPath)
+        {
+            javac@exeExt @@@outputJavacOpts @@@outputClasses;
+            dx@batExt --dex --output=@appOutputPath/bin/classes.dex @appOutputPath/bin @dxLibPath
+        }
+
+        string appBinPath = appOutputPath + "/bin";
+        shell(working_path = appBinPath)
+        {
+            aapt@exeExt add @appOutputPath/bin/resources.ap_ classes.dex
+        }
+        
+        string libsParams = "-rj " + appOutputPath + "/libs";
+        libsParams = "";
+        string password = "xkp.android.projects.2012";
+        string androidIdiomPath = appOutputPath + "/../../../idioms/android";
+        shell(working_path = appOutputPath)
+        {
+            apkbuilder@batExt @appOutputPath/bin/@appName.apk -z @appOutputPath/bin/resources.ap_ -f @appOutputPath/bin/classes.dex -rf @appOutputPath/src @libsParams;
+            jarsigner -keystore @androidIdiomPath/java.keystore/xkp.android.projects.jks -storepass @password -keypass @password -signedjar @appOutputPath/bin/@appName.apk @appOutputPath/bin/resources.ap_ xkp.android.projects
+        }
+	}
+	else
+	{
+		compiler.error("Project type is not implemented", android_project_type = appOptions.android_project_type);
+	}
+</xss:code>

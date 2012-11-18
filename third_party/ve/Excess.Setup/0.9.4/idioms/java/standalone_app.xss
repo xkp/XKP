@@ -1,0 +1,33 @@
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class <xss:e value="application.name"/> {
+
+	<xss:code>
+		compiler.inject("render_instances");
+	</xss:code>
+
+	public static void main(String[] args) {
+	
+	<xss:code>
+		bool exists = false;
+		for(var e in application.events)
+		{
+			if(e.name == "create")
+			{
+				exists = true;
+				break;
+			}
+		}
+		
+		if(exists)
+		{
+			out()
+			{
+				application.create();
+			}
+		}
+	</xss:code>
+	}
+}

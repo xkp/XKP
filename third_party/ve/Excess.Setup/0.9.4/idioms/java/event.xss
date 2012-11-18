@@ -1,0 +1,34 @@
+
+<xss:parameter id="e"/>
+<xss:parameter id="new_id"/>
+
+<xss:code>
+	//TRACE: log
+	//compiler.log("Rendering event: " + e.name);
+	
+	string ret_type = "void";
+	if(e.return_type) ret_type = e.return_type;
+	
+	if(new_id == null) new_id = e.output_id;
+	
+	if(e.implemented && e.name)
+	{
+		out(indent = 1)
+		{
+			private <xss:e value="ret_type"/> <xss:e>new_id</xss:e>(<xss:e>e.args.render()</xss:e>) <xss:open_brace/>
+		}
+		
+		for(var impl in e.impls)
+		{
+			out(indent = 2)
+			{
+				<xss:e>impl.render()</xss:e>
+			}
+		}
+		
+		out(indent = 1)
+		{
+			<xss:close_brace/>
+		}
+	}
+</xss:code>

@@ -1,0 +1,479 @@
+<xss:parameter id="seq"/>
+<xss:parameter id="is_class"/>
+
+<xss:class>
+    method resolve_key(key, key_value, key_index, owner_seq, prop_info, interp)
+    {
+        //for good measure
+        key.value = null;
+
+        if (compiler.parse_expression(key_value))
+        {
+            //in this case we need to figure out the key values at runtime
+            //this code will keep the expression information to be genearted later. 
+            //Note: such expressions will be evaluated at sequence's start time 
+            
+            var info = object();
+            info.expr = compiler.render_expression(key_value, owner_seq);
+            info.idx  = key_index;
+            info.interp = interp;
+            
+            owner_seq.key_expressions += info;
+        }
+        else if (key_value == "@") //convention over configuration
+        {
+            //same deal, only this time we'll assign the current value 
+            //kinda neat
+            
+            var nfo = object();
+            nfo.expr = compiler.property_get(prop_info.property, prop_info.path);
+            nfo.idx  = key_index;
+            nfo.interp = interp;
+            
+            owner_seq.key_expressions += nfo;
+        }
+        else //assume constants
+        {
+            key.value = key_value;
+        }
+    }
+    
+    method get_target_info(seq, expr)
+    {
+        var type = null;
+        if (seq.target)
+        {
+            var oo = null; //td: compiler.get_instance(seq.target);
+            if (oo)
+                type = oo;
+        }
+        else if (seq.target_type)
+            type = compiler.get_type(seq.target_type);
+        
+        if (!type)
+            compiler.error("Sequence target (or its type) cannot be resolved", expression = expr); 
+        
+        return compiler.analyze_expression(itm.property, this_ = seq);
+    }
+    
+    method generate_at(at, seq, rendering_instance)
+    {
+        var seq_id = seq.id;
+        if (!rendering_instance)
+            seq_id = "this";
+
+        float time = at.time;
+        for(var itm in at.children)
+        {
+            if (itm.class_name == "animate")
+            {
+                var prop_info = compiler.analyze_expression(itm.property, this_ = seq);
+                if (!prop_info.property)
+                {
+                    //td: !!!
+                    //if (prop_info.first_string == "target")
+                    //    prop_info = get_target_info(seq, itm.property);
+                    //else
+                        compiler.error("Sequences expect a property to modify", expression = itm.property); 
+                }
+
+                var    prop      = prop_info.property;
+                string prop_name = prop_info.property_name;
+                string iid       = compiler.genid('__i');
+                string path      = prop_info.path;
+                var    first     = prop_info.first; 
+                
+                if (!rendering_instance)
+                {
+					if (!prop_info.this_property)
+                        compiler.error("Sequence class targets must be properties");
+
+                    path = "this__." + path;
+                }
+                else if (prop_info.this_property)
+                {
+                    path = seq.id + "." + path;
+                }    
+                
+                string first_name = prop_info.first_string;
+                string first_type = "";
+                
+                //el nombre del tipo, para hacer cast
+                if (first)
+                {
+                    first_type = first.type.output_id;
+                }
+                else
+                    compiler.error("Cannot resolve expression", expression = itm.property); 
+                    
+                if (prop_info.first_property)   
+                    compiler.log("Oh noes... a PROPERTY");
+
+                var prop_type = prop.type.output_id;
+                out(indent = 2)
+                {
+                   final Interpolator <xss:e v="iid"/> = new Interpolator();
+				   <xss:e v="iid"/>.setAssigner(new Assign(){
+	                    public void put(Object value)
+	                    {
+						    <xss:e v="compiler.property_set(prop, path, 'value')"/>;
+	                    }
+				   });
+				   <xss:e v="iid"/>.setInterpolator(Manager.getInstance().interpolator("<xss:e v="prop_type"/>"));	
+                }
+                        
+                //generate keys
+                array keys;
+                if (itm.keys)
+                {
+                    keys = itm.keys;
+                }
+                else
+                {
+                    //a simple from/to animation
+                    var end     = object();
+                    end.t       = itm.in;
+                    end.value   = itm.to;
+                            
+                    var start   = object();
+                    start.t     = 0;
+                    start.value = itm.from;
+
+                    keys = [start, end];
+                }
+                        
+                float length = 0.0;
+                int   idx    = 0;
+                for(var key in keys)
+                {
+                    //td: make time flexible
+                    if (key.t > length)
+                        length = key.t; 
+                            
+                    key.t += time;
+                    resolve_key(key, key.value, idx, seq, prop_info, iid);                    
+                    
+                    var key_value = key.value;
+                    if (key_value == null)
+                      key_value = "null";
+                      
+                    out(indent = 4)
+                    {
+						<xss:e v="iid"/>.addKey(<xss:e v="key.t"/>, <xss:e v="key_value"/>);
+                       
+                    }
+                    
+                    idx++;
+                }
+				
+                out(indent = 2)
+                {
+				    <xss:e v="seq_id "/>.addHandler(<xss:e v="iid"/>);
+				}
+                
+            }
+            else if (itm.class_name == "run")
+            {
+                if (itm.method)
+                {
+                    var mthd = seq.get_method(itm.method);
+                    if (!mthd)
+                        compiler.error("run tag got an invalid method", methd = itm.method);
+                    
+                    string mid = compiler.genid('__m');
+                    string mid_caller = seq.output_id;
+                        
+                    out(indent = 2)
+                    {
+                        Caller <xss:e v="mid"/> = new Caller(<xss:e v="time"/>);
+						<xss:e v="mid"/>.setCaller(new Runnable() 
+                        {
+                            public void run() 
+                            {
+                                <xss:e v="mthd.output_id"/>();
+                            }
+                        });
+                        <xss:e v="mid_caller"/>.addHandler(<xss:e v="mid"/>);
+					}
+                }
+                else if (itm.sequence)
+                {
+					string seq_caller = seq.id;
+                    string sid = compiler.genid('__s');
+                    out(indent = 2)
+                    {
+                        Caller <xss:e v="sid"/> = new Caller(<xss:e v="time"/>);
+						<xss:e v="sid"/>.setCaller(new Runnable() 
+                        {
+                            public void run() 
+                            {
+                                <xss:e v="seq_caller"/>.start();
+                            }
+                        });
+                        <xss:e v="mid_caller"/>.addHandler(<xss:e v="sid"/>);
+                    }
+                }
+                else
+                {
+                    compiler.error("run tag only supports method and sequence in this context");
+                }
+            }
+        }
+    }
+            
+    method generate_when(itm, seq)
+    {
+        if (!itm.expr)
+            return; //td: error
+            
+        seq.conditions += itm.expr;
+        seq.actions += itm.children;
+    }
+    
+    method generate_every(itm, seq, rendering_instance)
+    {
+        string aid = compiler.genid("__h");
+		string cal = compiler.genid("__c");
+        
+        out()
+        {
+            Every <xss:e v="aid"/> = new Every(<xss:e v="itm.t"/>);
+        }
+
+        string caller = seq.id;
+        for(var child in itm.children)
+        {
+            if (child.class_name == "run") 
+            {
+                if (child.method)
+                {
+                    var mthd = seq.get_method(child.method);
+                    if (!mthd)
+                        compiler.error("run tag got an invalid method", methd = itm.method);
+                    
+                    out()
+                    {
+						<xss:e v="aid"/>.addCaller(new Runnable() 
+                        {
+                            public void run() 
+                            {
+                                <xss:e v="mthd.output_id"/>();
+                            }
+                        });
+                    }
+                }
+                else if (child.sequence)
+                {
+                    out()
+                    {
+						<xss:e v="aid"/>.addCaller(new Runnable() 
+                        {
+                            public void run() 
+                            {
+                                <xss:e v="child.sequence"/>.start();
+                            }
+                        });
+                    }
+                }
+                else compiler.log("WARNING: 'run' needs 'method' or 'sequence'");
+            }
+            else compiler.log("WARNING: 'every' supports only 'run'");
+        }
+
+        out()
+        {
+			<xss:e v="caller"/>.addHandler(<xss:e v="aid"/>);
+        }
+    }
+            
+    method generate_item(itm, seq, rendering_instance)
+    {
+        if (itm.class_name == "at")         generate_at(itm, seq, rendering_instance);
+        else if (itm.class_name == "when")  generate_when(itm, seq);
+        else if (itm.class_name == "every") generate_every(itm, seq, rendering_instance);
+        else if (itm.class_name == "sequence")
+        {
+            generate_sequence(itm, seq, true);
+        }
+        else
+        {
+            //td: error
+        }
+    }
+    
+    method generate_when_actions(seq, array actions, seq_id)
+    {	
+        string inumb = compiler.genid('__numb');
+        for(var action in actions)
+        {
+            if (action.class_name == "run")
+            {
+                if (action.method)
+                {
+                    var mthd = seq.get_method(action.method);
+                    if (!mthd)
+                        compiler.error("when tag found an invalid method");
+                        
+                    out(indent = 3) 
+                    {
+						<xss:e v="mthd.output_id"/>();
+                    }
+                }
+                else if (action.sequence)
+                {
+                    out(indent = 2) 
+                    {
+                        <xss:e v="action.sequence"/>.start();
+                    }
+                }
+                else
+                {
+                    //td: error
+                    compiler.log("WARNING: You can run methods or sequences, nothing else");
+                }
+            }
+            else
+            {
+                //td: error
+                compiler.log("WARNING: Only run is allowed inside whens");
+            }
+        }
+    }
+            
+    method generate_sequence(seq, parent, rendering_instance)
+    {
+        string parent_id = "null";
+        string seq_id = seq.output_id;
+
+        if (parent)
+            parent.subs += seq;
+
+        if (rendering_instance)
+        {
+            //declare object field
+            out(marker = "declarations", marker_source = "previous") {private Sequence <xss:e v="seq_id"/>;}
+
+            //initialize it here
+            out() {<xss:e v="seq_id"/> = new Sequence();}
+            if (seq.loop)
+                out() {<xss:e v="seq_id"/>.setLoop(true);}
+            
+            if (parent)
+            {
+                //build the instance chain
+                parent_id = parent.id;
+
+                var p = parent.parent;
+                while(p != null)
+                {
+                    parent_id = p.id + "." + parent_id;
+                    p = p.parent;
+                }
+            
+                seq_id = parent_id + "." + seq.id;
+                out(indent = 2)
+                {
+                    <xss:e v="parent_id"/>.push(<xss:e v="seq.id"/>);
+                }
+            }
+            
+            compiler.xss("../java/instance.xss", seq, marker = "declarations", marker_source="previous", render_events = false);
+            compiler.xss("../java/instance.xss", seq, event_renderer = "event.xss", render_properties = false, render_methods = false);
+        }
+        else
+        {
+            compiler.error("Sequence classes not implemented?");
+        }
+        
+
+        if (seq.auto_start)
+        {
+            out(indent = 2)
+            {
+                <xss:e v="seq_id"/>.start();
+            }
+        }
+                
+        out()
+        {
+            <xss:e v="seq_id"/>.setParent(<xss:e v="parent_id"/>);
+        }
+
+        //we'll let our children fill in on what the want done
+        seq.conditions      = [];
+        seq.actions         = [];
+        seq.subs            = [];
+        seq.key_expressions = [];
+        for(var item in seq.children)
+        {
+            generate_item(item, seq, rendering_instance);
+        }
+
+        if (!seq.key_expressions.empty)
+        {
+            out(indent = 2)
+            {
+                <xss:e v="seq_id"/>.events.addListener("start",  new EventHolder.Implementor() 
+                <xss:open_brace/>
+	                public void call(Object ev) 
+                    <xss:open_brace/>
+            }
+            
+            for(var key_xpr in seq.key_expressions)
+            {
+                out(indent=3)
+                {
+                    <xss:e v="key_xpr.interp"/>.setKeyValue(<xss:e v="key_xpr.idx"/>, <xss:e v="key_xpr.expr"/>);
+                }
+            }
+            
+            out(indent = 2)
+            {
+                <xss:close_brace/>
+                <xss:close_brace/>);
+            }
+        }
+
+        if (!seq.conditions.empty)
+        {
+            out(indent = 2)
+            {
+                <xss:e v="seq_id"/>.events.addListener("update",  new EventHolder.Implementor() 
+                <xss:open_brace/>
+	                public void call(Object ev) 
+                    <xss:open_brace/>
+            }
+            
+            //check the conditions described on the when clause
+            int cond_idx = 0;
+            for(var cond in seq.conditions)
+            {
+				string rend_cond = compiler.render_expression(cond, seq);
+                out(indent = 3)
+                {
+                    if (<xss:e v="rend_cond"/>)
+                    <xss:open_brace/>
+                }
+                
+                var action_list = seq.actions[cond_idx]; cond_idx++;
+                generate_when_actions(seq, action_list, seq_id);
+                
+                out(indent = 2)
+                {
+                    <xss:close_brace/>
+                }
+            }
+            
+            out(indent = 2)
+            {
+                <xss:close_brace/>
+			    <xss:close_brace/>);
+            }
+        }
+    }
+            
+    on render()
+    {
+        generate_sequence(seq, null, !is_class);
+    }
+</xss:class>

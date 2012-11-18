@@ -1,0 +1,74 @@
+<xss:parameter id="it"/>
+<xss:parameter id="event_renderer"/>
+<xss:parameter id="render_properties" default ="true"/>
+<xss:parameter id="render_events" default ="true"/>
+<xss:parameter id="render_methods" default ="true"/>
+
+<xss:code>
+	bool type = compiler.is_type(it) == true;
+	
+	string str_rend = "instance";
+	if(type)
+		str_rend = "class";
+	
+	//TRACE: log
+	compiler.log("Rendering " + str_rend + ": " + it.id);
+	
+	if (render_properties)
+    {
+		//TRACE: log
+        //compiler.log("Properties size: " + it.properties.size);
+	    for(var p in it.properties)
+	    {
+		    //TIPS: it's a very hacky hoo,... 
+		    //      i set that all object's properties have yours parent pointing to this;
+		    //      it doing that when a user defined class render yours properties,
+		    //      these are not repeated when an instance of this class is rendering
+		    if(p.parent)
+		    {
+			    //compiler.log("p.parent " + p.parent.id);
+			    if(p.parent.type)
+			    {
+				    //compiler.log("p.parent.type " + p.parent.type.id);
+				    //compiler.log(p.parent.type.user_defined);
+				    continue;
+			    }
+		    }
+		
+		    compiler.xss("property.xss", p = p, iname = it.output_id);
+	    }
+    }
+	
+	if (render_methods)
+    {
+		//TRACE: log
+        //compiler.log("Methods size: " + it.methods.size);
+	    for(var m in it.methods)
+	    {
+		    compiler.xss("method.xss", m = m, iname = it.output_id);
+	    }
+    }
+	
+	if (render_events)
+    {
+		//TRACE: log
+        //compiler.log("Events size: " + it.events.size);
+	    for(var e in it.events)
+	    {
+		    string renderer_path = "event.xss";
+			
+			if(e.renderer)
+			{
+				renderer_path = compiler.idiom_path(it, e.renderer);
+				compiler.xss(renderer_path, e = e, it = it);
+				continue;
+			}
+			
+		    if(event_renderer)
+			    renderer_path = compiler.idiom_path(it, event_renderer);
+
+		    string new_id = e.output_id + it.id;
+		    compiler.xss(renderer_path, e = e, it = it, new_id = new_id);
+	    }
+    }
+</xss:code>

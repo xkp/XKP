@@ -1,0 +1,72 @@
+<xss:parameter id="it"/>
+<xss:parameter id="code"/>
+<xss:parameter id="args"/>
+
+<xss:code>
+if (it.post)
+{
+    out()
+    {
+        var _form = new require('formidable').IncomingForm();
+        var post = {fields: [], field_values: {}, files: []};
+    }
+
+    if (it.upload_dir)
+        out()
+        {
+            var upload_dir  = "<xss:e v="it.upload_dir"/>";
+            _form.uploadDir = upload_dir;
+        }
+    
+    out()
+    {
+        _form.on('error', function(err) 
+        {
+            throw err;
+        }).on('field', function(field, value) 
+        {
+            post.fields.push([field, value]);
+            post.field_values[field] = value;
+        }).on('file', function(field, file) 
+        {
+            post.files.push(file);
+        }).on('end', function() 
+        <xss:open_brace/>
+    }
+    
+    for(var arg in args)
+    {
+        out()
+        {
+            var <xss:e v="arg"/> = post.field_values["<xss:e v="arg"/>"];
+        }
+    }
+    
+    out()
+    {
+            <xss:e v="code"/>
+        <xss:close_brace/>);
+        _form.parse(request);    
+    }
+}
+else
+{
+    out()
+    {
+        var __params = url.parse(request.url, true).query;
+    }
+
+    for(var qarg in args)
+    {
+        out()
+        {
+            var <xss:e v="qarg"/> = __params.<xss:e v="qarg"/>;
+        }
+    }
+
+    out()
+    {
+        <xss:e v="code"/>
+    }
+}
+</xss:code>

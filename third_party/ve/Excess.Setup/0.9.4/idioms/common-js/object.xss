@@ -1,0 +1,57 @@
+<xss:parameter id="obj"/>
+<xss:parameter id="only_when_attr"/>
+{
+<xss:code>
+    //This is a way to generate simple objects mainly coming from xml
+    //its kinda crappy and will be revised in time
+    for(var prop in obj.properties)
+    {
+        if (only_when_attr)
+        {
+            var value = prop.attribute_value(only_when_attr);
+            if (!value)
+                continue;
+        }
+
+        if (prop.type.is_array)
+	    {
+		    out()
+		    {
+			    <xss:e value="prop.name"/> : [
+		    }
+
+            for(var array_item in prop.value.children)
+            {
+                out()
+                {
+                    <xss:file output="inline" src="object.xss">
+                        <parameter name="obj" value="array_item"/>
+                    </xss:file>,
+                }
+            }
+
+		    out()
+		    {
+			    ],
+		    }
+	    }
+	    else if (prop.type.is_object)
+	    {
+		    out()
+		    {
+			    <xss:e value="prop.name"/> : 
+                <xss:file output="inline" src="object.xss">
+                    <parameter name="obj" value="prop.value"/>
+                </xss:file>,
+		    }
+	    }
+	    else
+	    {
+		    out()
+		    {
+			    <xss:e value="prop.name"/> : <xss:e v="prop.render_value()"/>,
+		    }
+	    }
+    }
+</xss:code>
+}

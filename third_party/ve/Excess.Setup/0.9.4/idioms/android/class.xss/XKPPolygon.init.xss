@@ -1,0 +1,14 @@
+<xss:parameter id="it"/>
+
+<xss:code>
+	for(var i in it.children)
+	{
+		if(i.type.id != "polygon_point")
+			continue;
+		
+		out()
+		{
+			<xss:e value="it.output_id"/>.addPoint(<xss:e value="i.x"/>, <xss:e value="i.y"/>);
+		}
+	}
+</xss:code>

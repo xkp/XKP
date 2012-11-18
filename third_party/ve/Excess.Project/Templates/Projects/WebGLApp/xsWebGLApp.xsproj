@@ -175,6 +175,6 @@
   </ItemGroup>
   <Import Project="$(ExcessPath)\Excess.targets" />
   <PropertyGroup>
-    <PostBuildEvent>chrome --allow-file-access-from-files $(TargetPath)</PostBuildEvent>
+    <PostBuildEvent>"$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name"><xss:e value="application.title"/></string>
+<xss:code>
+
+	//ERROR: without this, console error with "Cannot assign" is dispatching when 
+	//       resCounter was assigned new value, or worst, assert is dispatching
+	int resCounter = 0;
+	
+	for(var inst in android.instances)
+	{
+		for(var prop in inst.properties)
+		{
+			if(prop.value != null && prop.res_type == "str_reference")
+			{
+				string strResName = "res" + resCounter++ as string;
+				prop.strResourceName = strResName;
+				
+				out(indent = 1)
+				{
+					<string name="<xss:e value="strResName"/>"><xss:e value="prop.value"/></string>
+				}
+			}
+		}
+	}
+</xss:code>
+</resources>

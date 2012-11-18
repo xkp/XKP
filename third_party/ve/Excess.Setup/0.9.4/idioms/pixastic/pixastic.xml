@@ -1,0 +1,285 @@
+<module id="pixastic" src="pixastic.xs">
+    <dependency href="resig.js" shared="true"/>
+
+    <dependency href="pixastic.core.js"/>	  
+    <dependency href="actions.js"/>
+	<dependency href="pixastic-manager.js"/>	  
+    <dependency href="pixastic-utils.js"/>
+	<types>
+		<class id="preset" output_id="pixastic.Preset"/>	
+		<class id="preset_filter"/>
+		<class id="filter">
+			<property id="apply" type="bool" use_plain_value="true">
+				<get text="apply_"/>
+                <set text="set_apply({value})"/>
+            </property>
+		</class>
+		<class id="brightness" super="filter" output_id="pixastic.Brightness">	
+			<constructor_params>
+				<parameter property="brightness"/>	
+				<parameter property="contrast"/>				
+			</constructor_params>
+            <property id="brightness" type="int" use_plain_value="true" dont_init="true">
+				<get text="options.brightness"/>
+                <set text="set_brightness({value})"/>
+            </property>
+			<property id="contrast" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.contrast"/>
+                <set text="set_contrast({value})"/>
+            </property>			
+		</class>
+		<class id="hsl" super="filter" output_id="pixastic.HSL">	
+			<constructor_params>
+				<parameter property="hue"/>	
+				<parameter property="saturation"/>
+				<parameter property="lightness"/>
+			</constructor_params>
+            <property id="hue" type="int" use_plain_value="true" dont_init="true">
+				<get text="options.hue"/>
+                <set text="set_hue({value})"/>
+            </property>
+			<property id="saturation" type="int" use_plain_value="true" dont_init="true">
+				<get text="options.saturation"/>
+                <set text="set_saturation({value})"/>
+            </property>
+			<property id="lightness" type="int" use_plain_value="true" dont_init="true">
+				<get text="options.lightness"/>
+                <set text="set_lightness({value})"/>
+            </property>			
+		</class>
+		<class id="edges" super="filter" output_id="pixastic.Edges">	
+			<constructor_params>
+				<parameter property="mono"/>	
+				<parameter property="invert"/>				
+			</constructor_params>
+            <property id="mono" type="bool" use_plain_value="true" dont_init="true">
+				<get text="options.mono"/>
+                <set text="set_mono({value})"/>
+            </property>
+			<property id="invert" type="bool" use_plain_value="true" dont_init="true">
+				<get text="options.invert"/>
+                <set text="set_invert({value})"/>
+            </property>			
+		</class>
+		<class id="pointillize" super="filter" output_id="pixastic.Pointillize">	
+			<constructor_params>
+				<parameter property="radius"/>	
+				<parameter property="density"/>	
+				<parameter property="noise"/>	
+				<parameter property="transparent"/>
+			</constructor_params>
+            <property id="radius" type="int" use_plain_value="true" dont_init="true">
+				<get text="options.radius"/>
+                <set text="set_radius({value})"/>
+            </property>
+			<property id="density" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.density"/>
+                <set text="set_density({value})"/>
+            </property>	
+			<property id="noise" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.noise"/>
+                <set text="set_noise({value})"/>
+            </property>
+			<property id="transparent" type="bool" use_plain_value="true" dont_init="true">
+				<get text="options.transparent"/>
+                <set text="set_transparent({value})"/>
+            </property>			
+		</class>
+		<class id="blend" super="filter" output_id="pixastic.Blend">	
+			<constructor_params>
+				<parameter property="amount"/>	
+				<parameter property="mode"/>	
+				<parameter property="blend_image"/>				
+			</constructor_params>
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>
+			<property id="mode" type="string" dont_init="true">
+				<get text="options.mode"/>
+                <set text="set_mode({value})"/>
+            </property>	
+			<property id="blend_image" type="string" dont_init="true">
+				<get text="options.image"/>
+                <set text="set_image({value})"/>
+            </property>			
+		</class>
+		<class id="flipv" super="filter" output_id="pixastic.FlipV"/>			
+		<class id="invert" super="filter" output_id="pixastic.Invert"/>			
+		<class id="noise" output_id="pixastic.Noise">		
+			<constructor_params>
+				<parameter property="amount"/>	
+				<parameter property="strength"/>
+				<parameter property="mono"/>									
+			</constructor_params>
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>
+			<property id="mono" type="bool" use_plain_value="true" dont_init="true">
+				<get text="options.mono"/>
+                <set text="set_mono({value})"/>
+            </property>	
+			<property id="strength" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.strength"/>
+                <set text="set_strength({value})"/>
+            </property>			
+		</class>
+		<class id="sepia" super="filter" output_id="pixastic.Sepia"/>		
+		<class id="coloradjust" super="filter" output_id="pixastic.ColorAdjust">		
+			<constructor_params>
+				<parameter property="red"/>	
+				<parameter property="green"/>
+				<parameter property="blue"/>									
+			</constructor_params>
+            <property id="red" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.red"/>
+                <set text="set_red({value})"/>
+            </property>
+			<property id="green" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.green"/>
+                <set text="set_green({value})"/>
+            </property>
+			<property id="blue" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.blue"/>
+                <set text="set_blue({value})"/>
+            </property>			
+		</class>
+		<class id="blur" super="filter" output_id="pixastic.Blur"/>		
+		<class id="edges2" super="filter" output_id="pixastic.Edges2"/>	         
+		<class id="glow" super="filter" output_id="pixastic.Glow">	
+			<constructor_params>
+				<parameter property="amount"/>	
+				<parameter property="radius"/>								
+			</constructor_params>
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>
+			<property id="radius" type="float" dont_init="true">
+				<get text="options.radius"/>
+                <set text="set_radius({value})"/>
+            </property>				
+		</class>
+		<class id="laplace" super="filter" output_id="pixastic.Laplace">		
+			<constructor_params>
+				<parameter property="edge_strength"/>	
+				<parameter property="grey_level"/>
+				<parameter property="invert"/>									
+			</constructor_params>
+            <property id="edge_strength" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.edgeStrength"/>
+                <set text="set_edge_strength({value})"/>
+            </property>
+			<property id="grey_level" type="int" use_plain_value="true" dont_init="true">
+				<get text="options.greyLevel"/>
+                <set text="set_grey_level({value})"/>
+            </property>
+			<property id="invert" type="bool" use_plain_value="true" dont_init="true">
+				<get text="options.invert"/>
+                <set text="set_invert({value})"/>
+            </property>
+		</class>
+		<class id="sharpen" super="filter" output_id="pixastic.Sharpen">	
+			<constructor_params>
+				<parameter property="amount"/>												
+			</constructor_params>
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>
+		</class>
+		<class id="blurfast" super="filter" output_id="pixastic.BlurFast">	
+			<constructor_params>
+				<parameter property="amount"/>												
+			</constructor_params>
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>	
+		</class>
+		<class id="crop" super="filter" output_id="pixastic.Crop"/>				
+		<class id="emboss" super="filter" output_id="pixastic.Emboss">	
+			<constructor_params>
+				<parameter property="strength"/>	
+				<parameter property="grey_level"/>
+				<parameter property="direction"/>
+				<parameter property="blend"/>
+			</constructor_params>
+            <property id="strength" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.strength"/>
+                <set text="set_strength({value})"/>
+            </property>	
+			<property id="grey_level" type="int" use_plain_value="true" dont_init="true">
+				<get text="options.greyLevel"/>
+                <set text="set_grey_level({value})"/>
+            </property>	
+			<property id="direction" type="string" dont_init="true">
+				<get text="options.direction"/>
+                <set text="set_direction({value})"/>
+            </property>	
+			<property id="blend" type="bool" use_plain_value="true" dont_init="true">
+				<get text="options.blend"/>
+                <set text="set_blend({value})"/>
+            </property>
+		</class>
+		<class id="lighten" super="filter" output_id="pixastic.Lighten">	
+			<constructor_params>
+				<parameter property="amount"/>												
+			</constructor_params>
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>
+		</class>
+		<class id="posterize" super="filter" output_id="pixastic.Posterize">	
+			<constructor_params>
+				<parameter property="levels"/>												
+			</constructor_params>
+            <property id="levels" type="int" use_plain_value="true" dont_init="true">
+				<get text="options.levels"/>
+                <set text="set_levels({value})"/>
+            </property>
+		</class>
+		<class id="solarize" super="filter" output_id="pixastic.Solarize"/>			
+		<class id="desaturate" super="filter" output_id="pixastic.Desaturate">	
+			<constructor_params>
+				<parameter property="average"/>												
+			</constructor_params>
+            <property id="average" type="bool" use_plain_value="true" dont_init="true">
+				<get text="options.average"/>
+                <set text="set_average({value})"/>
+            </property>	
+		</class>
+		<class id="fliph" super="filter" output_id="pixastic.FlipH"/>			
+		<class id="mosaic" super="filter" output_id="pixastic.Mosaic">	
+			<constructor_params>
+				<parameter property="block_size"/>												
+			</constructor_params>
+            <property id="block_size" type="int" use_plain_value="true" dont_init="true">
+				<get text="options.blockSize"/>
+                <set text="set_block_size({value})"/>
+            </property>	
+		</class>
+		<class id="removenoise" super="filter" output_id="pixastic.RemoveNoise"/>			
+		<class id="unsharpmask" super="filter" output_id="pixastic.UnsharpMask">	
+			<constructor_params>
+				<parameter property="amount"/>		
+				<parameter property="radius"/>
+				<parameter property="threshold"/>
+			</constructor_params>
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>
+			<property id="radius" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.radius"/>
+                <set text="set_radius({value})"/>
+            </property>
+			<property id="threshold" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.threshold"/>
+                <set text="set_threshold({value})"/>
+            </property>
+		</class>
+	</types>	
+</module>

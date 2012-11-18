@@ -1,0 +1,413 @@
+<xss:parameter id="seq"/>
+<xss:parameter id="is_class"/>
+<xss:parameter id="path"/>
+
+<xss:class>
+    object get_scope(seq)
+    {
+        var  expr_this = seq;
+        if (seq.target)
+            expr_this = compiler.get_instance(seq.target);
+        else if (seq.target_type)
+            expr_this = compiler.get_type(seq.target_type);
+        else if (compiler.is_type(seq.parent))
+            expr_this = compiler.get_type(seq.parent.id);
+        
+        return expr_this;
+    }
+    
+    method resolve_key(key, key_value, key_index, owner_seq, prop_info, interp)
+    {
+        //for good measure
+        key.value = null;
+
+        var this_ = get_scope(owner_seq); 
+        if (compiler.parse_expression(key_value))
+        {
+            //in this case we need to figure out the key values at runtime
+            //this code will keep the expression information to be genearted later. 
+            //Note: such expressions will be evaluated at sequence's start time 
+            
+            var info  = object();
+            info.expr = compiler.render_expression(key_value, this_);
+            info.idx  = key_index;
+            info.interp = interp;
+            
+            if (prop_info.inside_class)
+                info.expr = compiler.replace_identifier(info.expr, "this.", "this__."); //td!!! this_str
+            
+            owner_seq.key_expressions += info;
+        }
+        else if (key_value == "@") //convention over configuration
+        {
+            //same deal, only this time we'll assign the current value 
+            //kinda neat
+            var nfo = object();
+            
+            nfo.expr = compiler.property_get(prop_info.property, prop_info.path);
+            nfo.idx  = key_index;
+            nfo.interp = interp;
+            
+            //if (!rendering_instance)
+            //    nfo.expr = compiler.replace_identifier(nfo.expr, owner_seq.id, "this__");
+
+            owner_seq.key_expressions += nfo;
+        }
+        else //assume constants
+        {
+            key.value = key_value;
+        }
+    }
+    
+    method generate_at(at, seq, seq_id, rendering_instance)
+    {
+        float time = at.time;
+        for(var itm in at.children)
+        {
+            if (itm.class_name == "animate")
+            {
+                var prop_info = analyze_expression(itm.property, seq, seq_id, rendering_instance);
+
+                var    prop      = prop_info.property;
+                string prop_name = prop_info.property_name;
+                string iid       = compiler.genid('__i');
+                string path      = prop_info.path;
+                
+                string assign    = path + "." + prop_name + " = value"; 
+                if (prop) assign = compiler.property_set(prop, path, 'value');
+                else      compiler.error("Cannot find animatable property", prop = itm.property);
+                
+                //start the interpolator
+                myidiom.begin_interpolator(prop, iid, assign, path);
+                        
+                //generate keys
+                array keys = itm.find_by_type("key");
+                
+                if (keys.empty)
+                {
+                    if (itm.in == null|| itm.from == null || itm.to == null)					
+                         compiler.error("animate needs keys or [from, to, in]");
+					
+                    
+                    //a simple from/to animation
+                    var end     = object();
+                    end.t       = itm.in;
+                    end.value   = itm.to;
+                            
+                    var start   = object();
+                    start.t     = 0;
+                    start.value = itm.from;
+
+                    keys = [start, end];
+                }
+                        
+                float length = 0.0;
+                int   idx    = 0;
+                for(var key in keys)
+                {
+                    //td: make time flexible
+                    if (key.t > length)
+                        length = key.t; 
+                            
+                    key.t += time;
+                    resolve_key(key, key.value, idx, seq, prop_info, iid);       
+                    
+                    if (key.value == null)
+                        key.value = "null";
+                        
+                    myidiom.render_key(iid, key);
+                    
+                    idx++;
+                }
+
+                //close the interpolator 
+                myidiom.close_interpolator(iid, seq_id);
+            }
+            else if (itm.class_name == "run")
+            {
+                string mid = compiler.genid('__r');
+                
+                myidiom.begin_caller(mthd, mid, time);
+                generate_run(itm, seq_id, seq, rendering_instance);
+                myidiom.close_caller(seq_id, mid);
+            }
+        }
+    }
+            
+    method analyze_expression(string expr, seq, seq_id, rendering_instance)
+    {
+        var  expr_this = seq;
+        bool targetted = false;
+        bool inside_class = false;
+        if (seq.target)
+        {
+            targetted = true;
+            if (rendering_instance)
+                expr_this = compiler.get_instance(seq.target);
+            else
+                compiler.error("Sequence classes do not support target, use target_type");
+                    
+            if (!expr_this)
+                compiler.error("Invalid sequence target", target=seq.target);
+        }
+        else if (seq.target_type)
+        {
+            targetted = true;
+            expr_this = compiler.get_type(seq.target_type);
+
+            if (!expr_this)
+                compiler.error("Invalid sequence target type", target=seq.target_type);
+        }
+        else if (compiler.is_type(seq.parent))
+        {
+            inside_class = true;
+            expr_this = compiler.get_type(seq.parent.id);
+        }
+                
+        var result = compiler.analyze_expression(expr, this_ = expr_this);
+        result.inside_class = inside_class;
+        
+        if (targetted)
+        {
+            if (result.path == null || result.path == '')
+                result.path = seq_id + ".target";
+            else
+                result.path = seq_id + ".target." + result.path;
+        }
+        
+        if (inside_class)
+        {
+            if (result.path == null || result.path == '')
+                result.path = "this__";
+            else
+            {
+                result.path = compiler.replace_identifier(result.path, "this.", "this__.");
+            }
+        }
+                
+        if (!rendering_instance)
+        {
+			if (!result.this_property)
+                compiler.error("Sequence class targets must be properties");
+
+            result.path = compiler.replace_identifier(result.path, "this.", "this__.");
+        }
+        else if (result.this_property)
+        {
+            result.path = compiler.replace_identifier(result.path, "this.", seq.id + ".");
+        }    
+               
+        return result;
+    }
+    
+    method generate_when(itm, seq, seq_id, rendering_instance)
+    {
+        if (itm.expr)
+        {
+            seq.conditions += itm.expr;
+            seq.actions += itm.children;
+        }
+        else if (itm.trigger)
+        {
+            var ev = analyze_expression(itm.trigger, seq, seq_id, rendering_instance);
+            
+            myidiom.begin_when_event(ev, seq_id);
+            generate_when_actions(itm.children, seq_id, seq);
+            myidiom.close_when_event();
+        }
+        else
+            compiler.error("When tag expects an 'expr' or 'trigger'");
+    }
+    
+    method generate_every(itm, seq, seq_id, rendering_instance)
+    {
+        if (!itm.time)
+            compiler.error("'every' needs 'time'");
+    
+        string aid = compiler.genid("__h");
+        
+        myidiom.begin_every(aid, itm.time);
+        
+        for(var child in itm.children)
+        {
+            if (child.class_name == "run") 
+                generate_run(child, seq_id, seq, rendering_instance);
+            else 
+                compiler.error("'every' supports only 'run'");
+        }
+
+        myidiom.close_every(aid, seq_id);
+    }
+            
+    method generate_item(itm, seq, seq_id, rendering_instance)
+    {
+        if (itm.class_name == "at")             generate_at(itm, seq, seq_id, rendering_instance);
+        else if (itm.class_name == "when")      generate_when(itm, seq, seq_id, rendering_instance);
+        else if (itm.class_name == "every")     generate_every(itm, seq, seq_id, rendering_instance);
+        else if (itm.class_name == "sequence")  
+        {
+            //render nested sequence
+            string nested_id = seq_id + "." + itm.id;
+            generate_sequence(itm, nested_id, seq_id, true);
+            
+            string shid = compiler.genid('__sh');
+            myidiom.register_nested_sequence(seq_id, nested_id, shid);
+        }
+        else
+        {
+            compiler.error("Invalid animation tag", tag = itm.class_name);
+        }
+    }
+    
+    method generate_run(action, seq_id, seq, rendering_instance)
+    {
+        if (action.method)
+        {
+            var mthd = analyze_expression(action.method, seq, seq_id, rendering_instance);
+            if (!mthd.is_method)
+                compiler.error("run method must be valid method", methd = action.method);
+            
+            var path = mthd.path;
+            if (!path)
+                path = seq_id;
+            else if (path == "")
+                path = seq_id;
+
+            myidiom.run_method(mthd, path);
+        }
+        else if (action.sequence)
+        {   
+            var torun = compiler.analyze_expression(action.sequence);
+            myidiom.run_sequence(torun, seq_id);
+        }
+        else if (action.expr)
+        {
+            myidiom.run_expression(action.expr, seq, seq_id);
+        }
+        else
+        {
+            compiler.log("WARNING: You can run methods, sequences or expressions, nothing else");
+        }
+    }
+    
+    method generate_when_actions(array actions, seq_id, seq)
+    {
+        for(var action in actions)
+        {
+            if (action.class_name == "run")
+                generate_run(action, seq_id, seq, true);
+            else
+                compiler.log("WARNING: Only run is allowed inside whens");
+        }
+    }
+            
+    method generate_sequence(seq, seq_id, parent_id, rendering_instance)
+    {
+        if (seq_id == null)
+        {
+            seq_id  = seq.output_id;
+            if (path)
+              seq_id = path + "." + seq_id;
+        }
+        
+        if (rendering_instance)
+        {
+            myidiom.render_instance(seq, seq_id, parent_id, path);
+        }
+        else
+        {
+            //render as class
+            //td: !!! check for java
+            
+            seq_id = "this";
+            out()
+            {
+                var this__ = this;
+            }
+        }
+        
+
+        if (seq.auto_start)
+        {
+            out()
+            {
+                <xss:e v="seq_id"/>.start();
+            }
+        }
+                
+        if (parent_id) 
+            myidiom.notify_parented(seq_id, parent_id);
+
+        //we'll let our children fill in on what the want done
+        seq.conditions      = [];
+        seq.actions         = [];
+        seq.key_expressions = [];
+        for(var item in seq.children)
+        {
+            generate_item(item, seq, seq_id, rendering_instance);
+        }
+
+        if (!seq.key_expressions.empty)
+        {
+            myidiom.begin_key_expressions(seq_id);
+            
+            for(var key_xpr in seq.key_expressions)
+            {
+                myidiom.render_key_expression(key_xpr);
+            }
+            
+            myidiom.close_key_expressions();
+        }
+
+        if (!seq.conditions.empty)
+        {
+            myidiom.begin_frame_conditions(seq_id);
+            
+            //check the conditions described on the when clause
+            int cond_idx = 0;
+            for(var cond in seq.conditions)
+            {
+                cond = compiler.render_expression(cond, seq);
+
+                out()
+                {
+                    if (<xss:e v="cond"/>)
+                    <xss:open_brace/>
+                }
+                
+                var action_list = seq.actions[cond_idx]; cond_idx++;
+                generate_when_actions(action_list, seq_id, seq);
+                
+                out()
+                {
+                    <xss:close_brace/>
+                }
+            }
+            
+            myidiom.close_frame_conditions();
+        }
+    }
+        
+    property myidiom; //delegate 
+    
+    on render()
+    {
+        myidiom = seq.idiom;
+        
+        if (is_class)
+        {
+            if (seq.target_type)
+            {
+                var ttype = compiler.get_type(seq.target_type);
+                seq.add_property("target", null, ttype);
+            }
+        }
+        
+        var top_level = !seq.parent;
+        if (!top_level)
+            top_level = seq.parent.class_name != "sequence";
+
+        if (top_level) 
+            generate_sequence(seq, null, null, !is_class);
+    }
+</xss:class>

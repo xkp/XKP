@@ -1,0 +1,120 @@
+<xss:parameter id="it"/>
+
+<xss:class>
+	method render_component(var component, int idt)
+	{
+        if (component.class_name == "element")
+            return;
+
+        if (component.simple)
+        {
+            out() {<<xss:e value="component.type.id"/>/>}
+            return;
+        }
+    
+		string class_name = "";
+		if (component.type)
+			class_name = component.type.tag;
+        
+        if (!class_name)
+            class_name = component.type.id;
+            
+        if (class_name == "")
+            return;
+			
+		if(component.html_renderer)
+		{
+			string file_renderer = "class.xss/" + component.html_renderer;
+			compiler.xss(file_renderer, component);
+		}
+		else
+		{
+			out(indent = idt)
+			{
+				<<xss:e value="class_name"/> id="<xss:e value="component.id"/>"
+			}
+            
+            if (component.css_class) 
+                out() { class="<xss:e value="component.css_class"/>" }
+				
+			//render some properties inside html tag
+			if(component.attributes)
+			{
+				for(var attr in component.attributes)
+				{
+					string attrib = attr.value;
+					if(attr.expr)
+					{
+						if(attrib == "{parent.id}")
+						{
+							attrib = component.parent.id;
+						}
+						else
+						if(attrib == "{id}")
+						{
+							attrib = component.id;
+						}
+					}
+						
+					out(indent = idt + 1)
+					{
+						<xss:e value="attr.name"/>="<xss:e value="attrib"/>" 
+					}
+				}
+			}
+				
+			var prop_outtag = [];
+			var qproperty = component.query_properties("*");
+			for(var p1 in qproperty)
+			{
+				if(p1.value == null)
+					continue;
+					
+				if(p1.render_as == "attribute")
+				{
+					out()
+					{
+						<xss:e value="p1.output_id"/>="<xss:e value="p1.value"/>" 
+					}
+				} 
+				else
+				if(p1.render_as == "text")
+				{
+					prop_outtag += p1;
+				}
+			}
+				
+			compiler.out(">");
+				
+			for(var p2 in prop_outtag)
+			{
+				out(indent = idt)
+				{
+					<xss:e value="p2.value"/>
+				}
+			}
+				
+			if(component.children)
+			{
+				for(var child in component.children)
+				{
+					render_component(child, idt + 1);
+				}
+			}
+					
+			//close the tag
+			out(indent = idt)
+			{
+				</<xss:e value="class_name"/>>
+			}
+		}
+	}
+
+	on render()
+	{
+		if (it.class_name == "html")
+            out(){<xss:e value="it.text"/>}
+        else
+            render_component(it, 1);
+	}
+</xss:class>
