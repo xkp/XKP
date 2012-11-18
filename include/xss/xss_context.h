@@ -520,8 +520,20 @@ struct IErrorHandler
 
 enum NOTIFIED
   {
-    NOTID_ASSIGN,
-    NOTID_RETURN_TYPE
+    NOTID_DECL_VAR,
+    NOTID_ASSIGN_EXPR,
+    NOTID_ITER_FOR,
+    NOTID_DECL_PROP, 
+    NOTID_DECL_METHOD, //td: how to save property and your object owner, maybe struct for each notified
+    NOTID_DECL_CLASS,
+    NOTID_DECL_INSTANCE,
+    NOTID_ASSIGN_PROP,
+    NOTID_READ_PROP,
+    NOTID_CALL_METHOD,
+    NOTID_INSTANTIATION_EXPR,
+    NOTID_RETURN_TYPE,
+    NOTID_RETURN_EXPR,
+    NOTID_DSL
   };
 
 struct notification
@@ -634,7 +646,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
 			void           visit(context_visitor* visitor);
 	    variant        identity_value();
       bool           add_instance(XSSObject instance);
-      void           notify(notification nfy);
+      void           notify(notification nfy, bool bottom_up = false);
     public:
       variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
       bool    resolve(const str& id, resolve_info& info);
@@ -684,10 +696,14 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
 
     private:
       //0.9.5
-      CONTEXT_IDENTITY identity_;
-      variant          identity_obj_;
-      fs::path         src_file_;
-      fs::path         output_file_;
+      typedef std::multimap<NOTIFIED, notification> notified_list;
+      typedef std::pair<NOTIFIED, notification>     notified_pair;
+
+      CONTEXT_IDENTITY  identity_;
+      variant           identity_obj_;
+      fs::path          src_file_;
+      fs::path          output_file_;
+      notified_list     notifications_;
        
       bool     resolve_dot(const str& id, resolve_info& info);
       bool     identity_search(const str& id, resolve_info& info);

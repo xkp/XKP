@@ -142,6 +142,7 @@
     <ClInclude Include="..\..\..\include\xss\lang\waxjs.h" />
     <ClInclude Include="..\..\..\include\xss\lang_factory.h" />
     <ClInclude Include="..\..\..\include\xss\object_model.h" />
+    <ClInclude Include="..\..\..\include\xss\xss_code.h" />
     <ClInclude Include="..\..\..\include\xss\xss_compiler.h" />
     <ClInclude Include="..\..\..\include\xss\xss_context.h" />
     <ClInclude Include="..\..\..\include\xss\xss_error.h" />

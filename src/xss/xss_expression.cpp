@@ -680,6 +680,10 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
 
                 type_ = ctx->get_type(it->identifier());
                 it->bind(RESOLVE_INSTANCE, type_);
+
+                notification ntfy(NOTID_INSTANTIATION_EXPR, args);
+                ctx->notify(ntfy);
+
                 return;
               };
             case OP_OBJECT:
@@ -745,6 +749,13 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
 
                     it->bind(resolver.what, resolver.value);
                     left = resolver;
+
+                    if (resolver.what == RESOLVE_PROPERTY)
+                      {
+                        XSSProperty prop = resolver.value;
+                        notification ntfy(NOTID_ASSIGN_PROP, prop); // td: recolect from where it call is doing...how ?? think!!
+                        ctx->notify(ntfy);
+                      }
                   }
                 else
                   {
@@ -770,6 +781,9 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
                         it->bind(RESOLVE_METHOD, mthd);
                         left.what  = RESOLVE_TYPE;
                         left.type  = current;
+
+                        notification ntfy(NOTID_CALL_METHOD, mthd); // td: recolect from where it call is doing...how ?? think!!
+                        ctx->notify(ntfy);
                       }
                     else
                       {
@@ -963,7 +977,7 @@ void xss_expression::bind(XSSContext ctx)
             arg2_->bind(ctx);
 
             XSSExpression expr = XSSExpression(shared_from_this());
-            notification ntfy(NOTID_ASSIGN, expr);
+            notification ntfy(NOTID_ASSIGN_EXPR, expr);
             ctx->notify(ntfy);
           }
         else
