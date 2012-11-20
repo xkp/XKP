@@ -17,19 +17,22 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>production\</OutputPath>
+    <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>production\</OutputPath>
+    <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="application.xml" />
     <Compile Include="application.xs" />
+    <Compile Include="application.xml">
+      <DependentUpon>application.xs</DependentUpon>
+    </Compile>
     <Compile Include="project.xml">
+      <DependentUpon>application.xs</DependentUpon>
       <xs_project>true</xs_project>
     </Compile>
   </ItemGroup>
@@ -102,9 +105,6 @@
     <Content Include="js\joint.js">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="js\jquery-1.4.2.min.js">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="js\jquery-1.7.1.min.js">
       <SubType>Content</SubType>
     </Content>
@@ -160,9 +160,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="js\spawner.js">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="js\state.js">
       <SubType>Content</SubType>
     </Content>
     <Content Include="js\streamer.js">

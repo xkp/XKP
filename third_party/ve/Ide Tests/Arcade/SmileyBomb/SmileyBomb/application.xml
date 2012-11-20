@@ -1,0 +1,24 @@
+﻿<application id="SmileyBomb" src="application.xs" title="SmileyBomb" width="600" height="400">
+
+  <physics_world id="myWorld"
+                   scale       = "30"
+                   friction    = "0.5"
+                   density     = "1.0"
+                   restitution = "0.2"/>
+
+  <resources>
+    <image src="../images/smile_sad_48.png"/>
+    <image src="../images/smile_grin_48.png"/>
+    <image src="../images/sound_on.png"/>
+    <image src="../images/sound_off.png"/>
+    <image src="../images/stone-12.jpg"/>
+    <image src="../images/bomb.png"/>
+    <audio src="../sounds/boom.wav"/>
+  </resources>
+
+  <state_button id="sound" x="50" y="50" width="50" height="50" active="../images/sound_on.png" inactive="../images/sound_off.png"/>
+  <spawner id="sp1" x="300" y="100" auto_start="true" frequency="3" creator_class="bad_guy"/>
+  <good_guy id="hero" x="300" y="350"/>
+  <floor x="0" y="390" width="600" height="40"/>
+  <label id="game_over" x="220" y="200" visible="false" font="40pt Calibri" caption="GAME OVER"/>
+</application>

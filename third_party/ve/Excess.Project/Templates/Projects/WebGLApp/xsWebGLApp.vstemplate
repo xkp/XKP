@@ -1,7 +1,7 @@
 <VSTemplate Version="2.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
   <TemplateData>
-    <Name>Excess WebGL Application</Name>
-    <Description>A project for creating a webgl xs application</Description>
+    <Name>Excess Performance 3D Web Application</Name>
+    <Description>A project for creating a performance 3d xs web application</Description>
     <Icon>webglIcon.ico</Icon>
     <ProjectType>Excess</ProjectType>
     <SortOrder>50</SortOrder>
@@ -20,7 +20,6 @@
       <ProjectItem>js\colors.js</ProjectItem>
       <ProjectItem>js\event.js</ProjectItem>
       <ProjectItem>js\joint.js</ProjectItem>
-      <ProjectItem>js\jquery-1.4.2.min.js</ProjectItem>
       <ProjectItem>js\jquery-1.7.1.min.js</ProjectItem>
       <ProjectItem>js\jquery-idiom.js</ProjectItem>
       <ProjectItem>js\jquery-ui-1.8.18.custom.min.js</ProjectItem>
@@ -40,7 +39,6 @@
       <ProjectItem>js\scene_loader.js</ProjectItem>
       <ProjectItem>js\sequence.js</ProjectItem>
       <ProjectItem>js\spawner.js</ProjectItem>
-      <ProjectItem>js\state.js</ProjectItem>
       <ProjectItem>js\streamer.js</ProjectItem>
       <ProjectItem>js\three\Detector.js</ProjectItem>
       <ProjectItem>js\three\fonts.js</ProjectItem>

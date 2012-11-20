@@ -1,0 +1,24 @@
+﻿<application id="Particles" src="application.xs" title="Particles" background="black">
+
+  <label id="lbl0" x="350" y="50" color="White" font="12px Verdana" caption="Move the mouse to rotate the camera"/>
+
+  <materials>
+    <particle_canvas_material id="p_mat1" color="Math.random() * 0x808008 + 0x808008" program="program_fill"/>
+  </materials>
+
+  <scene>
+
+    <camera id="camera_1" fov="75" aspect="1.5" near="1" far="3000" look_at="scene.position">
+      <position z="1000"/>
+    </camera>
+
+    <particle_system material="p_mat1"
+						 quantity="1000" scale="Math.random() * 10 + 5">
+      <x begin="-400" end="400"/>
+      <y begin="-400" end="400"/>
+      <z begin="-400" end="400"/>
+    </particle_system>
+
+  </scene>
+
+</application>
