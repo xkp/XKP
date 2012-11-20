@@ -1,0 +1,63 @@
+<VSTemplate Version="2.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+  <TemplateData>
+    <Name>Excess Arcade Canvas Web Application</Name>
+    <Description>A project for creating an arcade canvas xs web application</Description>
+    <Icon>arcadeIcon.ico</Icon>
+    <ProjectType>Excess</ProjectType>
+    <SortOrder>50</SortOrder>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>CanvasArcadeApplication</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <RequiredFrameworkVersion>4.0</RequiredFrameworkVersion>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="xsArcadeApp.xsproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">application.xml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true">application.xs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="project.xml">project.xml</ProjectItem>
+      <ProjectItem>js\Box2dWeb-2.1.a.3.min.js</ProjectItem>
+      <ProjectItem>js\colors.js</ProjectItem>
+      <ProjectItem>js\event.js</ProjectItem>
+      <ProjectItem>js\joint.js</ProjectItem>     
+      <ProjectItem>js\jquery-1.7.1.min.js</ProjectItem>
+      <ProjectItem>js\jquery-idiom.js</ProjectItem>
+      <ProjectItem>js\jquery-ui-1.8.18.custom.min.js</ProjectItem>
+      <ProjectItem>js\jquery.easing.min.js</ProjectItem>
+      <ProjectItem>js\jquery.js</ProjectItem>
+      <ProjectItem>js\jquery.ui.map.min.js</ProjectItem>
+      <ProjectItem>js\jquery.utils.js</ProjectItem>
+      <ProjectItem>js\jquery\jquery-ui.css</ProjectItem>
+      <ProjectItem>js\jquery\jquery-ui.js</ProjectItem>
+      <ProjectItem>js\jquery\jquery.js</ProjectItem>
+      <ProjectItem>js\jsmanipulate\jsm-manager.js</ProjectItem>
+      <ProjectItem>js\jsmanipulate\jsm-utils.js</ProjectItem>
+      <ProjectItem>js\jsmanipulate\jsmanipulate.js</ProjectItem>
+      <ProjectItem>js\keys.js</ProjectItem>
+      <ProjectItem>js\prototype.js</ProjectItem>
+      <ProjectItem>js\resig.js</ProjectItem>
+      <ProjectItem>js\scene_loader.js</ProjectItem>
+      <ProjectItem>js\sequence.js</ProjectItem>
+      <ProjectItem>js\spawner.js</ProjectItem>      
+      <ProjectItem>js\streamer.js</ProjectItem>
+      <ProjectItem>js\three\Detector.js</ProjectItem>
+      <ProjectItem>js\three\fonts.js</ProjectItem>
+      <ProjectItem>js\three\loaders\ColladaLoader.js</ProjectItem>
+      <ProjectItem>js\three\postprocessing\BloomPass.js</ProjectItem>
+      <ProjectItem>js\three\postprocessing\DotScreenPass.js</ProjectItem>
+      <ProjectItem>js\three\postprocessing\EffectComposer.js</ProjectItem>
+      <ProjectItem>js\three\postprocessing\FilmPass.js</ProjectItem>
+      <ProjectItem>js\three\postprocessing\MaskPass.js</ProjectItem>
+      <ProjectItem>js\three\postprocessing\RenderPass.js</ProjectItem>
+      <ProjectItem>js\three\postprocessing\SavePass.js</ProjectItem>
+      <ProjectItem>js\three\postprocessing\ShaderPass.js</ProjectItem>
+      <ProjectItem>js\three\postprocessing\TexturePass.js</ProjectItem>
+      <ProjectItem>js\three\ShaderExtras.js</ProjectItem>
+      <ProjectItem>js\three\Stats.js</ProjectItem>
+      <ProjectItem>js\three\Three.js</ProjectItem>
+      <ProjectItem>js\three\Utils.js</ProjectItem>
+      <ProjectItem>js\ui.js</ProjectItem>
+      <ProjectItem>js\utils.js</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

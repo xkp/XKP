@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5bc1c78a-bd00-458f-bf88-bd7b8695b821}</ProjectGuid>
+    <OutputType>Html</OutputType>
+    <RootNamespace>Text</RootNamespace>
+    <AssemblyName>Text.html</AssemblyName>
+    <MainFile>project.xml</MainFile>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetPlatform>v4</TargetPlatform>
+    <Name>Text</Name>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- Set the IronPythonPath property by proving in different locations where Iron Python could be installed -->
+    <!-- Regular LocalAppData -->
+    <ExcessPath Condition=" '$(ExcessPath)' == '' ">$(EXCESS_INSTALL_PATH)\Extensions\Application\Excess</ExcessPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>production</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>production</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="application.xs" />
+    <Compile Include="application.xml">
+      <DependentUpon>application.xs</DependentUpon>
+    </Compile>
+    <Compile Include="project.xml">
+      <DependentUpon>application.xs</DependentUpon>
+      <xs_project>true</xs_project>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="js" />
+    <Folder Include="js\jsmanipulate" />
+    <Folder Include="js\jquery" />
+    <Folder Include="js\three" />
+    <Folder Include="js\three\loaders" />
+    <Folder Include="js\three\postprocessing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="js\Box2dWeb-2.1.a.3.min.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\colors.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\event.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\joint.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\jquery-1.7.1.min.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\jquery-idiom.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\jquery-ui-1.8.18.custom.min.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\jquery.easing.min.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\jquery.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\jquery.ui.map.min.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\jquery.utils.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\jquery\jquery-ui.css">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\jquery\jquery-ui.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\jquery\jquery.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\jsmanipulate\jsm-manager.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\jsmanipulate\jsm-utils.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\jsmanipulate\jsmanipulate.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\keys.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\prototype.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\resig.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\scene_loader.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\sequence.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\spawner.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\streamer.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\three\Detector.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\three\fonts.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\three\loaders\ColladaLoader.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\three\postprocessing\BloomPass.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\three\postprocessing\DotScreenPass.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\three\postprocessing\EffectComposer.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\three\postprocessing\FilmPass.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\three\postprocessing\MaskPass.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\three\postprocessing\RenderPass.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\three\postprocessing\SavePass.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\three\postprocessing\ShaderPass.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\three\postprocessing\TexturePass.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\three\ShaderExtras.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\three\Stats.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\three\Three.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\three\Utils.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\ui.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="js\utils.js">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(ExcessPath)\Excess.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>chrome --allow-file-access-from-files $(TargetPath)</PostBuildEvent>
+  </PropertyGroup>
+</Project>

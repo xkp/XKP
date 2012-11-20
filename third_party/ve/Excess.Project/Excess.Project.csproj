@@ -273,6 +273,14 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="Project.jpg" />
+    <None Include="Templates\Projects\CanvasApp\application.xs" />
+    <None Include="Templates\Projects\CanvasApp\xsCanvasApp.xsproj">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Templates\Projects\ArcadeApp\application.xs" />
+    <None Include="Templates\Projects\ArcadeApp\xsArcadeApp.xsproj">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Templates\Projects\jQueryApp\application.xs" />
     <None Include="Templates\Projects\jQueryApp\jQueryApp.xsproj">
       <SubType>Designer</SubType>
@@ -297,6 +305,114 @@
     <Content Include="Templates\Items\WPFClass\wclass.xml" />
     <Content Include="Templates\Items\WPFClass\WPFClass.ico" />
     <None Include="Templates\Projects\ThreeJSApp\threejsIcon.ico" />
+    <Content Include="Templates\Projects\CanvasApp\application.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Templates\Projects\CanvasApp\js\Box2dWeb-2.1.a.3.min.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\colors.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\event.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\joint.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\jquery-1.4.2.min.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\jquery-1.7.1.min.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\jquery-idiom.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\jquery-ui-1.8.18.custom.min.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\jquery.easing.min.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\jquery.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\jquery.ui.map.min.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\jquery.utils.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\jquery\jquery-ui.css" />
+    <Content Include="Templates\Projects\CanvasApp\js\jquery\jquery-ui.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\jquery\jquery.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\jsmanipulate\jsm-manager.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\jsmanipulate\jsm-utils.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\jsmanipulate\jsmanipulate.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\keys.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\prototype.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\resig.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\scene_loader.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\sequence.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\spawner.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\state.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\streamer.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\three\Detector.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\three\fonts.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\three\loaders\ColladaLoader.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\three\postprocessing\BloomPass.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\three\postprocessing\DotScreenPass.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\three\postprocessing\EffectComposer.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\three\postprocessing\FilmPass.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\three\postprocessing\MaskPass.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\three\postprocessing\RenderPass.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\three\postprocessing\SavePass.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\three\postprocessing\ShaderPass.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\three\postprocessing\TexturePass.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\three\ShaderExtras.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\three\Stats.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\three\Three.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\three\Utils.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\ui.js" />
+    <Content Include="Templates\Projects\CanvasApp\js\utils.js" />
+    <None Include="Templates\Projects\CanvasApp\project.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Templates\Projects\CanvasApp\canvasIcon.ico" />
+    <VSTemplate Include="Templates\Projects\CanvasApp\xsCanvasApp.vstemplate">
+      <SubType>Designer</SubType>
+    </VSTemplate>
+    <Content Include="Templates\Projects\ArcadeApp\application.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Templates\Projects\ArcadeApp\arcadeIcon.ico" />
+    <Content Include="Templates\Projects\ArcadeApp\js\Box2dWeb-2.1.a.3.min.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\colors.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\event.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\joint.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\jquery-1.4.2.min.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\jquery-1.7.1.min.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\jquery-idiom.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\jquery-ui-1.8.18.custom.min.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\jquery.easing.min.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\jquery.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\jquery.ui.map.min.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\jquery.utils.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\jquery\jquery-ui.css" />
+    <Content Include="Templates\Projects\ArcadeApp\js\jquery\jquery-ui.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\jquery\jquery.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\jsmanipulate\jsm-manager.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\jsmanipulate\jsm-utils.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\jsmanipulate\jsmanipulate.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\keys.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\prototype.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\resig.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\scene_loader.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\sequence.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\spawner.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\state.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\streamer.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\three\Detector.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\three\fonts.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\three\loaders\ColladaLoader.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\three\postprocessing\BloomPass.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\three\postprocessing\DotScreenPass.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\three\postprocessing\EffectComposer.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\three\postprocessing\FilmPass.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\three\postprocessing\MaskPass.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\three\postprocessing\RenderPass.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\three\postprocessing\SavePass.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\three\postprocessing\ShaderPass.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\three\postprocessing\TexturePass.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\three\ShaderExtras.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\three\Stats.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\three\Three.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\three\Utils.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\ui.js" />
+    <Content Include="Templates\Projects\ArcadeApp\js\utils.js" />
+    <None Include="Templates\Projects\ArcadeApp\project.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <VSTemplate Include="Templates\Projects\ArcadeApp\xsArcadeApp.vstemplate">
+      <SubType>Designer</SubType>
+    </VSTemplate>
     <Content Include="Templates\Projects\jQueryApp\application.xml">
       <SubType>Designer</SubType>
     </Content>

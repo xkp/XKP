@@ -1,0 +1,25 @@
+﻿<application id="ShaderFresnel" src="application.xs" title="ShaderFresnel" background="Black">
+
+  <resources>
+    <texture_cube 	id="t_cube1"
+						posx="../images/cube/Park/posx.jpg" negx="../images/cube/Park/negx.jpg"
+						posy="../images/cube/Park/posy.jpg" negy="../images/cube/Park/negy.jpg"
+						posz="../images/cube/Park/posz.jpg" negz="../images/cube/Park/negz.jpg"
+		/>
+  </resources>
+
+  <materials>
+    <my_material id="shader_mat1" t_cube="t_cube1"/>
+  </materials>
+
+  <scene>
+
+    <camera id="camera_1" fov="60" aspect="1.5" near="1" far="100000" look_at="scene.position">
+      <position z="3200"/>
+    </camera>
+
+    <panorama_cube size="100000" texture_cube="t_cube1"/>
+
+  </scene>
+
+</application>

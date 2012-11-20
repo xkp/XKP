@@ -15,12 +15,12 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>production\</OutputPath>
+    <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>production\</OutputPath>
+    <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
 
@@ -53,9 +53,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="js\joint.js">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="js\jquery-1.4.2.min.js">
       <SubType>Content</SubType>
     </Content>
     <Content Include="js\jquery-1.7.1.min.js">
@@ -113,9 +110,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="js\spawner.js">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="js\state.js">
       <SubType>Content</SubType>
     </Content>
     <Content Include="js\streamer.js">
