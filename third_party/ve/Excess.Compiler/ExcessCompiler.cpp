@@ -177,7 +177,7 @@ Tokenizer^ Compiler::CreateTokenizer(String^ s)
 //ExcessModel
 ExcessModel::ExcessModel()
 {
-	model_ = create_object_model(); 
+	model_ = create_object_model();
 	projects_ = new std::map<std::string, int>();
 	dirt_ = new std::map<std::string, int>();
 	dirt_index_ = new std::map<int, std::string>();
@@ -309,6 +309,12 @@ bool ExcessModel::updateChanges()
 	//	if (elapsed < 0 || elapsed > 1000)
 	//		break;
 	//}
+}
+
+void ExcessModel::addSearchPath(String^ path)
+{
+  std::string str_path = StringUtils::fromString(path);
+  model_->addSearchPath(str_path);
 }
 
 List<ExcessCompletionItem^>^ ExcessModel::getCompletion(String^ filename, String^ text, int line, int col)

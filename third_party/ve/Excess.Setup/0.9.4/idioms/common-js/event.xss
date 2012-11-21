@@ -1,0 +1,70 @@
+<xss:parameter id="ev"/>
+<xss:parameter id="it"/>
+<xss:parameter id="is_class"/>
+<xss:parameter id="path"/>
+
+<xss:code>
+//remember every event could be implemented multiple times
+
+string ev_name = ev.output_id;
+var    impls  	= ev.impls;
+var    evargs 	= ev.args;
+
+string this_str;
+string codethis_str;
+
+if (is_class)
+{
+	this_str     = "this";	
+    codethis_str = "this__";	
+}
+else
+{
+    //instance
+    if (compiler.is_type(it.parent))
+    {
+	    this_str = "this." + it.output_id;	
+        codethis_str = "this__";	
+    }
+    else if (compiler.application_object(it))
+    {
+	    this_str = it.output_id;
+        codethis_str = null;	
+    }
+    else if (path)
+    {
+	    this_str = path + "." + it.output_id;
+        codethis_str = this_str;	
+    }
+    else
+    {
+	    this_str = it.output_id;
+        codethis_str = this_str;	
+    }
+}
+
+out(indent = 0)
+{
+	<xss:e value="this_str"/>.events.addListener("<xss:e value="ev_name"/>", function(<xss:e value="evargs.render()"/>)
+	<xss:open_brace/>    
+}
+		
+for(var evimpl in impls)
+{
+    if (!codethis_str)
+        evimpl.use_this_id(true);
+    else
+        evimpl.this_string(codethis_str);
+        	
+	out(indent = 1)
+	{
+		<xss:e>evimpl.render()</xss:e>
+	}
+}
+
+out(indent = 0)
+{
+	<xss:close_brace/>
+	);
+}
+</xss:code>

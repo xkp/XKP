@@ -1,0 +1,39 @@
+<xss:parameter id="obj"/>
+
+<xss:code>
+
+var type = obj.type;
+
+if (type.constructor_params)           
+{
+    int i = 0;
+    for(int j = 0; j < type.constructor_params.size; j++)
+    {		
+		var p = type.constructor_params[j];
+	    if (p.constant)
+		{
+			if(i > 0) 
+                out() {,}
+			
+            out() {<xss:e v="p.constant"/>}		 
+			i++;
+		}
+		else if (p.property)
+		{		
+            var prop = obj.get_property(p.property);			
+			if(prop.value != null)
+			{
+			    if(i > 0) 
+                    out() {,}
+					
+			    if(prop.use_plain_value)
+					out() {<xss:e v="prop.value"/>}
+				else
+					out() {<xss:e v="prop.render_value()"/>}
+				
+			    i++;				
+			}
+		}			        
+    }
+}
+</xss:code>

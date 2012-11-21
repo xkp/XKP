@@ -1,0 +1,130 @@
+<xss:parameter id="clazz"/>
+<xss:parameter id="renderer"/>
+<xss:parameter id="property_renderer" default="property.xss"/>
+<xss:parameter id="method_renderer"   default="method.xss"/>
+<xss:parameter id="event_renderer"    default="event.xss"/>
+
+<xss:code>
+    if (clazz.super)
+    {	
+        out()
+        {
+            <xss:e v="clazz.output_id"/> = Class.create(<xss:e v="clazz.super.output_id"/>,
+        }
+    }
+    else
+    {
+        out()
+        {
+            <xss:e v="clazz.output_id"/> = Class.create(
+        }
+    }
+</xss:code>
+{
+    initialize: function($super
+    <xss:code>
+        var c_params = clazz.type.constructor_params;
+        if (c_params)
+        {
+            for(var p in c_params)
+            {	
+				if (p.property) p.id = p.property;
+				out()
+                {
+                , <xss:e v="p.id"/>
+                }
+            }
+        }
+    </xss:code>)
+    {
+        $super(
+        <xss:code>			
+            var c_params = clazz.type.constructor_params; 
+            
+            if (c_params)
+            {				
+                int idx = 0;				
+                for(var p in c_params)
+                {
+                    string param_str = p.id;
+                    
+					if (p.property)
+                    {
+                        param_str = p.property;
+                        
+                        var clazz_prop = clazz.get_property(p.property); 
+                        if (clazz_prop)
+                        {
+                            if (clazz_prop.value)
+                            {
+                                param_str = param_str + "? " + param_str + " : " + clazz_prop.render_value();
+                            }
+                        }
+                    }
+					
+                    if (idx > 0) out() {,}
+                    
+                    out() {<xss:e v="param_str"/>}
+                    idx++;
+                }
+            }	
+        </xss:code>
+        );
+        this.events = new ev.EventHolder(); 
+        var this__  = this;
+        <xss:code>
+        //register instances as properties, why not?
+        for(var fi in clazz.instances)
+        {
+            compiler.add_object_property(clazz, fi.output_id, value = fi, type = fi.type, dont_render = true);
+        }
+        
+        if (renderer)
+        {
+            compiler.xss(renderer, clazz, is_class = true);
+        }
+
+        for(var inst in clazz.instances)
+        {				
+            string inst_renderer = inst.type.renderer;
+            if (!inst_renderer)
+            {
+                compiler.error("Class not rendereable", class_name = inst.type_name);
+            }               
+            string path = compiler.idiom_path(inst, inst_renderer);
+            compiler.xss(path, inst, path = "this");
+        }
+        
+        //render properties
+        for(var prop in clazz.properties)
+        {
+            if (prop.dont_init)
+                continue;
+    
+            compiler.xss(property_renderer, prop, clazz, is_class = true, path = "this");
+        }    
+
+        for(var mthd in clazz.methods)
+        {
+            compiler.xss(method_renderer, mthd, clazz, is_class = true, path = "this");
+        }
+
+        //render events as functions
+        for(var ev in clazz.events)
+        {
+            compiler.xss(event_renderer, ev, clazz, is_class = true, path = "this");
+        }
+        
+        //provide a way to initialize stuff
+		for(var inst_ in clazz.instances)
+		{	
+			if(!inst_.dont_render)
+				compiler.xss("../common-js/instance.xss", inst_, path = "this");
+		}
+        out()
+        {
+            this.events.dispatch("init", [this]);
+        }		
+        </xss:code>
+    },
+});

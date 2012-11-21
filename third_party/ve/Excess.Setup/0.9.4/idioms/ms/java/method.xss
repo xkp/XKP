@@ -1,0 +1,17 @@
+<xss:parameter id="mthd"/>
+<xss:parameter id="owner"/>
+<xss:parameter id="is_class"/>
+
+<xss:code>
+string mthd_name = mthd.name ;
+string mthd_owner = owner.id ;
+out(indent = 0)
+{	 final IExecutable <xss:e value="mthd_name"/> =new IExecutable(){
+        public void execute(<xss:e>mthd.args.render()</xss:e>){
+          <xss:e>mthd.code.render()</xss:e>
+        }
+    };
+	<xss:e value="mthd_owner"/>.addMethod(<xss:e value="mthd_name"/>);
+	
+	}
+</xss:code>

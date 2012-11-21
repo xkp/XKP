@@ -1,0 +1,6 @@
+<xss:code>
+    if (project.embedded)
+        compiler.xss("threejs_embedded.xss");
+    else
+        compiler.xss("app.xss");
+</xss:code>

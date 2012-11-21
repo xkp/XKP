@@ -1,0 +1,28 @@
+<xss:parameter id="obj"/>
+<xss:parameter id="type"/>
+
+<xss:code>
+	if(!type)
+		type = obj.type;		
+	if(obj.super)
+	{
+		if(obj.super.id == "controls")
+			out(){
+				<xss:e v="obj.id"/> = new <xss:e v="obj.type.output_id"/>( <xss:e v="obj.parent.id"/> );
+				manager.events.addListener("update", function()
+				{				
+					<xss:e v="obj.id"/>.update( c_delta );
+				})
+			}		
+	}
+	else
+	{
+		out()
+		{
+		    <xss:e v="obj.id"/> = 
+		    <xss:e v="compiler.instantiate(obj)"/> ;	
+			manager.active_camera = <xss:e v="obj.id"/>;
+		}	
+	}	
+</xss:code>
+

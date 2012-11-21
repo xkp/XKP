@@ -1,0 +1,569 @@
+<module id="jsmanipulate" src="jsmanipulate.xs">
+    <dependency href="resig.js" shared="true"/>
+
+    <dependency href="jsmanipulate.js"/>	  
+	<dependency href="jsm-manager.js"/>
+	<dependency href="jsm-utils.js"/>
+	
+	<types>
+        <class id="preset" output_id="jsmanip.Preset" serializer="../common-js/serializer.xss" resolve_children="true"/>
+		<class id="preset_filter"/>
+		<class id="filter">
+			<property id="enabled" type="bool" use_plain_value="true">
+				<get text="enabled"/>
+                <set text="set_enabled({value})"/>
+            </property>
+			<property id="render_on_apply" type="bool" use_plain_value="true">
+				<get text="render_on_apply"/>
+                <set text="set_render_on_apply({value})"/>
+            </property>
+		</class>
+		<class id="brightness" super="filter" output_id="jsmanip.Brightness">	
+			<constructor_params>
+				<parameter property="amount"/>									
+			</constructor_params>
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>						
+		</class>
+		<class id="blur" super="filter" output_id="jsmanip.Blur">	
+			<constructor_params>
+				<parameter property="amount"/>									
+			</constructor_params>
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>						
+		</class>
+		<class id="bump" super="filter" output_id="jsmanip.Bump"/>	
+		<class id="circlesmear" super="filter" output_id="jsmanip.Circlesmear">	
+			<constructor_params>
+				<parameter property="size"/>	
+				<parameter property="density"/>
+				<parameter property="mix"/>
+			</constructor_params>
+            <property id="size" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.size"/>
+                <set text="set_size({value})"/>
+            </property>	
+			<property id="density" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.density"/>
+                <set text="set_density({value})"/>
+            </property>
+			<property id="mix" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.mix"/>
+                <set text="set_mix({value})"/>
+            </property>
+		</class>
+		<class id="contrast" super="filter" output_id="jsmanip.Contrast">	
+			<constructor_params>
+				<parameter property="amount"/>									
+			</constructor_params>
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>						
+		</class>
+		<class id="crosssmear" super="filter" output_id="jsmanip.Crosssmear">	
+			<constructor_params>
+				<parameter property="size"/>	
+				<parameter property="density"/>
+				<parameter property="mix"/>
+			</constructor_params>
+            <property id="size" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.size"/>
+                <set text="set_size({value})"/>
+            </property>	
+			<property id="density" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.density"/>
+                <set text="set_density({value})"/>
+            </property>
+			<property id="mix" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.mix"/>
+                <set text="set_mix({value})"/>
+            </property>
+		</class>
+		<class id="diffusion" super="filter" output_id="jsmanip.Diffusion">	
+			<constructor_params>
+				<parameter property="scale"/>									
+			</constructor_params>
+            <property id="scale" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.scale"/>
+                <set text="set_scale({value})"/>
+            </property>						
+		</class>
+		<class id="dither" super="filter" output_id="jsmanip.Dither">	
+			<constructor_params>
+				<parameter property="levels"/>	
+				<parameter property="color"/>
+			</constructor_params>
+            <property id="levels" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.levels"/>
+                <set text="set_levels({value})"/>
+            </property>	
+			<property id="color" type="bool" use_plain_value="true" dont_init="true">
+				<get text="options.color"/>
+                <set text="set_color({value})"/>
+            </property>	
+		</class>
+		<class id="edge" super="filter" output_id="jsmanip.Edge"/>
+		<class id="emboss" super="filter" output_id="jsmanip.Emboss">	
+			<constructor_params>
+				<parameter property="height"/>	
+				<parameter property="angle"/>
+				<parameter property="elevation"/>
+			</constructor_params>
+            <property id="height" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.height"/>
+                <set text="set_height({value})"/>
+            </property>	
+			<property id="angle" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.angle"/>
+                <set text="set_angle({value})"/>
+            </property>
+			<property id="elevation" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.elevation"/>
+                <set text="set_elevation({value})"/>
+            </property>
+		</class>
+		<class id="exposure" super="filter" output_id="jsmanip.Exposure">	
+			<constructor_params>
+				<parameter property="exposure"/>									
+			</constructor_params>
+            <property id="exposure" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.exposure"/>
+                <set text="set_exposure({value})"/>
+            </property>						
+		</class>
+		<class id="gain" super="filter" output_id="jsmanip.Gain">	
+			<constructor_params>
+				<parameter property="gain"/>	
+				<parameter property="bias"/>	
+			</constructor_params>
+            <property id="gain" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.gain"/>
+                <set text="set_gain({value})"/>
+            </property>	
+			<property id="bias" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.bias"/>
+                <set text="set_bias({value})"/>
+            </property>
+		</class>
+		<class id="gamma" super="filter" output_id="jsmanip.Gamma">	
+			<constructor_params>
+				<parameter property="amount"/>									
+			</constructor_params>
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>						
+		</class>
+		<class id="greyscale" super="filter" output_id="jsmanip.Greyscale"/>
+		<class id="hue" super="filter" output_id="jsmanip.Hue">	
+			<constructor_params>
+				<parameter property="amount"/>									
+			</constructor_params>
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>						
+		</class>
+		<class id="invert" super="filter" output_id="jsmanip.Invert"/>
+		<class id="kaleidoscope" super="filter" output_id="jsmanip.Kaleidoscope">	
+			<constructor_params>
+				<parameter property="angle"/>	
+				<parameter property="rotation"/>
+				<parameter property="sides"/>
+				<parameter property="center_x"/>
+				<parameter property="center_y"/>
+			</constructor_params>
+            <property id="angle" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.angle"/>
+                <set text="set_angle({value})"/>
+            </property>	
+			<property id="rotation" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.rotation"/>
+                <set text="set_rotation({value})"/>
+            </property>	
+			<property id="sides" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.sides"/>
+                <set text="set_sides({value})"/>
+            </property>	
+			<property id="center_x" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.centerY"/>
+                <set text="set_center_x({value})"/>
+            </property>	
+			<property id="center_y" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.centerY"/>
+                <set text="set_center_y({value})"/>
+            </property>	
+		</class>
+		<class id="lensdistortion" super="filter" output_id="jsmanip.Lensdistortion">	
+			<constructor_params>				
+				<parameter property="refraction"/>
+				<parameter property="radius"/>
+				<parameter property="center_x"/>
+				<parameter property="center_y"/>
+			</constructor_params>           
+			<property id="refraction" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.refraction"/>
+                <set text="set_refraction({value})"/>
+            </property>	
+			<property id="radius" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.radius"/>
+                <set text="set_radius({value})"/>
+            </property>	
+			<property id="center_x" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.centerX"/>
+                <set text="set_center_x({value})"/>
+            </property>	
+			<property id="center_y" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.centerY"/>
+                <set text="set_center_y({value})"/>
+            </property>	
+		</class>
+		<class id="linesmear" super="filter" output_id="jsmanip.Linesmear">	
+			<constructor_params>				
+				<parameter property="distance"/>
+				<parameter property="density"/>
+				<parameter property="angle"/>
+				<parameter property="mix"/>
+			</constructor_params>           
+			<property id="distance" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.distance"/>
+                <set text="set_distance({value})"/>
+            </property>	
+			<property id="density" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.density"/>
+                <set text="set_density({value})"/>
+            </property>	
+			<property id="angle" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.angle"/>
+                <set text="set_angle({value})"/>
+            </property>	
+			<property id="mix" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.mix"/>
+                <set text="set_mix({value})"/>
+            </property>	
+		</class>
+		<class id="maximum" super="filter" output_id="jsmanip.Maximum"/>
+		<class id="median" super="filter" output_id="jsmanip.Median"/>
+		<class id="minimum" super="filter" output_id="jsmanip.Minimum"/>
+		<class id="noise" super="filter" output_id="jsmanip.Noise">	
+			<constructor_params>				
+				<parameter property="amount"/>
+				<parameter property="density"/>
+				<parameter property="monochrome"/>				
+			</constructor_params>           
+			<property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>	
+			<property id="density" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.density"/>
+                <set text="set_density({value})"/>
+            </property>	
+			<property id="monochrome" type="bool" use_plain_value="true" dont_init="true">
+				<get text="options.monochrome"/>
+                <set text="set_monochrome({value})"/>
+            </property>	
+		</class>
+		<class id="oil" super="filter" output_id="jsmanip.Oil">	
+			<constructor_params>				
+				<parameter property="range"/>							
+			</constructor_params>           
+			<property id="range" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.range"/>
+                <set text="set_range({value})"/>
+            </property>				
+		</class>
+		<class id="pinch" super="filter" output_id="jsmanip.Pinch">	
+			<constructor_params>				
+				<parameter property="amount"/>
+				<parameter property="radius"/>
+				<parameter property="angle"/>
+				<parameter property="center_x"/>
+				<parameter property="center_y"/>
+			</constructor_params>           
+			<property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>	
+			<property id="radius" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.radius"/>
+                <set text="set_radius({value})"/>
+            </property>	
+			<property id="angle" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.angle"/>
+                <set text="set_angle({value})"/>
+            </property>	
+			<property id="center_x" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.centerX"/>
+                <set text="set_center_x({value})"/>
+            </property>	
+			<property id="center_y" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.centerY"/>
+                <set text="set_center_y({value})"/>
+            </property>	
+		</class>
+		<class id="pixelate" super="filter" output_id="jsmanip.Pixelate">	
+			<constructor_params>				
+				<parameter property="size"/>							
+			</constructor_params>           
+			<property id="size" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.size"/>
+                <set text="set_size({value})"/>
+            </property>				
+		</class>
+		<class id="posterize" super="filter" output_id="jsmanip.Posterize">	
+			<constructor_params>				
+				<parameter property="levels"/>							
+			</constructor_params>           
+			<property id="levels" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.levels"/>
+                <set text="set_levels({value})"/>
+            </property>				
+		</class>
+		<class id="rgbadjust" super="filter" output_id="jsmanip.RGBadjust">	
+			<constructor_params>				
+				<parameter property="red"/>		
+				<parameter property="green"/>	
+				<parameter property="blue"/>	
+			</constructor_params>           
+			<property id="red" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.red"/>
+                <set text="set_red({value})"/>
+            </property>	
+			<property id="green" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.green"/>
+                <set text="set_green({value})"/>
+            </property>	
+			<property id="blue" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.blue"/>
+                <set text="set_blue({value})"/>
+            </property>	
+		</class>
+		<class id="saturation" super="filter" output_id="jsmanip.Saturation">	
+			<constructor_params>
+				<parameter property="amount"/>									
+			</constructor_params>
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>						
+		</class>
+		<class id="sawtoothripple" super="filter" output_id="jsmanip.Sawtoothripple">	
+			<constructor_params>
+				<parameter property="amplitude_x"/>	
+				<parameter property="amplitude_y"/>
+				<parameter property="wavelength_x"/>
+				<parameter property="wavelength_y"/>
+			</constructor_params>
+            <property id="amplitude_x" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.xAmplitude"/>
+                <set text="set_amplitude_x({value})"/>
+            </property>	
+			<property id="amplitude_y" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.yAmplitude"/>
+                <set text="set_amplitude_y({value})"/>
+            </property>	
+			<property id="wavelength_x" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.xWavelength"/>
+                <set text="set_wavelength_x({value})"/>
+            </property>	
+			<property id="wavelength_y" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.yWavelength"/>
+                <set text="set_wavelength_y({value})"/>
+            </property>	
+		</class>
+		<class id="sepia" super="filter" output_id="jsmanip.Sepia">	
+			<constructor_params>
+				<parameter property="amount"/>									
+			</constructor_params>
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>						
+		</class>
+		<class id="sharpen" super="filter" output_id="jsmanip.Sharpen"/>
+		<class id="sineripple" super="filter" output_id="jsmanip.Sineripple">	
+			<constructor_params>
+				<parameter property="amplitude_x"/>	
+				<parameter property="amplitude_y"/>
+				<parameter property="wavelength_x"/>
+				<parameter property="wavelength_y"/>
+			</constructor_params>
+            <property id="amplitude_x" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.xAmplitude"/>
+                <set text="set_amplitude_x({value})"/>
+            </property>	
+			<property id="amplitude_y" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.yAmplitude"/>
+                <set text="set_amplitude_y({value})"/>
+            </property>	
+			<property id="wavelength_x" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.xWavelength"/>
+                <set text="set_wavelength_x({value})"/>
+            </property>	
+			<property id="wavelength_y" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.yWavelength"/>
+                <set text="set_wavelength_y({value})"/>
+            </property>	
+		</class>
+		<class id="solarize" super="filter" output_id="jsmanip.Solarize"/>
+		<class id="sparkle" super="filter" output_id="jsmanip.Sparkle">	
+			<constructor_params>				
+				<parameter property="rays"/>
+				<parameter property="size"/>
+				<parameter property="amount"/>
+				<parameter property="randomness"/>
+				<parameter property="center_x"/>
+				<parameter property="center_y"/>
+			</constructor_params>           
+			<property id="rays" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.rays"/>
+                <set text="set_rays({value})"/>
+            </property>	
+			<property id="size" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.size"/>
+                <set text="set_size({value})"/>
+            </property>	
+			<property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>	
+			<property id="randomness" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.randomness"/>
+                <set text="set_randomness({value})"/>
+            </property>
+			<property id="center_x" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.centerX"/>
+                <set text="set_center_x({value})"/>
+            </property>	
+			<property id="center_y" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.centerY"/>
+                <set text="set_center_y({value})"/>
+            </property>	
+		</class>
+		<class id="squaresmear" super="filter" output_id="jsmanip.Squaresmear">	
+			<constructor_params>
+				<parameter property="size"/>	
+				<parameter property="density"/>
+				<parameter property="mix"/>
+			</constructor_params>
+            <property id="size" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.size"/>
+                <set text="set_size({value})"/>
+            </property>		
+			<property id="density" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.density"/>
+                <set text="set_density({value})"/>
+            </property>
+			<property id="mix" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.mix"/>
+                <set text="set_mix({value})"/>
+            </property>
+		</class>
+		<class id="threshold" super="filter" output_id="jsmanip.Threshold">	
+			<constructor_params>
+				<parameter property="threshold"/>									
+			</constructor_params>
+            <property id="threshold" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.threshold"/>
+                <set text="set_threshold({value})"/>
+            </property>						
+		</class>
+		<class id="triangleripple" super="filter" output_id="jsmanip.Triangleripple">	
+			<constructor_params>
+				<parameter property="amplitude_x"/>	
+				<parameter property="amplitude_y"/>
+				<parameter property="wavelength_x"/>
+				<parameter property="wavelength_y"/>
+			</constructor_params>
+            <property id="amplitude_x" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.xAmplitude"/>
+                <set text="set_amplitude_x({value})"/>
+            </property>	
+			<property id="amplitude_y" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.yAmplitude"/>
+                <set text="set_amplitude_y({value})"/>
+            </property>	
+			<property id="wavelength_x" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.xWavelength"/>
+                <set text="set_wavelength_x({value})"/>
+            </property>	
+			<property id="wavelength_y" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.yWavelength"/>
+                <set text="set_wavelength_y({value})"/>
+            </property>	
+		</class>
+		<class id="vignette" super="filter" output_id="jsmanip.Vignette">	
+			<constructor_params>
+				<parameter property="amount"/>									
+			</constructor_params>
+            <property id="amount" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amount"/>
+                <set text="set_amount({value})"/>
+            </property>						
+		</class>
+		<class id="twirl" super="filter" output_id="jsmanip.Twirl">	
+			<constructor_params>				
+				<parameter property="radius"/>
+				<parameter property="angle"/>
+				<parameter property="center_x"/>
+				<parameter property="center_y"/>
+			</constructor_params> 			
+			<property id="radius" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.radius"/>
+                <set text="set_radius({value})"/>
+            </property>	
+			<property id="angle" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.angle"/>
+                <set text="set_angle({value})"/>
+            </property>	
+			<property id="center_x" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.centerX"/>
+                <set text="set_center_x({value})"/>
+            </property>	
+			<property id="center_y" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.centerY"/>
+                <set text="set_center_y({value})"/>
+            </property>	
+		</class>
+		<class id="waterripple" super="filter" output_id="jsmanip.Waterripple">	
+			<constructor_params>
+				<parameter property="phase"/>
+				<parameter property="radius"/>
+				<parameter property="wavelength"/>
+				<parameter property="amplitude"/>
+				<parameter property="center_x"/>
+				<parameter property="center_y"/>
+			</constructor_params> 	
+			<property id="phase" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.phase"/>
+                <set text="set_phase({value})"/>
+            </property>
+			<property id="radius" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.radius"/>
+                <set text="set_radius({value})"/>
+            </property>	
+			<property id="wavelength" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.wavelength"/>
+                <set text="set_wavelength({value})"/>
+            </property>	
+			<property id="amplitude" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.amplitude"/>
+                <set text="set_amplitude({value})"/>
+            </property>	
+			<property id="center_x" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.centerX"/>
+                <set text="set_center_x({value})"/>
+            </property>	
+			<property id="center_y" type="float" use_plain_value="true" dont_init="true">
+				<get text="options.centerY"/>
+                <set text="set_center_y({value})"/>
+            </property>	
+		</class>
+	</types>	
+</module>

@@ -1,0 +1,29 @@
+		public void setupTabHost(int id, ArrayList<String> tabs) {
+			TabHost tabh = (TabHost) mActivity.findViewById(id);
+			if(tabh == null) {
+				for (ViewGroup viewgrp : mViewGroup) {
+					tabh = (TabHost) viewgrp.findViewById(id);
+					if(tabh != null) break;
+				}
+			}
+			
+			tabh.setup();
+			TabHost.TabSpec spec;
+			
+			ViewGroup linear = (ViewGroup) tabh.getChildAt(0);
+			ViewGroup frame = (ViewGroup) linear.getChildAt(1);
+			
+			int szTabs = tabs.size();
+			int childs = frame.getChildCount();
+			int szMin = Math.min(szTabs, childs);
+			
+			for(int i = 0; i < szMin; i++) {
+				String tab = tabs.get(i);
+				int viewId = frame.getChildAt(i).getId();
+				
+				spec = tabh.newTabSpec(tab);
+				spec.setContent(viewId);
+				spec.setIndicator(tab);
+				tabh.addTab(spec);
+			}
+		}

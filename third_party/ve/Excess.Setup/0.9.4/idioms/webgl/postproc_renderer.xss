@@ -1,0 +1,46 @@
+<xss:parameter id="obj"/>
+<xss:code>
+if(obj.class_name == "effect_composer")
+{
+	out()
+	{
+		var renderModel = new THREE.RenderPass( scene, manager.active_camera );
+		<xss:e v="obj.id"/> = new THREE.EffectComposer( renderer );
+		<xss:e v="obj.id"/>.addPass( renderModel );
+		manager.active_composer = <xss:e v="obj.id"/>;
+	}	
+}else
+{
+	out()
+	{
+		<xss:e v="obj.id"/> = new THREE.ShaderPass( THREE.ShaderExtras[ "<xss:e v="obj.shader"/>" ] );
+	}
+	for(var child in obj.children)
+	{		
+		out()
+		{
+			<xss:e v = "obj.id"/>.uniforms[ '<xss:e v = "child.output_id"/>' ]						
+		}
+		if(child.texture)
+			out()
+			{
+				.texture = THREE.ImageUtils.loadTexture( manager.streamer.get_resource('<xss:e v="child.texture"/>').asset )		
+			}
+		else if(child.texture_cube)
+			out()
+			{
+				.texture = <xss:e v="child.texture_cube"/>	
+			}
+		else if(child.value)
+			out()
+			{
+				.value = <xss:e v = "child.value"/>
+			}
+		out()
+		{
+			;
+		}
+	}	
+}
+
+</xss:code>

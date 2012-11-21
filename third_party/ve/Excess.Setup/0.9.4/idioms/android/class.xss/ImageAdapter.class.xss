@@ -1,0 +1,104 @@
+<xss:parameter id="it"/>
+
+	public class ImageAdapter extends BaseAdapter {
+
+		private static final int ITEM_WIDTH = 236;
+		private static final int ITEM_HEIGHT = 188;
+
+		private final Context mContext;
+		private final float mDensity;
+
+		private final Integer[] mImageIds = {
+<xss:code>
+	string project_path = compiler.project_path() + "/";
+	string output_path = application.appName + "/res/drawable/";
+	
+	//ERROR: this sentence no resolve correct value... 
+	//       and only success with arrays type
+	//compiler.log(it.images);
+	
+	var img_prop = it.get_property("images");
+	if(img_prop.type.is_array)
+	{
+		for(int i = 0; i < img_prop.value.size; i++)
+		{
+			var img = img_prop.value[i];
+			
+			string simg = img.value;
+			int sz = String.size(simg);
+			
+			int pos = String.find_last(simg, "\\/", 0);
+			int rpos = pos + 1;
+			int npos = sz - pos - 1;
+			string fn_img = String.substr(simg, rpos, npos);
+			
+			//ERROR: expressions like this doing that parameters of
+			//       method are inverting yours values
+			//string fn_img = String.substr(simg, sz - pos - 1, pos + 1);
+			
+			//build path files
+			//string srcf = project_path + img.value;
+			//string dstf = output_path + fn_img;
+			
+			//TIPS: for now, file are copy in resources idioms
+			//copy file
+			//compiler.log("Copying resource file " + srcf);
+			//compiler.copy_file(src = srcf, dst = dstf);
+			
+			pos = String.find_last(fn_img, ".", 0);
+			string n_img = String.substr(fn_img, 0, pos);
+			
+			string comma = ",";
+			if(i >= img_prop.value.size - 1)
+				comma = "";
+			
+			out(indent = 2, dont_break = true)
+			{
+				R.drawable.<xss:e value="n_img"/><xss:e value="comma"/>
+			}
+			
+		}
+	}
+</xss:code>
+		};
+
+		public ImageAdapter(Context ctx) {
+			mContext = ctx;
+			mDensity = ctx.getResources().getDisplayMetrics().density;
+		}
+
+		@Override
+		public int getCount() {
+			return mImageIds.length;
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return position;
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ImageView imageView;
+			if (convertView == null) {
+				convertView = new ImageView(mContext);
+
+				imageView = (ImageView) convertView;
+				imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+				imageView.setLayoutParams(new Gallery.LayoutParams(
+						(int) (ITEM_WIDTH * mDensity + 0.5f),
+						(int) (ITEM_HEIGHT * mDensity + 0.5f)));
+			} else {
+				imageView = (ImageView) convertView;
+			}
+
+			imageView.setImageResource(mImageIds[position]);
+
+			return imageView;
+		}
+	}

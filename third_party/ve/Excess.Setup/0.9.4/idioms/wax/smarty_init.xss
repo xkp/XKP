@@ -1,0 +1,2 @@
+<xss:parameter id="it"/>
+this.<xss:e v="it.id"/> = new jSmart( "<xss:e v="wax_compiler.escape(it.text)"/>" );

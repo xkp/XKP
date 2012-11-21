@@ -1,0 +1,35 @@
+<xss:parameter id="obj"/>
+
+<xss:code>			
+	compiler.xss("component.xss", obj, false);
+	out()
+	{
+	<xss:e v="obj.output_id"/>.set_data_source = function(data)
+		<xss:open_brace/>
+			this.components = [];
+			
+			for(var i = 0; i < data.length; i++)
+			<xss:open_brace/>
+				var item = data[i];
+				var child = new <xss:e v="obj.template"/>(
+	}
+	var type = compiler.get_type(obj.template);	
+	out()
+	{
+		this.manager, this
+	}
+	if (type.constructor_params)
+	{
+		for(int i = 2; i < type.constructor_params.size; i++)
+		{				
+			out() {, null}			
+		}
+	}	
+	out()
+	{
+				);				
+				child.data_source_set(item); 				
+			<xss:close_brace/>
+		<xss:close_brace/>
+	}
+</xss:code>

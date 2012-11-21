@@ -1,0 +1,71 @@
+
+<xss:code>
+//preconditions
+if (!application.canvasElement)
+	application.canvasElement = "myCanvas";
+
+if (!application.ui_package)
+    application.ui_package = "ui_package";
+
+</xss:code>
+
+
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title><xss:e value = "application.title"/></title>
+
+<xss:marker id="dependencies"/>
+
+<script type="text/javascript">
+    <xss:code>
+        compiler.xss("ui_script.xss");
+    </xss:code>
+</script>
+
+</head>
+
+<body>	
+	<canvas id="<xss:e value="application.canvasElement"/>" width="<xss:e value="application.width"/>" height="<xss:e value="application.height"/>"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
+			
+	<xss:marker id="html_body"/>
+
+</body>
+
+</html>
+
+<xss:code>
+    //process dependencies
+    var dependencies = compiler.get_dependencies();
+    var default_path = project.js_path;
+    if (!default_path)
+        default_path = "../js";
+    
+    array non_shared = [];
+    for(var dep in dependencies)
+    {
+        if (dep.shared)
+        {
+            //shared libraries will be assumed to be at the default library path 
+            compiler.xss("../common-js/dependency.xss", dep, path = default_path, marker = "dependencies");
+        }
+        else
+        {
+            //let the idioms decide
+            compiler.inject("compile_dependency", dep);
+            non_shared += dep;
+        }
+    }
+
+    for(var ndep in non_shared)
+    {
+        //it is understood that dependencies will come out of
+        //compile with their full path
+        compiler.xss("../common-js/dependency.xss", ndep, marker = "dependencies");
+    }
+</xss:code>

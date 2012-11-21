@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Particles</title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	background:Black;
+	}
+</style>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/Detector.js"></script>
+<script type="text/javascript">	
+if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+			var renderer = new THREE.WebGLRenderer( { antialias: false } );
+		var ui_;
+var canvas_position = {x:0, y:0};
+var g_elapsed;
+var g_delta;	
+var scene = new THREE.Scene();
+scene.mouse_thru = true;
+var streamer = {};
+var manager = new threejs.Manager(scene, renderer, null, canvas_position);
+var three_utils = new threejs.Utils();
+manager.events = new ev.EventHolder();
+manager.events.parent = manager;
+manager.c_anims = [];
+manager.js_anims = [];
+manager.c_skins = [];
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
+var application = {};
+var clock = new THREE.Clock();
+application.events = new ev.EventHolder();
+		var streamer = new stream.Streamer();		
+		var ResourceUtils = new stream.ResourceUtils();
+	streamer.manager = manager;
+// --------RESOURCES---------
+		var global_package = new stream.Package(streamer);	
+                global_package.add_item(
+		{
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"../images/sprites/snowflake1.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+                global_package.add_item(
+		{
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"../images/sprites/snowflake2.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var __image2;
+				global_package.events.addListener("loaded", function()
+				{
+					__image2 = streamer.get_resource("__image2");
+				});
+                global_package.add_item(
+		{
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"../images/sprites/snowflake3.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var __image3;
+				global_package.events.addListener("loaded", function()
+				{
+					__image3 = streamer.get_resource("__image3");
+				});
+                global_package.add_item(
+		{
+		id:				"__image4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"../images/sprites/snowflake4.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var __image4;
+				global_package.events.addListener("loaded", function()
+				{
+					__image4 = streamer.get_resource("__image4");
+				});
+                global_package.add_item(
+		{
+		id:				"__image5",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"../images/sprites/snowflake5.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var __image5;
+				global_package.events.addListener("loaded", function()
+				{
+					__image5 = streamer.get_resource("__image5");
+				});
+		global_package.load();	
+    // --------RESOURCES---------
+renderer.setSize( app_width, app_height );
+manager.streamer = streamer;
+function render() {
+manager.canvas_position = getElementPosition(renderer.domElement);
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+	g_delta = 0; //first update
+else
+	g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+if(!g_delta) g_delta = 0;
+manager.delta = g_delta;
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+				manager.scene.add(camera_1);
+				set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+var p_mat1;var p_mat2;var p_mat3;var p_mat4;var p_mat5;var camera_1;var __fly_controls1;var __particle_system1;var __particle_system2;var __particle_system3;var __particle_system4;var __particle_system5;
+threejs_load_resources(manager, function()
+{
+p_mat1 = new THREE.ParticleBasicMaterial({
+map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('../images/sprites/snowflake1.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:10,
+	});
+			p_mat1.manager = manager;
+p_mat2 = new THREE.ParticleBasicMaterial({
+map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('../images/sprites/snowflake2.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:20,
+	});
+			p_mat2.manager = manager;
+p_mat3 = new THREE.ParticleBasicMaterial({
+map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('../images/sprites/snowflake3.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:15,
+	});
+			p_mat3.manager = manager;
+p_mat4 = new THREE.ParticleBasicMaterial({
+map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('../images/sprites/snowflake4.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:5,
+	});
+			p_mat4.manager = manager;
+p_mat5 = new THREE.ParticleBasicMaterial({
+map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('../images/sprites/snowflake5.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:8,
+	});
+			p_mat5.manager = manager;
+		    camera_1 = 
+		    new THREE.PerspectiveCamera(70, 1.5, 1, 1000, null) ;	
+			manager.active_camera = camera_1;
+			camera_1.manager = manager;
+				__fly_controls1 = new THREE.FlyControls( camera_1 );
+				manager.events.addListener("update", function()
+				{				
+					__fly_controls1.update( c_delta );
+				})
+			__fly_controls1.manager = manager;
+		var geometry = new THREE.Geometry();
+		for ( i = 0; i < 10000; i ++ ) {
+			var vertex = new THREE.Vector3();								
+			vertex.x = default_interpolate(-1000, 1000, Math.random());
+			vertex.y = default_interpolate(-1000, 1000, Math.random());
+			vertex.z = default_interpolate(-1000, 1000, Math.random());
+			geometry.vertices.push( vertex );			
+		}
+		__particle_system1 = new THREE.ParticleSystem( geometry, p_mat1 );
+		manager.scene.add( __particle_system1 );	
+			__particle_system1.manager = manager;
+		var geometry = new THREE.Geometry();
+		for ( i = 0; i < 10000; i ++ ) {
+			var vertex = new THREE.Vector3();								
+			vertex.x = default_interpolate(-1000, 1000, Math.random());
+			vertex.y = default_interpolate(-1000, 1000, Math.random());
+			vertex.z = default_interpolate(-1000, 1000, Math.random());
+			geometry.vertices.push( vertex );			
+		}
+		__particle_system2 = new THREE.ParticleSystem( geometry, p_mat2 );
+		manager.scene.add( __particle_system2 );	
+			__particle_system2.manager = manager;
+		var geometry = new THREE.Geometry();
+		for ( i = 0; i < 10000; i ++ ) {
+			var vertex = new THREE.Vector3();								
+			vertex.x = default_interpolate(-1000, 1000, Math.random());
+			vertex.y = default_interpolate(-1000, 1000, Math.random());
+			vertex.z = default_interpolate(-1000, 1000, Math.random());
+			geometry.vertices.push( vertex );			
+		}
+		__particle_system3 = new THREE.ParticleSystem( geometry, p_mat3 );
+		manager.scene.add( __particle_system3 );	
+			__particle_system3.manager = manager;
+		var geometry = new THREE.Geometry();
+		for ( i = 0; i < 10000; i ++ ) {
+			var vertex = new THREE.Vector3();								
+			vertex.x = default_interpolate(-1000, 1000, Math.random());
+			vertex.y = default_interpolate(-1000, 1000, Math.random());
+			vertex.z = default_interpolate(-1000, 1000, Math.random());
+			geometry.vertices.push( vertex );			
+		}
+		__particle_system4 = new THREE.ParticleSystem( geometry, p_mat4 );
+		manager.scene.add( __particle_system4 );	
+			__particle_system4.manager = manager;
+		var geometry = new THREE.Geometry();
+		for ( i = 0; i < 10000; i ++ ) {
+			var vertex = new THREE.Vector3();								
+			vertex.x = default_interpolate(-1000, 1000, Math.random());
+			vertex.y = default_interpolate(-1000, 1000, Math.random());
+			vertex.z = default_interpolate(-1000, 1000, Math.random());
+			geometry.vertices.push( vertex );			
+		}
+		__particle_system5 = new THREE.ParticleSystem( geometry, p_mat5 );
+		manager.scene.add( __particle_system5 );	
+			__particle_system5.manager = manager;
+            manager.events.addListener('update', function(){if(camera_1)camera_1.lookAt(scene.position)});
+            camera_1.position.y = 300;
+            camera_1.position.z = 500;
+            __fly_controls1.movementSpeed = 20;
+            __fly_controls1.rollSpeed = 0.200000003;
+var event_manager = new ev.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(manager, ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(manager, ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(manager, ev.keyCode);                  
+};
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(delta, elapsed)
+{    
+	application.events.dispatch("update", [delta, elapsed]);
+});
+application.events.dispatch("init", []);
+		document.body.appendChild( renderer.domElement );
+animate();
+});
+function animate() {	
+	requestAnimationFrame( animate );
+	render();	
+}
+</script>
+</body>
+</html>

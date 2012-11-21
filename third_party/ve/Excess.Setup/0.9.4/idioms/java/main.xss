@@ -1,0 +1,9 @@
+<xss:code>
+	string output_fname = "java.test1.java";
+	if(application.name)
+	{
+		output_fname = application.name + ".java";
+	}
+	
+	compiler.xss("standalone_app.xss", output_file = output_fname);
+</xss:code>

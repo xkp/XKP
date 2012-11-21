@@ -52,6 +52,7 @@ class IFileSystem
       virtual str        load_file(const str& filename, fs::path base_path) = 0;
       virtual str        load_file(fs::path file)                           = 0;
       virtual DataReader load_data(fs::path file)                           = 0;
+      virtual void       add_search_path(fs::path path)                     = 0;
   };
 
 //data structures

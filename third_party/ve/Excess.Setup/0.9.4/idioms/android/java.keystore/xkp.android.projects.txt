@@ -1,0 +1,36 @@
+d:\xkp\xss\idioms\android>keytool -genkey -keyalg RSA -alias xkp.android.projects -keystore xkp.android.projects.jks -validity 730 -keysize 2048
+Escriba la contrase±a del almac⁄n de claves:
+Volver a escribir la contrase±a nueva:
++Cuﬂles son su nombre y su apellido?
+  [Unknown]:  Gilberto Cuba Ricardo
++Cuﬂl es el nombre de su unidad de organizaciæn?
+  [Unknown]:  XKP CodeEXCESS
++Cuﬂl es el nombre de su organizaciæn?
+  [Unknown]:  XKP Corp.
++Cuﬂl es el nombre de su ciudad o localidad?
+  [Unknown]:  HolguÌn
++Cuﬂl es el nombre de su estado o provincia?
+  [Unknown]:  HolguÌn
++Cuﬂl es el cædigo de pa›s de dos letras de la unidad?
+  [Unknown]:  CU
++Es correcto CN=Gilberto Cuba Ricardo, OU=XKP CodeEXCESS, O=XKP Corp., L=HolguÌn, ST=HolguÌn, C=CU?
+  [no]:  yes
++Cuﬂles son su nombre y su apellido?
+  [Gilberto Cuba Ricardo]:
++Cuﬂl es el nombre de su unidad de organizaciæn?
+  [XKP CodeEXCESS]:
++Cuﬂl es el nombre de su organizaciæn?
+  [XKP Corp.]:
++Cuﬂl es el nombre de su ciudad o localidad?
+  [HolguÌn]:
++Cuﬂl es el nombre de su estado o provincia?
+  [HolguÌn]:
++Cuﬂl es el cædigo de pa›s de dos letras de la unidad?
+  [CU]:
++Es correcto CN=Gilberto Cuba Ricardo, OU=XKP CodeEXCESS, O=XKP Corp., L=HolguÌn, ST=HolguÌn, C=CU?
+  [no]:  y
+
+Escriba la contrase±a clave para <xkp.android.projects>
+        (INTRO si es la misma contrase±a que la del almac⁄n de claves):
+		
+xkp.android.projects.2012

@@ -1,0 +1,87 @@
+<module id="java" src="classes.xs">
+	<types>	
+		<enum id="EBoolean" output_id="int" default_value="EBoolean.true">
+			<property id="true" type="EBoolean" output_id="truest" output_xml="true_">
+				<get text="Bool.truest" global="true"/>
+			</property>
+			
+			<property id="false" type="EBoolean" output_id="falsest" output_xml="false_">
+				<get text="Bool.falsest" global="true"/>
+			</property>
+		</enum>
+		
+		<class id="classx">
+			<property id="px_value" type="int"/>
+			<property id="ps_value" type="var"/>
+			<property id="arr" type="array"/>
+			
+			<property id="size" type="int">
+				<get text="size()"/>
+				<set text="setSize({value})"/>
+			</property>
+			
+			<method id="mthd_1" type="int"/>
+			
+			<event id="create"/>
+		</class>
+		
+		<class id="classy">
+			<property id="size" type="int">
+				<get text="size()"/>
+				<set text="setSize({value})"/>
+			</property>
+			
+			<method id="mthd_1" type="int"/>
+			<method id="mthd_2" type="int"/>
+			
+			<event id="click"/>
+		</class>
+		
+		<class id="java4" output_id="JavaClass">
+			<constructor_params>
+				<parameter id="const" constant="this"/>
+				<parameter id="default" default_value="defaulting"/>
+				<parameter property="guest" runtime="true"/>
+			</constructor_params>
+			
+			<property id="x" type="int">
+				<get text="getX()"/>
+				<set text="setX({value})"/>
+			</property>
+			
+			<property id="y" type="int">
+				<get text="getY()"/>
+				<set text="setY({value})"/>
+			</property>
+			
+			<property id="width" type="int">
+				<get text="getWidth()"/>
+				<set text="setWidth({value})"/>
+			</property>
+			
+			<property id="height" type="int">
+				<get text="getHeight()"/>
+				<set text="setHeight({value})"/>
+			</property>
+			
+			<property id="script" type="string" no_script="true">
+				<get text="getScript()"/>
+				<set text="setScript({value})"/>
+			</property>
+			
+			<property id="guest" type="string">
+				<get text="getGuest()"/>
+				<set text="setGuest({value})"/>
+			</property>
+		</class>
+		
+		<class id="java5" output_id="JavaClass">
+			<property id="guest" type="string">
+				<get text="getGuest()"/>
+				<set text="setGuest({value})"/>
+			</property>
+			
+			<event id="java_event" />
+		</class>
+	</types>
+</module>

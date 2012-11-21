@@ -11,18 +11,16 @@
     <TargetPlatform>v4</TargetPlatform>
   </PropertyGroup>
   <PropertyGroup>
-    <!-- Set the IronPythonPath property by proving in different locations where Iron Python could be installed -->
-    <!-- Regular LocalAppData -->
-    <ExcessPath Condition=" '$(ExcessPath)' == '' ">$(EXCESS_INSTALL_PATH)\Extensions\Application\Excess</ExcessPath>
+    <ExcessPath Condition=" '$(ExcessPath)' == '' ">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\XKP\ExcessIDE@InstallPath)\Extensions\Application\Excess</ExcessPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>production\</OutputPath>
+    <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>production\</OutputPath>
+    <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
 
@@ -55,9 +53,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="js\joint.js">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="js\jquery-1.4.2.min.js">
       <SubType>Content</SubType>
     </Content>
     <Content Include="js\jquery-1.7.1.min.js">
@@ -115,9 +110,6 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="js\spawner.js">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="js\state.js">
       <SubType>Content</SubType>
     </Content>
     <Content Include="js\streamer.js">
@@ -180,6 +172,6 @@
   </ItemGroup>
   <Import Project="$(ExcessPath)\Excess.targets" />
   <PropertyGroup>
-    <PostBuildEvent>chrome --allow-file-access-from-files $(TargetPath)</PostBuildEvent>
+    <PostBuildEvent>"$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

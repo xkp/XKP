@@ -1,0 +1,35 @@
+<xss:parameter id="it"/>
+<xss:parameter id="path"/>
+
+<xss:code>
+	var myidiom = it.idiom;
+
+	string id = it.output_id;
+	if (path)
+		id = path + "." + id;
+
+	myidiom.render_create_spawner(it, path, id);
+
+	string creator_class = it.creator_class;
+	if (!creator_class)
+		compiler.error("Spawner requires creator_class");
+		
+	var type = compiler.get_type(creator_class);
+	if (!type)
+		compiler.error("Unknown spawner type", type = creator_class);
+
+	bool no_physics = true;
+	for(var i in type.instances)
+	{
+		if(i.type)
+		{
+			if(i.type.id == "physics" || i.type.id == "body")
+				no_physics = false;
+		}
+	}
+	
+	if(no_physics)
+		compiler.error("Spawner requires creator_class with physics type");
+
+	myidiom.render_instancing_spawner(it, path, id, type);
+</xss:code>

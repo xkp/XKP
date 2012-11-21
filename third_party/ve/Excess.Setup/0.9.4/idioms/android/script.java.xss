@@ -1,0 +1,489 @@
+<xss:parameter id="clazz"/>
+<xss:parameter id="base_namespace"/>
+<xss:parameter id="is_type" default="false"/>
+<xss:parameter id="main" default="0"/>
+
+package <xss:e value="base_namespace"/>.<xss:e value="application.appName"/>;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+<xss:code>
+	if(is_type)
+	{
+		out(indent = 0)
+		{
+			import android.content.Context;
+			import android.content.res.TypedArray;
+			import android.util.AttributeSet;
+			import android.view.LayoutInflater;
+		}
+	} else
+	{
+		out(indent = 0)
+		{
+			import android.app.Activity;
+			import android.os.Bundle;
+		}
+	}
+</xss:code>
+
+import <xss:e value="base_namespace"/>.libs.Layout.XKPLayout;
+<xss:marker id="imports"/>
+
+<xss:code>
+	string class_name = "";
+	string cextends = "";
+	if(is_type)
+	{
+		class_name = clazz.output_id;
+		if(clazz.super)
+			cextends = "extends " + clazz.super.output_id;
+	} else
+	{
+		class_name = "Act" + application.appName;
+		cextends = "extends Activity";
+	}
+	
+	out(indent = 0)
+	{
+		public class <xss:e value="class_name"/> 
+						<xss:e value="cextends"/>
+	}
+</xss:code>
+
+<xss:code>
+	//contents
+	array<string> classes	 = [];
+	
+	bool class_utils = false;
+	bool new_utils = false;
+	var idiom = compiler.idiom_by_id("android");
+	
+	for(var inst in clazz.instances)
+	{
+		//TRACE: log
+		//compiler.log("View: " + inst.id);
+
+		if(inst.no_script || inst.no_render)
+			continue;
+		
+		//render all instances declarations
+		if(inst.id && inst.id != application.id && !compiler.is_type(inst))
+		{
+			out(indent = 1, marker = "declarations")
+			{
+				private <xss:e value="inst.type.output_id"/> <xss:e value="inst.output_id"/>;
+			}
+		}
+		
+		//find all classes without duplicates
+		if(inst.classes)
+		{
+			for(var c in inst.classes)
+			{
+				bool found3 = false;
+				for(var cla in classes)
+				{
+					if(cla == c.name)
+					{
+						found3 = true;
+						break;
+					}
+				}
+				
+				if(!found3)
+				{
+					//TRACE: log
+					//compiler.log("Adding class " + c.name + " on " + clazz.id);
+					classes += c.name;
+					
+					string xss_file = "class.xss/" + c.file_name;
+					compiler.xss(xss_file, marker = "defined_class", inst);
+				}
+			}
+		}
+		
+		//find all utils without duplicates
+		if(inst.utils)
+		{
+			if(!idiom.bundle) idiom.bundle = [];
+			
+			for(var util in inst.utils)
+			{
+				bool found4 = false;
+				for(var utl in idiom.bundle)
+				{
+					if(utl.name == util.name)
+					{
+						found4 = true;
+						break;
+					}
+				}
+				
+				if(!found4)
+				{
+					idiom.bundle += util;
+					new_utils = true;
+				}
+			}
+			
+			class_utils = true;
+		}
+	}
+	
+	//render all utils methods
+	bool need_utils = idiom.need_utils;
+	if(class_utils || need_utils)
+	{
+		out(indent = 2, marker = "declarations")
+		{
+			public static XKPUtils util;
+		}
+		
+		out(indent = 0, marker = "imports")
+		{
+			import xkp.android.libs.Widget.XKPUtils;
+		}
+		
+		string act_name = "Act" + application.appName;
+		out(indent = 1, marker = "callers")
+		{
+			util = new XKPUtils();
+			<xss:e value="act_name"/>.util.addView(this);
+			util = <xss:e value="act_name"/>.util;
+		}
+		
+		if(new_utils)
+		{
+			string src_path = "/src/xkp/android/libs/Widget/";
+			string src_filename = "XKPUtils.java";
+			string dst_path = src_path;
+			string dst_filename = src_filename;
+			
+			string srcf = compiler.full_path("/copy.defaults" + src_path + src_filename);
+			string dstf = application.appName + dst_path + dst_filename;
+
+			string ipath = compiler.full_path("");
+			compiler.xss(src = srcf, output_file = dstf, base_namespace = base_namespace, bundle = idiom.bundle, idiom_path = ipath);
+		}
+	}
+</xss:code>
+
+{
+	<xss:marker id="declarations"/>
+	
+	private boolean mLayoutStarted = false;
+<xss:code>
+	string parent_type_name = "";
+	string clazzer_name = "";
+	string ref_parent = "null";
+	
+	// build instance or type constructors
+	string prefix = "";
+	if(is_type)
+	{
+		parent_type_name = clazz.type.output_id;
+		if(clazz.container)
+		{
+			ref_parent = "this";
+		}
+		
+		out(indent = 0)
+		{
+			public <xss:e value="clazz.output_id"/>(Context context) <xss:open_brace/>
+				this(context, null);
+			<xss:close_brace/>
+			
+			public <xss:e value="clazz.output_id"/>(Context context, AttributeSet attrs) <xss:open_brace/>
+				super(context, attrs);
+				
+				initCallers();
+				
+				LayoutInflater li = (LayoutInflater) context.
+					getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				
+				// TIPS: link xml file with inflater
+				<xss:e value="parent_type_name"/> root = (<xss:e value="parent_type_name"/>) li.inflate(R.layout.<xss:e value="clazz.output_id"/>, <xss:e value="ref_parent"/>);
+				
+				// TIPS: and with all exists views
+		}
+		
+		if(!clazz.container)
+		{
+			string _path = "this";
+			for(var prop in clazz.properties)
+			{
+				var _prop = clazz.get_property(prop.name);
+				var _value = _prop.render_value();
+				
+				out(indent = 0)
+				{
+					<xss:e value="compiler.property_set(_prop, _path, _value)"/>;
+				}
+			}
+		}
+		
+		prefix = "root.";
+		clazzer_name = clazz.output_id;
+	} else
+	{
+		string act_name = "Act" + application.appName;
+		parent_type_name = "XKPLayout"; // TIPS: force,... very much forces
+		out(indent = 0)
+		{
+			private <xss:e value="act_name"/> application;
+			
+			@Override
+			public void onCreate(Bundle savedInstanceState) <xss:open_brace/>
+				super.onCreate(savedInstanceState);
+                initCallers();
+				initInstances();
+				setContentView(R.layout.main);
+				bindViews();
+			<xss:close_brace/>
+			
+			private void bindViews() <xss:open_brace/>
+		}
+		clazzer_name = application.output_id;
+	}
+	
+	out(indent = 0, marker = "declarations")
+	{
+		private <xss:e value="parent_type_name"/> layout<xss:e value="clazzer_name"/>;
+	}
+	
+	//TIPS: create layout treeview observer
+	out(indent = 0)
+	{
+		// TIPS: create an observer for notify layout updated
+		layout<xss:e value="clazzer_name"/> = (<xss:e value="parent_type_name"/>) <xss:e value="prefix"/>findViewById(R.id.layout<xss:e value="clazzer_name"/>);
+		ViewTreeObserver mainLayoutViewTreeObserver = layout<xss:e value="clazzer_name"/>.getViewTreeObserver();
+		if(mainLayoutViewTreeObserver.isAlive()) <xss:open_brace/>
+			mainLayoutViewTreeObserver.addOnGlobalLayoutListener(new OnGlobalLayoutListener() <xss:open_brace/>
+				@Override
+				public void onGlobalLayout() <xss:open_brace/>
+					if(!mLayoutStarted) <xss:open_brace/>
+						mLayoutStarted = true;
+						onLayoutStarted();
+					<xss:close_brace/>
+					onLayoutUpdated();
+				<xss:close_brace/>
+			<xss:close_brace/>);
+		<xss:close_brace/>
+	}
+
+	var idiom = compiler.idiom_by_id("android");
+	for(var inst in clazz.instances)
+	{
+		if(inst.id == null || inst.no_script || inst.no_render || compiler.is_type(inst))
+			continue;
+		
+		if(inst.id && inst.id != application.id)
+		{
+			out(indent = 2)
+			{
+				<xss:e value="inst.output_id"/> = (<xss:e value="inst.type.output_id"/>) <xss:e value="prefix"/>findViewById(R.id.<xss:e value="inst.output_id"/>);
+			}
+		}
+
+		idiom.process_event_handler(inst);
+		
+		var qprops = inst.query_properties("*");
+		for(var p in qprops)
+		{
+			if(p.set_handle)
+			{
+				out(indent = 2)
+				{
+					<xss:e value="inst.output_id"/>.<xss:e value="p.set_handle"/>(<xss:e value="p.set_param_hnd"/>);
+ 				}
+ 			}
+ 		}
+		
+		if(inst.inits)
+		{
+			for(var init in inst.inits)
+			{
+				string init_file = "class.xss/" + init.file_name;
+				compiler.xss(init_file, it = inst);
+			}
+		}
+	}
+	
+	if(is_type)
+	{
+		out(indent = 0)
+		{
+			TypedArray ta = context.obtainStyledAttributes(
+					attrs, R.styleable.<xss:e value="clazz.output_id"/>);
+		}
+	}
+</xss:code>
+			<xss:marker id="set_property_value"/>
+<xss:code>
+	if(is_type)
+	{
+		out(indent = 0)
+		{
+			ta.recycle();
+		}
+	}
+</xss:code>
+	}
+
+private void initCallers() {
+	<xss:marker id="callers"/>
+}
+
+<xss:code>
+	if(!is_type)
+	{
+		out(indent = 1)
+		{
+			@Override
+			public void onPause() <xss:open_brace/>
+				super.onPause();
+		}
+		compiler.inject("render_application_pause", bns = base_namespace);
+		out(indent = 1)
+		{
+			<xss:close_brace/>
+		}
+
+		out(indent = 1)
+		{
+			@Override
+			public void onStop() <xss:open_brace/>
+				super.onStop();
+		}
+		compiler.inject("render_application_stop", bns = base_namespace);
+		out(indent = 1)
+		{
+			<xss:close_brace/>
+		}
+
+		out(indent = 1)
+		{
+			@Override
+			public void onResume() <xss:open_brace/>
+				super.onResume();
+		}
+		compiler.inject("render_application_resume", bns = base_namespace);
+		out(indent = 1)
+		{
+			<xss:close_brace/>
+		}
+	}
+</xss:code>
+
+private void onLayoutUpdated() {
+	<xss:marker id="layout_update"/>
+}
+
+private void onLayoutStarted() {
+	<xss:marker id="layout_start"/>
+}
+
+<xss:code>
+	// render instances of other idioms
+	if(!is_type)
+	{
+		compiler.inject("render_initialization", clazz = clazz, bns = base_namespace);
+		
+		out(indent = 0)
+		{
+			private void initInstances() <xss:open_brace/>
+				application = this;
+		}
+		
+		compiler.inject("render_instances");
+		
+		out(indent = 0)
+		{
+			<xss:close_brace/>
+		}
+    }
+	else
+	{
+		compiler.inject("render_type_initialization", clazz = clazz, bns = base_namespace);
+		
+		for(var inst in clazz.instances)
+		{
+			//TRACE: log
+			//compiler.log("-- clazz = " + clazz.id);
+			//compiler.log("--- inst = " + inst.id);
+			//compiler.log("---- inst idiom = " + inst.idiom.id);
+			inst.idiom.render_instance(inst, clazz);
+		}
+	}
+		
+	// render other idiom scripts
+	compiler.inject("render_idiom_scripts", main = main);
+</xss:code>
+
+<xss:marker id="handlers"/>
+
+<xss:code>
+	if(!is_type)
+	{
+		//compiler.xss("../java/instance.xss", it = application);
+		//clazz.instances += application;
+	}
+	else
+	{
+		compiler.xss("../java/instance.xss", it = clazz);
+		
+		//TODO: include all this to another xss file with only structure, maybe to 'styleableProperties.xml.xss'
+		for(var prop in clazz.properties)
+		{
+			if(!prop.set || !prop.type)
+				continue;
+			
+			string method_set = prop.output_id + "_set";
+			string style_name = "R.styleable." + clazz.output_id + "_" + prop.id;
+			string get_function = "";
+			string more_params = "";
+			
+			if(prop.type.id == "string")
+			{
+				get_function = "getString";
+			} else
+			if(prop.type.id == "int")
+			{
+				get_function = "getInteger";
+				more_params = ", 0";
+			} else
+			if(prop.type.id == "bool")
+			{
+				get_function = "getBoolean";
+				more_params = ", false";
+			} else
+			if(prop.type.id == "float")
+			{
+				get_function = "getFloat";
+				more_params = ", 0.0";
+			} else
+			{
+				get_function = "getResourceId";
+				more_params = ", 0";
+			}
+			
+			string func_resrc = "ta." + get_function;
+			
+			out(marker = "set_property_value")
+			{
+				<xss:e value="method_set"/>(<xss:e value="func_resrc"/>(<xss:e value="style_name"/><xss:e value="more_params"/>));
+			}
+		}
+		
+		string output_filename = application.appName + "/res/values/" + clazz.id + "Style.xml";
+		compiler.xss("styleableProperties.xml.xss", output_file = output_filename, clazz = clazz);
+	}
+</xss:code>
+
+<xss:marker id="defined_class"/>
+}

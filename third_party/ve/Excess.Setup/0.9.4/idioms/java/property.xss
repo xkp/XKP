@@ -1,0 +1,76 @@
+
+<xss:parameter id="p"/>
+<xss:parameter id="iname" default=""/>
+
+<xss:code>
+	//TRACE: log
+	//compiler.log("Rendering property: " + p.id);
+
+	if(!p.user_defined || p.no_render)
+		return;
+	
+	string obj_type = "Object";
+	string prop_type = obj_type;
+	if(p.type != null)
+		prop_type = p.type.output_id;
+		
+	string ret_type = prop_type;
+	if(p.get)
+		if(p.get.type)
+			ret_type = p.get.type.output_id;
+			
+	if(ret_type == obj_type)
+		if(prop_type != obj_type)
+			ret_type = prop_type;
+	
+	string rend_value = "";
+	if(p.value)
+	{
+		var value = p.render_value();
+		rend_value = " = " + value;
+	}
+	
+	if(p.set && p.get)
+	{
+		out(indent = 1)
+		{
+			public <xss:e>ret_type</xss:e> <xss:e>p.output_id</xss:e>_get() <xss:open_brace/>
+				<xss:e>p.get.render()</xss:e>
+			<xss:close_brace/>
+			
+			public void <xss:e>p.output_id</xss:e>_set(<xss:e>prop_type</xss:e> value) <xss:open_brace/>
+				<xss:e>p.set.render()</xss:e>
+			<xss:close_brace/>
+		}
+	}
+	else
+	if(p.set)
+	{
+		out(indent = 1)
+		{
+			private <xss:e>prop_type</xss:e> <xss:e>p.output_id</xss:e><xss:e>rend_value</xss:e>;
+			
+			public void <xss:e>p.output_id</xss:e>_set(<xss:e>prop_type</xss:e> value) <xss:open_brace/>
+				<xss:e>p.output_id</xss:e> = value;
+				<xss:e>p.set.render()</xss:e>
+			<xss:close_brace/>
+		}
+	}
+	else
+	if(p.get)
+	{
+		out(indent = 1)
+		{
+			public <xss:e>ret_type</xss:e> <xss:e>p.output_id</xss:e>_get() <xss:open_brace/>
+				<xss:e>p.get.render()</xss:e>
+			<xss:close_brace/>
+		}
+	}
+	else
+	{
+		out(indent = 1)
+		{
+			private <xss:e>prop_type</xss:e> <xss:e>p.output_id</xss:e><xss:e>rend_value</xss:e>;
+		}
+	}
+</xss:code>

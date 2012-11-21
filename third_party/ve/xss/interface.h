@@ -44,17 +44,18 @@ typedef std::vector<xss_error_info> xss_error_info_list;
 class IObjectModel
 {
 	public:
-		virtual int  load(const std::string& filename)												  = 0;
+		virtual int  load(const std::string& filename)                                                = 0;
 		virtual void addIncludes(int appId, const std::string& def_file, const std::string& src_file) = 0;
 		virtual bool notifyChange(const std::string& fname, int line, int col, 
-								  int oldEndLine, int oldEndCol, int newEndLine, int newEndCol)		  = 0;
-		virtual bool updateChanges(int ms)															  = 0;
-		virtual void queueChange(const std::string& fname, const std::string& content)				  = 0;
+								  int oldEndLine, int oldEndCol, int newEndLine, int newEndCol)                   = 0;
+		virtual bool updateChanges(int ms)                                                            = 0;
+		virtual void queueChange(const std::string& fname, const std::string& content)                = 0;
 		virtual void walkContext(const std::string& fname, const std::string& text, 
-								 int line, int col, walk_list& results)								  = 0;
-		virtual void walkErrors(const std::string& fname, xss_error_info_list& errors)				  = 0;
-		virtual bool buildProject(const std::string& fname, xss_error_info_list& errors)			  = 0;
-		virtual std::string appName(const std::string& fname)										  = 0;
+								 int line, int col, walk_list& results)                                           = 0;
+		virtual void walkErrors(const std::string& fname, xss_error_info_list& errors)                = 0;
+		virtual bool buildProject(const std::string& fname, xss_error_info_list& errors)              = 0;
+		virtual std::string appName(const std::string& fname)                                         = 0;
+    virtual void addSearchPath(const std::string& path)                                           = 0;
 };
 
 #endif

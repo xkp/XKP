@@ -1,0 +1,40 @@
+<xss:parameter id="it"/>
+
+<xss:code>
+    var input_type = "radio";
+    if (it.class_name == "checkbox")
+        input_type = "checkbox";  
+
+    bool in_group = false;
+    if ((it.class_name == "checkbox" && it.parent.class_name == "checkgroup") ||
+        (it.class_name == "radiobutton" && it.parent.class_name == "radiogroup"))
+        in_group = true;
+        
+    string input_id = compiler.genid("rgitem");
+    string label_id = "";
+    if (!in_group)
+    {
+        input_id = it.output_id + "_input";
+        label_id = it.output_id + "_label";
+        
+        out()
+        {
+            <div id="<xss:e value="it.output_id"/>">
+        }
+    }
+    
+    out()
+    {
+        <input id="<xss:e value="input_id"/>" type="<xss:e value="input_type"/>" name="<xss:e value="it.parent.id"/>"/>
+        <label id="<xss:e value="label_id"/>" for="<xss:e value="input_id"/>"> <xss:e value="it.caption"/> </label>
+    }
+    
+    if (!in_group)
+    {
+        out()
+        {
+            </div>
+        }
+    }
+</xss:code>
+

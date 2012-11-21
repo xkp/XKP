@@ -1,0 +1,48 @@
+
+<xss:parameter id="ev"/>
+<xss:parameter id="owner"/>
+<xss:parameter id="is_class"/>
+
+<xss:code>
+	var		impls		= ev.impls;
+	var		evargs		= ev.args;
+	string	ev_parent	= owner.output_id;
+
+	//generate functions
+	if(ev.render_as == "script")
+		return;
+
+	if(ev.render_as == "bind")
+    {
+        string bind_str = ev.bind_with;
+        if (!bind_str)
+            bind_str = "bind";
+        
+        out()
+	    {
+		    <xss:e value="ev_parent"/>.<xss:e value="bind_str"/>( '<xss:e value="ev.output_id"/>', function(<xss:e value="evargs.render()"/>) <xss:open_brace/> 
+	    }
+    }
+    else 
+    {
+        //default
+        out(indent = 0)
+	    {
+		    <xss:e value="ev_parent"/>.<xss:e value="ev.output_id"/>( function(<xss:e value="evargs.render()"/>) <xss:open_brace/> 
+	    }
+    }
+
+	for(var evimpl in impls)
+	{
+	    evimpl.use_this_id(true);
+		out(indent = 1)
+		{
+			<xss:e>evimpl.render()</xss:e>
+		}
+	}
+
+	out(indent = 0)
+	{
+		<xss:close_brace/>);
+	}
+</xss:code>

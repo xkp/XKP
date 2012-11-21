@@ -135,26 +135,27 @@ namespace ExcessCompiler {
 	public ref class ExcessModel
 	{
 		public:	
-			ExcessModel();
-			~ExcessModel();
+      ExcessModel();
+      ~ExcessModel();
 		public:	
-			int		loadProject(String^ filename, String^ path);
-			String^ getAppName(String^ filename);
-			void	unloadProject(Guid project);
-			bool	buildProject(String^ filename, List<ExcessErrorInfo^>^ errors);
-			bool	buildAll();
-            void	addInclude(String^ projectPath, String^ def, String^ src);
-            void	notifyChange(String^ filename, String^ contents, int line, int col, int oldEndLine, int oldEndCol, int newEndLine, int newEndCol);
-			bool	updateChanges();
+      int		  loadProject(String^ filename, String^ path);
+      String^ getAppName(String^ filename);
+      void	  unloadProject(Guid project);
+      bool	  buildProject(String^ filename, List<ExcessErrorInfo^>^ errors);
+      bool	  buildAll();
+      void	  addInclude(String^ projectPath, String^ def, String^ src);
+      void	  notifyChange(String^ filename, String^ contents, int line, int col, int oldEndLine, int oldEndCol, int newEndLine, int newEndCol);
+      bool	  updateChanges();
+      void    addSearchPath(String^ path);
 
 			//access
 			List<ExcessCompletionItem^>^ getCompletion(String^ filename, String^ text, int line, int col);
             List<ExcessErrorInfo^>^		 getErrors(String^ filename);
             List<ExcessErrorInfo^>^		 getAllErrors();
 		private:
-			IObjectModel*				model_; //wtf, no smart pointers?
+			IObjectModel*               model_; //wtf, no smart pointers?
 			std::map<std::string, int>*	projects_;
-			List<String^>				dirt_content_;
+			List<String^>               dirt_content_;
 			std::map<std::string, int>*	dirt_;
 			std::map<int, std::string>*	dirt_index_;
 			

@@ -1,0 +1,16 @@
+<xss:parameter id="it"/>
+<xss:parameter id="world"/>
+<xss:parameter id="path"/>
+
+<xss:code>
+	var myidiom = it.idiom;
+
+	string id = it.output_id;
+	if (path)
+		id = path + "." + id;
+	
+	it.world = world;
+	myidiom.render_create_joint(it, world, path, id);
+
+	myidiom.render_instancing_joint(it, world, path, id);
+</xss:code>

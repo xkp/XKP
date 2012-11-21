@@ -1,0 +1,62 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title></title>
+
+<script type="text/javascript" src="resig.js" shared="true"></script>
+
+<script type="text/javascript">			
+var g_elapsed = -1;
+var g_delta = 0.0;
+var g_sequence_manager = new state.Manager();
+
+var application = {}
+
+<xss:marker id="variables"/>
+
+function default_interpolate(a, b, t)
+{
+    return a + (b - a)*t;
+}
+
+function start(resolution)  
+{  
+	var start = new Date().getTime();  
+	function update()  
+	{  
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+		
+        g_elapsed = now; 
+
+		g_sequence_manager.update(g_delta);
+        window.setTimeout(update, resolution);  
+	}  
+	window.setTimeout(update, resolution);  
+}  
+
+<xss:code>
+compiler.inject("render_types");
+
+compiler.xss("../common-js/instance.xss", application);
+compiler.inject("render_instances");
+</xss:code>
+
+start();
+</script>
+
+</head>
+
+<body>
+</body>
+
+</html>

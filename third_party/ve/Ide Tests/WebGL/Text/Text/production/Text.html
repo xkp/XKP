@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Text</title>
+</head>
+<body>
+<style type="text/css">
+	body{
+	background:SlateGray;
+	}
+</style>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/colors.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/three/Three.js"></script>
+            <script type="text/javascript" src="../js/three/Stats.js"></script>
+            <script type="text/javascript" src="../js/three/Utils.js"></script>
+            <script type="text/javascript" src="../js/three/Detector.js"></script>
+            <script type="text/javascript" src="../js/three/fonts.js"></script>
+<script type="text/javascript">	
+if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+			var renderer = new THREE.WebGLRenderer( { antialias: false } );
+		var ui_;
+var canvas_position = {x:0, y:0};
+var g_elapsed;
+var g_delta;	
+var scene = new THREE.Scene();
+scene.mouse_thru = true;
+var streamer = {};
+var manager = new threejs.Manager(scene, renderer, null, canvas_position);
+var three_utils = new threejs.Utils();
+manager.events = new ev.EventHolder();
+manager.events.parent = manager;
+manager.c_anims = [];
+manager.js_anims = [];
+manager.c_skins = [];
+var app_width = window.innerWidth;
+var app_height = window.innerHeight;
+var application = {};
+var clock = new THREE.Clock();
+application.events = new ev.EventHolder();
+		var streamer = new stream.Streamer();		
+		var ResourceUtils = new stream.ResourceUtils();
+	streamer.manager = manager;
+// --------RESOURCES---------
+		var global_package = new stream.Package(streamer);	
+		global_package.load();	
+    // --------RESOURCES---------
+renderer.setSize( app_width, app_height );
+manager.streamer = streamer;
+function render() {
+manager.canvas_position = getElementPosition(renderer.domElement);
+var now   = new Date().getTime();
+if (g_elapsed < 0)
+	g_delta = 0; //first update
+else
+	g_delta  = now - g_elapsed;  
+g_elapsed = now; 
+if(!g_delta) g_delta = 0;
+manager.delta = g_delta;
+c_delta = clock.getDelta(),
+c_elapsed = clock.getElapsedTime() * 10;
+manager.events.dispatch("update", [g_delta, g_elapsed]);	
+				manager.scene.add(camera_1);
+				set_active_camera(camera_1);
+application.events.dispatch("switch_cameras", []);
+}
+var material_1;var camera_1;var __trackball_controls1;var light;var text_1;
+threejs_load_resources(manager, function()
+{
+material_1 = new THREE.MeshLambertMaterial({
+color:Math.random() * 0xffffff,shading:smooth_shading,
+	});
+			material_1.manager = manager;
+		    camera_1 = 
+		    new THREE.PerspectiveCamera(25, 1.5, 1, 10000, null) ;	
+			manager.active_camera = camera_1;
+			camera_1.manager = manager;
+				__trackball_controls1 = new THREE.TrackballControls( camera_1 );
+				manager.events.addListener("update", function()
+				{				
+					__trackball_controls1.update( c_delta );
+				})
+			__trackball_controls1.manager = manager;
+	    light = 
+	    new THREE.DirectionalLight(16777215, 1, 0, null) ;
+	    manager.scene.add(light);
+			light.manager = manager;
+var text_1_geometry = new THREE.TextGeometry("eXceSs", {
+size:40,height:5,curveSegments:3,weight:"bold",style:"normal",bevelEnabled:true,bevelThickness:2,bevelSize:1
+	});
+	text_1 = new THREE.Mesh(text_1_geometry, material_1); 
+	manager.scene.add(text_1);
+			text_1.manager = manager;
+            camera_1.position.z = 350;
+            light.position.y = 0.5;
+            light.position.z = 1;
+            text_1.position.x = -100;
+            set_rotation_y(text_1.rotation, 30);
+	application.events.addListener("init", function()
+	{    
+	}
+	);
+var event_manager = new ev.ThreeEventManager();
+document.onmousemove = function(ev)
+{
+	event_manager.mousemove(manager, ev.clientX, ev.clientY);                  
+};
+document.onmousedown = function(ev)
+{
+	event_manager.mousedown(manager, ev.clientX, ev.clientY);                  
+};
+document.onmouseup = function(ev)
+{
+	event_manager.mouseup(manager, ev.clientX, ev.clientY);		
+};
+document.onkeydown = function(ev)
+{
+	event_manager.keydown(manager, ev.keyCode);                  
+};
+document.onkeyup = function(ev)
+{
+	event_manager.keyup(manager, ev.keyCode);                  
+};
+document.onkeypress = function(ev)
+{
+	event_manager.keypress(manager, ev.keyCode);                  
+};
+manager.events.addListener("mousedown", function(x,y)
+{    
+	application.events.dispatch("mousedown", [x, y]);
+});
+manager.events.addListener("mouseup", function(x,y)
+{    
+	application.events.dispatch("mouseup", [x, y]);
+});
+manager.events.addListener("mousemove", function(x,y)
+{    
+	application.events.dispatch("mousemove", [x, y]);
+});
+manager.events.addListener("click", function(x,y)
+{    
+	application.events.dispatch("click", [x, y]);
+});
+manager.events.addListener("drag", function(x,y)
+{    
+	application.events.dispatch("drag", [x, y]);
+});
+manager.events.addListener("dragend", function(x,y)
+{    
+	application.events.dispatch("dragend", [x, y]);
+});
+manager.events.addListener("keyup", function(keycode)
+{    
+	application.events.dispatch("keyup", [keycode]);
+});
+manager.events.addListener("keydown", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("keypress", function(keycode)
+{    
+	application.events.dispatch("keydown", [keycode]);
+});
+manager.events.addListener("update", function(delta, elapsed)
+{    
+	application.events.dispatch("update", [delta, elapsed]);
+});
+application.events.dispatch("init", []);
+		document.body.appendChild( renderer.domElement );
+animate();
+});
+function animate() {	
+	requestAnimationFrame( animate );
+	render();	
+}
+</script>
+</body>
+</html>

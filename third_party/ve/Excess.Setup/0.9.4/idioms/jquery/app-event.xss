@@ -1,0 +1,30 @@
+
+<xss:parameter id="ev"/>
+
+<xss:code>
+	var	impls  = ev.impls;
+	var	evargs = ev.args;
+
+	//generate functions
+	if(ev.render_as == "script")
+		return;
+
+	out(indent = 0)
+	{
+		application.<xss:e value="ev.output_id"/> = function(<xss:e value="evargs.render()"/>) <xss:open_brace/> 
+	}
+
+	for(var evimpl in impls)
+	{
+	    evimpl.use_this_id(true);
+		out(indent = 1)
+		{
+			<xss:e>evimpl.render()</xss:e>
+		}
+	}
+
+	out(indent = 0)
+	{
+		<xss:close_brace/>
+	}
+</xss:code>

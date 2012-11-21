@@ -1,0 +1,20 @@
+
+<xss:parameter id="m"/>
+<xss:parameter id="iname" default=""/>
+
+<xss:code>
+	//TRACE: log
+	//compiler.log("Rendering method: " + m.name);
+	
+	string mthd_type = "void";
+	
+	if(m.type != null)
+		mthd_type = m.type.output_id;
+	
+	out(indent = 1)
+	{
+		public <xss:e>mthd_type</xss:e> <xss:e>m.output_id</xss:e>(<xss:e>m.args.render()</xss:e>) <xss:open_brace/>
+			<xss:e>m.code.render()</xss:e>
+		<xss:close_brace/>
+	}
+</xss:code>

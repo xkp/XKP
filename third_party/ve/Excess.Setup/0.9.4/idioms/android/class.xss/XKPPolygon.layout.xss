@@ -1,0 +1,7 @@
+<xss:parameter id="view"/>
+<xss:parameter id="caller"/>
+<xss:parameter id="ind"/>
+
+<xss:code>
+	// not render childs
+</xss:code>

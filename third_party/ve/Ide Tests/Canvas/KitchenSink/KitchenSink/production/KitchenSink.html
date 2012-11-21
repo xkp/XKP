@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>KitchenSink</title>
+            <script type="text/javascript" src="../js/resig.js"></script>
+            <script type="text/javascript" src="../js/event.js"></script>
+            <script type="text/javascript" src="../js/utils.js"></script>
+            <script type="text/javascript" src="../js/keys.js"></script>
+            <script type="text/javascript" src="../js/ui.js"></script>
+            <script type="text/javascript" src="../js/streamer.js"></script>
+            <script type="text/javascript" src="../js/sequence.js"></script>
+<script type="text/javascript">
+var drawingCanvas;	
+var streamer;	
+var g_ui;
+var g_elapsed = -1;
+var g_delta = 0.0;
+var g_canvas;
+var g_ui_root;
+var application = {};
+var app_width = 600;
+var app_height = 600;
+application.events = new ev.EventHolder();
+var SoundUtils = new ui.SoundUtils();
+		if(drawingCanvas){
+			var client =
+			{
+				width: 600,
+				height: 600,
+				canvas: drawingCanvas
+			};            						
+			var ui_ = new ui.Manager(client, streamer);			
+			var g_ui = ui_;
+			var g_ui_root = ui_.root;
+			var mouse_pressed = false;
+		}		
+		var streamer = new stream.Streamer();		
+		var ResourceUtils = new stream.ResourceUtils();
+		var g_sequence_manager = new state.Manager();
+        function default_interpolate(a, b, t)
+        {
+            return a + (b - a)*t;
+        }		
+		var global_package = new stream.Package(streamer);	
+                global_package.add_item(
+		{
+		id:				"__image1",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"../images/progress.full.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var __image1;
+				global_package.events.addListener("loaded", function()
+				{
+					__image1 = streamer.get_resource("__image1");
+				});
+                global_package.add_item(
+		{
+		id:				"__image2",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"../images/progress.empty.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var __image2;
+				global_package.events.addListener("loaded", function()
+				{
+					__image2 = streamer.get_resource("__image2");
+				});
+                global_package.add_item(
+		{
+		id:				"__image3",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"../images/smile_grin_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var __image3;
+				global_package.events.addListener("loaded", function()
+				{
+					__image3 = streamer.get_resource("__image3");
+				});
+                global_package.add_item(
+		{
+		id:				"__image4",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"../images/smile_sad_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var __image4;
+				global_package.events.addListener("loaded", function()
+				{
+					__image4 = streamer.get_resource("__image4");
+				});
+                global_package.add_item(
+		{
+		id:				"__image5",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"../images/arrow_left.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var __image5;
+				global_package.events.addListener("loaded", function()
+				{
+					__image5 = streamer.get_resource("__image5");
+				});
+                global_package.add_item(
+		{
+		id:				"__image6",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"../images/arrow_right.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var __image6;
+				global_package.events.addListener("loaded", function()
+				{
+					__image6 = streamer.get_resource("__image6");
+				});
+                global_package.add_item(
+		{
+		id:				"__image7",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"../images/arrow_right_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var __image7;
+				global_package.events.addListener("loaded", function()
+				{
+					__image7 = streamer.get_resource("__image7");
+				});
+                global_package.add_item(
+		{
+		id:				"__image8",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"../images/arrow_right_green_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var __image8;
+				global_package.events.addListener("loaded", function()
+				{
+					__image8 = streamer.get_resource("__image8");
+				});
+                global_package.add_item(
+		{
+		id:				"__image9",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"../images/arrow_left_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var __image9;
+				global_package.events.addListener("loaded", function()
+				{
+					__image9 = streamer.get_resource("__image9");
+				});
+                global_package.add_item(
+		{
+		id:				"__image10",
+		resource_type:	RESOURCE_IMAGE,
+		src:			"../images/arrow_left_green_48.png",
+		frame_width:	null,
+		frame_height:	null,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var __image10;
+				global_package.events.addListener("loaded", function()
+				{
+					__image10 = streamer.get_resource("__image10");
+				});
+                global_package.add_item(
+		{
+		id:				"monster_sheet",
+		resource_type:	RESOURCE_SPRITE,
+		src:			"../images/monster.png",
+		frame_width:	64,
+		frame_height:	64,
+		animations:		[],	
+		children:		{}
+		}
+);	
+				var monster_sheet;
+				global_package.events.addListener("loaded", function()
+				{
+					monster_sheet = streamer.get_resource("monster_sheet");
+				});
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "monster_sheet")
+				{		
+					global_package.items[i].children['m_run_l'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "monster_sheet")
+				{		
+					global_package.items[i].children['m_run_d'] = child_;
+				}					
+			}	
+			var child_ = {};
+			child_.type_ = 'animation';
+			for(var i = 0; i < global_package.items.length; i++)
+			{
+				if(global_package.items[i].id == "monster_sheet")
+				{		
+					global_package.items[i].children['m_idle'] = child_;
+				}					
+			}	
+		for(var i = 0; i < global_package.items.length; i++)
+        {						
+			if(global_package.items[i].id == "monster_sheet")
+				global_package.items[i].animations.push
+				({
+					id:			"m_run_l",
+					frame_row:	0,
+					frame_col:	0,
+					frames:		10,
+					step:		20,
+					right_to_left:		false
+				});
+		}		
+		for(var i = 0; i < global_package.items.length; i++)
+        {						
+			if(global_package.items[i].id == "monster_sheet")
+				global_package.items[i].animations.push
+				({
+					id:			"m_run_d",
+					frame_row:	2,
+					frame_col:	9,
+					frames:		10,
+					step:		20,
+					right_to_left:		true
+				});
+		}		
+		for(var i = 0; i < global_package.items.length; i++)
+        {						
+			if(global_package.items[i].id == "monster_sheet")
+				global_package.items[i].animations.push
+				({
+					id:			"m_idle",
+					frame_row:	1,
+					frame_col:	0,
+					frames:		10,
+					step:		20,
+					right_to_left:		false
+				});
+		}		
+		global_package.load();	
+    var canvas_position = {x:0, y:0};
+function start(resolution)  
+{  
+	function updater()  
+	{
+		canvas_position = getElementPosition(drawingCanvas);
+		var now   = new Date().getTime();
+        if (g_elapsed < 0)
+            g_delta = 0; //first update
+        else
+		    g_delta  = now - g_elapsed;  
+        g_elapsed = now; 
+		g_sequence_manager.update(g_delta);
+		application.events.dispatch("update", [g_delta, g_elapsed]);			
+		var context = g_canvas.getContext('2d');
+		g_ui.update(g_delta, context);
+		window.setTimeout(updater, resolution);  
+	}    
+	window.setTimeout(updater, resolution);  
+}  
+var main;var test1;var title0;var lbl_event;var lbl0;var lbl1;var btn1;var stateBtn;var lbl3;var test2;var title1;var pb1;var btn2;var btn3;var lbl2;var lbl7;var monster;var test3;var title2;var c1;var r1;var p1;var line1;var lbl4;var lbl5;var lbl6;var lbl8;var btn5;var test4;var title3;var title4;var inst0;var clips;var ca1;var back_img;var ca2;var tb1;var inst1;var inst2;var inst3;var btnNext;var btnPrev;
+            application.clicks = 0;
+            application.do_rotation_plus = false;
+            application.do_rotation_minus = false;
+            application.do_drag = false;
+            application.px = null;
+            application.py = null;
+            application.left_key_down = false;
+            application.right_key_down = false;
+            application.increase_pol_size = false;
+            application.decrease_pol_size = false;
+	application.events.addListener("keydown", function(keycode)
+	{    
+		if (btn1.isVisible())
+{
+if (keycode == LEFT_ARROW)
+{
+btn1.set_x(btn1.x - 2);
+monster.set_animation("m_run_l");
+application.left_key_down = true;
+}
+if (keycode == RIGHT_ARROW)
+{
+btn1.set_x(btn1.x + 2);
+monster.set_animation("m_run_d");
+application.right_key_down = true;
+}
+if (keycode == UP_ARROW)
+{
+btn1.set_y(btn1.y - 2);
+}
+if (keycode == DOWN_ARROW)
+{
+btn1.set_y(btn1.y + 2);
+}
+}
+if (ca1.isVisible())
+{
+if (keycode == LEFT_ARROW)
+{
+ca1.set_x(ca1.x - 2);
+}
+if (keycode == RIGHT_ARROW)
+{
+ca1.set_x(ca1.x + 2);
+}
+if (keycode == UP_ARROW)
+{
+ca1.set_y(ca1.y - 2);
+}
+if (keycode == DOWN_ARROW)
+{
+ca1.set_y(ca1.y + 2);
+}
+}
+if (ca2.isVisible())
+{
+if (keycode == A)
+{
+ca2.set_x(ca2.x - 2);
+}
+if (keycode == D)
+{
+ca2.set_x(ca2.x + 2);
+}
+if (keycode == W)
+{
+ca2.set_y(ca2.y - 2);
+}
+if (keycode == S)
+{
+ca2.set_y(ca2.y + 2);
+}
+}
+if (keycode == NUMPAD_PLUS)
+{
+application.do_rotation_plus = true;
+}
+if (keycode == NUMPAD_MINUS)
+{
+application.do_rotation_minus = true;
+}
+if (keycode == CTRL)
+{
+application.do_drag = true;
+}
+if (keycode == SHIFT)
+{
+application.increase_pol_size = true;
+}
+if (keycode == ALT)
+{
+application.decrease_pol_size = true;
+}
+	}
+	);
+	application.events.addListener("keyup", function(keycode)
+	{    
+		if (keycode == LEFT_ARROW)
+{
+application.left_key_down = false;
+monster.set_animation("m_idle");
+}
+if (keycode == RIGHT_ARROW)
+{
+application.right_key_down = false;
+monster.set_animation("m_idle");
+}
+if (keycode == NUMPAD_PLUS)
+{
+application.do_rotation_plus = false;
+}
+if (keycode == NUMPAD_MINUS)
+{
+application.do_rotation_minus = false;
+}
+if (keycode == CTRL)
+{
+application.do_drag = false;
+}
+if (keycode == SHIFT)
+{
+application.increase_pol_size = false;
+}
+if (keycode == ALT)
+{
+application.decrease_pol_size = false;
+}
+	}
+	);
+	application.events.addListener("update", function()
+	{    
+		if (application.left_key_down)
+{
+monster.set_x(monster.x - 0.200000003);
+}
+if (application.right_key_down)
+{
+monster.set_x(monster.x + 0.200000003);
+}
+	}
+	);
+window.onload = function()
+{
+        drawingCanvas = document.getElementById("myCanvas");
+        g_canvas = drawingCanvas;
+	if (drawingCanvas && drawingCanvas.getContext)
+	{
+		var client =
+		{
+			width: 600,
+			height: 600,
+			canvas: drawingCanvas
+		};
+		var ui_ = new ui.Manager(client, streamer);
+		g_ui = ui_;
+        g_ui_root = ui_.root;
+     	ui_.load_resources(function()
+		{
+		    main = new ui.Switch(g_ui_root.manager, g_ui_root);
+		    test1 = new ui.Component(main.manager, main);
+	    test1.mouse_thru = true;
+		    title0 = new ui.Label(test1.manager, test1, "12px Verdana");
+		    lbl_event = new ui.Label(test1.manager, test1, "12px Verdana");
+		    lbl0 = new ui.Label(test1.manager, test1, null);
+		    lbl1 = new ui.Label(test1.manager, test1, null);
+		    btn1 = new ui.Button(test1.manager, test1, "../images/smile_sad_48.png", "../images/smile_grin_48.png");
+		    stateBtn = new ui.StateButton(test1.manager, test1, "../images/smile_grin_48.png", "../images/smile_sad_48.png");
+		    lbl3 = new ui.Label(test1.manager, test1, null);
+		    test2 = new ui.Component(main.manager, main);
+	    test2.mouse_thru = true;
+		    title1 = new ui.Label(test2.manager, test2, "12px Verdana");
+		    pb1 = new ui.ProgressBar(test2.manager, test2, null);
+		    btn2 = new ui.Image(test2.manager, test2, "../images/arrow_left.png");
+		    btn3 = new ui.Image(test2.manager, test2, "../images/arrow_right.png");
+		    lbl2 = new ui.Label(test2.manager, test2, null);
+		    lbl7 = new ui.Label(test2.manager, test2, "11px Verdana");
+		    monster = new ui.Sprite(test2.manager, test2);
+		    test3 = new ui.Component(main.manager, main);
+	    test3.mouse_thru = true;
+		    title2 = new ui.Label(test3.manager, test3, "12px Verdana");
+		    c1 = new ui.Circle(test3.manager, test3, "cyan", "black", 3);
+		    r1 = new ui.Rectangle(test3.manager, test3, "green", null, null);
+		    p1 = new ui.Polygon(test3.manager, test3, "pink", "brown", 3);
+		p1.points.push({id:"point1", x:300, y:300});
+		p1.points.push({id:"point2", x:300, y:250});
+		p1.points.push({id:"point3", x:210, y:230});
+		p1.points.push({id:"point4", x:250, y:300});
+		    line1 = new ui.Line(test3.manager, test3);
+		    lbl4 = new ui.Label(test3.manager, test3, "11px Verdana");
+		    lbl5 = new ui.Label(test3.manager, test3, "11px Verdana");
+		    lbl6 = new ui.Label(test3.manager, test3, "11px Verdana");
+		    lbl8 = new ui.Label(test3.manager, test3, "11px Verdana");
+		    btn5 = new ui.Button(test3.manager, test3, "../images/smile_sad_48.png", "../images/smile_grin_48.png");
+		    test4 = new ui.Component(main.manager, main);
+	    test4.mouse_thru = true;
+		    title3 = new ui.Label(test4.manager, test4, "12px Verdana");
+		    title4 = new ui.Label(test4.manager, test4, "12px Verdana");
+		    inst0 = new ui.Label(test4.manager, test4, "12px Verdana");
+		    clips = new ui.Component(test4.manager, test4);
+	    clips.mouse_thru = true;
+		    ca1 = new ui.ClipArea(clips.manager, clips, "rect");
+	    ca1.mouse_thru = true;
+		    back_img = new ui.Image(clips.manager, clips, "../images/smile_grin_48.png");
+		    ca2 = new ui.ClipArea(clips.manager, clips, "circle");
+	    ca2.mouse_thru = true;
+		    tb1 = new ui.TextButton(test4.manager, test4, "My_Button", "12px Arial");
+		    inst1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    inst2 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    inst3 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
+		    btnNext = new ui.Button(g_ui_root.manager, g_ui_root, "../images/arrow_right_green_48.png", "../images/arrow_right_48.png");
+		    btnPrev = new ui.Button(g_ui_root.manager, g_ui_root, "../images/arrow_left_green_48.png", "../images/arrow_left_48.png");
+            main.set_x(0);
+            main.set_y(0);
+            main.set_width(600);
+            main.set_height(450);
+            title0.set_x(50);
+            title0.set_y(50);
+            title0.text("This screen shows some buttons (1/4)");
+	title0.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+title0.set_x(x - title0.w / 2);
+title0.set_y(y - title0.h / 2);
+}
+	}
+	);
+            lbl_event.set_x(240);
+            lbl_event.set_y(120);
+            lbl_event.text("Pass the mouse over this text...");
+	lbl_event.events.addListener("mousein", function()
+	{    
+		lbl_event.text("The mouse is over me...");
+	}
+	);
+	lbl_event.events.addListener("mouseout", function()
+	{    
+		lbl_event.text("Pass the mouse over this text...");
+	}
+	);
+            lbl0.set_x(240);
+            lbl0.set_y(175);
+            lbl0.text("Use keyboard arrows to move the first smiley");
+            lbl1.set_x(330);
+            lbl1.set_y(220);
+            lbl1.text("Click this smiley to count");
+            btn1.set_x(270);
+            btn1.set_y(200);
+            btn1.set_width(50);
+            btn1.set_height(50);
+	btn1.events.addListener("click", function()
+	{    
+		if (application.do_rotation_plus)
+{
+btn1.set_rotation(btn1.get_rotation() + 5);
+}
+if (application.do_rotation_minus)
+{
+btn1.set_rotation(btn1.get_rotation() - 5);
+}
+lbl1.text("Got " + application.clicks + " smileys");
+application.clicks = application.clicks + 1;
+	}
+	);
+	btn1.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+btn1.set_x(x - btnNext.w / 2);
+btn1.set_y(y - btnNext.h / 2);
+}
+	}
+	);
+            stateBtn.set_x(270);
+            stateBtn.set_y(300);
+            stateBtn.set_width(50);
+            stateBtn.set_height(50);
+	stateBtn.events.addListener("click", function()
+	{    
+		if (stateBtn.is_active)
+{
+lbl3.text("Wow I'm happy !!!");
+}
+else
+{
+lbl3.text("Bad I'm sad... Click again on me");
+}
+if (application.do_rotation_plus)
+{
+stateBtn.set_rotation(stateBtn.get_rotation() + 5);
+}
+if (application.do_rotation_minus)
+{
+stateBtn.set_rotation(stateBtn.get_rotation() - 5);
+}
+	}
+	);
+	stateBtn.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+stateBtn.set_x(x - btnNext.w / 2);
+stateBtn.set_y(y - btnNext.h / 2);
+}
+	}
+	);
+            lbl3.set_x(330);
+            lbl3.set_y(340);
+            lbl3.text("This smiley is a state button, click it");
+            title1.set_x(50);
+            title1.set_y(50);
+            title1.text("This screen shows a percentage or progress bar and a sprite sheet animation (2/4)");
+            pb1.set_x(225);
+            pb1.set_y(120);
+            pb1.set_width(150);
+            pb1.set_height(10);
+            btn2.set_x(200);
+            btn2.set_y(115);
+            btn2.set_width(20);
+            btn2.set_height(20);
+	btn2.events.addListener("click", function()
+	{    
+		if (application.do_rotation_plus)
+{
+btn2.set_rotation(btn2.get_rotation() + 5);
+}
+if (application.do_rotation_minus)
+{
+btn2.set_rotation(btn2.get_rotation() - 5);
+}
+pb1.value(pb1.get_value() - 1);
+	}
+	);
+	btn2.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+btn2.set_x(x - btnNext.w / 2);
+btn2.set_y(y - btnNext.h / 2);
+}
+	}
+	);
+            btn3.set_x(380);
+            btn3.set_y(115);
+            btn3.set_width(20);
+            btn3.set_height(20);
+	btn3.events.addListener("click", function()
+	{    
+		if (application.do_rotation_plus)
+{
+btn3.set_rotation(btn3.get_rotation() + 5);
+}
+if (application.do_rotation_minus)
+{
+btn3.set_rotation(btn3.get_rotation() - 5);
+}
+pb1.value(pb1.get_value() + 1);
+	}
+	);
+	btn3.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+btn3.set_x(x - btnNext.w / 2);
+btn3.set_y(y - btnNext.h / 2);
+}
+	}
+	);
+            lbl2.set_x(210);
+            lbl2.set_y(200);
+            lbl2.text("Click small arrows to adjust percentage");
+            lbl7.set_x(210);
+            lbl7.set_y(270);
+            lbl7.text("Press arrows on your keyboard to walk the zombie");
+            monster.set_x(300);
+            monster.set_y(300);
+            monster.set_sheet("monster_sheet");
+            monster.set_animation("m_idle");
+	monster.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+monster.set_x(x - monster.w / 2);
+monster.set_y(y - monster.h / 2);
+}
+	}
+	);
+            title2.set_x(50);
+            title2.set_y(50);
+            title2.text("This screen shows a lot of figures (3/4)");
+            c1.set_x(70);
+            c1.set_y(70);
+            c1.set_radius(60);
+	c1.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+c1.set_x(x - c1.w / 2);
+c1.set_y(y - c1.h / 2);
+}
+	}
+	);
+	c1.events.addListener("click", function()
+	{    
+		if (application.do_rotation_plus)
+{
+c1.set_line_width(c1.line_width + 1);
+}
+if (application.do_rotation_minus)
+{
+c1.set_line_width(c1.line_width - 1);
+}
+	}
+	);
+            r1.set_x(300);
+            r1.set_y(100);
+            r1.set_width(60);
+            r1.set_height(90);
+            r1.set_rotation(-30);
+            r1.alpha(60);
+	r1.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+r1.set_x(x - r1.w / 2);
+r1.set_y(y - r1.h / 2);
+}
+	}
+	);
+	r1.events.addListener("click", function()
+	{    
+		r1.set_stroke("brown");
+if (application.do_rotation_plus)
+{
+r1.set_rotation(r1.get_rotation() + 5);
+}
+if (application.do_rotation_minus)
+{
+r1.set_rotation(r1.get_rotation() - 5);
+}
+	}
+	);
+            p1.alpha(40);
+	p1.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+p1.set_x(x - p1.w / 2);
+p1.set_y(y - p1.h / 2);
+}
+	}
+	);
+	p1.events.addListener("click", function()
+	{    
+		if (application.increase_pol_size)
+{
+p1.set_width(p1.get_width() + 5);
+p1.set_height(p1.get_height() + 5);
+}
+else
+{
+if (application.decrease_pol_size)
+{
+p1.set_width(p1.get_width() - 5);
+p1.set_height(p1.get_height() - 5);
+}
+else
+{
+if (application.do_rotation_plus)
+{
+p1.set_rotation(p1.get_rotation() + 5);
+}
+else
+{
+if (application.do_rotation_minus)
+{
+p1.set_rotation(p1.get_rotation() - 5);
+}
+else
+{
+for(var i = 0; i < 4; i++)
+{
+if (i % 2 == 0)
+{
+application.px = p1.points[i].x + 5;
+application.py = p1.points[i].y + 5;
+}
+else
+{
+application.px = p1.points[i].x - 5;
+application.py = p1.points[i].y - 5;
+}
+p1.setPointbyIndex(i, application.px, application.py);
+}
+}
+}
+}
+}
+	}
+	);
+            line1.set_x1(500);
+            line1.set_y1(50);
+            line1.set_x2(500);
+            line1.set_y2(300);
+            line1.set_color("red");
+            lbl4.set_x(50);
+            lbl4.set_y(400);
+            lbl4.text("Click the circle pressing NUMPAD + or NUMPAD - to increment or decrement its linewidth");
+            lbl5.set_x(50);
+            lbl5.set_y(420);
+            lbl5.text("Greeny the drunked rectangle and Pinky the polygon rotates like the other components, test it!!!");
+            lbl6.set_x(50);
+            lbl6.set_y(440);
+            lbl6.text("Click the smiley to increment the black line width");
+            lbl8.set_x(50);
+            lbl8.set_y(460);
+            lbl8.text("Use SHIFT/ALT with click to resize the polygon");
+            btn5.set_x(400);
+            btn5.set_y(200);
+            btn5.set_width(50);
+            btn5.set_height(50);
+	btn5.events.addListener("click", function()
+	{    
+		if (application.do_rotation_plus)
+{
+btn5.set_rotation(btn5.get_rotation() + 5);
+}
+if (application.do_rotation_minus)
+{
+btn5.set_rotation(btn5.get_rotation() - 5);
+}
+line1.set_lineWidth(line1.lineWidth + 1);
+	}
+	);
+	btn5.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+btn5.set_x(x - btn5.w / 2);
+btn5.set_y(y - btn5.h / 2);
+}
+	}
+	);
+            title3.set_x(50);
+            title3.set_y(50);
+            title3.text("This screen shows two intersected clip area components with diferent forms");
+            title4.set_x(50);
+            title4.set_y(70);
+            title4.text("over a tiled image and the text button(4/4)");
+            inst0.set_x(70);
+            inst0.set_y(90);
+            inst0.text("Use arrows to move the rect and WASD to move the circle");
+            ca1.set_x(90);
+            ca1.set_y(100);
+            ca1.set_width(200);
+            ca1.set_height(220);
+            ca1.shape = "rect";
+            back_img.set_x(0);
+            back_img.set_y(0);
+            back_img.set_width(400);
+            back_img.set_height(400);
+            back_img.set_iwidth(120);
+            back_img.set_iheight(40);
+            ca2.set_x(100);
+            ca2.set_y(160);
+            ca2.set_width(200);
+            ca2.set_height(200);
+            ca2.shape = "circle";
+            tb1.set_x(400);
+            tb1.set_y(400);
+            inst1.set_x(50);
+            inst1.set_y(480);
+            inst1.text("Click on this arrows to change the screen");
+            inst2.set_x(50);
+            inst2.set_y(500);
+            inst2.text("Use NUMPAD + or NUMPAD - keys with click over a component to rotate it");
+            inst3.set_x(50);
+            inst3.set_y(520);
+            inst3.text("Use CTRL + mouse drag over a component to drag it");
+            btnNext.set_x(320);
+            btnNext.set_y(550);
+            btnNext.set_width(50);
+            btnNext.set_height(50);
+	btnNext.events.addListener("click", function()
+	{    
+		if (application.do_rotation_plus)
+{
+btnNext.set_rotation(btnNext.get_rotation() + 5);
+}
+if (application.do_rotation_minus)
+{
+btnNext.set_rotation(btnNext.get_rotation() - 5);
+}
+if (main.get_active() < main.count() - 1)
+{
+main.active(main.get_active() + 1);
+}
+	}
+	);
+	btnNext.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+btnNext.set_x(x - btnNext.w / 2);
+btnNext.set_y(y - btnNext.h / 2);
+}
+	}
+	);
+            btnPrev.set_x(220);
+            btnPrev.set_y(550);
+            btnPrev.set_width(50);
+            btnPrev.set_height(50);
+	btnPrev.events.addListener("click", function()
+	{    
+		if (application.do_rotation_plus)
+{
+btnPrev.set_rotation(btnPrev.get_rotation() + 5);
+}
+if (application.do_rotation_minus)
+{
+btnPrev.set_rotation(btnPrev.get_rotation() - 5);
+}
+if (main.get_active() > 0)
+{
+main.active(main.get_active() - 1);
+}
+	}
+	);
+	btnPrev.events.addListener("drag", function(x,y)
+	{    
+		if (application.do_drag)
+{
+btnPrev.set_x(x - btnPrev.w / 2);
+btnPrev.set_y(y - btnPrev.h / 2);
+}
+	}
+	);
+			document.onkeydown = function(ev)
+			{
+				ui_.keydown(ev.keyCode);                  
+			};
+			document.onkeyup = function(ev)
+			{
+				ui_.keyup(ev.keyCode);                  
+			};
+			document.onkeypress = function(ev)
+			{
+				ui_.keypress(ev.keyCode);                  
+			};			
+			drawingCanvas.onmousemove = function(ev)
+			{
+				ui_.mousemove(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+			};
+			drawingCanvas.onmousedown = function(ev)
+			{
+				ui_.mousedown(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+			};
+			drawingCanvas.onmouseup = function(ev)
+			{
+				ui_.mouseup(ev.clientX - canvas_position.x, ev.clientY - canvas_position.y);                  
+			};		
+			ui_.events.addListener("mousedown", function(x,y)
+			{    
+				application.events.dispatch("mousedown", [x, y]);
+			});
+			ui_.events.addListener("mouseup", function(x,y)
+			{    
+				application.events.dispatch("mouseup", [x, y]);
+			});
+			ui_.events.addListener("mousemove", function(x,y)
+			{    
+				application.events.dispatch("mousemove", [x, y]);
+			});
+			ui_.events.addListener("click", function(x,y)
+			{    
+				application.events.dispatch("click", [x, y]);
+			});
+			ui_.events.addListener("drag", function(x,y)
+			{    
+				application.events.dispatch("drag", [x, y]);
+			});
+			ui_.events.addListener("dragend", function(x,y)
+			{    
+				application.events.dispatch("dragend", [x, y]);
+			});
+			ui_.events.addListener("keyup", function(keycode)
+			{    
+				application.events.dispatch("keyup", [keycode]);
+			});
+			ui_.events.addListener("keydown", function(keycode)
+			{    
+				application.events.dispatch("keydown", [keycode]);
+			});
+			ui_.events.addListener("keypress", function(keycode)
+			{    
+				application.events.dispatch("keydown", [keycode]);
+			});
+            application.events.dispatch("init", []);
+            start();			
+			ui_.draw(drawingCanvas.getContext('2d'));
+		});
+	}
+}
+</script>
+</head>
+<body>	
+	<canvas id="myCanvas" width="600" height="600"
+		style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>	
+</body>
+</html>

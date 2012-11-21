@@ -1,0 +1,33 @@
+<xss:parameter id="obj"/>
+<xss:code>
+
+var type = obj.type;
+var params = type.constructor_params;
+int i = 0;
+
+if (params)
+{    
+    for(var p in params)
+    {			
+		if (p.property)
+		{
+			if(obj.get_property(p.property) != null)
+			{
+			var prop = obj.get_property(p.property);
+				if(prop.value != null){
+					if(i > 0) out() {,}					
+					if(prop.output_id == "src")
+						out(){map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('<xss:e v="obj.src"/>').asset)}
+					else					
+					if(prop.output_id == "texture_object") 
+						out(){map:new THREE.Texture(<xss:e v="obj.texture_object"/>)}
+					else		
+						out() {<xss:e v="prop.output_id"/>:<xss:e v="prop.value"/>}					
+					i++;
+				}
+			}
+		}			        
+    }
+}
+if(i > 0) out() {,}	
+</xss:code>

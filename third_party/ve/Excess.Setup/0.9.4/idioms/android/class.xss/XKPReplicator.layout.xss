@@ -1,0 +1,20 @@
+<xss:parameter id="view"/>
+<xss:parameter id="caller"/>
+<xss:parameter id="ind"/>
+
+<xss:code>
+	//TODO: each child of replicator is assumed as template
+	//      these are outputs to xml layout file separated.
+	//      how make this?
+	for(var ch1 in view.children)
+		caller.generate_view(ch1, view, ind + 2);
+		
+	//TODO: the name of output file is a id of component
+	//TODO: the structure of this new xml layout file is:
+	//<?xml version="1.0" encoding="utf-8"?>
+	//<merge
+	//	xmlns:android="http://schemas.android.com/apk/res/android"
+	//	xmlns:xkp="http://schemas.android.com/apk/res/<xss:e value="base_namespace"/>.switcher">
+	//  <!-- inside the view childs -->
+	//</merge>
+</xss:code>

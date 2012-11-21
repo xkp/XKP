@@ -846,7 +846,7 @@ ui.ProgressBar = ui.Component.extend(
 		this._super(manager, parent);
 		if (!images)
 		{
-			images = ['images/progress.empty.png', 'images/progress.full.png'];
+			images = ['../images/progress.empty.png', '../images/progress.full.png'];
 		}		
 		this.left    = new ui.Image(this.manager, this, images[1]);
 		this.right   = new ui.Image(this.manager, this, images[0]);

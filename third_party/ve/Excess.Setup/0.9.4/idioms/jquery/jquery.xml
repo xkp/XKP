@@ -1,0 +1,1026 @@
+ <module id="jquery" src="jquery.xs">
+     <dependency href="jquery-1.7.1.min.js"/>
+     <dependency href="jquery-ui-1.8.18.custom.min.js"/>
+     <dependency href="jquery-idiom.js"/>
+     <dependency href="ui-lightness/jquery-ui-1.8.18.custom.css" stylesheet="true"/>
+
+     <types>
+		<class id="component">
+            <property id="x" type="int" output_id="left" render_type="script" css="true" dont_init="true" postfix="px">
+                <get text="position().left"/>
+                <set text="css( { left:{value} } )"/>
+            </property>
+			
+            <property id="y" type="int" output_id="top" render_type="script" css="true" dont_init="true" postfix="px">
+                <get text="position().top"/>
+                <set text="css( { top:{value} } )"/>
+            </property>
+			
+            <property id="width" type="int" css="true" dont_init="true" postfix="px">
+                <get text="width()"/>
+                <set text="width({value})"/>
+            </property>
+			
+            <property id="height" type="int" css="true" dont_init="true" postfix="px">
+                <get text="height()"/>
+                <set text="height({value})"/>
+            </property>
+
+            <property id="placement" type="string" dont_init="true">
+				<get text='attr("placement")'/>
+				<set text='attr("placement", {value})'/>
+			</property>
+
+            <property id="background-color" type="string" css="true" dont_init="true" as_plain_text="true">
+                <get text='css("background-color")'/>
+                <set text='css("background-color", {value})'/>
+            </property>
+
+            <property id="color" type="string" css="true" dont_init="true" as_plain_text="true">
+                <get text='css("background-color")'/>
+                <set text='css("background-color", {value})'/>
+            </property>
+
+            <property id="visible" type="bool" render_type="script">
+                <get text='JQUComponent.get_visible({path})' global='true'/>
+                <set text='JQUComponent.set_visible({path}, {value})' global='true'/>
+            </property>
+
+            <property id="enabled" type="bool">
+                <get text='JQUComponent.get_enabled({path})' global='true'/>
+                <set text='JQUComponent.set_enabled({path}, {value})' global='true'/>
+            </property>
+
+            <property id="alpha" output_id="opacity" type="float" css="true">
+                <get text='css("opacity")'/>
+                <set text='css("opacity", {value})'/>
+            </property>
+
+            <property id="opacity" type="float" css="true">
+                <get text='css("opacity")'/>
+                <set text='css("opacity", {value})'/>
+            </property>
+
+            <event id="change"/>
+            <event id="click"/>
+            <event id="blur"/>
+            <event id="dblclick"/>
+            <event id="error"/>
+            <event id="focus"/>
+            <event id="focusin"/>
+            <event id="focusout"/>
+            <event id="hover"/>
+            <event id="keydown"/>
+            <event id="keypress"/>
+            <event id="keyup"/>
+            <event id="load"/>
+            <event id="unload"/>
+            <event id="mousedown"/>
+            <event id="mousein"  output_id="mouseenter"/>
+            <event id="mouseout" output_id="mouseleave"/>
+            <event id="mouseover"/>
+            <event id="mouseup"/>
+            <event id="ready"/>
+            <event id="scroll"/>
+            <event id="select"/>
+            <event id="submit"/>
+            <event id="toggle"/>
+        </class>
+
+        <class id="element" super="component"/>
+         
+        <!-- components -->
+        <class id="div" super="component" html_renderer="div.html.xss"/>
+        <class id="br" simple="true" dont_render="true"/>
+
+        <class id="img" super="component">
+            <property id="src" type="string" render_as="attribute">
+                <get text='attr("src")'/>
+                <set text='attr("src", {value})'/>
+            </property>
+        </class>
+
+        <class id="label" super="component">
+            <property id="caption" type="string" render_as="text" dont_init="true">
+                <get text="text()"/>
+                <set text="text({value})"/>
+            </property>
+
+            <property id="font" type="string" css="true" dont_init="true" as_plain_text="true">
+                <get text='css("font")'/>
+                <set text='css("font", {value})'/>
+            </property>
+
+            <method id="empty"/>
+        </class>
+
+         <class id="button" super="component" tag="input" jquery="button">
+            <array id="attributes">
+                <object name="type" value="button"/>
+                <object name="name" value="{id}" expr="true"/>
+            </array>
+
+            <property id="caption" type="string" output_id="value" render_as="attribute" dont_init="true">
+                <get text='attr("value")'/>
+                <set text='attr("value", {value})'/>
+            </property>
+        </class>
+
+        <class id="editbox" super="component" tag="input">
+            <array id="attributes">
+                <object name="type" value="text"/>
+                <object name="name" value="{id}" expr="true"/>
+            </array>
+
+            <property id="text" type="string" output_id="value" render_as="attribute" dont_init="true">
+                <get text='attr("value")'/>
+                <set text='attr("value", {value})'/>
+            </property>
+
+            <property id="hint" type="string" output_id="title" render_as="attribute" dont_init="true">
+                <get text='attr("title")'/>
+                <set text='attr("title", {value})'/>
+            </property>
+        </class>
+
+        <class id="radiobutton" super="component" jquery="button" html_renderer="radiobutton.html.xss" js_renderer="radiobutton.js.xss">
+            <property id="caption" type="string" render_as="text" dont_init="true">
+                <get text='JQUCheckbox.get_caption({path})' global="true"/>
+                <set text='JQUCheckbox.set_caption({path}, {value})' global="true"/>
+            </property>
+
+            <property id="checked" type="bool" render_as="attribute" dont_init="true">
+                <get text='JQUCheckbox.get_checked({path})' global='true'/>
+                <set text='JQUCheckbox.set_checked({path}, {value})' global='true'/>
+            </property>
+        </class>
+
+        <class id="checkbox" super="component" jquery="button" html_renderer="radiobutton.html.xss" js_renderer="radiobutton.js.xss">
+            <property id="caption" type="string" render_as="text" dont_init="true">
+                <get text='JQUCheckbox.get_caption({path})' global="true"/>
+                <set text='JQUCheckbox.set_caption({path}, {value})' global="true"/>
+            </property>
+
+            <property id="checked" type="bool" render_as="attribute" dont_init="true">
+                <get text='JQUCheckbox.get_checked({path})' global='true'/>
+                <set text='JQUCheckbox.set_checked({path}, {value})' global='true'/>
+            </property>
+        </class>
+
+        <class id="radiogroup" super="component" tag="div" jquery="buttonset"/>
+        <class id="checkgroup" super="component" tag="div" jquery="buttonset"/>
+
+        <class id="accordion" super="component" js_renderer="../jquery-object.xss" html_renderer="accordion.html.xss">
+            <property id="disabled" type="bool" dont_init="true" render_as="script">
+                <get text='accordion("option", "disabled")'/>
+                <set text='accordion("option", "disabled", {value})'/>
+            </property>
+            <property id="active" type="var"  dont_init="true" render_as="script">
+                <get text='accordion("option", "active")'/>
+                <set text='accordion("option", "active", {value})'/>
+            </property>
+            <property id="animated" type="var" dont_init="true" render_as="script">
+                <get text='accordion("option", "animated")'/>
+                <set text='accordion("option", "animated", {value})'/>
+            </property>
+            <property id="autoHeight"  type="bool" dont_init="true" render_as="script">
+                <get text='accordion("option", "autoHeight")'/>
+                <set text='accordion("option", "autoHeight", {value})'/>
+            </property>
+            <property id="clearStyle"  type="bool" dont_init="true" render_as="script">
+                <get text='accordion("option", "clearStyle")'/>
+                <set text='accordion("option", "clearStyle", {value})'/>
+            </property>
+            <property id="navigation"  type="bool" dont_init="true" render_as="script">
+                <get text='accordion("option", "navigation")'/>
+                <set text='accordion("option", "navigation", {value})'/>
+            </property>
+            <property id="fillSpace"   type="bool" dont_init="true" render_as="script">
+                <get text='accordion("option", "fillSpace")'/>
+                <set text='accordion("option", "fillSpace", {value})'/>
+            </property>
+            <property id="action" output_id="event" type="string" dont_init="true" render_as="script"/>
+
+            <event id="create"      render_as="script"/>
+            <event id="change"      render_as="script"/>
+            <event id="changestart" render_as="script"/>
+        </class>
+
+        <class id="datepicker" super="component" js_renderer="../jquery-object.xss"  html_renderer="datepicker.html.xss">
+            <property id="disabled" type="bool" dont_init="true" render_as="script">
+                <get text='datepicker("option", "disabled")'/>
+                <set text='datepicker("option", "disabled", {value})'/>
+            </property>
+            <property id="altField" type="var" dont_init="true" render_as="script">
+                <get text='datepicker("option", "altField")'/>
+                <set text='datepicker("option", "altField", {value})'/>
+            </property>
+            <property id="altFormat" type="string" dont_init="true" render_as="script">
+                <get text='datepicker("option", "altFormat")'/>
+                <set text='datepicker("option", "altFormat", {value})'/>
+            </property>
+            <property id="appendText" type="string" dont_init="true" render_as="script">
+                <get text='datepicker("option", "appendText")'/>
+                <set text='datepicker("option", "appendText", {value})'/>
+            </property>
+            <property id="autoSize" type="bool" dont_init="true" render_as="script">
+                <get text='datepicker("option", "autoSize")'/>
+                <set text='datepicker("option", "autoSize", {value})'/>
+            </property>
+            <property id="buttonImage" type="string" dont_init="true" render_as="script">
+                <get text='datepicker("option", "buttonImage")'/>
+                <set text='datepicker("option", "buttonImage", {value})'/>
+            </property>
+            <property id="buttonImageOnly" type="bool" dont_init="true" render_as="script">
+                <get text='datepicker("option", "buttonImageOnly")'/>
+                <set text='datepicker("option", "buttonImageOnly", {value})'/>
+            </property>
+            <property id="buttonText" type="string" dont_init="true" render_as="script">
+                <get text='datepicker("option", "buttonText")'/>
+                <set text='datepicker("option", "buttonText", {value})'/>
+            </property>
+            <property id="changeMonth" type="bool" dont_init="true" render_as="script">
+                <get text='datepicker("option", "changeMonth")'/>
+                <set text='datepicker("option", "changeMonth", {value})'/>
+            </property>
+            <property id="changeYear" type="bool" dont_init="true" render_as="script">
+                <get text='datepicker("option", "changeYear")'/>
+                <set text='datepicker("option", "changeYear", {value})'/>
+            </property>
+            <property id="constrainInput" type="bool" dont_init="true" render_as="script">
+                <get text='datepicker("option", "constrainInput")'/>
+                <set text='datepicker("option", "constrainInput", {value})'/>
+            </property>
+            <property id="currentText" type="string" dont_init="true" render_as="script">
+                <get text='datepicker("option", "currentText")'/>
+                <set text='datepicker("option", "currentText", {value})'/>
+            </property>
+            <property id="dateFormat" type="string" dont_init="true" render_as="script">
+                <get text='datepicker("option", "dateFormat")'/>
+                <set text='datepicker("option", "dateFormat", {value})'/>
+            </property>
+            <property id="defaultDate" type="var" dont_init="true" render_as="script">
+                <get text='datepicker("option", "defaultDate")'/>
+                <set text='datepicker("option", "defaultDate", {value})'/>
+            </property>
+            <property id="duration" type="var" dont_init="true" render_as="script">
+                <get text='datepicker("option", "duration")'/>
+                <set text='datepicker("option", "duration", {value})'/>
+            </property>
+            <property id="firstDay" type="int" dont_init="true" render_as="script">
+                <get text='datepicker("option", "firstDay")'/>
+                <set text='datepicker("option", "firstDay", {value})'/>
+            </property>
+            <property id="gotoCurrent" type="bool" dont_init="true" render_as="script">
+                <get text='datepicker("option", "gotoCurrent")'/>
+                <set text='datepicker("option", "gotoCurrent", {value})'/>
+            </property>
+            <property id="hideIfNoPrevNext" type="bool" dont_init="true" render_as="script">
+                <get text='datepicker("option", "hideIfNoPrevNext")'/>
+                <set text='datepicker("option", "hideIfNoPrevNext", {value})'/>
+            </property>
+            <property id="isRTL" type="bool" dont_init="true" render_as="script">
+                <get text='datepicker("option", "isRTL")'/>
+                <set text='datepicker("option", "isRTL", {value})'/>
+            </property>
+            <property id="maxDate" type="var" dont_init="true" render_as="script">
+                <get text='datepicker("option", "maxDate")'/>
+                <set text='datepicker("option", "maxDate", {value})'/>
+            </property>
+            <property id="minDate" type="var" dont_init="true" render_as="script">
+                <get text='datepicker("option", "minDate")'/>
+                <set text='datepicker("option", "minDate", {value})'/>
+            </property>
+            <property id="navigationAsDateFormat" type="bool" dont_init="true" render_as="script">
+                <get text='datepicker("option", "navigationAsDateFormat")'/>
+                <set text='datepicker("option", "navigationAsDateFormat", {value})'/>
+            </property>
+            <property id="nextText" type="string" dont_init="true" render_as="script">
+                <get text='datepicker("option", "nextText")'/>
+                <set text='datepicker("option", "nextText", {value})'/>
+            </property>
+            <property id="numberOfMonths" type="var" dont_init="true" render_as="script">
+                <get text='datepicker("option", "numberOfMonths")'/>
+                <set text='datepicker("option", "numberOfMonths", {value})'/>
+            </property>
+            <property id="prevText" type="string" dont_init="true" render_as="script">
+                <get text='datepicker("option", "prevText")'/>
+                <set text='datepicker("option", "prevText", {value})'/>
+            </property>
+            <property id="selectOtherMonths" type="bool" dont_init="true" render_as="script">
+                <get text='datepicker("option", "selectOtherMonths")'/>
+                <set text='datepicker("option", "selectOtherMonths", {value})'/>
+            </property>
+            <property id="shortYearCutoff" type="var" dont_init="true" render_as="script">
+                <get text='datepicker("option", "shortYearCutoff")'/>
+                <set text='datepicker("option", "shortYearCutoff", {value})'/>
+            </property>
+            <property id="showAnim" type="string" dont_init="true" render_as="script">
+                <get text='datepicker("option", "showAnim")'/>
+                <set text='datepicker("option", "showAnim", {value})'/>
+            </property>
+            <property id="showButtonPanel" type="bool" dont_init="true" render_as="script">
+                <get text='datepicker("option", "showButtonPanel")'/>
+                <set text='datepicker("option", "showButtonPanel", {value})'/>
+            </property>
+            <property id="showCurrentAtPos" type="int" dont_init="true" render_as="script">
+                <get text='datepicker("option", "showCurrentAtPos")'/>
+                <set text='datepicker("option", "showCurrentAtPos", {value})'/>
+            </property>
+            <property id="showMonthAfterYear" type="bool" dont_init="true" render_as="script">
+                <get text='datepicker("option", "showMonthAfterYear")'/>
+                <set text='datepicker("option", "showMonthAfterYear", {value})'/>
+            </property>
+            <property id="showOn" type="string" dont_init="true" render_as="script">
+                <get text='datepicker("option", "showOn")'/>
+                <set text='datepicker("option", "showOn", {value})'/>
+            </property>
+            <property id="showOtherMonths" type="bool" dont_init="true" render_as="script">
+                <get text='datepicker("option", "showOtherMonths")'/>
+                <set text='datepicker("option", "showOtherMonths", {value})'/>
+            </property>
+            <property id="showWeek" type="bool" dont_init="true" render_as="script">
+                <get text='datepicker("option", "showWeek")'/>
+                <set text='datepicker("option", "showWeek", {value})'/>
+            </property>
+            <property id="stepMonths" type="int" dont_init="true" render_as="script">
+                <get text='datepicker("option", "stepMonths")'/>
+                <set text='datepicker("option", "stepMonths", {value})'/>
+            </property>
+            <property id="weekHeader" type="string" dont_init="true" render_as="script">
+                <get text='datepicker("option", "weekHeader")'/>
+                <set text='datepicker("option", "weekHeader", {value})'/>
+            </property>
+            <property id="yearRange" type="string" dont_init="true" render_as="script">
+                <get text='datepicker("option", "yearRange")'/>
+                <set text='datepicker("option", "yearRange", {value})'/>
+            </property>
+            <property id="yearSuffix" type="string" dont_init="true" render_as="script">
+                <get text='datepicker("option", "yearSuffix")'/>
+                <set text='datepicker("option", "yearSuffix", {value})'/>
+            </property>
+
+            <event id="create"  render_as="script"/>
+            <event id="beforeShow"  render_as="script" output_args="input, inst"/>
+            <event id="beforeShowDay"  render_as="script" output_args="date"/>
+            <event id="changeMonthYear" output_id="onChangeMonthYear" render_as="script" output_args="year, month, inst"/>
+            <event id="close"  output_id="onClose" render_as="script" output_args="dateText, inst"/>
+            <event id="select" output_id="onSelect" render_as="script" output_args="dateText, inst"/>
+        </class>
+
+        <class id="autocomplete" super="component" tag="input" js_renderer="autocomplete.js.xss">
+            <property id="disabled" type="bool" dont_init="true" render_as="script">
+                <get text='autocomplete("option", "disabled")'/>
+                <set text='autocomplete("option", "disabled", {value})'/>
+            </property>
+            <property id="appendTo" type="string" dont_init="true" render_as="script">
+                <get text='autocomplete("option", "appendTo")'/>
+                <set text='autocomplete("option", "appendTo", {value})'/>
+            </property>
+            <property id="autoFocus" type="bool" dont_init="true" render_as="script">
+                <get text='autocomplete("option", "autoFocus")'/>
+                <set text='autocomplete("option", "autoFocus", {value})'/>
+            </property>
+            <property id="delay" type="int" dont_init="true" render_as="script">
+                <get text='autocomplete("option", "delay")'/>
+                <set text='autocomplete("option", "delay", {value})'/>
+            </property>
+            <property id="minLength" type="int" dont_init="true" render_as="script">
+                <get text='autocomplete("option", "minLength")'/>
+                <set text='autocomplete("option", "minLength", {value})'/>
+            </property>
+            <property id="source" type="array" dont_init="true" render_as="script">
+                <get text='autocomplete("option", "source")'/>
+                <set text='autocomplete("option", "source", {value})'/>
+            </property>
+
+            <event id="create" render_as="script"/>
+            <event id="search" render_as="script"/>
+            <event id="open" render_as="script"/>
+            <event id="focus" render_as="script"/>
+            <event id="select" render_as="script"/>
+            <event id="close" render_as="script"/>
+            <event id="change" render_as="script"/>
+        </class>
+        
+        <class id="dialog" super="component" js_renderer="dialog.js.xss" html_renderer="div.html.xss">
+            <property id="disabled" type="bool" dont_init="true" render_as="script">
+                <get text='dialog("option", "disabled")'/>
+                <set text='dialog("option", "disabled", {value})'/>
+            </property>
+            <property id="autoOpen" type="bool" dont_init="true" render_as="script">
+                <get text='dialog("option", "autoOpen")'/>
+                <set text='dialog("option", "autoOpen", {value})'/>
+            </property>
+            <property id="closeOnEscape" type="bool" dont_init="true" render_as="script">
+                <get text='dialog("option", "closeOnEscape")'/>
+                <set text='dialog("option", "closeOnEscape", {value})'/>
+            </property>
+            <property id="closeText" type="string" dont_init="true" render_as="script">
+                <get text='dialog("option", "closeText")'/>
+                <set text='dialog("option", "closeText", {value})'/>
+            </property>
+            <property id="dialogClass" type="string" dont_init="true" render_as="script">
+                <get text='dialog("option", "dialogClass")'/>
+                <set text='dialog("option", "dialogClass", {value})'/>
+            </property>
+            <property id="draggable" type="bool" dont_init="true" render_as="script">
+                <get text='dialog("option", "draggable")'/>
+                <set text='dialog("option", "draggable", {value})'/>
+            </property>
+            <property id="hideEffect" type="string" dont_init="true" render_as="script">
+                <get text='dialog("option", "hideEffect")'/>
+                <set text='dialog("option", "hideEffect", {value})'/>
+            </property>
+            <property id="hide" type="string" dont_init="true" render_as="script">
+                <get text='dialog("option", "hide")'/>
+                <set text='dialog("option", "hide", {value})'/>
+            </property>
+            <property id="maxHeight" type="int" dont_init="true" render_as="script">
+                <get text='dialog("option", "maxHeight")'/>
+                <set text='dialog("option", "maxHeight", {value})'/>
+            </property>
+            <property id="maxWidth" type="int" dont_init="true" render_as="script">
+                <get text='dialog("option", "maxWidth")'/>
+                <set text='dialog("option", "maxWidth", {value})'/>
+            </property>
+            <property id="minHeight" type="int" dont_init="true" render_as="script">
+                <get text='dialog("option", "minHeight")'/>
+                <set text='dialog("option", "minHeight", {value})'/>
+            </property>
+            <property id="minWidth" type="int" dont_init="true" render_as="script">
+                <get text='dialog("option", "minWidth")'/>
+                <set text='dialog("option", "minWidth", {value})'/>
+            </property>
+            <property id="modal" type="bool" dont_init="true" render_as="script">
+                <get text='dialog("option", "modal")'/>
+                <set text='dialog("option", "modal", {value})'/>
+            </property>
+            <property id="resizable" type="bool" dont_init="true" render_as="script">
+                <get text='dialog("option", "resizable")'/>
+                <set text='dialog("option", "resizable", {value})'/>
+            </property>
+            <property id="showEffect" type="string" dont_init="true" render_as="script">
+                <get text='dialog("option", "showEffect")'/>
+                <set text='dialog("option", "showEffect", {value})'/>
+            </property>
+            <property id="show" type="string" dont_init="true" render_as="script">
+                <get text='dialog("option", "show")'/>
+                <set text='dialog("option", "show", {value})'/>
+            </property>
+            <property id="stack" type="bool" dont_init="true" render_as="script">
+                <get text='dialog("option", "stack")'/>
+                <set text='dialog("option", "stack", {value})'/>
+            </property>
+            <property id="title" type="string" dont_init="true" render_as="script">
+                <get text='dialog("option", "title")'/>
+                <set text='dialog("option", "title", {value})'/>
+            </property>
+
+            <method id="show"  output_id="dialog('open')" ignore_args="true"/>
+            <method id="close" output_id="dialog('close')" ignore_args="true"/>
+
+            <event id="create" render_as="script"/>
+            <event id="beforeClose" render_as="script"/>
+            <event id="open" render_as="script"/>
+            <event id="focus" render_as="script"/>
+            <event id="dragStart" render_as="script"/>
+            <event id="drag" render_as="script"/>
+            <event id="dragStop" render_as="script"/>
+            <event id="resizeStart" render_as="script"/>
+            <event id="resize" render_as="script"/>
+            <event id="resizeStop" render_as="script"/>
+            <event id="closed" output_id="close" render_as="script"/>
+        </class>
+
+        <class id="progressbar" super="component" js_renderer="../jquery-object.xss" tag="div">
+            <property id="disabled" type="bool" dont_init="true" render_as="script">
+                <get text='progressbar( "option", "disabled" )'/>
+                <set text='progressbar( "option", "disabled", {value})'/>
+            </property>
+
+            <property id="value" type="int" dont_init="true" render_as="script">
+                <get text='progressbar( "option", "value" )'/>
+                <set text='progressbar( "option", "value", {value})'/>
+            </property>
+
+            <event id="create"   render_as="script"/>
+            <event id="change"   render_as="script"/>
+            <event id="complete" render_as="script"/>
+        </class>
+
+        <class id="slider" super="component" js_renderer="../jquery-object.xss"  tag="div">
+            <property id="disabled" type="bool" dont_init="true" render_as="script">
+                <get text='slider( "option", "disabled" )'/>
+                <set text='slider( "option", "disabled", {value})'/>
+            </property>
+            <property id="animate" type="var" dont_init="true" render_as="script">
+                <get text='slider( "option", "animate" )'/>
+                <set text='slider( "option", "animate", {value})'/>
+            </property>
+            <property id="max" type="int" dont_init="true" render_as="script">
+                <get text='slider( "option", "max" )'/>
+                <set text='slider( "option", "max", {value})'/>
+            </property>
+            <property id="min" type="int" dont_init="true" render_as="script">
+                <get text='slider( "option", "min" )'/>
+                <set text='slider( "option", "min", {value})'/>
+            </property>
+            <property id="orientation" type="string" dont_init="true" render_as="script">
+                <get text='slider( "option", "orientation" )'/>
+                <set text='slider( "option", "orientation", {value})'/>
+            </property>
+            <property id="range" type="var" dont_init="true" render_as="script">
+                <get text='slider( "option", "range" )'/>
+                <set text='slider( "option", "range", {value})'/>
+            </property>
+            <property id="step" type="int" dont_init="true" render_as="script">
+                <get text='slider( "option", "step" )'/>
+                <set text='slider( "option", "step", {value})'/>
+            </property>
+            <property id="value" type="int" dont_init="true" render_as="script">
+                <get text='slider( "option", "value" )'/>
+                <set text='slider( "option", "value", {value})'/>
+            </property>
+            <property id="values" type="array" dont_init="true" render_as="script">
+                <get text='slider( "option", "values" )'/>
+                <set text='slider( "option", "values", {value})'/>
+            </property>
+
+            <event id="create" render_as="script"/>
+            <event id="start" render_as="script"/>
+            <event id="slide" render_as="script"/>
+            <event id="change" render_as="script"/>
+            <event id="stop" render_as="script"/>
+        </class>
+
+        <class id="tabs" super="component" js_renderer="../jquery-object.xss" tag="tabs" html_renderer="tabs.html.xss">
+            <property id="disabled" type="bool" dont_init="true" render_as="script">
+                <get text='tabs( "option", "disabled" )'/>
+                <set text='tabs( "option", "disabled", {value})'/>
+            </property>
+            <property id="action" output_id="event" type="string" dont_init="true" render_as="script">
+                <get text='tabs( "option", "event" )'/>
+                <set text='tabs( "option", "event", {value})'/>
+            </property>
+            <property id="cache" type="bool" dont_init="true" render_as="script">
+                <get text='tabs( "option", "cache" )'/>
+                <set text='tabs( "option", "cache", {value})'/>
+            </property>
+            <property id="collapsible" type="bool" dont_init="true" render_as="script">
+                <get text='tabs( "option", "collapsible" )'/>
+                <set text='tabs( "option", "collapsible", {value})'/>
+            </property>
+            <property id="fx" type="var" dont_init="true" render_as="script">
+                <get text='tabs( "option", "fx" )'/>
+                <set text='tabs( "option", "fx", {value})'/>
+            </property>
+            <property id="idPrefix" type="string" dont_init="true" render_as="script">
+                <get text='tabs( "option", "idPrefix" )'/>
+                <set text='tabs( "option", "idPrefix", {value})'/>
+            </property>
+            <property id="panelTemplate" type="string" dont_init="true" render_as="script">
+                <get text='tabs( "option", "panelTemplate" )'/>
+                <set text='tabs( "option", "panelTemplate", {value})'/>
+            </property>
+            <property id="selected" type="int" dont_init="true" render_as="script">
+                <get text='tabs( "option", "selected" )'/>
+                <set text='tabs( "option", "selected", {value})'/>
+            </property>
+            <property id="spinner" type="string" dont_init="true" render_as="script">
+                <get text='tabs( "option", "spinner" )'/>
+                <set text='tabs( "option", "spinner", {value})'/>
+            </property>
+            <property id="tabTemplate" type="string" dont_init="true" render_as="script">
+                <get text='tabs( "option", "tabTemplate" )'/>
+                <set text='tabs( "option", "tabTemplate", {value})'/>
+            </property>
+
+            <event id="create" render_as="script"/>
+            <event id="select" render_as="script"/>
+            <event id="load" render_as="script"/>
+            <event id="show" render_as="script"/>
+            <event id="add" render_as="script"/>
+            <event id="remove" render_as="script"/>
+            <event id="enable" render_as="script"/>
+            <event id="disable" render_as="script"/>
+        </class>
+        
+        <class id="canvas" super="component" tag="canvas" js_renderer="canvas.js.xss"/>
+
+        <class id="supersized" js_renderer="../jquery-object.xss" html_renderer="../bypass.xss" caller="$">
+            <dependency stylesheet="true" href="supersized.css"/>
+            <dependency stylesheet="true" href="supersized.shutter.css"/>
+            <dependency href="jquery.easing.min.js"/>
+            <dependency href="supersized.3.2.7.min.js"/>
+            <dependency href="supersized.shutter.min.js"/>
+
+            <property id="slideshow" type="bool" dont_init="true" render_as="script"/>
+            <property id="autoplay" type="bool" dont_init="true" render_as="script"/>
+            <property id="start_slide" type="int" dont_init="true" render_as="script"/>
+            <property id="stop_loop" type="bool" dont_init="true" render_as="script"/>
+            <property id="random" type="bool" dont_init="true" render_as="script"/>
+            <property id="slide_interval" type="int" dont_init="true" render_as="script"/>
+            <property id="transition" type="int" dont_init="true" render_as="script"/>
+            <property id="transition_speed" type="int" dont_init="true" render_as="script"/>
+            <property id="new_window" type="bool" dont_init="true" render_as="script"/>
+            <property id="pause_hover" type="bool" dont_init="true" render_as="script"/>
+            <property id="keyboard_nav" type="bool" dont_init="true" render_as="script"/>
+            <property id="performance" type="int" dont_init="true" render_as="script"/>
+            <property id="image_protect" type="bool" dont_init="true" render_as="script"/>
+            <property id="image_protect" type="bool" dont_init="true" render_as="script"/>
+            <property id="min_width" type="int" dont_init="true" render_as="script"/>
+            <property id="min_height" type="int" dont_init="true" render_as="script"/>
+            <property id="vertical_center" type="bool" dont_init="true" render_as="script"/>
+            <property id="horizontal_center" type="bool" dont_init="true" render_as="script"/>
+            <property id="fit_always" type="bool" dont_init="true" render_as="script"/>
+            <property id="fit_portrait" type="bool" dont_init="true" render_as="script"/>
+            <property id="fit_landscape" type="bool" dont_init="true" render_as="script"/>
+            <property id="slide_links" type="var" dont_init="true" render_as="script"/>
+            <property id="thumb_links" type="bool" dont_init="true" render_as="script"/>
+            <property id="thumbnail_navigation" type="bool" dont_init="true" render_as="script"/>
+            <property id="slides" type="array" dont_init="true" render_as="script"/>
+            <property id="progress_bar" type="bool" dont_init="true" render_as="script"/>
+            <property id="mouse_scrub" type="bool" dont_init="true" render_as="script"/>
+        </class>
+         
+        <class id="highchart" super="component" js_renderer="highchart.xss" html_renderer="div.html.xss">
+            <dependency href="highcharts.js"/>
+
+            <property id="chart" type="object" dont_init="true">
+                <get text='ChartObject.chart'/>
+                <set text='ChartObject.chart = {value}'/>
+            </property>
+            <property id="colors" type="array" dont_init="true" render_as="script">
+                <get text='ChartObject.colors'/>
+                <set text='ChartObject.colors = {value}'/>
+            </property>
+            <property id="credits" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.credits'/>
+                <set text='ChartObject.credits = {value}'/>
+            </property>
+            <property id="labels" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.labels'/>
+                <set text='ChartObject.labels = {value}'/>
+            </property>
+            <property id="legend" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.legend'/>
+                <set text='ChartObject.legend = {value}'/>
+            </property>
+            <property id="loading" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.loading'/>
+                <set text='ChartObject.loading = {value}'/>
+            </property>
+            <property id="plotOptions" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.plotOptions'/>
+                <set text='ChartObject.plotOptions = {value}'/>
+            </property>
+            <property id="point" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.plotOptions'/>
+                <set text='ChartObject.plotOptions = {value}'/>
+            </property>
+            <property id="series" type="array" dont_init="true" render_as="script">
+                <get text='ChartObject.series'/>
+                <set text='ChartObject.series = {value}'/>
+            </property>
+            <property id="subtitle" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.subtitle'/>
+                <set text='ChartObject.subtitle = {value}'/>
+            </property>
+            <property id="symbols" type="array" dont_init="true" render_as="script">
+                <get text='ChartObject.symbols'/>
+                <set text='ChartObject.symbols = {value}'/>
+            </property>
+            <property id="title" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.title'/>
+                <set text='ChartObject.title = {value}'/>
+            </property>
+            <property id="tooltip" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.tooltip'/>
+                <set text='ChartObject.tooltip = {value}'/>
+            </property>
+            <property id="xAxis" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.xAxis'/>
+                <set text='ChartObject.xAxis = {value}'/>
+            </property>
+            <property id="yAxis" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.yAxis'/>
+                <set text='ChartObject.yAxis = {value}'/>
+            </property>
+            <property id="exporting" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.exporting'/>
+                <set text='ChartObject.exporting = {value}'/>
+            </property>
+            <property id="navigation" type="object" dont_init="true" render_as="script">
+                <get text='ChartObject.navigation'/>
+                <set text='ChartObject.navigation = {value}'/>
+            </property>
+        </class>
+        
+        <class id="jqGrid" super="component" js_renderer="jqGrid.js.xss" tag="table" >
+            <dependency stylesheet="true" href="ui.jqgrid.css"/>
+            <dependency href="grid.locale-en.js"/>
+            <dependency href="jquery.jqGrid.min.js"/>
+
+            <property id="caption" type="string" dont_init="true" render_as="script">
+                <get text="jqGrid('getGridParam', 'caption')"/>
+                <set text="jqGrid('setCaption',{value})"/>
+            </property>
+
+            <property id="columns" output_id="colModel" type="array" dont_init="true" render_as="script">
+                <get text="jqGrid('getGridParam', 'colModel')"/>
+                <set text="jqGrid('setGridParam', 'colModel', {value})"/>
+            </property>
+
+            <property id="data_source" type="array" dont_init="true">
+                <set text='JQUGrid.set_data({path}, {value})' global='true'/>
+            </property>
+        </class>
+         
+        <class id="skitter" super="component" js_renderer="../jquery-object.xss" html_renderer="skitter.html.xss" >
+            <dependency stylesheet="true" href="skitter.styles.css"/>
+            <dependency href="jquery.skitter.min.js"/>
+            <dependency href="jquery.easing.min.js"/>
+            <dependency href="jquery.animate-colors-min.js"/>
+
+            <property id="images" type="array" dont_init="true"/>
+            
+            <property id="animateNumberActive" type="object" dont_init="true" render_as="script"/>
+            <property id="animateNumberOut" type="object" dont_init="true" render_as="script"/>
+            <property id="animateNumberOver" type="object" dont_init="true" render_as="script"/>
+            
+            <property id="animation" type="string" dont_init="true" render_as="script">
+                <set text="skitter({animation: {value}})"/>
+            </property>
+            
+            <property id="auto_play" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({auto_play: {value}})"/>
+            </property>
+            
+            <property id="controls" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({controls: {value}})"/>
+            </property>
+            
+            <property id="controls_position" type="string" dont_init="true" render_as="script">
+                <set text="skitter({controls_position: {value}})"/>
+            </property>
+
+            <property id="dots" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({dots: {value}})"/>
+            </property>
+
+            <property id="easing_default" type="string" dont_init="true" render_as="script">
+                <set text="skitter({easing_default: {value}})"/>
+            </property>
+
+            <property id="enable_navigation_keys" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({enable_navigation_keys: {value}})"/>
+            </property>
+            
+            <property id="focus" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({focus: {value}})"/>
+            </property>
+
+            <property id="focus_position" type="string" dont_init="true" render_as="script">
+                <set text="skitter({focus_position: {value}})"/>
+            </property>
+
+            <property id="fullscreen" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({fullscreen: {value}})"/>
+            </property>
+
+            <property id="hideTools" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({hideTools: {value}})"/>
+            </property>
+
+            <property id="interval" type="int" dont_init="true" render_as="script">
+                <set text="skitter({interval: {value}})"/>
+            </property>
+
+            <property id="label" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({label: {value}})"/>
+            </property>
+
+            <property id="navigation" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({navigation: {value}})"/>
+            </property>
+
+            <property id="numbers" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({numbers: {value}})"/>
+            </property>
+
+            <property id="numbers_align" type="string" dont_init="true" render_as="script">
+                <set text="skitter({numbers_align: {value}})"/>
+            </property>
+
+            <property id="preview" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({preview: {value}})"/>
+            </property>
+
+            <property id="show_randomly" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({show_randomly: {value}})"/>
+            </property>
+
+            <property id="stop_over" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({show_randomly: {value}})"/>
+            </property>
+            
+            <property id="thumbs" type="bool" dont_init="true" render_as="script">
+                <set text="skitter({thumbs: {value}})"/>
+            </property>
+
+            <property id="velocity" type="float" dont_init="true" render_as="script">
+                <set text="skitter({velocity: {value}})"/>
+            </property>
+
+            <property id="width_label" type="string" dont_init="true" render_as="script">
+                <set text="skitter({width_label: {value}})"/>
+            </property>
+
+            <property id="with_animations" type="array" dont_init="true" render_as="script">
+                <set text="skitter({width_label: {value}})"/>
+            </property>
+        </class>
+
+         <class id="gmap" super="component" js_renderer="../jquery-object.xss" tag="div">
+             <dependency href="http://maps.google.com/maps/api/js?sensor=true" absolute="true"/>
+             <dependency href="jquery.ui.map.min.js"/>
+
+             <property id="visible" override="true" type="bool" render_type="script">
+                 <get text='JQUComponent.get_visible({path})' global='true'/>
+                 <set text='JQUMap.set_visible({path}, {value})' global='true'/>
+             </property>
+
+             <property id="backgroundColor" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'backgroundColor')"/>
+                 <set text="gmap('option', 'backgroundColor', {value})"/>
+             </property>
+
+             <property id="center" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'center')"/>
+                 <set text="gmap('option', 'center', {value})"/>
+             </property>
+
+             <property id="disableDefaultUI" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'disableDefaultUI')"/>
+                 <set text="gmap('option', 'disableDefaultUI', {value})"/>
+             </property>
+
+             <property id="disableDoubleClickZoom" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'disableDoubleClickZoom')"/>
+                 <set text="gmap('option', 'disableDoubleClickZoom', {value})"/>
+             </property>
+
+             <property id="draggable" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'draggable')"/>
+                 <set text="gmap('option', 'draggable', {value})"/>
+             </property>
+
+             <property id="draggableCursor" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'draggableCursor')"/>
+                 <set text="gmap('option', 'draggableCursor', {value})"/>
+             </property>
+
+             <property id="heading" type="float" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'heading')"/>
+                 <set text="gmap('option', 'heading', {value})"/>
+             </property>
+             
+             <property id="keyboardShortcuts" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'keyboardShortcuts')"/>
+                 <set text="gmap('option', 'keyboardShortcuts', {value})"/>
+             </property>
+             
+             <property id="mapMaker" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'mapMaker')"/>
+                 <set text="gmap('option', 'mapMaker', {value})"/>
+             </property>
+             
+             <property id="mapTypeControl" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'mapTypeControl')"/>
+                 <set text="gmap('option', 'mapTypeControl', {value})"/>
+             </property>
+             
+             <property id="maxZoom" type="float" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'maxZoom')"/>
+                 <set text="gmap('option', 'maxZoom', {value})"/>
+             </property>
+             
+             <property id="minZoom" type="float" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'minZoom')"/>
+                 <set text="gmap('option', 'minZoom', {value})"/>
+             </property>
+             
+             <property id="noClear" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'noClear')"/>
+                 <set text="gmap('option', 'noClear', {value})"/>
+             </property>
+             
+             <property id="overviewMapControl" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'overviewMapControl')"/>
+                 <set text="gmap('option', 'overviewMapControl', {value})"/>
+             </property>
+             
+             <property id="overviewMapControlOptions" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'overviewMapControlOptions')"/>
+                 <set text="gmap('option', 'overviewMapControlOptions', {value})"/>
+             </property>
+             
+             <property id="panControl" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'panControl')"/>
+                 <set text="gmap('option', 'panControl', {value})"/>
+             </property>
+             
+             <property id="panControlOptions" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'panControlOptions')"/>
+                 <set text="gmap('option', 'panControlOptions', {value})"/>
+             </property>
+             
+             <property id="rotateControl" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'rotateControl')"/>
+                 <set text="gmap('option', 'rotateControl', {value})"/>
+             </property>
+             
+             <property id="rotateControlOptions" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'rotateControlOptions')"/>
+                 <set text="gmap('option', 'rotateControlOptions', {value})"/>
+             </property>
+             
+             <property id="scaleControl" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'scaleControl')"/>
+                 <set text="gmap('option', 'scaleControl', {value})"/>
+             </property>
+             
+             <property id="scaleControlOptions" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'scaleControlOptions')"/>
+                 <set text="gmap('option', 'scaleControlOptions', {value})"/>
+             </property>
+             
+             <property id="scrollwheel" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'scrollwheel')"/>
+                 <set text="gmap('option', 'scrollwheel', {value})"/>
+             </property>
+             
+             <property id="streetView" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'streetView')"/>
+                 <set text="gmap('option', 'streetView', {value})"/>
+             </property>
+             
+             <property id="streetViewControl" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'streetViewControl')"/>
+                 <set text="gmap('option', 'streetViewControl', {value})"/>
+             </property>
+             
+             <property id="streetViewControlOptions" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'streetViewControlOptions')"/>
+                 <set text="gmap('option', 'streetViewControlOptions', {value})"/>
+             </property>
+             
+             <property id="styles" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'styles')"/>
+                 <set text="gmap('option', 'styles', {value})"/>
+             </property>
+             
+             <property id="tilt" type="float" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'tilt')"/>
+                 <set text="gmap('option', 'tilt', {value})"/>
+             </property>
+             
+             <property id="zoom" type="float" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'zoom')"/>
+                 <set text="gmap('option', 'zoom', {value})"/>
+             </property>
+             
+             <property id="zoomControl" type="bool" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'zoomControl')"/>
+                 <set text="gmap('option', 'zoomControl', {value})"/>
+             </property>
+             
+             <property id="zoomControlOptions" type="string" dont_init="true" render_as="script">
+                 <get text="gmap('option', 'zoomControlOptions')"/>
+                 <set text="gmap('option', 'zoomControlOptions', {value})"/>
+             </property>
+
+
+             <event id="bounds_changed" render_as="bind" bind_with="addEventListener"/>
+             <event id="center_changed" render_as="bind" bind_with="addEventListener"/>
+             <event id="click" render_as="bind" bind_with="addEventListener"/>
+             <event id="dblclick" render_as="bind" bind_with="addEventListener"/>
+             <event id="drag" render_as="bind" bind_with="addEventListener"/>
+             <event id="dragend" render_as="bind" bind_with="addEventListener"/>
+             <event id="dragstart" render_as="bind" bind_with="addEventListener"/>
+             <event id="heading_changed" render_as="bind" bind_with="addEventListener"/>
+             <event id="idle" render_as="bind" bind_with="addEventListener"/>
+             <event id="maptypeid_changed" render_as="bind" bind_with="addEventListener"/>
+             <event id="mousemove" render_as="bind" bind_with="addEventListener"/>
+             <event id="mouseout" render_as="bind" bind_with="addEventListener"/>
+             <event id="mouseover" render_as="bind" bind_with="addEventListener"/>
+             <event id="projection_changed" render_as="bind" bind_with="addEventListener"/>
+             <event id="resize" render_as="bind" bind_with="addEventListener"/>
+             <event id="rightclick" render_as="bind" bind_with="addEventListener"/>
+             <event id="tilesloaded" render_as="bind" bind_with="addEventListener"/>
+             <event id="tilt_changed" render_as="bind" bind_with="addEventListener"/>
+             <event id="zoom_changed" render_as="bind" bind_with="addEventListener"/>
+         </class>
+     </types>
+</module>

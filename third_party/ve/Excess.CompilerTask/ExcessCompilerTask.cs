@@ -10,6 +10,8 @@ using Microsoft.Build.BuildEngine;
 using ExcessCompiler;
 using System.Xml.Linq;
 using Newtonsoft.Json;
+using Microsoft.Win32;
+using System.Windows.Forms;
 
 namespace Excess.CompilerTasks
 {   
@@ -162,12 +164,28 @@ namespace Excess.CompilerTasks
                 string filePath = Path.Combine(projectPath, MainFile);
                 XAttribute version = XElement.Load(filePath).Attribute("version");
                 bool old_version = version != null && version.Value == "0.9.4";
+                string installPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\XKP\ExcessIDE", @"InstallPath", @"");
+
                 if (old_version)
                 {
-                    //call xss.exe                
+                    string execPath = installPath + version.Value + @"\";
+
+                    if (!Directory.Exists(installPath))
+                    {
+                        MessageBox.Show("Excess IDE Installed Path", "The path specified inside InstallPath registry key is not exists.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return success;
+                    }
+
+                    if (!File.Exists(execPath + "xss.exe"))
+                    {
+                        MessageBox.Show("Excess IDE Compiler", "The xss.exe don't exists inside installed path.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return success;
+                    }
+                    
+                    //call xss.exe
                     Process proc = new Process();
-                    proc.StartInfo = new ProcessStartInfo("xss.exe");
-                    proc.StartInfo.Arguments = filePath + " json";
+                    proc.StartInfo = new ProcessStartInfo(execPath + "xss.exe");
+                    proc.StartInfo.Arguments = "\"" + filePath + "\" json";
                     proc.StartInfo.RedirectStandardOutput = true;
                     proc.StartInfo.UseShellExecute = false;
 
@@ -196,6 +214,7 @@ namespace Excess.CompilerTasks
                 ExcessModelService service = ExcessModelService.getInstance();
                 List<ExcessErrorInfo> errors = new List<ExcessErrorInfo>();
                 success = service.Model.buildProject(filePath, errors);
+
                 if (errors.Count == 0)
                 {
                     Engine engine = new Engine();
@@ -205,7 +224,7 @@ namespace Excess.CompilerTasks
                     myLogger logger = new myLogger(Log);
 
                     // Set the logfile parameter to indicate the log destination
-                    logger.Parameters = @"logfile=C:\dev\XKP_BIN\build.log";
+                    logger.Parameters = @"logfile=" + installPath + @"logs\build.log";
 
                     // Register the logger with the engine
                     engine.RegisterLogger(logger);
@@ -228,7 +247,7 @@ namespace Excess.CompilerTasks
                     if (success)
                         Console.WriteLine("Build succeeded.");
                     else
-                        Console.WriteLine(@"Build failed. View C:\temp\build.log for details");
+                        Console.WriteLine(@"Build failed. View " + installPath + @"logs\build.log for details");
 
                     return true;
                 }

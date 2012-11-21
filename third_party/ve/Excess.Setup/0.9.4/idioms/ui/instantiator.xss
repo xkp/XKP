@@ -1,0 +1,7 @@
+<xss:parameter id="type"/>
+<xss:parameter id="runtime_args"/>
+
+<xss:code>
+
+</xss:code>
+<xss:e v="compiler.instantiate(type, runtime_args = runtime_args)"/>;

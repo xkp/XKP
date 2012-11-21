@@ -11,6 +11,9 @@
 
   <scene>
     <!-- scene elements -->
+    <camera id="main_camera" fov="75" aspect="1.5" near="1" far="3000">
+      <position x="0" y="0" z="0"/>
+    </camera>
   </scene>
 
 </application>

@@ -1,0 +1,1310 @@
+<module id="android" src="classes.xs">
+
+	<types>
+	
+		<!-- ENUM declarations -->
+		<enum id="EVisibility" output_id="int">
+			<property id="true" type="EVisibility" output_id="VISIBLE" output_xml="visible">
+				<get text="View.VISIBLE" global="true"/>
+			</property>
+			
+			<property id="false" type="EVisibility" output_id="INVISIBLE" output_xml="invisible">
+				<get text="View.INVISIBLE" global="true"/>
+			</property>
+			
+			<property id="gone" type="EVisibility" output_id="GONE" output_xml="gone">
+				<get text="View.GONE" global="true"/>
+			</property>
+		</enum>
+		
+		<enum id="EGravity" output_id="Gravity">
+			<property id="top" type="EGravity" output_id="TOP" output_xml="top">
+				<get text="Gravity.TOP" global="true"/>
+			</property>
+			
+			<property id="fill" type="EGravity" output_id="FILL" output_xml="fill">
+				<get text="Gravity.FILL" global="true"/>
+			</property>
+			
+			<property id="left" type="EGravity" output_id="LEFT" output_xml="left">
+				<get text="Gravity.LEFT" global="true"/>
+			</property>
+			
+			<property id="right" type="EGravity" output_id="RIGHT" output_xml="right">
+				<get text="Gravity.RIGHT" global="true"/>
+			</property>
+			
+			<property id="bottom" type="EGravity" output_id="BOTTOM" output_xml="bottom">
+				<get text="Gravity.BOTTOM" global="true"/>
+			</property>
+			
+			<property id="center" type="EGravity" output_id="CENTER" output_xml="center">
+				<get text="Gravity.CENTER" global="true"/>
+			</property>
+			
+			<property id="fill_vertical" type="EGravity" output_id="FILL_VERTICAL" output_xml="fill_vertical">
+				<get text="Gravity.FILL_VERTICAL" global="true"/>
+			</property>
+			
+			<property id="clip_vertical" type="EGravity" output_id="CLIP_VERTICAL" output_xml="clip_vertical">
+				<get text="Gravity.CLIP_VERTICAL" global="true"/>
+			</property>
+			
+			<property id="center_vertical" type="EGravity" output_id="CENTER_VERTICAL" output_xml="center_vertical">
+				<get text="Gravity.CENTER_VERTICAL" global="true"/>
+			</property>
+			
+			<property id="fill_horizontal" type="EGravity" output_id="FILL_HORIZONTAL" output_xml="fill_horizontal">
+				<get text="Gravity.FILL_HORIZONTAL" global="true"/>
+			</property>
+			
+			<property id="clip_horizontal" type="EGravity" output_id="CLIP_HORIZONTAL" output_xml="clip_horizontal">
+				<get text="Gravity.CLIP_HORIZONTAL" global="true"/>
+			</property>
+			
+			<property id="center_horizontal" type="EGravity" output_id="CENTER_HORIZONTAL" output_xml="center_horizontal">
+				<get text="Gravity.CENTER_HORIZONTAL" global="true"/>
+			</property>
+		</enum>
+		
+		<enum id="EOrientation" output_id="int" default="EOrientation.vertical">
+			<property id="vertical" type="EOrientation" output_id="VERTICAL" output_xml="vertical">
+				<get text="LinearLayout.VERTICAL" global="true"/>
+			</property>
+			
+			<property id="horizontal" type="EOrientation" output_id="HORIZONTAL" output_xml="horizontal">
+				<get text="LinearLayout.HORIZONTAL" global="true"/>
+			</property>
+		</enum>
+		
+		<enum id="EActionMotionEvent" output_id="int">
+			<property id="up" type="EActionMotionEvent" output_id="ACTION_UP" output_xml="up">
+				<get text="MotionEvent.ACTION_UP" global="true"/>
+			</property>
+			
+			<property id="move" type="EActionMotionEvent" output_id="ACTION_MOVE" output_xml="move">
+				<get text="MotionEvent.ACTION_MOVE" global="true"/>
+			</property>
+			
+			<property id="down" type="EActionMotionEvent" output_id="ACTION_DOWN" output_xml="down">
+				<get text="MotionEvent.ACTION_DOWN" global="true"/>
+			</property>
+			
+			<property id="cancel" type="EActionMotionEvent" output_id="ACTION_CANCEL" output_xml="cancel">
+				<get text="MotionEvent.ACTION_CANCEL" global="true"/>
+			</property>
+			<!-- continue -->
+		</enum>
+		
+		<enum id="EActionDragEvent" output_id="int">
+			<property id="started" type="EActionDragEvent" output_id="ACTION_DRAG_STARTED" output_xml="started">
+				<get text="DragEvent.ACTION_DRAG_STARTED" global="true"/>
+			</property>
+			
+			<property id="entered" type="EActionDragEvent" output_id="ACTION_DRAG_ENTERED" output_xml="entered">
+				<get text="DragEvent.ACTION_DRAG_ENTERED" global="true"/>
+			</property>
+			
+			<property id="location" type="EActionDragEvent" output_id="ACTION_DRAG_LOCATION" output_xml="location">
+				<get text="DragEvent.ACTION_DRAG_LOCATION" global="true"/>
+			</property>
+			
+			<property id="exited" type="EActionDragEvent" output_id="ACTION_DRAG_EXITED" output_xml="exited">
+				<get text="DragEvent.ACTION_DRAG_EXITED" global="true"/>
+			</property>
+			
+			<property id="drop" type="EActionDragEvent" output_id="ACTION_DROP" output_xml="drop">
+				<get text="DragEvent.ACTION_DROP" global="true"/>
+			</property>
+			
+			<property id="ended" type="EActionDragEvent" output_id="ACTION_DRAG_ENDED" output_xml="ended">
+				<get text="DragEvent.ACTION_DRAG_ENDED" global="true"/>
+			</property>
+		</enum>
+		
+		<enum id="EKeyEvent" output_id="int">
+			<property id="left_arrow" type="EKeyEvent">
+				<get text="KeyEvent.KEYCODE_DPAD_LEFT" global="true"/>
+			</property>
+			
+			<property id="right_arrow" type="EKeyEvent">
+				<get text="KeyEvent.KEYCODE_DPAD_RIGHT" global="true"/>
+			</property>
+			
+			<property id="up_arrow" type="EKeyEvent">
+				<get text="KeyEvent.KEYCODE_DPAD_UP" global="true"/>
+			</property>
+			
+			<property id="down_arrow" type="EKeyEvent">
+				<get text="KeyEvent.KEYCODE_DPAD_DOWN" global="true"/>
+			</property>
+			
+			<property id="enter" type="EKeyEvent">
+				<get text="KeyEvent.KEYCODE_ENTER" global="true"/>
+			</property>
+			<!-- continue -->
+		</enum>
+		
+		<enum id="EDirection" output_id="int">
+			<property id="up" type="EDirection" output_id="FOCUS_UP">
+				<get text="View.FOCUS_UP" global="true"/>
+			</property>
+			
+			<property id="down" type="EDirection" output_id="FOCUS_DOWN">
+				<get text="View.FOCUS_DOWN" global="true"/>
+			</property>
+			
+			<property id="left" type="EDirection" output_id="FOCUS_LEFT">
+				<get text="View.FOCUS_LEFT" global="true"/>
+			</property>
+			
+			<property id="right" type="EDirection" output_id="FOCUS_RIGHT">
+				<get text="View.FOCUS_RIGHT" global="true"/>
+			</property>
+		</enum>
+		
+		<enum id="EScaleType" output_id="int">
+			<property id="matrix" type="EScaleType" output_id="ScaleType.MATRIX" output_xml="matrix">
+				<get text="ScaleType.MATRIX" global="true"/>
+			</property>
+			
+			<property id="fitXY" type="EScaleType" output_id="ScaleType.FIT_XY" output_xml="fitXY">
+				<get text="ScaleType.FIT_XY" global="true"/>
+			</property>
+			
+			<property id="fitStart" type="EScaleType" output_id="ScaleType.FIT_START" output_xml="fitStart">
+				<get text="ScaleType.FIT_START" global="true"/>
+			</property>
+			
+			<property id="fitCenter" type="EScaleType" output_id="ScaleType.FIT_CENTER" output_xml="fitCenter">
+				<get text="ScaleType.FIT_CENTER" global="true"/>
+			</property>
+			
+			<property id="fitEnd" type="EScaleType" output_id="ScaleType.FIT_END" output_xml="fitEnd">
+				<get text="ScaleType.FIT_END" global="true"/>
+			</property>
+			
+			<property id="center" type="EScaleType" output_id="ScaleType.CENTER" output_xml="center">
+				<get text="ScaleType.CENTER" global="true"/>
+			</property>
+			
+			<property id="centerCrop" type="EScaleType" output_id="ScaleType.CENTER_CROP" output_xml="centerCrop">
+				<get text="ScaleType.CENTER_CROP" global="true"/>
+			</property>
+			
+			<property id="centerInside" type="EScaleType" output_id="ScaleType.CENTER_INSIDE" output_xml="centerInside">
+				<get text="ScaleType.CENTER_INSIDE" global="true"/>
+			</property>
+		</enum>
+		
+		<enum id="EProgressStyle" output_id="int" default_value="EProgressStyle.horizontal">
+			<property id="small" type="EProgressStyle" output_xml="?android:attr/progressBarStyleSmall"/>
+			<property id="normal" type="EProgressStyle" output_xml="?android:attr/progressBarStyle"/>
+			<property id="large" type="EProgressStyle" output_xml="?android:attr/progressBarStyleLarge"/>
+			<property id="horizontal" type="EProgressStyle" output_xml="?android:attr/progressBarStyleHorizontal"/>
+		</enum>
+		
+		<enum id="EClipForm" output_id="int">
+			<property id="rect" type="EClipForm" output_id="FRM_RECT" output_xml="rect">
+				<get text="XKPClip.FRM_RECT" global="true"/>
+			</property>
+			
+			<property id="circle" type="EClipForm" output_id="FRM_CIRCLE" output_xml="circle">
+				<get text="XKPClip.FRM_CIRCLE" global="true"/>
+			</property>
+			
+			<property id="polygon" type="EClipForm" output_id="FRM_POLYGON" output_xml="polygon">
+				<get text="XKPClip.FRM_POLYGON" global="true"/>
+			</property>
+		</enum>
+		
+		<enum id="EPlacement" output_id="int">
+			<property id="none" type="EPlacement" output_id="PL_NONE" output_xml="none">
+				<get text="XKPLayout.PL_NONE" global="true"/>
+			</property>
+			
+			<property id="top" type="EPlacement" output_id="PL_TOP" output_xml="top">
+				<get text="XKPLayout.PL_TOP" global="true"/>
+			</property>
+			
+			<property id="left" type="EPlacement" output_id="PL_LEFT" output_xml="left">
+				<get text="XKPLayout.PL_LEFT" global="true"/>
+			</property>
+			
+			<property id="right" type="EPlacement" output_id="PL_RIGHT" output_xml="right">
+				<get text="XKPLayout.PL_RIGHT" global="true"/>
+			</property>
+			
+			<property id="bottom" type="EPlacement" output_id="PL_BOTTOM" output_xml="bottom">
+				<get text="XKPLayout.PL_BOTTOM" global="true"/>
+			</property>
+			
+			<property id="client" type="EPlacement" output_id="PL_CLIENT" output_xml="client">
+				<get text="XKPLayout.PL_CLIENT" global="true"/>
+			</property>
+			
+			<property id="center" type="EPlacement" output_id="PL_CENTER" output_xml="center">
+				<get text="XKPLayout.PL_CENTER" global="true"/>
+			</property>
+		</enum>
+
+		<!-- EVENT declarations -->
+		<class id="IClickListener">
+			<array id="imports">
+				<object import="android.view.View.OnClickListener"/>
+			</array>
+			
+			<event id="click" output_id="onClick" interface="OnClickListener" def_args="View v" set_handle="setOnClickListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="IClickInsideFigureListener">
+			<array id="imports">
+				<object import="xkp.android.libs.Graphics.XKPGraphics.OnClickInsideFigureListener"/>
+			</array>
+			
+			<event id="click" output_id="onClickInsideFigure" interface="OnClickInsideFigureListener" def_args="View v" set_handle="setOnClickInsideFigureListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="ILongClickListener">
+			<array id="imports">
+				<object import="android.view.View.OnLongClickListener"/>
+			</array>
+			
+			<event id="longclick" output_id="onLongClick" interface="OnLongClickListener" def_args="View v" set_handle="setOnLongClickListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="IFocusChangeListener">
+			<array id="imports">
+				<object import="android.view.View.OnFocusChangeListener"/>
+			</array>
+			
+			<event id="focuschange" output_id="onFocusChange" interface="OnFocusChangeListener" def_args="View v, Boolean hasFocus" set_handle="setOnFocusChangeListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="IChangeListener">
+			<array id="imports">
+				<object import="android.widget.CompoundButton"/>
+				<object import="android.widget.CompoundButton.OnCheckedChangeListener"/>
+			</array>
+			
+			<event id="change" output_id="onCheckedChanged" interface="OnCheckedChangeListener" def_args="CompoundButton v, Boolean isChecked" set_handle="setOnCheckedChangeListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="IKeyListener">
+			<array id="imports">
+				<object import="android.view.View.OnKeyListener"/>
+				<object import="android.view.KeyEvent"/>
+			</array>
+			
+			<event id="key" output_id="onKey" interface="OnKeyListener" return_type="boolean" def_args="View v, int keyCode, KeyEvent event" set_handle="setOnKeyListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="IKeyDownListener">
+			<array id="imports">
+				<object import="android.view.View.OnKeyListener"/>
+				<object import="android.view.KeyEvent"/>
+			</array>
+			
+			<!-- TODO: how to force the type or argument in events with the declared types here? -->
+			<event id="keydown" output_id="onKeyDown" return_type="boolean" def_args="int keyCode, KeyEvent event" renderer="class.xss/keyDown.event.xss"/>
+		</class>
+		
+		<class id="IKeyLongPressListener">
+			<event id="longkey" output_id="onKeyLongPress" return_type="boolean" def_args="int keyCode, KeyEvent event"/>
+		</class>
+		
+		<class id="IKeyMultipleListener">
+			<event id="keymultiple" output_id="onKeyMultiple" return_type="boolean" def_args="int keyCode, int repeatCount, KeyEvent event"/>
+		</class>
+		
+		<class id="IKeyUpListener">
+			<event id="keyup" output_id="onKeyUp" return_type="boolean" def_args="int keyCode, KeyEvent event"/>
+		</class>
+		
+		<class id="IDragListener" api_level="11">
+			<array id="imports">
+				<object import="android.view.View.OnDragListener"/>
+			</array>
+			
+			<event id="drag" output_id="onDrag" interface="OnDragListener" def_args="View v, DragEvent event" set_handle="setOnDragListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="IDragEventListener" api_level="11">
+			<event id="dragE" output_id="onDragEvent" interface="OnDragListener" def_args="DragEvent event"/>
+		</class>
+		
+		<class id="ITouchListener">
+			<array id="imports">
+				<object import="android.view.MotionEvent"/>
+				<object import="android.view.View.OnTouchListener"/>
+			</array>
+			
+			<event id="touch" output_id="onTouch" interface="OnTouchListener" return_type="boolean" def_args="View v, MotionEvent ev" param_mthd="ev" set_handle="setOnTouchListener" set_param_hnd="this"/>
+		</class>
+		
+		<!-- CLASS declarations -->
+		<class id="IClassImageAdapter">
+			<array id="imports">
+				<object import="android.view.ViewGroup"/>
+				<object import="android.widget.ImageView"/>
+				<object import="android.widget.BaseAdapter"/>
+				<object import="android.content.Context"/>
+			</array>
+			
+			<array id="classes">
+				<object name="ImageAdapter" file_name="ImageAdapter.class.xss"/>
+			</array>
+			
+			<property id="adapter" no_layout="true" type="string" set_handle="setAdapter" set_param_hnd="new ImageAdapter(this)"/>
+		</class>
+		
+		<class id="Math" no_layout="true" static="true">
+			<method id="min" type="float"/>
+			<method id="max" type="float"/>
+			<method id="abs" type="float"/>
+			<method id="atan2" type="double"/>
+			<method id="random" type="double"/>
+			
+			<property id="PI" output_id="PI" type="double"/>
+		</class>
+		
+		<class id="MotionEvent" no_layout="true">
+			<array id="imports">
+				<object import="android.view.MotionEvent"/>
+			</array>
+			
+			<method id="getAction" type="EActionMotionEvent"/>
+			<method id="getX" type="float"/>
+			<method id="getY" type="float"/>
+		</class>
+		
+		<class id="Display" no_layout="true">
+			<array id="imports">
+				<object import="android.view.Display"/>
+			</array>
+			
+			<method id="getWidth" type="int"/>
+			<method id="getHeight" type="int"/>
+		</class>
+		
+		<!-- After API Level 11 -->
+		<class id="DragEvent" no_layout="true">
+			<method id="getAction" type="EActionDragEvent"/>
+			<method id="getResult" type="bool"/>
+			<method id="getX" type="float"/>
+			<method id="getY" type="float"/>
+		</class>
+		
+		<!-- VIEW declarations -->
+		<class id="IWidget">
+			<property id="x" type="int" output_id="layout_x" ns="xkp" res_type="dimension">
+				<get text="getLeft()"/> 
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setLeft((Integer){value})" global="true"/>
+			</property>
+			
+			<property id="y" type="int" output_id="layout_y" ns="xkp" res_type="dimension">
+				<get text="getTop()"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setTop((Integer){value})" global="true"/>
+			</property>
+			
+			<!-- fill_parent == match_parent, wrap_content  -->
+			<!-- fill_parent is deprecated after android api 8 -->
+			<property id="width" type="int" output_id="layout_width" ns="android" res_type="dimension" default_value="wrap_content">
+				<get text="getWidth()"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setWidth((Integer){value})" global="true"/>
+			</property>
+			
+			<property id="height" type="int" output_id="layout_height" ns="android" res_type="dimension" default_value="wrap_content">
+				<get text="getHeight()"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setHeight((Integer){value})" global="true"/>
+			</property>
+			
+			<property id="placement" type="EPlacement" ns="xkp">
+				<get text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).getPlacement()" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setPlacement({value})" global="true"/>
+			</property>
+			
+			<property id="autosize_x" type="bool" ns="xkp">
+				<get text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).getAutoSizeX()" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setAutoSizeX({value})" global="true"/>
+			</property>
+			
+			<property id="autosize_y" type="bool" ns="xkp">
+				<get text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).getAutoSizeY()" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setAutoSizeY({value})" global="true"/>
+			</property>
+			
+			<property id="visible" type="EVisibility" output_id="visibility" ns="android">
+				<get text="getVisibility()"/>
+				<set text="setVisibility({value})"/>
+			</property>
+			
+			<property id="enabled" type="bool" ns="android">
+				<get text="isEnabled()"/>
+				<set text="setEnabled({value})"/>
+			</property>
+			
+			<property id="gravity" type="EGravity" output_id="gravity" ns="android">
+				<get text="getGravity()"/>
+				<set text="setGravity({value})"/>
+			</property>
+			
+			<property id="clickable" type="bool" ns="android">
+				<get text="isClickable()"/>
+				<set text="setClickable({value})"/>
+			</property>
+			
+			<property id="long_clickable" type="bool" output_id="longClickable" ns="android">
+				<get text="isLongClickable()"/>
+				<set text="setLongClickable({value})"/>
+			</property>
+			
+			<property id="focusable" type="bool" ns="android">
+				<get text="isFocusable()"/>
+				<set text="setFocusable({value})"/>
+			</property>
+			
+			<property id="padding" type="int" ns="android" res_type="dimension">
+				<set text="setPadding({value}, {value}, {value}, {value})"/>
+			</property>
+			
+			<property id="paddingLeft" type="int" ns="android">
+				<get text="getPaddingLeft()"/>
+				<set text="setPadding({value}, getPaddingTop(), getPaddingRight(), getPaddingBottom())"/>
+			</property>
+			
+			<property id="paddingTop" type="int" ns="android">
+				<get text="getPaddingTop()"/>
+				<set text="setPadding(getPaddingLeft(), {value}, getPaddingRight(), getPaddingBottom())"/>
+			</property>
+			
+			<property id="paddingRight" type="int" ns="android">
+				<get text="getPaddingRight()"/>
+				<set text="setPadding(getPaddingLeft(), getPaddingTop(), {value}, getPaddingBottom())"/>
+			</property>
+			
+			<property id="paddingBottom" type="int" ns="android">
+				<get text="getPaddingBottom()"/>
+				<set text="setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), {value})"/>
+			</property>
+			
+			<property id="alpha" type="float" ns="android" api_level="11">
+				<get text="getAlpha()"/>
+				<set text="setAlpha({value})"/>
+			</property>
+			
+			<property id="rotation" type="float" ns="android" api_level="11">
+				<get text="getRotation()"/>
+				<set text="setRotation({value})"/>
+			</property>
+			
+			<!--
+			<property id="layout_margin" ns="android" type="int"/>
+			<property id="layout_weight" ns="android" type="float"/>
+			-->
+			
+			<method id="is_touch_mode" type="bool" output_id="isInTouchMode"/>
+			<method id="is_focused" type="bool" output_id="isFocused"/>
+			<method id="is_selected" type="bool" output_id="isSelected"/>
+			<method id="click" type="bool" output_id="performClick"/>
+			<method id="longclick" type="bool" output_id="performLongClick"/>
+			<method id="request_focus" type="bool" output_id="requestFocus"/>
+			<!--<array id="args">
+					<object param_type="EDirection" param_name="direction"/>
+				</array>
+			</method>-->
+			<method id="set_selected" output_id="setSelected"/>
+			<!--<array id="args">
+					<object param_type="bool" param_name="selected"/>
+				</array>
+			</method>-->
+			<method id="show_menu" type="bool" output_id="showContextMenu"/>
+			
+			<event id="draw" output_id="onDraw"/>
+			
+			<import id="IClickListener"/>
+			<import id="ILongClickListener"/>
+			<import id="ITouchListener"/>
+			<!--<import id="IDragListener"/>
+			<import id="IDragEventListener"/>-->
+			<import id="IKeyListener"/>
+			<import id="IKeyDownListener"/>
+			<import id="IKeyLongPressListener"/>
+			<import id="IKeyMultipleListener"/>
+			<import id="IKeyUpListener"/>
+			<import id="IFocusChangeListener"/>
+		</class>
+		
+		<class id="ITextView" super="IWidget">
+			<array id="imports">
+				<object import="android.text.method.KeyListener"/>
+			</array>
+			
+			<property id="caption" type="string" output_id="text" ns="android" res_type="str_reference">
+				<get text="getText().toString()"/>
+				<set text="setText({value})"/>
+			</property>
+			
+			<property id="cursor_visible" type="bool" output_id="cursorVisible" ns="android">
+				<get text="getCursorVisible()"/>
+				<set text="setCursorVisible({value})"/>
+			</property>
+			
+			<property id="hint" type="string" ns="android" res_type="str_reference">
+				<get text="getHint()"/>
+				<set text="setHint({value})"/>
+			</property>
+			
+			<property id="text_color" type="int" output_id="textColor" ns="android" res_type="color_reference">
+				<get text="getTextColor()"/>
+				<set text="setTextColor({value})"/>
+			</property>
+			
+			<property id="text_selectable" type="bool" output_id="textIsSelectable" ns="android">
+				<get text="isTextSelectable()"/>
+				<set text="setTextIsSelectable({value})"/>
+			</property>
+			
+			<property id="links_clickeable" type="bool" output_id="linksClickable" ns="android">
+				<get text="getLinksClickable()"/>
+				<set text="setLinksClickable({value})"/>
+			</property>
+			
+			<property id="lines" type="int" ns="android">
+				<get text="getLineCount()"/>
+				<set text="setLines({value})"/>
+			</property>
+			
+			<property id="max_lines" type="int" output_id="maxLines" ns="android">
+				<get text="getLineCount()"/>
+				<set text="setLines({value})"/>
+			</property>
+			
+			<property id="max_height" type="int" output_id="maxHeight" ns="android">
+				<get text="getMaxHeight()"/>
+				<set text="setMaxHeight({value})"/>
+			</property>
+			
+			<property id="max_width" type="int" output_id="maxWidth" ns="android">
+				<get text="getMaxWidth()"/>
+				<set text="setMaxWidth({value})"/>
+			</property>
+			
+			<property id="min_height" type="int" output_id="minHeight" ns="android">
+				<get text="getMinHeight()"/>
+				<set text="setMinHeight({value})"/>
+			</property>
+			
+			<property id="min_width" type="int" output_id="minWidth" ns="android">
+				<get text="getMinWidth()"/>
+				<set text="setMinWidth({value})"/>
+			</property>
+			
+			<event id="keydown" output_id="onKeyDown" interface="KeyListener" return_type="boolean" def_args="View view, Editable text, int keyCode, KeyEvent event" set_handle="setKeyListener" set_param_hnd="this"/>
+			<event id="keyother" output_id="onKeyOther" interface="KeyListener" return_type="boolean" def_args="View view, Editable text, KeyEvent event" set_handle="setKeyListener" set_param_hnd="this"/>
+			<event id="keyup" output_id="onKeyUp" interface="KeyListener" return_type="boolean" def_args="View view, Editable text, int keyCode, KeyEvent event" set_handle="setKeyListener" set_param_hnd="this"/>
+		
+			<method id="append"/>
+			<!--<array id="args">
+					<object param_type="CharSequence" param_name="text"/>
+				</array>
+			</method>-->
+			<method id="selection_end" type="int" output_id="getSelectionEnd" />
+			<method id="selection_start" type="int" output_id="getSelectionStart"/>
+			<method id="has_selection" type="bool" output_id="hasSelection"/>
+			<method id="length" type="int"/>
+		</class>
+		
+		<class id="label" super="ITextView" output_id="TextView">
+			<array id="imports">
+				<object import="android.widget.TextView"/>
+			</array>
+		</class>
+		
+		<class id="button" super="ITextView" output_id="Button" event_scope="application">
+			<array id="imports">
+				<object import="android.widget.Button"/>
+			</array>
+		</class>
+		
+		<class id="checkbox" super="ITextView" output_id="CheckBox">
+			<array id="imports">
+				<object import="android.widget.CheckBox"/>
+			</array>
+			
+			<property id="checked" type="bool" ns="android">
+				<get text="isChecked()"/>
+				<set text="setChecked({value})"/>
+			</property>
+			
+			<method id="toggle" ns="android"/>
+			
+			<import id="IChangeListener"/>
+		</class>
+		
+		<class id="radiobutton" super="ITextView" output_id="RadioButton">
+			<array id="imports">
+				<object import="android.widget.RadioButton"/>
+			</array>
+			
+			<property id="checked" type="bool" ns="android">
+				<get text="isChecked()"/>
+				<set text="setChecked({value})"/>
+			</property>
+			
+			<method id="toggle"/>
+			
+			<import id="IChangeListener"/>
+		</class>
+		
+		<class id="editbox" super="ITextView" output_id="EditText">
+			<array id="imports">
+				<object import="android.widget.EditText"/>
+			</array>
+			
+			<property id="text" type="string" ns="android" res_type="str_reference">
+				<get text="getText().toString()"/>
+				<set text="setText({value})"/>
+			</property>
+			
+			<method id="select_all" output_id="selectAll"/>
+			<method id="select" output_id="setSelection"/>
+			<!--<array id="args">
+					<object param_type="int" param_name="start"/>
+					<object param_type="int" param_name="stop"/>
+				</array>
+			</method>-->
+		</class>
+		
+		<class id="img_native" super="IWidget" output_id="ImageView">
+			<array id="imports">
+				<object import="android.widget.ImageView"/>
+				<object import="xkp.android.libs.Widget.XKPUtils"/>
+			</array>
+			
+			<property id="src" type="string" output_id="src" ns="android" res_type="drawable">
+				<!--<set text="util.setResourceImageView(R.id.{path}, {value})" global="true"/>-->
+				<set text="util.setResourceImageView({path}, {value})" global="true"/>
+			</property>
+			
+			<property id="scale" type="EScaleType" output_id="scaleType" ns="android">
+				<get text="getScaleType()"/>
+				<set text="setScaleType({value})"/>
+			</property>
+			
+			<method id="set_alpha" output_id="setAlpha"/>
+			<method id="set_bitmap" output_id="setImageBitmap"/>
+			<!--<array id="args">
+					<object param_type="Bitmap" param_name="bm"/>
+				</array>
+			</method>-->
+			<method id="set_matrix" output_id="setImageMatrix"/>
+			<!--<array id="args">
+					<object param_type="Matrix" param_name="matrix"/>
+				</array>
+			</method>-->
+			
+			<array id="utils">
+				<object name="setResourceImageView" file_name="setResourceImageView.util.xss" import="android.widget.ImageView"/>
+			</array>
+		</class>
+		
+		<class id="imagemap" super="img_native" sub_ns="libs.Widget" output_id="XKPImageMap">
+			<array id="imports">
+				<object import="xkp.android.libs.Widget.XKPImageMap"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Widget/" src_filename="XKPImageMap.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPImageMap.xml"/>
+			</array>
+			
+			<property id="map_src" type="string" ns="xkp" res_type="drawable">
+				<!--<set text="util.setResourceXKPImageMap(R.id.{path}, {value})" global="true"/>-->
+				<set text="util.setResourceXKPImageMap({path}, {value})" global="true"/>
+			</property>
+			
+			<!--TODO: zoom -->
+			
+			<property id="cam_x" type="int" output_id="camera_left" ns="xkp" res_type="dimension">
+				<get text="getCameraLeft()"/>
+				<set text="setCameraLeft({value})"/>
+			</property>
+			
+			<property id="cam_y" type="int" output_id="camera_top" ns="xkp" res_type="dimension">
+				<get text="getCameraTop()"/>
+				<set text="setCameraTop({value})"/>
+			</property>
+			
+			<property id="cam_width" type="int" output_id="camera_width" ns="xkp" res_type="dimension">
+				<get text="getCameraWidth()"/>
+				<set text="setCameraWidth({value})"/>
+			</property>
+			
+			<property id="cam_height" type="int" output_id="camera_height" ns="xkp" res_type="dimension">
+				<get text="getCameraHeight()"/>
+				<set text="setCameraHeight({value})"/>
+			</property>
+			
+			<array id="utils">
+				<object name="setResourceImageMap" file_name="setResourceXKPImageMap.util.xss" import="xkp.android.libs.Widget.XKPImageMap"/>
+			</array>
+		</class>
+		
+		<class id="imagebutton" super="img_native" output_id="ImageButton">
+			<array id="imports">
+				<object import="android.widget.ImageButton"/>
+			</array>
+		</class>
+		
+		<class id="togglebutton" super="ITextView" output_id="ToggleButton">
+			<array id="imports">
+				<object import="android.widget.ToggleButton"/>
+			</array>
+			
+			<property id="text_off" type="string" output_id="textOff" ns="android" res_type="str_reference">
+				<get text="getTextOff().toString()"/>
+				<set text="setTextOff({value})"/>
+			</property>
+			
+			<property id="text_on" type="string" output_id="textOn" ns="android" res_type="str_reference">
+				<get text="getTextOn().toString()"/>
+				<set text="setTextOn({value})"/>
+			</property>
+			
+			<method id="checked" output_id="setChecked"/>
+			<!--<array id="args">
+					<object param_type="boolean" param_name="checked"/>
+				</array>
+			</method>-->
+		</class>
+		
+		<class id="radiogroup" super="IWidget" output_id="RadioGroup">
+			<array id="imports">
+				<object import="android.widget.RadioGroup"/>
+				<object import="android.widget.RadioGroup.OnCheckedChangeListener"/>
+			</array>
+			
+			<!-- i added this property cuz RadioGroup inherits from LinearLayout -->
+			<property id="orientation" type="EOrientation" ns="android">
+				<get text="getOrientation()"/>
+				<set text="setOrientation({value})"/>
+			</property>
+			
+			<method id="add_cmp" output_id="addView"/>
+			<!--<array id="args">
+					<object param_type="View" param_name="child"/>
+					<object param_type="int" param_name="index"/>
+					<object param_type="ViewGroup.LayoutParams" param_name="params"/>
+				</array>
+			</method>-->
+			<method id="check"/>
+			<!--<array id="args">
+					<object param_type="int" param_name="id"/>
+				</array>
+			</method>-->
+			<method id="clear_check" output_id="clearCheck"/>
+			<method id="selected" output_id="getCheckedRadioButtonId"/>
+			
+			<event id="change" output_id="onCheckedChanged" interface="OnCheckedChangeListener" def_args="RadioGroup group, int checkedId" set_handle="setOnCheckedChangeListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="progress_bar" super="IWidget" output_id="ProgressBar">
+			<array id="imports">
+				<object import="android.widget.ProgressBar"/>
+			</array>
+			
+			<property id="max" type="int" ns="android">
+				<get text="getMax()"/>
+				<set text="setMax({value})"/>
+			</property>
+			
+			<property id="progress" type="int" ns="android">
+				<get text="getProgress()"/>
+				<set text="setProgress({value})"/>
+			</property>
+			
+			<property id="secondary_progress" type="int" output_id="secondaryProgress" ns="android">
+				<get text="getSecundaryProgress()"/>
+				<set text="setSecundaryProgress({value})"/>
+			</property>
+			
+			<property id="style" type="EProgressStyle" ns="">
+			</property>
+			
+			<method id="inc_1" output_id="incrementProgressBy"/>
+			<!--<array id="args">
+					<object param_type="int" param_name="diff"/>
+				</array>
+			</method>-->
+			<method id="inc_2" output_id="incrementSecondaryProgressBy"/>
+			<!--<array id="args">
+					<object param_type="int" param_name="diff"/>
+				</array>
+			</method>-->
+			<method id="indeterminate" type="bool" output_id="isIndeterminate"/>
+			<method id="set_indeterminate" output_id="setIndeterminate"/>
+			<!--<array id="args">
+					<object param_type="boolean" param_name="indeterminate"/>
+				</array>
+			</method>-->
+		</class>
+		
+		<class id="seekbar" super="progress_bar" output_id="SeekBar">
+			<array id="imports">
+				<object import="android.widget.SeekBar"/>
+				<object import="android.widget.SeekBar.OnSeekBarChangeListener"/>
+			</array>
+			
+			<event id="progresschanged" output_id="onProgressChanged" interface="SeekBar.OnSeekBarChangeListener" def_args="SeekBar seekBar, int progress, boolean fromUser" set_handle="setOnSeekBarChangeListener" set_param_hnd="this"/>
+			<event id="starttracking" output_id="onStartTrackingTouch" interface="SeekBar.OnSeekBarChangeListener" def_args="SeekBar seekBar" set_handle="setOnSeekBarChangeListener" set_param_hnd="this"/>
+			<event id="stoptracking" output_id="onStopTrackingTouch" interface="SeekBar.OnSeekBarChangeListener" def_args="SeekBar seekBar" set_handle="setOnSeekBarChangeListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="scroller" super="IWidget" output_id="ScrollView" container="true">
+			<array id="imports">
+				<object import="android.widget.ScrollView"/>
+			</array>
+			
+			<property id="fillviewport" type="bool" output_id="fillViewport" ns="android">
+				<get text="isFillViewport()"/>
+				<set text="setFillViewport({value})"/>
+			</property>
+			
+			<property id="smooth" type="bool" no_layout="true">
+				<get text="isSmoothScrollingEnabled()"/>
+				<set text="setSmoothScrollingEnabled({value})"/>
+			</property>
+			
+			<method id="add_cmp" output_id="addView"/>
+			<!--<array id="args">
+					<object param_type="View" param_name="child"/>
+					<object param_type="int" param_name="index"/>
+					<object param_type="ViewGroup.LayoutParams" param_name="params"/>
+				</array>
+			</method>-->
+			<method id="draw"/>
+			<!--<array id="args">
+					<object param_type="Canvas" param_name="canvas"/>
+				</array>
+			</method>-->
+			<method id="fling"/>
+			<!--<array id="args">
+					<object param_type="int" param_name="velocityY"/>
+				</array>
+			</method>-->
+			<method id="fullscroll" type="bool" output_id="fullScroll"/>
+			<!-- the scroll direction: FOCUS_UP to go the top of the view or FOCUS_DOWN to go the bottom -->
+			<!--<array id="args">
+					<object param_type="int" param_name="direction"/>
+				</array>
+			</method>-->
+			<method id="pagescroll" type="bool" output_id="pageScroll"/>
+			<!-- the scroll direction: FOCUS_UP to go one page up or FOCUS_DOWN to go one page down -->
+			<!--<array id="args">
+					<object param_type="int" param_name="direction"/>
+				</array>
+			</method>-->
+			<method id="max_scroll_amount" type="int" output_id="getMaxScrollAmount"/>
+		</class>
+		
+		<class id="tabcontrol" super="IWidget" output_id="TabHost">
+			<array id="imports">
+				<object import="android.view.ViewGroup"/> 						<!-- script in utils need this -->
+				<object import="android.widget.TabHost"/>
+				<object import="android.widget.TabHost.TabSpec"/>
+				<object import="android.widget.TabHost.TabContentFactory"/>
+				<object import="android.widget.TabHost.OnTabChangeListener"/>
+			</array>
+			
+			<property id="tabs" type="array" no_layout="true">
+				<set text="util.setupTabHost(R.id.{path}, {value})" global="true"/>
+			</property>
+			
+			<property id="current_by_id" type="int" no_layout="true">
+				<get text="getCurrentTab()"/>
+				<set text="setCurrentTab({value})"/>
+			</property>
+			
+			<property id="current_by_tag" type="string" no_layout="true">
+				<get text="getCurrentTabTag()"/>
+				<set text="setCurrentTabByTag({value})"/>
+			</property>
+			
+			<method id="add_tab" output_id="addTab"/>
+			<!--<array id="args">
+					<object param_type="TabHost.TabSpec" param_name="tabSpec"/>
+				</array>
+			</method>-->
+			<method id="clear" output_id="clearAllTabs"/>
+			<method id="current_tab" type="IWidget" output_id="getCurrentTabView"/>
+			<method id="newtab" type="" output_id="newTabSpec"/>
+			<!--<array id="args">
+					<object param_type="string" param_name="tag"/>
+				</array>
+			</method>-->
+			
+			<array id="utils">
+				<object name="setupTabHost" file_name="setupTabHost.util.xss" import="android.widget.TabHost"/>
+			</array>
+			
+			<array id="inits">
+				<object name="tabHost" file_name="TabHost.init.xss"/>
+			</array>
+			
+			<object id="def_layout" file_name="TabHost.layout.xss"/>
+			
+			<event id="changed" output_id="onTabChanged" interface="TabHost.OnTabChangeListener" def_args="String tabid" set_handle="setOnTabChangedListener" set_param_hnd="this"/>
+		</class>
+		
+		<class id="spinner" super="IWidget" output_id="Spinner">
+			<array id="imports">
+				<object import="android.widget.Spinner"/>
+				<object import="android.widget.AdapterView.OnItemClickListener"/>
+			</array>
+			
+			<event id="itemclick" output_id="onItemClick" interface="AdapterView.OnItemClickListener" def_args="AdapterView parent, View view, int position, long id" set_handle="setOnItemClickListener" set_param_hnd="this"/>
+			<event id="click" output_id="onClick" interface="OnClickListener" def_args="DialogInterface dialog, int which" set_handle="setOnClickListener" set_param_hnd="this"/>
+			
+			<property id="prompt" type="string" ns="android" res_type="str_reference">
+				<get text="getPrompt()"/>
+				<set text="setPrompt({value})"/>
+			</property>
+			
+			<property id="items" type="array" no_layout="true" res_type="array_str">
+				<get text="getItems()"/>
+				<set text="setItems({value})"/>
+			</property>
+		</class>
+		
+		<class id="listbox" super="IWidget" output_id="ListView">
+			<array id="imports">
+				<object import="android.widget.ListView"/>
+			</array>
+			
+			<property id="items" type="array" output_id="entries" res_type="array_objs">
+				<get text="getItems()"/>
+				<set text="setItems({value})"/>
+			</property>
+			
+			<property id="dividerHeight" type="int" ns="android">
+				<get text="getDividerHeight()"/>
+				<set text="setDividerHeight({value})"/>
+			</property>
+			
+			<method id="max_scroll_amount" type="int" output_id="getMaxScrollAmount"/>
+			<method id="set_selection" output_id="setSelection"/>
+			<!--<array id="args">
+					<object param_type="int" param_name="position"/>
+				</array>
+			</method>-->
+		</class>
+		
+		<class id="imagegallery" super="IWidget" output_id="Gallery">
+			<array id="imports">
+				<object import="android.widget.Gallery"/>
+				<object import="xkp.android.libs.Widget.XKPUtils"/>
+			</array>
+			
+			<property id="spacing" type="int" ns="android" res_type="dimension">
+				<get text="getGravity()"/>
+				<set text="setGravity({value})"/>
+			</property>
+			
+			<property id="images" type="array" no_layout="true" res_type="array_imgs">
+				<get text="empty()"/>
+				<set text="empty({value})"/>
+			</property>
+			
+			<array id="utils">
+				<object name="setResourceImageView" file_name="setResourceImageView.util.xss" import="android.widget.ImageView"/>
+			</array>
+			
+			<import id="IClassImageAdapter"/>
+		</class>
+		
+		<class id="holder" super="IWidget" sub_ns="libs.Layout" output_id="XKPLayout" container="true">
+		</class>
+		
+		<class id="div" super="holder" sub_ns="libs.Layout" output_id="XKPLayout" container="true">
+		</class>
+		
+		<class id="switcher" super="IWidget" sub_ns="libs.Widget" output_id="XKPSwitcher">
+			<array id="imports">
+				<object import="xkp.android.libs.Widget.XKPSwitcher"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Widget/" src_filename="XKPSwitcher.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPSwitcher.xml"/>
+			</array>
+			
+			<property id="active" type="string" output_id="current" ns="xkp" res_type="id_reference">
+				<get text="getDisplayedChildByName()"/>
+				<set text="setDisplayedChildByName(util.getIdFromName({value}))"/>
+			</property>
+			
+			<property id="active_index" type="int" output_id="currentIndex" ns="xkp">
+				<get text="getDisplayedChild()"/>
+				<set text="setDisplayedChild({value})"/>
+			</property>
+		</class>
+		
+		<class id="replicator" super="IWidget" sub_ns="libs.Widget" output_id="XKPReplicator">
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Widget/" src_filename="XKPReplicator.java"/>
+				<object src_path="/src/xkp/android/libs/Widget/" src_filename="XKPObject.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPReplicator.xml"/>
+			</array>
+			
+			<property id="template" type="string" output_id="template" ns="xkp" res_type="id_reference">
+				<get text="getTemplateResource()"/>
+				<set text="setTemplateResource({value})"/>
+			</property>
+			
+			<property id="items" type="array" output_id="items" ns="xkp">
+				<get text="getItems()"/>
+				<set text="setItems({value})"/>
+			</property>
+			
+			<object id="def_layout" file_name="XKPReplicator.layout.xss"/>
+		</class>
+		
+		<!-- GRAPHIC declarations -->
+		<class id="IGraphic">
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPGraphics.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPGraphics.xml"/>
+			</array>
+			
+			<property id="x1" type="float" output_id="pos_x1" ns="xkp" res_type="dimension">
+				<get text="getX1()"/> 
+				<set text="setX1({value})"/>
+			</property>
+			
+			<property id="y1" type="float" output_id="pos_y1" ns="xkp" res_type="dimension">
+				<get text="getY1()"/>
+				<set text="setY1({value})"/>
+			</property>
+			
+			<property id="x2" type="float" output_id="pos_x2" ns="xkp" res_type="dimension">
+				<get text="getX2()"/>
+				<set text="setX2({value})"/>
+			</property>
+			
+			<property id="y2" type="float" output_id="pos_y2" ns="xkp" res_type="dimension">
+				<get text="getY2()"/>
+				<set text="setY2({value})"/>
+			</property>
+			
+			<property id="x" type="float" output_id="pos_x1" ns="xkp" res_type="dimension">
+				<get text="getX1()"/> 
+				<set text="setLeft({value})"/>
+			</property>
+			
+			<property id="y" type="float" output_id="pos_y1" ns="xkp" res_type="dimension">
+				<get text="getY1()"/>
+				<set text="setTop({value})"/>
+			</property>
+			
+			<property id="width" type="float" output_id="pos_width" ns="xkp" res_type="dimension">
+				<get text="getFigureWidth()"/>
+				<set text="setFigureWidth({value})"/>
+			</property>
+			
+			<property id="height" type="float" output_id="pos_height" ns="xkp" res_type="dimension">
+				<get text="getFigureHeight()"/>
+				<set text="setFigureHeight({value})"/>
+			</property>
+			
+			<property id="line_width" type="int" ns="xkp" res_type="dimension">
+				<get text="getLineWidth()"/>
+				<set text="setLineWidth({value})"/>
+			</property>
+			
+			<property id="stroke" type="string" output_id="stroke_color" ns="xkp" res_type="color_reference">
+				<get text="getStrokeColor()"/>
+				<set text="setStrokeColor({value})"/>
+			</property>
+			
+			<property id="fill" type="string" output_id="fill_color" ns="xkp" res_type="color_reference">
+				<get text="getFillColor()"/>
+				<set text="setFillColor({value})"/>
+			</property>
+			
+			<property id="_width" type="int" output_id="layout_width" ns="android" res_type="dimension" default_value="wrap_content">
+				<get text="getWidth()"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setWidth((Integer){value})" global="true"/>
+			</property>
+			
+			<property id="_height" type="int" output_id="layout_height" ns="android" res_type="dimension" default_value="wrap_content">
+				<get text="getHeight()"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setHeight((Integer){value})" global="true"/>
+			</property>
+			
+			<property id="placement" type="EPlacement" ns="xkp">
+				<get text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).getPlacement()" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setPlacement({value})" global="true"/>
+			</property>
+			
+			<property id="autosize_x" type="bool" ns="xkp">
+				<get text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).getAutoSizeX()" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setAutoSizeX({value})" global="true"/>
+			</property>
+			
+			<property id="autosize_y" type="bool" ns="xkp">
+				<get text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).getAutoSizeY()" global="true"/>
+				<set text="((XKPLayout.LayoutParams) {path}.getLayoutParams()).setAutoSizeY({value})" global="true"/>
+			</property>
+			
+			<property id="visible" type="EVisibility" output_id="visibility" ns="android">
+				<get text="getVisibility()"/>
+				<set text="setVisibility({value})"/>
+			</property>
+			
+			<property id="enabled" type="bool" ns="android">
+				<get text="isEnabled()"/>
+				<set text="setEnabled({value})"/>
+			</property>
+			
+			<property id="alpha" type="float" ns="android" api_level="11">
+				<get text="getAlpha()"/>
+				<set text="setAlpha({value})"/>
+			</property>
+			
+			<property id="rotation" type="float" output_id="angle" ns="xkp" res_type="float">
+				<get text="getAngle()"/>
+				<set text="setAngle({value})"/>
+			</property>
+
+			<method id="click" type="bool" output_id="performClickInsideFigure"/>
+			
+			<import id="IClickInsideFigureListener"/>
+		</class>
+		
+		<class id="img" super="IGraphic" sub_ns="libs.Graphics" output_id="XKPImage">
+			<array id="imports">
+				<object import="xkp.android.libs.Graphics.XKPImage"/>
+				<object import="xkp.android.libs.Widget.XKPUtils"/>
+			</array>
+			
+			<property id="src" type="string" output_id="src" ns="xkp" res_type="drawable">
+				<!--<set text="util.setResourceXKPImage(R.id.{path}, {value})" global="true"/>-->
+				<set text="util.setResourceXKPImage({path}, {value})" global="true"/>
+			</property>
+			
+			<array id="utils">
+				<object name="setResourceXKPImage" file_name="setResourceXKPImage.util.xss" import="xkp.android.libs.Graphics.XKPImage"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPImage.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPImage.xml"/>
+			</array>
+		</class>
+		
+		<class id="rectangle" super="IGraphic" sub_ns="libs.Graphics" output_id="XKPRectangle">
+			<array id="imports">
+				<object import="xkp.android.libs.Graphics.XKPRectangle"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPRectangle.java"/>
+			</array>
+		</class>
+		
+		<class id="line" super="IGraphic" sub_ns="libs.Graphics" output_id="XKPLine">
+			<array id="imports">
+				<object import="xkp.android.libs.Graphics.XKPLine"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPLine.java"/>
+			</array>
+		</class>
+		
+		<class id="circle" super="IGraphic" sub_ns="libs.Graphics" output_id="XKPCircle">
+			<array id="imports">
+				<object import="xkp.android.libs.Graphics.XKPCircle"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPCircle.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPCircle.xml"/>
+			</array>
+			
+			<property id="radius" type="float" output_id="radius" ns="xkp" res_type="dimension">
+				<get text="getRadius()"/>
+				<set text="setRadius({value})"/>
+			</property>
+		</class>
+		
+		<class id="polygon" super="IGraphic" sub_ns="libs.Graphics" output_id="XKPPolygon">
+			<array id="imports">
+				<object import="xkp.android.libs.Graphics.XKPPolygon"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPPolygon.java"/>
+			</array>
+			
+			<property id="points_count" type="int" no_layout="true">
+				<get text="getPointsCount()"/>
+			</property>
+			
+			<method id="get_point_x" type="int" output_id="getPointX"/>
+			<method id="get_point_y" type="int" output_id="getPointY"/>
+			<method id="set_point_x" type="int" output_id="setPointX"/>
+			<method id="set_point_y" type="int" output_id="setPointY"/>
+			
+			<method id="setPointbyIndex" output_id="setPoint"/>
+			
+			<array id="inits">
+				<object name="polygon" file_name="XKPPolygon.init.xss"/>
+			</array>
+			
+			<object id="def_layout" file_name="XKPPolygon.layout.xss"/>
+		</class>
+		
+		<class id="polygon_point" no_render="true">
+			<property id="x" type="int"/>
+			<property id="y" type="int"/>
+		</class>
+		
+		<class id="point" super="IGraphic" sub_ns="libs.Graphics" output_id="XKPPoint">
+			<array id="imports">
+				<object import="xkp.android.libs.Graphics.XKPPoint"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPPoint.java"/>
+			</array>
+		</class>
+		
+		<class id="clip_area" super="IGraphic" sub_ns="libs.Graphics" output_id="XKPClip">
+			<array id="imports">
+				<object import="xkp.android.libs.Graphics.XKPClip"/>
+			</array>
+			
+			<array id="xkp_files">
+				<object src_path="/src/xkp/android/libs/Graphics/" src_filename="XKPClip.java"/>
+				<object src_path="/res/values/" src_filename="styleable_XKPClip.xml"/>
+			</array>
+			
+			<property id="form" type="EClipForm" output_id="form" ns="xkp">
+				<get text="getForm()"/>
+				<set text="setForm({value})"/>
+			</property>
+		</class>
+
+		<class id="Application">
+			<import id="IKeyDownListener"/>
+		</class>
+		
+	</types>
+	
+    <instance id="appManager" output_id="getWindowManager()">
+		<method id="getDefaultDisplay" type="Display"/>
+    </instance>
+	
+</module>

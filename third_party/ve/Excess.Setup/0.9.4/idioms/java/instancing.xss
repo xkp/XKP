@@ -1,0 +1,85 @@
+<xss:parameter id="obj"/>
+<xss:parameter id="instantiate" default="true"/>
+<xss:parameter id="setproperties" default="true"/>
+
+<xss:code>
+	if(instantiate)
+	{
+		string obj_id = obj.output_id;
+		string type_id = obj.type.output_id;
+		
+		out()
+		{
+			<xss:e value="type_id"/> <xss:e value="obj_id"/> = new <xss:e v="type_id"/>( }
+		
+		var type = obj.type;
+		if (type.constructor_params)
+		{
+			int i = 0;
+			for(var p in type.constructor_params)
+			{
+				if(p.constant)
+				{
+					if(i > 0)
+						out() {, }
+					
+					out() {<xss:e v="p.constant"/>}
+					i++;
+				}
+				else if(p.default_value)
+				{
+					if(i > 0)
+						out() {, }
+					
+					out() {<xss:e v="p.default_value"/>}
+					i++;
+				}
+				else if(p.property)
+				{
+					var pp = obj.get_property(p.property);
+					if(pp.value != null)
+					{
+						if(i > 0)
+							out() {, }
+						
+						if(pp.use_plain_value)
+							out() {<xss:e v="pp.value"/>}
+						else
+							out() {<xss:e v="pp.render_value()"/>}
+						
+						i++;
+					}
+				}
+			}
+		}
+		
+		out() { ); }
+		
+		/*
+		//td: differenciation...
+		out()
+		{
+			<xss:e value="type_id"/> <xss:e value="obj_id"/> = <xss:e v="compiler.instantiate(obj)"/>;
+		}
+		*/
+		
+	}
+	
+	if(setproperties)
+	{
+		string path = obj.output_id;
+		for(var prop in obj.properties)
+		{
+			if(prop.no_render || prop.no_script) continue;
+			
+			string value = prop.render_value();
+			if(prop.use_plain_value)
+				value = prop.value;
+			
+			out()
+			{
+				<xss:e value="compiler.property_set(prop, path, value)"/>;
+			}
+		}
+	}
+</xss:code>

@@ -15,6 +15,7 @@ class local_filesystem : public IFileSystem
       virtual DataReader load_data(fs::path file);
       virtual str        load_file(const str& filename, fs::path base_path);
       virtual str        load_file(fs::path file);
+      virtual void       add_search_path(fs::path path);
     private:
       typedef std::vector<fs::path> path_list;
 
