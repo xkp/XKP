@@ -40,7 +40,17 @@ const str SFileNotFound("File not found");
 const str SMissingArgType("Argument must have a type");
 const str SInvalidChild("An instance of this type is not insertable on this parent");
 const str SEventNotFound("Event not found");
-
+const str SUnsupportedAttribute("This object doesn't support this attribute");
+const str SUnsupportedChild("This object doesn't support this child");
+const str SInvalidPolicyAction("Invalid policy action");
+const str SPropertyTypeMismatch("Property type mismatch");
+const str SArrayItemMustHaveValue("Array item must have a value");
+const str SArrayMustHaveType("Array item must have a type");
+const str SInstanceValueExpectsObjectProperty("Instance value expects object property");
+const str SInstanceEventExpectsInstance("Instance not found");
+const str SCannotResolveChild("Cannot resolve child");
+const str SPropertyAlreadyExists("Property already exists");
+const str SErrorCompilingIdiom("Idiom could not compile code");
 
 //utils
 struct text_utils
@@ -158,9 +168,27 @@ struct fixup_resolver
                   handler_map::iterator handler = fix_.find(it->id);
                   if (handler != fix_.end())
                     {
+                      int curr_count  = ctx.fixup.size();
+
                       BIND_STATE result = (owner_->*(handler->second))(*it, ctx);  
-                      if (result == BS_BOUND || result == BS_ERROR)
-                        solved--;
+                      switch(result)
+                        {
+                          case BS_BOUND:
+                            {
+                              solved--;
+                              break;
+                            }
+                          case BS_ERROR:
+                            {
+                              //do not allow further fixups on errors
+                              for(int ii = curr_count; ii < ctx.fixup.size(); ii++)
+                                {
+                                  ctx.fixup.erase(ctx.fixup.begin() + ii);
+                                }
+                              break;
+                            }
+                        }
+
                     }
                 }
 
@@ -178,6 +206,29 @@ struct fixup_resolver
       handler_map   fix_;
       fixup_list    it_;
   };
+
+//idiom_instance
+idiom_instance::idiom_instance():
+  instances_(new dynamic_array),
+  types_(new dynamic_array)
+  {
+  }
+
+idiom_instance::idiom_instance(const idiom_instance& other):
+  instances_(other.instances_),
+  types_(other.types_)
+  {
+  }
+
+void idiom_instance::add_instance(XSSObject instance)
+  {
+    instances_->push_back(instance);
+  }
+
+void idiom_instance::add_class(XSSType type)
+  {
+    types_->push_back(type);
+  }
 
 //idiom
 str idiom::id()
@@ -234,21 +285,6 @@ str idiom::get_namespace()
     return namespace_;
   }
 
-IdiomInstance idiom::instance()
-  {
-    if (!instance_)
-      instance_ = IdiomInstance(new idiom_instance);
-    
-    return instance_;
-  }
-
-IdiomInstance idiom::create_instance()
-  {
-    IdiomInstance result(new idiom_instance);
-    result->copy(XSSObject(instance_));
-    return result;
-  }
-
 void idiom::set_path(const fs::path& p)
   {
     path_ = p;
@@ -257,6 +293,21 @@ void idiom::set_path(const fs::path& p)
 fs::path& idiom::path()
   {
     return path_;
+  }
+
+fs::path& idiom::src_file()
+  {
+    return src_file_;
+  }
+
+void idiom::src_file(fs::path& value)
+  {
+    src_file_ = value;
+  }
+
+xs_container& idiom::src()
+  {
+    return src_;
   }
 
 //application
@@ -339,7 +390,7 @@ void application::add_error(const str& desc, param_list* info, file_location& lo
 
     for(; it != nd; it++)
       {
-        if (it->desc == desc && loc.file == it->loc.file && loc.begin.line == it->loc.begin.line)
+        if (it->desc == desc && !loc.file.empty() && loc.file == it->loc.file && loc.begin.line == it->loc.begin.line)
           {
             //avoid dups
             it->loc.begin.column = loc.begin.column;
@@ -390,6 +441,88 @@ fs::path application::app_path()
     return app_path_;
   }
 
+
+void instantiate_idiom(Idiom idiom, IdiomInstance result, XSSCompiler compiler, XSSContext ctx)
+  {
+    //td: the reason the idioms are not cacheable is their bound to a compiler
+    fs::path file = idiom->src_file();
+    if (file.empty())
+      return;
+    
+    try
+      {
+        xs_container& items = idiom->src();
+        code_context  cctx  = compiler->context()->get_compile_context();
+
+        implicit_instance_linker il(cctx, DynamicObject(result), file); 
+        il.link(items);
+      }
+    catch(xs_error e)
+      {
+        str desc = variant_cast<str>(e.data.get("desc"), str());
+        int line = variant_cast<int>(e.data.get("line"), -1);
+        int col  = variant_cast<int>(e.data.get("column"), -1);
+
+        param_list error;
+        error.add("file", file.string());
+        ctx->error(SErrorCompilingIdiom, &error, file_position(line, col), file_position(line, col));
+      }
+  }
+
+void compile_idiom_instances(Application app, XSSCompiler compiler, XSSContext ctx)
+  {
+    idiom_list&           idioms_          = app->idioms();
+    idiom_instance_list&  idiom_instances_ = app->idiom_instances();
+    instance_list&        instances_       = app->instances();
+    type_list&            types_           = app->types();
+
+    idiom_instances_.clear();
+    
+    idiom_list::iterator it = idioms_.begin();
+    idiom_list::iterator nd = idioms_.end();
+    for(; it != nd; it++)
+      {
+        Idiom idiom    = *it;
+        str   idiom_id = idiom->id();
+        IdiomInstance ii(new idiom_instance());
+        ii->set_id(idiom_id);
+
+        idiom_instances_.push_back(ii);
+        compiler->register_symbol(idiom_id, ii);
+
+        instance_list::iterator iit = instances_.begin();
+        instance_list::iterator ind = instances_.end();
+
+        for(; iit != ind; iit++)
+          {
+            XSSObject instance   = *iit;
+            XSSType   type       = instance->type();
+            str       type_idiom = type->get_idiom();
+            if (type_idiom == idiom_id)
+              ii->add_instance(instance);
+          }
+
+        type_list::iterator tit = types_.begin();
+        type_list::iterator tnd = types_.end();
+
+        for(; tit != tnd; tit++)
+          {
+            XSSType   type       = *tit;
+            str       type_idiom = type->get_idiom();
+            if (type_idiom == idiom_id)
+              ii->add_class(type);
+          }
+      }
+
+    it      = idioms_.begin();
+    int idx = 0;
+    for(; it != nd; it++)
+      {
+        instantiate_idiom(*it, idiom_instances_[idx], compiler, ctx);
+        idx++;
+      }
+  }
+
 void application::build()
   {
     //JsonOutput out; 
@@ -398,6 +531,10 @@ void application::build()
     XSSCompiler compiler(new xss_compiler(&out));
     compiler->file_system(fs_);
     compiler->set_output_path(output_path_);
+
+    //process idioms,
+    //td: this should seriously be cached
+    compile_idiom_instances(shared_from_this(), compiler, ctx_);
     
     Application self = shared_from_this();
     compiler->register_symbol("application", self);
@@ -436,6 +573,34 @@ str application::random_id(XSSObject instance)
     XSSType type = instance->type();
     str type_id = type? type->id() : "object"; 
     return type_id + "__" + boost::lexical_cast<str>( instance.get() ); 
+  }
+
+IdiomInstance application::get_idiom(XSSType type)
+  {
+    while(true)
+      {
+        if (!type)
+          return IdiomInstance();
+
+        str idiom = type->idiom();
+        if (!idiom.empty())
+          {
+            idiom_instance_list::iterator it = idiom_instances_.begin();
+            idiom_instance_list::iterator nd = idiom_instances_.end();
+
+            for(; it != nd; it++)
+              {
+                IdiomInstance result = *it;
+                if (result->id() == idiom)
+                  return result;
+              }
+            
+            //bad idiom?
+            return IdiomInstance();
+          }
+
+        type = type->type();
+      }
   }
 
 DynamicArray application::__instances()
@@ -493,8 +658,41 @@ void application::add_class(XSSType result)
 
 void application::add_idiom(const str& id, Idiom it)
   {
-      //instance_map  
-    idioms_.insert(std::pair<str, XSSObject>(id, it->create_instance()));
+    idioms_.push_back(it);
+  }
+
+void application::inject(const str& evname, param_list args)
+  {
+    idiom_instance_list::iterator it = idiom_instances_.begin();
+    idiom_instance_list::iterator nd = idiom_instances_.end();
+
+    for(; it != nd; it++)
+      {
+        XSSObject mod = *it;
+        size_t evid = mod->event_id(evname);
+        if (evid > 0)
+          mod->dispatch_event(evid, args);
+      }
+  }
+
+idiom_list& application::idioms()
+  {
+    return idioms_;
+  }
+
+idiom_instance_list& application::idiom_instances()
+  {
+    return idiom_instances_;
+  }
+
+instance_list& application::instances()
+  {
+    return instances_;
+  }
+
+type_list& application::types()
+  {
+    return user_types_;
   }
 
 XSSObject application::root()
@@ -1171,10 +1369,11 @@ Idiom object_model::read_idiom(DataEntity de, const fs::path& path, om_context& 
     oev.attribute_handler("namespace",  &object_model::r_idiom_namespace);
     oev.attribute_handler("src",        &object_model::r_idiom_code); 
 
-    oev.child_handler("enum",   &object_model::r_idiom_enum);
-    oev.child_handler("import", &object_model::r_idiom_import);
-    oev.child_handler("class",  &object_model::r_idiom_type);
-    oev.child_handler("type",   &object_model::r_idiom_type);
+    oev.child_handler("enum",         &object_model::r_idiom_enum);
+    oev.child_handler("import",       &object_model::r_idiom_import);
+    oev.child_handler("class",        &object_model::r_idiom_type);
+    oev.child_handler("type",         &object_model::r_idiom_type);
+    oev.child_handler("dependencies", &object_model::r_idiom_dependencies);
 
     oev.attribute_handler("*", &object_model::r_invalid_idiom_attr);
     oev.child_handler    ("*", &object_model::r_invalid_idiom_child);
@@ -1667,19 +1866,49 @@ void object_model::r_idiom_namespace(const str& attr, const str& value, const va
 
 void object_model::r_idiom_code(const str& attr, const str& value, const variant& this_, om_context& ctx)
   {
-    xs_utils xs;
+    Idiom idiom = this_;
 
     code_context code_ctx;
     code_ctx = ctx.xss_ctx->get_compile_context();
     fs::path file = fs_->locate(value, ctx.idiom->path());
     
-    xs.compile_implicit_instance(fs_->load_file(file), DynamicObject(ctx.idiom->instance()), code_ctx, file);
+    try
+      {
+        std::vector<str> dl;
+        dl.push_back("out");
+    
+        xs_compiler  compiler(dl);
+        xs_container results;
+    
+        idiom->src_file(file);
+        compiler.compile_xs(fs_->load_file(file), idiom->src());
+      }
+    catch(xs_error e)
+      {
+        str desc = variant_cast<str>(e.data.get("desc"), str());
+        int line = variant_cast<int>(e.data.get("line"), -1);
+        int col  = variant_cast<int>(e.data.get("column"), -1);
+
+        param_list error;
+        error.add("file", file.string());
+        ctx.xss_ctx->error(SErrorCompilingIdiom, &error, file_position(line, col), file_position(line, col));
+      }
   }
 
 void object_model::r_invalid_idiom_attr(const str& attr, const str& value, const variant& this_, om_context& ctx)
   {
-    assert(false);
-    //ctx.xss_ctx->error();
+    param_list error;
+    error.add("object",    str("idiom"));
+    error.add("attribute", attr);
+    ctx.xss_ctx->error(SUnsupportedAttribute, &error, file_position(), file_position());
+  }
+
+void object_model::r_invalid_dependency_attr(const str& attr, const str& value, const variant& this_, om_context& ctx)
+  {
+    param_list error;
+    error.add("object",    str("dependency"));
+    error.add("attribute", attr);
+    ctx.xss_ctx->error(SUnsupportedAttribute, &error, file_position(), file_position());
   }
 
 void object_model::r_idiom_enum(DataEntity de, const variant& this_, om_context& ctx)
@@ -1828,6 +2057,8 @@ bool object_model::parse_pca(const str& action, PARENT_CHILD_ACTION& result)
             result = PCA_ASCHILD;
         else if (action == "independent")
             result = PCA_INDEPENDENT_CHILD;
+        else if (action == "as_child_only")
+            result = PCA_CHILD_ONLY;
         else 
             return false;
       }
@@ -1843,7 +2074,9 @@ bool object_model::parse_policy(DataEntity de, XSSType owner, parent_policy& res
     PARENT_CHILD_ACTION pca;
     if (!parse_pca(action, pca))
       {
-        assert(false); //td: error
+        param_list error;
+        error.add("policy", action);
+        ctx.xss_ctx->error(SInvalidPolicyAction, &error, file_position(), file_position());
         return false;
       }
 
@@ -1941,7 +2174,10 @@ void object_model::merge_property(XSSProperty dest, XSSProperty incoming, XSSObj
         XSSType dest_type = dest->property_type();
         if (incoming_type && dest_type != incoming_type)
           {
-            assert(false); //td: error
+            param_list error;
+            error.add("original type", dest_type->id());
+            error.add("new type", incoming_type->id());
+            ctx.xss_ctx->error(SPropertyTypeMismatch, &error, file_position(), file_position());
           }
       }
 
@@ -2070,7 +2306,10 @@ void object_model::r_type_reject_parent(DataEntity de, const variant& this_, om_
 
 void object_model::r_invalid_type_item(DataEntity de, const variant& this_, om_context& ctx)
   {
-    assert(false); //td: error
+    param_list error;
+    error.add("object", str("type"));
+    error.add("child",  de->type());
+    ctx.xss_ctx->error(SUnsupportedChild, &error, file_position(), file_position());
   }
 
 void object_model::r_include_class(DataEntity de, const variant& this_, om_context& ctx)
@@ -2106,12 +2345,18 @@ void object_model::r_include_instance(DataEntity de, const variant& this_, om_co
 
 void object_model::r_invalid_include_child(DataEntity de, const variant& this_, om_context& ctx)
   {
-    assert(false); //td: error
+    param_list error;
+    error.add("object", str("include"));
+    error.add("child",  de->type());
+    ctx.xss_ctx->error(SUnsupportedChild, &error, file_position(), file_position());
   }
 
 void object_model::r_invalid_array_attr(const str& attr, const str& value, const variant& this_, om_context& ctx)
   {
-    assert(false); //td: error
+    param_list error;
+    error.add("object",    str("array"));
+    error.add("attribute", attr);
+    ctx.xss_ctx->error(SUnsupportedAttribute, &error, file_position(), file_position());
   }
 
 void object_model::r_array_item(DataEntity de, const variant& this_, om_context& ctx)
@@ -2140,29 +2385,38 @@ void object_model::r_array_item(DataEntity de, const variant& this_, om_context&
               }
             else
               {
-                assert(false); //td: error
+                ctx.xss_ctx->error(SArrayItemMustHaveValue, null, file_position(), file_position());
               }
           }
       }
     else
       {
-        assert(false); //td: error
+          ctx.xss_ctx->error(SArrayMustHaveType, null, file_position(), file_position());
       }
   }
 
 void object_model::r_invalid_array_item(DataEntity de, const variant& this_, om_context& ctx)
   {
-    assert(false); //td: error
+    param_list error;
+    error.add("object", str("array"));
+    error.add("child",  de->type());
+    ctx.xss_ctx->error(SUnsupportedChild, &error, file_position(), file_position());
   }
 
 void object_model::r_invalid_property_child(DataEntity de, const variant& this_, om_context& ctx)
   {
-    assert(false); //td: error
+    param_list error;
+    error.add("object", str("property"));
+    error.add("child",  de->type());
+    ctx.xss_ctx->error(SUnsupportedChild, &error, file_position(), file_position());
   }
 
 void object_model::r_invalid_event_child(DataEntity de, const variant& this_, om_context& ctx)
   {
-    assert(false); //td: error
+    param_list error;
+    error.add("object", str("event"));
+    error.add("child",  de->type());
+    ctx.xss_ctx->error(SUnsupportedChild, &error, file_position(), file_position());
   }
 
 XSSObject object_model::read_object_instance(DataEntity de, XSSObject parent, om_context& ctx)
@@ -2189,7 +2443,10 @@ XSSObject object_model::read_object_instance(DataEntity de, XSSObject parent, om
           }
         else
           {
-            assert(false); //td: error
+            param_list error;
+            error.add("property", prop->id());
+            error.add("type", type->id());
+            ctx.xss_ctx->error(SInstanceValueExpectsObjectProperty, &error, file_position(), file_position());
           }
       }
     else
@@ -2224,17 +2481,38 @@ XSSExpression object_model::read_array(DataEntity de, XSSType array_type, om_con
     return result;
   }
 
+XSSObject object_model::read_raw(DataEntity de, om_context& ctx)
+  {
+    XSSObject result(new xss_object);
+
+    om_entity_visitor oev(this, result, ctx);
+    oev.attribute_handler("*", &object_model::r_object_attr);
+    oev.child_handler    ("*", &object_model::r_raw_child);
+
+    de->visit(&oev);
+    return result;
+  }
+
 void object_model::r_object_instance(DataEntity de, const variant& this_, om_context& ctx)
   {
     XSSObject parent = this_;
     read_object_instance(de, parent, ctx);
   }
 
+void object_model::r_raw_child(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    XSSObject parent = this_;
+    XSSObject child  = read_raw(de, ctx);
+    parent->add_child(child);
+  }
+
 void object_model::r_idiom_type(DataEntity de, const variant& this_, om_context& ctx)
   {
+    Idiom   idiom = this_;
     XSSType result(new xss_type());
     result->set_id(de->id());
     result->set_output_id(de->attr("output_id"));
+    result->idiom(idiom->id());
     
     om_entity_visitor oev(this, result, ctx);
     oev.attribute_handler("output_id",     &object_model::r_attr_nop);
@@ -2254,13 +2532,61 @@ void object_model::r_idiom_type(DataEntity de, const variant& this_, om_context&
 
     de->visit(&oev);
 
-	ctx.idiom->add_type(result);
+	  ctx.idiom->add_type(result);
     ctx.xss_ctx->add_type(result, str());
+  }
+
+void object_model::r_idiom_dependencies(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    om_entity_visitor oev(this, this_, ctx);
+    oev.attribute_handler("*",          &object_model::r_invalid_dependency_attr);
+    oev.child_handler    ("dependency", &object_model::r_idiom_dependency);
+    oev.child_handler    ("*",          &object_model::r_invalid_dependency_child);
+
+    de->visit(&oev);
+  }
+
+void object_model::r_idiom_dependency(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    XSSObject dependency(new xss_object);
+    dependency->set_id(de->id());
+    
+    om_entity_visitor oev(this, dependency, ctx);
+    oev.attribute_handler("*",    &object_model::r_object_attr);
+    oev.child_handler    ("file", &object_model::r_dependency_file);
+    oev.child_handler    ("*",    &object_model::r_invalid_dependency_child);
+
+    de->visit(&oev);
+  }
+
+void object_model::r_dependency_file(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    XSSObject    dependency = this_;
+    DynamicArray files      = dependency->get<DynamicArray>("files", DynamicArray());
+    if (!files)
+      {
+        files = DynamicArray(new dynamic_array);
+        dependency->add_attribute("files", files);
+      }
+
+    XSSObject file_info = read_raw(de, ctx);
+    files->push_back(file_info);
+  }
+
+void object_model::r_invalid_dependency_child(DataEntity de, const variant& this_, om_context& ctx)
+  {
+    param_list error;
+    error.add("object", str("dependency"));
+    error.add("child",  de->type());
+    ctx.xss_ctx->error(SUnsupportedChild, &error, file_position(), file_position());
   }
 
 void object_model::r_invalid_idiom_child(DataEntity de, const variant& this_, om_context& ctx)
   {
-    assert(false); //td: error
+    param_list error;
+    error.add("object", str("idiom"));
+    error.add("child",  de->type());
+    ctx.xss_ctx->error(SUnsupportedChild, &error, file_position(), file_position());
   }
 
 void object_model::r_enum_item(DataEntity de, const variant& this_, om_context& ctx)
@@ -2277,7 +2603,10 @@ void object_model::r_enum_item(DataEntity de, const variant& this_, om_context& 
 
 void object_model::r_invalid_enum_item(DataEntity de, const variant& this_, om_context& ctx)
   {
-    assert(false); //td: error
+    param_list error;
+    error.add("object", str("enum"));
+    error.add("child",  de->type());
+    ctx.xss_ctx->error(SUnsupportedChild, &error, file_position(), file_position());
   }
 
 void object_model::r_object_attr(const str& attr, const str& value_str, const variant& this_, om_context& ctx)
@@ -2559,7 +2888,10 @@ XSSProperty object_model::read_property(DataEntity de, XSSObject recipient, om_c
               }
             else
               {
-                assert(false); //td: error
+                param_list error;
+                error.add("property", result->id());
+                error.add("type", type->id());
+                ctx.xss_ctx->error(SInstanceValueExpectsObjectProperty, &error, file_position(), file_position());
               }
           }
       }
@@ -2651,7 +2983,7 @@ InlineRenderer object_model::read_inline_renderer(DataEntity de, param_list& par
 
 void object_model::register_idiom(const str& id, Application app, Idiom idiom)
   {
-    idiom_list::iterator it = idioms_.find(id);
+    idiom_map::iterator it = idioms_.find(id);
     if (it != idioms_.end())
       {
         param_list error;
@@ -2661,11 +2993,12 @@ void object_model::register_idiom(const str& id, Application app, Idiom idiom)
       }
 
     idioms_.insert(std::pair<str, Idiom>(id, idiom));
+    app->add_idiom(id, idiom);
   }
 
 Idiom object_model::find_idiom(const str& idiom)
   {
-    idiom_list::iterator it = idioms_.find(idiom);
+    idiom_map::iterator it = idioms_.find(idiom);
     if (it != idioms_.end())
       return it->second;
     
@@ -2793,7 +3126,9 @@ BIND_STATE object_model::f_instance_event(fixup_data& it, om_context& ctx)
       {
         if (vop.resolve_id() != RESOLVE_INSTANCE)
           {
-            assert(false); //td: error
+            param_list error;
+            error.add("instance", vop.identifier());
+            ctx.xss_ctx->error(SInstanceEventExpectsInstance, &error, file_position(), file_position());
             return BS_ERROR;
           }
         else
@@ -2863,7 +3198,9 @@ BIND_STATE object_model::f_object_child(fixup_data& it, om_context& ctx)
 
     if (!child)
       {
-        //td: error
+        param_list error;
+        error.add("child", fu.de->type());
+        ctx.xss_ctx->error(SCannotResolveChild, &error, file_position(), file_position());
         return BS_ERROR;
       }
 
@@ -3006,6 +3343,7 @@ void object_model::clear_file_errors(const str& fname)
 
 void object_model::parent_child_action(PARENT_CHILD_ACTION action, XSSObject parent, XSSObject child, om_context& ctx)
   {
+    bool do_add = true;
     switch(action)
       {
         case PCA_ASPROPERTY:
@@ -3019,7 +3357,10 @@ void object_model::parent_child_action(PARENT_CHILD_ACTION action, XSSObject par
               prop = parent->add_property(child_id, XSSExpression());
             else
               {
-                assert(false); //td: error
+                param_list error;
+                error.add("property", child_id);
+                ctx.xss_ctx->error(SPropertyAlreadyExists, &error, file_position(), file_position());
+                return;
               }
 
             prop->property_type(child->type());
@@ -3038,14 +3379,24 @@ void object_model::parent_child_action(PARENT_CHILD_ACTION action, XSSObject par
             child->set_parent(parent); 
             break;
           }
+        case PCA_CHILD_ONLY:
+          {
+            //add as child, do no register the instance
+            parent->add_child(child);
+            do_add = false;
+            break;
+          }
         default:
           assert(false); //catch
       }
 
     //we also must decide what to do with the child entity
     //this code is here since the child instance has just been created
-    if (!ctx.xss_ctx->add_instance(child))
-      ctx.application->add_instance(child);
+    if (do_add)
+      {
+        if (!ctx.xss_ctx->add_instance(child))
+          ctx.application->add_instance(child);
+      }
   }
 
 void object_model::resolve_parent_child(XSSObject parent, XSSObject child, om_context& ctx)
@@ -3057,8 +3408,19 @@ void object_model::resolve_parent_child(XSSObject parent, XSSObject child, om_co
 
     assert(parent_type);
     param_list error; //just in case
-    error.add("parent", parent->id());
-    error.add("child", child->id());
+    if (!parent->id().empty())
+      error.add("parent", parent->id());
+
+    XSSType ptype = parent->type();
+    if (ptype)
+      error.add("parent_type", ptype->id());
+
+    if (!child->id().empty())
+      error.add("child", child->id());
+
+    XSSType ctype = child->type();
+    if (ctype)
+      error.add("child_type", ctype->id());
 
     PARENT_CHILD_ACTION pca = PCA_DEFAULT;
     if (parent_type->accepts_child(child, pca))

@@ -259,9 +259,9 @@ namespace xkp
         //XSSObject    analyze_expression(const param_list params);
         //str          file(fs::path path);
         //str          render_code(const str& code, param_list_decl& args, XSSContext ctx);
-        void         add_dependencies(XSSObjectList& dependencies, XSSObject idiom);
-        DynamicArray get_dependencies();
-        DynamicArray idiom_dependencies(const str& idiom);
+        //void         add_dependencies(XSSObjectList& dependencies, XSSObject idiom);
+        //DynamicArray get_dependencies();
+        //DynamicArray idiom_dependencies(const str& idiom);
         str          build_project(const param_list params);
         str          get_result();
         void         render_app_types(const str& renderer);
@@ -279,7 +279,7 @@ namespace xkp
         XSSRenderer previous_renderer();
         //XSSRenderer entry_renderer();
         XSSContext  current_context();
-		fs::path	current_output_file();	
+		    fs::path	  current_output_file();	
       public:
         XSSObject options_;
 		  private:
@@ -336,15 +336,16 @@ namespace xkp
         //void  read_object_array(fs::path file, XSSContext ctx, std::vector<XSSObject>& classes_data);
 		    //void  compile_xs_file(fs::path file, xs_container& result, XSSContext ctx);
       private:
+        //0.9.5;
         //dependencies
-        typedef std::map<str, int>  dependency_map;
-        typedef std::pair<str, int> dependency_pair;
+        //typedef std::map<str, int>  dependency_map;
+        //typedef std::pair<str, int> dependency_pair;
 
-        dependency_map dependencies_;
-        XSSObjectList  deps_;
+        //dependency_map dependencies_;
+        //XSSObjectList  deps_;
 
-        void add_dependency(const str& href, XSSObject obj, XSSObject idiom);
-        void collect_dependencies(XSSType type, XSSType context = XSSType());
+        //void add_dependency(const str& href, XSSObject obj, XSSObject idiom);
+        //void collect_dependencies(XSSType type, XSSType context = XSSType());
       public:
         //glue
         str  __instantiation(const param_list params);
@@ -432,9 +433,9 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         //method_<variant,      1>("idiom_by_class",     &xss_compiler::idiom_by_class);
         //method_<void,         1>("using_idiom",        &xss_compiler::using_idiom);
         //method_<void,         1>("render_app_types",   &xss_compiler::render_app_types);
-        
-        method_<DynamicArray, 0>("get_dependencies",   &xss_compiler::get_dependencies);
-        method_<DynamicArray, 1>("idiom_dependencies", &xss_compiler::idiom_dependencies);
+        //method_<DynamicArray, 0>("get_dependencies",   &xss_compiler::get_dependencies);
+        //method_<DynamicArray, 1>("idiom_dependencies", &xss_compiler::idiom_dependencies);
+
         method_<str,          1>("render_value",       &xss_compiler::render_value);
         method_<DynamicArray, 2>("find_files",         &xss_compiler::find_files);
         method_<str,          1>("get_env_var",        &xss_compiler::get_env_var);

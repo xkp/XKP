@@ -1,0 +1,8 @@
+<classes>
+    <class id="mySequence" super="sequence" target_type="component">
+        <at t="0">
+            <animate property="target.width"  from="target.width"  to="target.width + amount" in="3"/>
+            <animate property="target.height" from="target.height" to="target.width + amount" in="3"/>
+        </at>
+    </class>
+</classes>

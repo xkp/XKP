@@ -15,7 +15,7 @@ extern "C"
 using namespace xkp;
 
 const str SCompilerError("syntax-error");
-const str SErrorCompiling("Error while compiling xs");
+const str SErrorCompiling("Syntax error");
 
 //utils
 inline str wide2str(const std::wstring& w)

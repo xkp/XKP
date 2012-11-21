@@ -1,0 +1,53 @@
+<idiom id="sequence" src="sequence.xs">
+    <dependencies>
+        <dependency id="sequence" using="xs.Sequence">
+            <file src="dependencies/dotnet/sequence.dll"/>
+        </dependency>
+    </dependencies>
+
+    <class id="run">
+        <reject_child type="*"/>
+    </class>
+
+    <class id="key">
+        <reject_child type="*"/>
+    </class>
+
+    <class id="animate">
+        <accept_child type="key" append="as_child_only"/>
+        <reject_child type="*"/>
+    </class>
+
+    <class id="at">
+        <accept_child type="run"     append="as_child_only"/>
+        <accept_child type="animate" append="as_child_only"/>
+        <reject_child type="*"/>
+    </class>
+
+    <class id="when">
+        <accept_child type="run" append="as_child_only"/>
+        <reject_child type="*"/>
+    </class>
+
+    <class id="sequence" instantiator="instantiator.xss" renderer="../sequence.xss" output_id="state.Sequence">
+        <accept_parent type="sequence"  append="as_child"/>
+        <reject_parent type="at" />
+        <reject_parent type="when" />
+        <reject_parent type="run" />
+        <reject_parent type="animate" />
+        
+        <accept_parent type="*" append="as_property"/>
+        
+        <accept_child type="at"      append="as_child_only"/>
+        <accept_child type="when"    append="as_child_only"/>
+        <accept_child type="run"     append="as_child_only"/>
+        <accept_child type="animate" append="as_child_only"/>
+        <reject_child type="*"/>
+
+        <property id="loop"   type="bool"/>
+        <property id="target" type="object"/>
+
+        <method id="start"/>
+        <method id="stop"/>
+    </class>
+</idiom>

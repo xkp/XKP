@@ -1,0 +1,29 @@
+<application>
+    <button id="btn1" caption="Hello, world">
+        <position x="10" y="10" width="153" height="61"/>
+    </button>
+
+    <button id="btn2" caption="Hello, animation">
+        <position x="300" y="10" width="153" height="61"/>
+    </button>
+
+    <button id="btn3" caption="Seq class">
+        <position x="500" y="10" width="153" height="61"/>
+    </button>
+
+    <sequence id="seq1">
+        <at t="3">
+            <animate property="btn1.x" from="10" to="btn2.x" in="3"/>
+        </at>
+        <at t="3">
+            <animate property="btn1.y" from="10" to="300" in="3"/>
+            <animate property="btn2.y">
+                <key t="0" value="10"/>
+                <key t="1" value="200"/>
+                <key t="3" value="300"/>
+            </animate>
+        </at>
+    </sequence>
+    
+    <mySequence id="seq2" target="btn3"/>
+</application>

@@ -1084,17 +1084,6 @@ void xss_compiler::inject(const param_list params)
 
     XSSContext ctx = cr->context();
     
-    //0.9.5
-    //XSSApplicationRenderer renderer = variant_cast<XSSApplicationRenderer>(ctx->resolve("#app", RESOLVE_CONST), XSSApplicationRenderer());
-
-    //if (!renderer)
-    //  {
-    //    param_list error;
-    //    error.add("id", SProjectError);
-    //    error.add("desc", SInjectingEventsOnNoRenderer );
-    //    xss_throw(error);
-    //  }
-
     //disptach events to all modules, aka injecting
     str evname = variant_cast<str>(params.get(0), str());
     if (evname.empty())
@@ -1126,18 +1115,7 @@ void xss_compiler::inject(const param_list params)
         push_renderer(renderer);
       }
 
-    assert(false); //td: !!! inject!
-    //app_->inject(evname, pl);
-    //std::vector<XSSModule> modules = renderer->modules();
-    //std::vector<XSSModule>::iterator it = modules.begin();
-    //std::vector<XSSModule>::iterator nd = modules.end();
-    //for(; it != nd; it++)
-    //  {
-    //    XSSModule mod = *it;
-    //    size_t evid = mod->event_id(evname);
-    //    if (evid > 0)
-    //      mod->dispatch_event(evid, pl);
-    //  }
+    app_->inject(evname, pl);
 
     if (!marker.empty())
       {
@@ -1171,7 +1149,7 @@ void xss_compiler::log(const param_list params)
 							}
 					}
 
-				out_->out("log", string_value, null);
+				out_->out("log", string_value + "\n", null);
       }
 	}
 
@@ -2001,34 +1979,34 @@ str xss_compiler::expression_to_string(XSSExpression expr)
 //    ICodeRenderer* compiled = variant_cast<ICodeRenderer*>(cc, null); assert(compiled);
 //    return compiled->render();
 //  }
-
-void xss_compiler::add_dependencies(XSSObjectList& dependencies, XSSObject idiom)
-  {
-    XSSObjectList::iterator it = dependencies.begin();
-    XSSObjectList::iterator nd = dependencies.end();
-
-    for(; it != nd; it++)
-      {
-        XSSObject obj = *it;
-        str href = obj->get<str>("href", str());
-        if (href.empty())
-          {
-				      param_list error;
-				      error.add("id", SCompiler);
-				      error.add("desc", SDependencyNeedsHRef);
-				      error.add("dep id", obj->id());
-
-				      xss_throw(error);
-          }
-
-        dependency_map::iterator it = dependencies_.find(href);
-        if (it == dependencies_.end())
-          {
-            add_dependency(href, obj, idiom);
-          }
-      }
-  }
-
+//
+//void xss_compiler::add_dependencies(XSSObjectList& dependencies, XSSObject idiom)
+//  {
+//    XSSObjectList::iterator it = dependencies.begin();
+//    XSSObjectList::iterator nd = dependencies.end();
+//
+//    for(; it != nd; it++)
+//      {
+//        XSSObject obj = *it;
+//        str href = obj->get<str>("href", str());
+//        if (href.empty())
+//          {
+//				      param_list error;
+//				      error.add("id", SCompiler);
+//				      error.add("desc", SDependencyNeedsHRef);
+//				      error.add("dep id", obj->id());
+//
+//				      xss_throw(error);
+//          }
+//
+//        dependency_map::iterator it = dependencies_.find(href);
+//        if (it == dependencies_.end())
+//          {
+//            add_dependency(href, obj, idiom);
+//          }
+//      }
+//  }
+//
 str xss_compiler::build_project(const param_list params)
   {
     assert(false);
@@ -2092,44 +2070,44 @@ str xss_compiler::build_project(const param_list params)
 //  {
 //    return result_;
 //  }
-
-DynamicArray xss_compiler::get_dependencies()
-  {
-    DynamicArray result(new dynamic_array);
-
-    XSSObjectList::iterator it = deps_.begin();
-    XSSObjectList::iterator nd = deps_.end();
-
-    for(; it != nd; it++)
-      {
-        result->push_back(*it);
-      }
-
-    return result;
-  }
-
-DynamicArray xss_compiler::idiom_dependencies(const str& idiom_id)
-  {
-    DynamicArray result(new dynamic_array);
-
-    XSSObjectList::iterator it = deps_.begin();
-    XSSObjectList::iterator nd = deps_.end();
-
-    for(; it != nd; it++)
-      {
-        XSSObject dep   = *it;
-        XSSObject idiom = dep->idiom();
-        if (idiom && idiom->id() == idiom_id)
-          {
-            bool shared = dep->get<bool>("shared", false);
-            if (!shared)
-              result->push_back(dep);
-          }
-      }
-
-    return result;
-  }
-
+//
+//DynamicArray xss_compiler::get_dependencies()
+//  {
+//    DynamicArray result(new dynamic_array);
+//
+//    XSSObjectList::iterator it = deps_.begin();
+//    XSSObjectList::iterator nd = deps_.end();
+//
+//    for(; it != nd; it++)
+//      {
+//        result->push_back(*it);
+//      }
+//
+//    return result;
+//  }
+//
+//DynamicArray xss_compiler::idiom_dependencies(const str& idiom_id)
+//  {
+//    DynamicArray result(new dynamic_array);
+//
+//    XSSObjectList::iterator it = deps_.begin();
+//    XSSObjectList::iterator nd = deps_.end();
+//
+//    for(; it != nd; it++)
+//      {
+//        XSSObject dep   = *it;
+//        XSSObject idiom = dep->idiom();
+//        if (idiom && idiom->id() == idiom_id)
+//          {
+//            bool shared = dep->get<bool>("shared", false);
+//            if (!shared)
+//              result->push_back(dep);
+//          }
+//      }
+//
+//    return result;
+//  }
+//
 void xss_compiler::push_renderer(XSSRenderer renderer)
   {
     renderers_.push_back(renderer);
@@ -3359,15 +3337,15 @@ void xss_compiler::init_project_context(code_context& result)
 //        throw xse;
 //      }
 //  }
-
-void xss_compiler::add_dependency(const str& href, XSSObject obj, XSSObject idiom)
-  {
-    obj->set_idiom(idiom);
-
-    dependencies_.insert(dependency_pair(href, deps_.size()));
-    deps_.push_back(obj);
-  }
-
+//
+//void xss_compiler::add_dependency(const str& href, XSSObject obj, XSSObject idiom)
+//  {
+//    obj->set_idiom(idiom);
+//
+//    dependencies_.insert(dependency_pair(href, deps_.size()));
+//    deps_.push_back(obj);
+//  }
+//
 //td: !!! dependencies
 //0.9.5
 //void xss_compiler::type_dependencies(XSSType type, dependency_list& deps)

@@ -1563,16 +1563,6 @@ void xss_object::set_type(XSSType type)
       }
   }
 
-XSSObject	xss_object::idiom()
-  {
-    return idiom_;
-  }
-
-void xss_object::set_idiom(XSSObject id)
-  {
-    idiom_ = id;
-  }
-
 void xss_object::add_event_impl(XSSEvent ev, XSSCode code, XSSSignature sig, XSSObject instance, XSSExpression instance_path)
   {
     event_impl_.push_back(XSSEventImpl(new xss_event_impl(ev, sig, code, instance, instance_path)));
@@ -2634,6 +2624,28 @@ void xss_type::add_child_policy(parent_policy& policy)
 void xss_type::add_parent_policy(parent_policy& policy)
   {
     parent_policy_.push_back(policy);
+  }
+
+str	xss_type::idiom()
+  {
+    return idiom_;
+  }
+
+void xss_type::idiom(const str& value)
+  {
+    idiom_ = value;
+  }
+
+str	xss_type::get_idiom()
+  {
+    if (!idiom_.empty())
+      return idiom_;
+
+    XSSType super = type();
+    if (super)
+      return super->get_idiom();
+
+    return str();
   }
 
 void xss_type::as_enum()

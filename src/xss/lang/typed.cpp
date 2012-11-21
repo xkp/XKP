@@ -873,7 +873,6 @@ bool typed_lang::render_assignment(XSSExpression expr, XSSValue left_value, XSSE
                             result << prop->output_id() << " = "; 
                             if (!render_expression(right, ctx, result))
                               return false;
-                            result << "";
                           }
                         else 
                           {

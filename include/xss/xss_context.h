@@ -100,6 +100,7 @@ enum PARENT_CHILD_ACTION
     PCA_ASPROPERTY,
     PCA_ASCHILD,
     PCA_INDEPENDENT_CHILD,
+    PCA_CHILD_ONLY,
     PCA_DEFAULT,
     PCA_REJECT,
     PCA_FIXUP,
@@ -254,10 +255,8 @@ class xss_object : public editable_object<xss_object>,
       void set_type_name(const str& id);
       void set_parent(XSSObject parent);
 
-			virtual XSSType	  type();
-			virtual void      set_type(XSSType type);
-			virtual XSSObject	idiom();
-			virtual void      set_idiom(XSSObject id);
+			virtual XSSType	type();
+			virtual void    set_type(XSSType type);
 
       //0.9.5
       void add_event_impl(XSSEvent ev, XSSCode code, XSSSignature sig, XSSObject instance = XSSObject(), XSSExpression instance_path = XSSExpression());
@@ -330,7 +329,6 @@ class xss_object : public editable_object<xss_object>,
 			DynamicArray	properties_;
 			DynamicArray	methods_;
 			DynamicArray	events_;
-			XSSObject     idiom_;
 
       //0.9.5
       //td: !!! finish the job
@@ -413,6 +411,9 @@ class xss_type : public xss_object
       void         add_instance(XSSObject instance);
       void         add_child_policy(parent_policy& policy);
       void         add_parent_policy(parent_policy& policy);
+			str	         idiom();
+      void         idiom(const str& value);
+      str	         get_idiom();
     public:
       void as_enum();
       void as_array(XSSType type);
@@ -452,6 +453,7 @@ class xss_type : public xss_object
       std::vector<XSSSignature> constructors_;
       parent_policy_list        child_policy_; 
       parent_policy_list        parent_policy_;
+      str                       idiom_;
   };
 
 class xss_dsl : public xss_object
@@ -1274,7 +1276,6 @@ struct xss_object_schema : editable_object_schema<T>
 				this->template property_<str>         ("type_name",		&T::type_name_);
 				this->template property_<str>         ("class_name",	&T::type_name_);
         this->template property_<XSSType>     ("type",        &T::type,       &T::set_type);
-        this->template property_<XSSObject>   ("idiom",       &T::idiom_);
 
         this->template readonly_property<XSSObject>    ("parent", &T::parent );
         this->template readonly_property<DynamicArray> ("evimpl", &T::get_evimpl );
@@ -1316,6 +1317,7 @@ struct xss_type_schema : xss_object_schema<xss_type>
 				readonly_property<DynamicArray>("instances",         &xss_type::all_instances_);
 				readonly_property<DynamicArray>("local_instances",   &xss_type::local_instances_);
 				readonly_property<DynamicArray>("foreign_instances", &xss_type::foreign_instances_);
+				readonly_property<DynamicArray>("idiom",             &xss_type::idiom_);
 
 				readonly_property<DynamicArray>("constructor_params", &xss_type::ctor_args);
       }

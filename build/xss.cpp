@@ -130,6 +130,8 @@ void test_object_model(fs::path target)
                 str value = xss_utils::var2string(it->info.get(i));  
                 std::cout << '\t' << name << " : " << value << '\n';
               }
+            if (it->loc.begin.line > 0)
+              std::cout << "At line: " << it->loc.begin.line << " column: " << it->loc.begin.column  << '\n';
           }
 
         std::cin.get();

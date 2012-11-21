@@ -58,11 +58,13 @@ class IFileSystem
 typedef std::vector<XSSType>            type_list;
 typedef std::map<str, XSSType>          type_map;
 typedef std::map<str, XSSContext>       context_map;
-typedef std::map<str, Idiom>            idiom_list;
+typedef std::vector<Idiom>              idiom_list;
+typedef std::map<str, Idiom>            idiom_map;
 typedef std::vector<XSSObject>          instance_list; //td: !!! instances
 typedef std::map<str, XSSObject>        instance_map;
 typedef std::map<fs::path, document>    document_map;
 typedef std::map<fs::path, Application> application_list;
+typedef std::vector<IdiomInstance>      idiom_instance_list;
 
 //misc
 enum APPLICATION_ITEM
@@ -77,7 +79,12 @@ enum APPLICATION_ITEM
 class idiom_instance : public xss_object
   {
     public:
-    private:
+      idiom_instance();
+      idiom_instance(const idiom_instance& other);
+    public:
+      void add_instance(XSSObject instance);
+      void add_class(XSSType type);
+    public:
       DynamicArray instances_;
       DynamicArray types_;
   };
@@ -93,17 +100,19 @@ class idiom
       void          add_import(XSSType import);
       XSSType       import(const str& id);
       str           get_namespace();
-      IdiomInstance instance();
-      IdiomInstance create_instance();
       void          set_path(const fs::path& path);
       fs::path&     path(); 
+      fs::path&     src_file();
+      void          src_file(fs::path& value);
+      xs_container& src();
     private:
       str           id_;
       type_list     types_;
       type_list     imports_;
       str           namespace_;
-      IdiomInstance instance_;
       fs::path      path_;
+      fs::path      src_file_;
+      xs_container  src_;
   };
 
 class application : public boost::enable_shared_from_this<application>
@@ -113,55 +122,61 @@ class application : public boost::enable_shared_from_this<application>
       application(const application& other);
       application(fs::path path);
     public:
-      void              entry_point(fs::path ep);
-      void              output_file(const str& ep);
-      void              compiler_options(DataEntity options);
-      void              set_context(XSSContext ctx);
-      code_context&     exec_context();
-      XSSContext        context();
-      fs::path          path();
-      document*         create_document(fs::path fname, XSSContext ctx);
-      document*         get_document(fs::path path);
-      error_list&       errors();
-      void              add_error(const str& desc, param_list* info, file_location& loc);
-      void              visit_errors(const fs::path& fname, error_visitor* visitor);
-      void              clear_file_errors(const fs::path& fname);
-      APPLICATION_ITEM  app_item(const str& fname);
-      void              app_path(const fs::path& fname);
-      fs::path          app_path();
-      void              build();
-      void              project_object(XSSObject project);
-      void              file_system(FileSystem fs);
-      void              output_path(const fs::path& fname);
-      fs::path          output_path();
-      void              add_instance(XSSObject instance);
-      void              add_class(XSSType result);
-      void              add_idiom(const str& id, Idiom it);
+      void                  entry_point(fs::path ep);
+      void                  output_file(const str& ep);
+      void                  compiler_options(DataEntity options);
+      void                  set_context(XSSContext ctx);
+      code_context&         exec_context();
+      XSSContext            context();
+      fs::path              path();
+      document*             create_document(fs::path fname, XSSContext ctx);
+      document*             get_document(fs::path path);
+      error_list&           errors();
+      void                  add_error(const str& desc, param_list* info, file_location& loc);
+      void                  visit_errors(const fs::path& fname, error_visitor* visitor);
+      void                  clear_file_errors(const fs::path& fname);
+      APPLICATION_ITEM      app_item(const str& fname);
+      void                  app_path(const fs::path& fname);
+      fs::path              app_path();
+      void                  build();
+      void                  project_object(XSSObject project);
+      void                  file_system(FileSystem fs);
+      void                  output_path(const fs::path& fname);
+      fs::path              output_path();
+      void                  add_instance(XSSObject instance);
+      void                  add_class(XSSType result);
+      void                  add_idiom(const str& id, Idiom it);
+      void                  inject(const str& evname, param_list args);
+      idiom_list&           idioms();
+      idiom_instance_list&  idiom_instances();
+      instance_list&        instances();
+      type_list&            types();
     public:
       XSSObject root(); 
       void      set_root(XSSObject r); 
       str       name(); 
       void      set_name(const str& name); 
     private:
-      fs::path     renderer_;
-      fs::path     output_;
-      fs::path     output_path_;
-      XSSContext   ctx_;
-      code_context code_ctx_;
-      XSSObject    app_; 
-      fs::path     path_;
-      fs::path     app_path_;
-      XSSObject    project_;
-      FileSystem   fs_;
-      str          app_name_; 
+      fs::path            renderer_;
+      fs::path            output_;
+      fs::path            output_path_;
+      XSSContext          ctx_;
+      code_context        code_ctx_;
+      XSSObject           app_; 
+      fs::path            path_;
+      fs::path            app_path_;
+      XSSObject           project_;
+      FileSystem          fs_;
+      str                 app_name_; 
+      document_map        documents_;
+      error_list          errors_;
+      instance_list       instances_;
+      type_list           user_types_;
+      idiom_list          idioms_;
+      idiom_instance_list idiom_instances_;
 
-      document_map  documents_;
-      error_list    errors_;
-      instance_list instances_;
-      type_list     user_types_;
-      instance_map  idioms_;
-
-      str random_id(XSSObject instance);
+      str           random_id(XSSObject instance);
+      IdiomInstance get_idiom(XSSType type);
     public:
       //glue
       DynamicArray __instances();
@@ -308,7 +323,7 @@ class object_model
     private:
       LanguageFactory languages_;
       FileSystem      fs_;
-      idiom_list      idioms_;
+      idiom_map       idioms_;
 	    bool			      changed_;	
 
       void            assure_id(DataEntity de, om_context& octx);
@@ -336,6 +351,7 @@ class object_model
       XSSObject       read_object(DataEntity de, om_context& ctx, XSSObject instance = XSSObject(), XSSType type = XSSType());
       XSSObject       read_object_instance(DataEntity de, XSSObject parent, om_context& ctx);
       XSSExpression   read_array(DataEntity de, XSSType array_type, om_context& ctx);
+      XSSObject       read_raw(DataEntity de, om_context& ctx);
 
       void read_attribute(const str& attr, const str& value, om_context& ctx);
       void read_child(DataEntity de, om_context& ctx);
@@ -347,9 +363,14 @@ class object_model
       void r_idiom_namespace(const str& attr, const str& value, const variant& this_, om_context& ctx);
       void r_idiom_code(const str& attr, const str& value, const variant& this_, om_context& ctx);
       void r_invalid_idiom_attr(const str& attr, const str& value, const variant& this_, om_context& ctx);
+      void r_invalid_dependency_attr(const str& attr, const str& value, const variant& this_, om_context& ctx);
       void r_idiom_enum(DataEntity de, const variant& this_, om_context& ctx);
       void r_idiom_import(DataEntity de, const variant& this_, om_context& ctx);
       void r_idiom_type(DataEntity de, const variant& this_, om_context& ctx);
+      void r_idiom_dependencies(DataEntity de, const variant& this_, om_context& ctx);
+      void r_idiom_dependency(DataEntity de, const variant& this_, om_context& ctx);
+      void r_dependency_file(DataEntity de, const variant& this_, om_context& ctx);
+      void r_invalid_dependency_child(DataEntity de, const variant& this_, om_context& ctx);
       void r_invalid_idiom_child(DataEntity de, const variant& this_, om_context& ctx);
 
       void r_object_attr(const str& attr, const str& value, const variant& this_, om_context& ctx);
@@ -357,6 +378,7 @@ class object_model
       void r_object_method(DataEntity de, const variant& this_, om_context& ctx);
       void r_object_event(DataEntity de, const variant& this_, om_context& ctx);
       void r_object_instance(DataEntity de, const variant& this_, om_context& ctx);
+      void r_raw_child(DataEntity de, const variant& this_, om_context& ctx);
 
       void r_enum_item(DataEntity de, const variant& this_, om_context& ctx);
       void r_invalid_enum_item(DataEntity de, const variant& this_, om_context& ctx);
@@ -471,7 +493,17 @@ struct application_schema : object_schema<application>
       }
   };
 
-register_complete_type(application,  application_schema);
+struct idiom_instance_schema : xss_object_schema<idiom_instance>
+  {
+    virtual void declare()
+      {
+        readonly_property<DynamicArray>("instances",   &idiom_instance::instances_);
+        readonly_property<DynamicArray>("user_types",  &idiom_instance::types_);
+      }
+  };
+
+register_complete_type(application,    application_schema);
+register_complete_type(idiom_instance, idiom_instance_schema);
 
 }
 #endif
