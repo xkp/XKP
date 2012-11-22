@@ -13,7 +13,6 @@
   <PropertyGroup>
     <ExcessPath Condition=" '$(ExcessPath)' == '' ">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\XKP\ExcessIDE@InstallPath)\Extensions\Application\Excess</ExcessPath>
   </PropertyGroup>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>production</OutputPath>
@@ -173,6 +172,6 @@
   </ItemGroup>
   <Import Project="$(ExcessPath)\Excess.targets" />
   <PropertyGroup>
-    <PostBuildEvent>chrome --allow-file-access-from-files $(TargetPath)</PostBuildEvent>
+    <PostBuildEvent>"$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
