@@ -651,17 +651,17 @@ bool xss_context::add_instance(XSSObject instance)
     return false;
   }
 
-void xss_context::notify(notification ntfy, bool bottom_up)
+void xss_context::notify(Notification ntfy, bool bottom_up)
   {
     // save current context's notification always?
     if (!bottom_up)
-      notifications_.insert(notified_pair(ntfy.id, ntfy));
+      notifications_.insert(notified_pair(ntfy->id, ntfy));
 
-    switch(ntfy.id)
+    switch(ntfy->id)
       {
         case NOTID_DECL_VAR:
           {
-            XSSStatement stmt = variant_cast<XSSStatement>(ntfy.data, XSSStatement());
+            XSSStatement stmt = variant_cast<XSSStatement>(ntfy->data, XSSStatement());
             statement_variable* var_stmt = dynamic_cast<statement_variable*>(stmt.get());
             assert(var_stmt);
             // td: !!! what?
@@ -669,7 +669,7 @@ void xss_context::notify(notification ntfy, bool bottom_up)
           }
         case NOTID_ITER_FOR:
           {
-            XSSStatement stmt = variant_cast<XSSStatement>(ntfy.data, XSSStatement());
+            XSSStatement stmt = variant_cast<XSSStatement>(ntfy->data, XSSStatement());
             statement_foreach* iter_for_stmt = dynamic_cast<statement_foreach*>(stmt.get());
             assert(iter_for_stmt);
             // td: !!! what?
@@ -677,33 +677,82 @@ void xss_context::notify(notification ntfy, bool bottom_up)
           }
         case NOTID_ASSIGN_EXPR:
           {
-            XSSExpression expr = variant_cast<XSSExpression>(ntfy.data, XSSExpression());
+            XSSExpression expr = variant_cast<XSSExpression>(ntfy->data, XSSExpression());
             assert(expr);
             // td: !!! what?
 
+            // bottom_up mechanism
             XSSContext pctx = parent_.lock();
             if (pctx->identity() == CTXID_CODE)
-              pctx->notify(ntfy, true);
+              {
+                pctx->notify(ntfy, true);
+              }
+            else
+            if (bottom_up)
+              {
+                notifications_.insert(notified_pair(ntfy->id, ntfy));
+              }
 
             break;
           }
         case NOTID_RETURN_EXPR:
           {
-            XSSExpression expr = variant_cast<XSSExpression>(ntfy.data, XSSExpression());
+            XSSExpression expr = variant_cast<XSSExpression>(ntfy->data, XSSExpression());
             assert(expr);
             // td: !!! what?
+
+            // bottom_up mechanism
+            XSSContext pctx = parent_.lock();
+            if (pctx->identity() == CTXID_CODE)
+              {
+                pctx->notify(ntfy, true);
+              }
+            else
+            if (bottom_up)
+              {
+                notifications_.insert(notified_pair(ntfy->id, ntfy));
+              }
+
             break;
           }
         case NOTID_RETURN_TYPE:
           {
-            XSSObject obj = variant_cast<XSSObject>(ntfy.data, XSSObject());
+            XSSObject obj = variant_cast<XSSObject>(ntfy->data, XSSObject());
             xss_method* mthd = dynamic_cast<xss_method*>(obj.get());
             assert(mthd);
             // td: !!! what?
             break;
           }
+        case NOTID_USING_TYPE:
+          {
+            if (ntfy->data.is<XSSStatement>())
+              {
+                XSSStatement stmt = variant_cast<XSSStatement>(ntfy->data, XSSStatement());
+                statement_variable* var_stmt = dynamic_cast<statement_variable*>(stmt.get());
+                assert(var_stmt);
+              }
+            else
+            if (ntfy->data.is<XSSArguments>())
+              {
+                XSSArguments args = variant_cast<XSSArguments>(ntfy->data, XSSArguments());
+                assert(args);
+              }
+            else
+            if (true)
+              {
+              }
+
+            if (identity_ != CTXID_APPLICATION)
+              {
+                XSSContext pctx = parent_.lock();
+                pctx->notify(ntfy, true);
+              }
+            break;
+          }
+
         case NOTID_DECL_PROP:
         case NOTID_DECL_METHOD:
+        case NOTID_DECL_EVENT:
         case NOTID_DECL_CLASS:
         case NOTID_DECL_INSTANCE:
         case NOTID_ASSIGN_PROP:
@@ -3325,8 +3374,8 @@ void xss_method::bind(XSSContext ctx)
         else if (rt && (return_type_ != rt))
 		      ctx->error(SMethodReturnTypeMismatch, null, code_->begin(), code_->end());
 
-        XSSObject obj = XSSObject(shared_from_this()); //td: check this, is that notification correct??
-        notification ntfy(NOTID_RETURN_TYPE, obj);
+        XSSObject obj = XSSObject(shared_from_this());
+        Notification ntfy = Notification(new notification(NOTID_RETURN_TYPE, obj));
         ctx->notify(ntfy);
       }
   }

@@ -828,6 +828,7 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
     XSSContext global = lang->create_context();
     global->set_path(base_path);
     global->set_language(lang);
+    global->identity(CTXID_APPLICATION, result);
 
     ErrorHandler eh(new om_error_handler(result));
     global->errors(eh);
