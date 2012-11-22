@@ -53,10 +53,14 @@ else
 
     if (has_field)
     {
-        out()
-        {
-            private <xss:e v="type_name"/> __<xss:e v="prop_name"/> = <xss:e v="compiler.expression_to_string(prop.value)"/>;
-        }
+		string value_str = "";
+		if (prop.value)
+			value_str = " = " + compiler.expression_to_string(prop.value);
+
+		out()
+		{
+			private <xss:e v="type_name"/> __<xss:e v="prop_name"/> <xss:e v="value_str"/>;
+		}
     }
 
     out()

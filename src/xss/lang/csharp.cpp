@@ -6,6 +6,8 @@ using namespace xkp;
 XSSContext cs_lang::create_context()
   {
 	  XSSContext result = typed_lang::create_context();
+	  XSSType var_type = result->get_type("var");
+	  var_type->set_output_id("object");
     
 	  //td: generalize
     XSSType exception_type(new xss_type("Exception"));

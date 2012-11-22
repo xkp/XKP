@@ -1109,8 +1109,6 @@ void xss_code::add(XSSStatement st)
 
 void xss_code::bind(XSSContext ctx)
   {
-    assert(!ctx_->parent()); //not sure of the semantics of rebinding
-
     ctx_->set_parent(ctx);
     ctx_->identity(CTXID_CODE, variant()); //td: !!! investigate when the code is needed by the context, this is increasing coupling
 

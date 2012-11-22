@@ -504,20 +504,25 @@ bool typed_lang::render_variable(IStatementVar* info, XSSContext ctx, std::ostri
     result << '\n';
 
     XSSType type = info->type();
+    str     type_name = info->type_name();
     if (type)
       {
-        if (!render_type_name(type, ctx, result))
+        std::ostringstream osst;
+        if (!render_type_name(type, ctx, osst))
           return false; 
-      }
-    else
-      result << info->type_name();
 
-    result << " " << info->id();
+        type_name = osst.str();
+      }
+
+    result << type_name << " " << info->id();
 
     XSSExpression value = info->value();
     if (value)
       {
         result << " = ";
+        if (info->needs_cast())
+          result << "(" << type_name << ")";
+
         if (!render_expression(value, ctx, result))
           return false;
       }

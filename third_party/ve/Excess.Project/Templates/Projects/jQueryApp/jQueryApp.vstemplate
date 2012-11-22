@@ -1,7 +1,7 @@
 <VSTemplate Version="2.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
   <TemplateData>
-    <Name>Excess jQuery UI Web Application</Name>
-    <Description>A project for creating a jquery ui xs web application</Description>
+    <Name>jQuery Application</Name>
+    <Description>A project for creating a jquery-like applications</Description>
     <Icon>jqueryIcon.ico</Icon>
     <ProjectType>Excess</ProjectType>
     <SortOrder>50</SortOrder>

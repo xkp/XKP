@@ -1,7 +1,7 @@
 <VSTemplate Version="2.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
   <TemplateData>
-    <Name>Excess Performance 3D Web Application</Name>
-    <Description>A project for creating a performance 3d xs web application</Description>
+    <Name>WebGL Application</Name>
+    <Description>A project for creating a accelerated web 3d applications, powered by threejs</Description>
     <Icon>webglIcon.ico</Icon>
     <ProjectType>Excess</ProjectType>
     <SortOrder>50</SortOrder>

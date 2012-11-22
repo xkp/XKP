@@ -1948,7 +1948,10 @@ void xss_compiler::render_expression(XSSExpression expr)
 
 str xss_compiler::expression_to_string(XSSExpression expr)
   {
-    Language           lang = ctx_->get_language();
+    if (!expr)
+		return str();
+
+	Language           lang = ctx_->get_language();
     std::ostringstream result;
     lang->render_expression(expr, ctx_, result);
     return result.str();

@@ -11,9 +11,8 @@
     <TargetPlatform>v4</TargetPlatform>
   </PropertyGroup>
   <PropertyGroup>
-    <!-- Set the IronPythonPath property by proving in different locations where Iron Python could be installed -->
-    <!-- Regular LocalAppData -->
-    <ExcessPath Condition=" '$(ExcessPath)' == '' ">$(EXCESS_INSTALL_PATH)\Extensions\Application\Excess</ExcessPath>
+    <ExcessPath Condition=" '$(ExcessPath)' == '' ">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\XKP\ExcessIDE@InstallPath)\Extensions\Application\Excess</ExcessPath>
+  </PropertyGroup>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>

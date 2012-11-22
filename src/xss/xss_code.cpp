@@ -135,11 +135,14 @@ void statement_for::bind(XSSContext ctx)
         for_code_->context()->register_symbol(RESOLVE_VARIABLE, id_, type_);
       }
 
+	XSSContext code_ctx = for_code_->context();
+	code_ctx->set_parent(ctx);
+
     if (cond_expr_)
-      cond_expr_->bind(for_code_->context());
+      cond_expr_->bind(code_ctx);
 
     if (iter_expr_)
-      iter_expr_->bind(for_code_->context());
+      iter_expr_->bind(code_ctx);
 
     for_code_->bind(ctx);
   }

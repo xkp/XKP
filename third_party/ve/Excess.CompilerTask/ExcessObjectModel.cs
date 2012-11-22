@@ -19,7 +19,8 @@ namespace Excess.CompilerTasks
             model_ = new ExcessModel();
 
             string xssIdiomsPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\XKP\ExcessIDE", @"XSSIdioms", @"");
-            model_.addSearchPath(xssIdiomsPath);
+            if (xssIdiomsPath != null)
+                model_.addSearchPath(xssIdiomsPath);
         }
 
         public ExcessModel Model
