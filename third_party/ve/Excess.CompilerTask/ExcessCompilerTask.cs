@@ -164,7 +164,7 @@ namespace Excess.CompilerTasks
                 string filePath = Path.Combine(projectPath, MainFile);
                 XAttribute version = XElement.Load(filePath).Attribute("version");
                 bool old_version = version != null && version.Value == "0.9.4";
-                string installPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\XKP\ExcessIDE", @"InstallPath", @"");
+                string installPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Excess", @"InstallPath", @"");
 
                 if (old_version)
                 {
