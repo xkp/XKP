@@ -223,6 +223,8 @@ namespace Excess.CompilerTasks
                     // Instantiate a new FileLogger to generate build log
                     myLogger logger = new myLogger(Log);
 
+                    // td: change location of logs to Personal Folders location
+
                     // Set the logfile parameter to indicate the log destination
                     logger.Parameters = @"logfile=" + installPath + @"logs\build.log";
 
