@@ -1,0 +1,52 @@
+<xss:parameter id="it"/>
+<xss:parameter id="path"/>
+
+<xss:code>
+    string id = it.output_id;
+    if (path)
+        id = path + "." + id;
+    
+    out()
+    {
+        <xss:e v="id"/> = <xss:e v="compiler.instantiate(it)"/>;
+    }
+
+    //compiler.xss("../common-js/instance.xss", it, path = path, var_value = id);
+
+    string creator_class = it.creator_class;
+    if (!creator_class)
+        compiler.error("Spawner requires creator_class");
+        
+    var type = compiler.get_type(creator_class);
+    if (!type)
+        compiler.error("Unknown spawner type", type=creator_class);
+    
+    out()
+    {
+        <xss:e v="id"/>.creator = function()
+        {
+            return <xss:e v="compiler.instantiate(type)"/>;
+        }
+    }
+    
+    if (it.parent.id != "application")
+    {
+        string visual_parent = it.parent.output_id;
+        
+        if (compiler.is_type(it.parent))
+            visual_parent = "this";
+
+        out()
+        {
+            <xss:e v="id"/>.parent = <xss:e v="visual_parent"/>;
+        }
+    }
+
+    if (it.auto_start)
+    {
+        out()
+        {
+            <xss:e v="id"/>.start();
+        }
+    }
+</xss:code>

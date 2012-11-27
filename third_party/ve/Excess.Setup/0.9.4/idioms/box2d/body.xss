@@ -1,0 +1,264 @@
+<xss:parameter id="it"/>
+<xss:parameter id="world"/>
+
+<xss:class>    
+    property visual_parent : string;
+	
+    method basic_properties()
+    {			
+		//fixture properties
+        var density = 1.0;
+        if (it.density)
+            density = it.density;
+        else if (world)
+            density = world.density;
+         
+        var friction = 0.5;
+        if (it.friction)
+            friction = it.friction;
+        else if (world)
+            friction = world.friction;
+
+        var restitution = 0.2; 
+        if (it.restitution)
+            restitution = it.restitution;
+        else if (world)
+            restitution = world.restitution;
+		
+		var angular_damping;		
+		if (it.angular_damping)
+            angular_damping = it.angular_damping;
+		else if (world)
+			angular_damping = world.angular_damping;
+			
+		var linear_damping;
+		if (it.linear_damping)
+            linear_damping = it.linear_damping;	
+		else if (world)
+			linear_damping = world.linear_damping;
+
+        //body type
+        var body_type = "";
+        if (!it.body_type)
+            compiler.error("Physics object must have a body type");
+
+        if (it.body_type == "static")
+            body_type = "b2Body.b2_staticBody";
+        else if (it.body_type == "kinematic")
+            body_type = "b2Body.b2_kinematicBody";
+        else if (it.body_type == "dynamic")
+            body_type = "b2Body.b2_dynamicBody";
+        else
+            compiler.error("Invalid body_type", object = it.id, body_type = it.body_type);
+
+        //output it all
+		if(angular_damping)
+		{
+			out(){bodyDef.angularDamping = <xss:e v="angular_damping"/>;}
+		}
+		if(linear_damping)
+		{
+			out(){bodyDef.linearDamping = <xss:e v="linear_damping"/>;}
+		}		
+        out()
+        {
+             fixDef.density = <xss:e v="density"/>;
+             fixDef.friction = <xss:e v="friction"/>;
+             fixDef.restitution = <xss:e v="restitution"/>;
+			 
+             bodyDef.type = <xss:e v="body_type"/>;
+        }		
+    }
+
+    method shape()
+    {
+        if (!it.shape)
+            compiler.error("Invalid, bodies must have a shape", object = it.id);
+
+        if (it.shape == "rect")
+        {
+            out()
+            {
+                fixDef.shape = new b2PolygonShape;
+            }
+
+            if (it.width != null && it.height != null)
+            {
+                out()
+                {
+                    fixDef.shape.SetAsBox(<xss:e v="it.width"/>/g_world_scale, <xss:e v="it.height"/>/g_world_scale);
+                }
+            }
+            else if (visual_parent)
+            {
+                out()
+                {
+                    fixDef.shape.SetAsBox(cmp.w/(2*g_world_scale), cmp.h/(2*g_world_scale));
+                }
+            }
+            else
+                compiler.error("Rect shapes mush have [width, height] or a visual parent");
+        }
+        else if (it.shape == "circle")
+        {
+            if (it.radius != null)
+            {
+                out()
+                {
+                    fixDef.shape = new b2CircleShape(<xss:e v="it.radius"/>/g_world_scale);
+                }
+            }
+            else if (visual_parent)
+            {
+                out()
+                {
+                    fixDef.shape = new b2CircleShape(Math.min(cmp.w, cmp.h)/(2*g_world_scale));
+                }
+            }
+            else
+            {
+                compiler.error("Circle shapes mush have a radius or visual parent");
+            }
+        }
+        else
+            compiler.error("Invalid shape", object = it.id, shape = it.shape);
+            
+        bool isSensor = it.sensor;
+        if (isSensor == null)
+            isSensor = false;
+            
+        out()
+        {
+            fixDef.isSensor = <xss:e v="isSensor"/>;
+        }
+    }
+
+    method position()
+    {
+        if (visual_parent)
+        {
+            out()
+            {
+                bodyDef.position.Set((cmp.x + cmp.w/2)/g_world_scale, (cmp.y + cmp.h/2)/g_world_scale);
+            }
+        }
+        else
+        {
+            var x  = it.x;
+            var y  = it.y;
+			var w  = 0;
+			var h  = 0;
+			
+			if(it.radius)
+			{
+				w  = it.radius * 2;
+				h  = it.radius * 2;				
+			}
+			else
+			{
+				w  = it.width;
+				h  = it.height;
+			}
+
+            if (!x) x = 0;
+            if (!y) y = 0;
+
+            out()
+            {
+                bodyDef.position.Set((<xss:e v="x"/> + <xss:e v="w"/>/2)/g_world_scale, (<xss:e v="y"/> + <xss:e v="h"/>/2)/g_world_scale);
+            }
+        }
+    }
+
+    private method foreign_parent(obj)
+    {
+        var foreing = obj.parent;
+        if (foreing)
+        {
+            if (foreing.has_property("x") &&
+                foreing.has_property("y") &&
+                foreing.has_property("width") &&
+                foreing.has_property("height"))
+            {
+                return foreing;
+            }
+
+        }         
+        return null;
+    }
+
+    on render()
+    {
+        world  = world;
+        var vp = foreign_parent(it);
+        
+        if (vp)
+        {
+            if (compiler.is_type(vp))
+                visual_parent = "this";
+            else
+                visual_parent = vp.output_id;
+        }
+        else 
+            visual_parent = null;
+            
+        if (visual_parent)
+        {
+            //must wrap this in a function so the box 2d objects are created on resize
+            out()
+            {
+				<xss:e v="visual_parent"/>.events.addListener('resized', function(cmp)
+                <xss:open_brace/>
+                    if (cmp.physics)
+                        g_world.DestroyBody(cmp.physics);
+            }
+        }
+        
+        basic_properties();
+        shape();
+        position();
+
+        //add the body into the world
+        out()
+        {
+            current_body = g_world.CreateBody(bodyDef);			
+            current_body.CreateFixture(fixDef);
+        }
+		
+		if(it.mouse_joint)
+			out()
+			{
+			current_body.mouse_joint = <xss:e v="it.mouse_joint"/>;
+			}
+			
+        if (visual_parent)
+        {
+            out()
+            {
+                cmp.physics = current_body;			
+                cmp.events.addListener('moved', update_body_position);
+                
+                current_body.host = cmp;
+                <xss:close_brace/>
+				);
+                
+                if (<xss:e v="visual_parent"/>.w > 0 && <xss:e v="visual_parent"/>.h > 0)
+                {
+					<xss:e v="visual_parent"/>.events.dispatch("resized", [<xss:e v="visual_parent"/>]);          
+                }
+                
+                <xss:e v="visual_parent"/>.RemoveFromWorld = function(keep_visual) 
+                {
+                    g_world.DestroyBody(<xss:e v="visual_parent"/>.physics);
+                    if (!keep_visual)
+                    {
+                        <xss:e v="visual_parent"/>.parent.removeComponent(<xss:e v="visual_parent"/>);
+                    }
+                }
+                
+            }
+            
+        }
+    }
+
+</xss:class>
