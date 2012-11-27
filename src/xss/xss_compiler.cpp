@@ -6,6 +6,7 @@
 #include "xss/language.h"
 #include "xss/dsl_out.h"
 #include "xss/dsl/native.h"
+#include "xss/xss_expression.h"
 
 //#include "xss/dsl/vm_shell.h"
 //#include "xss/lang/debug.h"
@@ -86,6 +87,9 @@ const str SDependencyNeedsHRef("class dependencies expect a 'href' tag");
 const str SBuildProjectExpectsProject("compiler.build expects project as first argument");
 const str SBuildProjectExpectsNamedParameters("compiler.build expects named arguments after project path");
 const str SSnafu("Something went wrong");
+const str SInvalidScope("compiler.compile_expression: invalid scope item");
+const str SPropertyCannotBeSet("compiler.property_set: cannot render property assignment");
+const str SPropertyCannotBeRead("compiler.property_get: cannot render property");
 
 //dependency_list
 void dependency_list::add(XSSObject dep)
@@ -1003,20 +1007,24 @@ void xss_compiler::xss(const param_list params)
     catch(xss_error xsse)
 	    {
 		    error_info = xsse.data; 
+		    error_info.add("file", file.string()); 
 	    }
     catch(xs_error xse)
 	    {
 		    error_info = xse.data; 
+		    error_info.add("file", file.string()); 
 	    }
     catch(runtime_error rte)
 	    {
 		    error_info = rte.data; 
-	    }
-    catch(...)
-	    {
-		    error_info.add("desc", SSnafu); 
 		    error_info.add("file", file.string()); 
 	    }
+    //td: !!! do this for release only
+    //catch(...)
+	   // {
+		  //  error_info.add("desc", SSnafu); 
+		  //  error_info.add("file", file.string()); 
+	   // }
 
     if (!success)
 	    {
@@ -1186,11 +1194,11 @@ bool xss_compiler::parse_expression(variant v)
 		return compiler.compile_expression(s, expr);
 	}
 
-variant xss_compiler::compile_expression(const str& expr)
-  {
-    assert(false); //td: 
-    return variant(); 
-    //0.9.5
+//0.9.5
+//variant xss_compiler::compile_expression(const str& expr)
+//  {
+//    assert(false); //td: 
+//    return variant(); 
     //XSSContext ctx  = current_context();
     //Language   lang = ctx->get_language();
 
@@ -1207,7 +1215,7 @@ variant xss_compiler::compile_expression(const str& expr)
     //  }
 
     //return lang->compile_expression(result, ctx);
-  }
+  //}
 
 str xss_compiler::render_expr(const expression& expr, XSSObject this_)
   {
@@ -1477,24 +1485,40 @@ XSSType xss_compiler::type_of(variant v)
 
 str xss_compiler::property_set(XSSProperty prop, const str& path, const str& value)
   {
-    assert(false);
-    return str();
-    //0.9.5
-    //XSSContext ctx  = current_context();
-    //Language   lang = ctx->get_language();
+    XSSContext ctx  = current_context();
+    Language   lang = ctx->get_language();
 
-    //return lang->property_set(prop, path, value, ctx);
+    std::ostringstream result;
+    if (!lang->render_set(prop, path, value, result))
+      {
+				param_list error;
+				error.add("id", SProjectError);
+				error.add("desc", SPropertyCannotBeSet);
+				error.add("prop", prop->id());
+
+				xss_throw(error);
+      }
+
+    return result.str();
   }
 
 str xss_compiler::property_get(XSSProperty prop, const str& path)
   {
-    assert(false);
-    return str();
-    //0.9.5
-    //XSSContext ctx  = current_context();
-    //Language   lang = ctx->get_language();
+    XSSContext ctx  = current_context();
+    Language   lang = ctx->get_language();
 
-    //return lang->property_get(prop, path, ctx);
+    std::ostringstream result;
+    if (!lang->render_get(prop, path, result))
+      {
+				param_list error;
+				error.add("id", SProjectError);
+				error.add("desc", SPropertyCannotBeRead);
+				error.add("prop", prop->id());
+
+				xss_throw(error);
+      }
+
+    return result.str();
   }
 
 str xss_compiler::render_value(variant value)
@@ -1525,77 +1549,95 @@ str xss_compiler::render_value(variant value)
 //    if (mod)
 //      mod->used();
 //  }
-//
-//XSSObject xss_compiler::analyze_expression(const param_list params)
-//  {
-//    //get expression
-//    str expr = variant_cast<str>(params.get(0), str());
-//    if (expr.empty())
-//      {
-//        param_list error;
-//        error.add("id", SCompiler);
-//        error.add("desc", SAnalyzeExpectsExpression);
-//        xss_throw(error);
-//      }
-//
-//    XSSObject result(new xss_object);
-//
-//    xs_utils   xs;
-//    expression e;
-//    if (!xs.compile_expression(expr, e))
-//      {
-//        result->add_attribute("error", SCannotCompileExpression);
-//      }
-//    else
-//      {
-//        XSSObject this_;
-//
-//        //process rest of the params
-//        for(int i = 0; i < params.size(); i++)
-//          {
-//            str pname = params.get_name(i);
-//            if (pname == "this_")
-//              {
-//                this_ = variant_cast<XSSObject>(params.get(i), XSSObject());
-//              }
-//          }
-//
-//        XSSContext ctx    = current_context();
-//        XSSObject  this__ = variant_cast<XSSObject>(this_, XSSObject());
-//        if (this__)
-//          {
-//            ctx = XSSContext(new xss_context(ctx));
-//            ctx->set_this(this__);
-//          }
-//
-//        expression_analizer ea;
-//        ea.analyze(e, ctx);
-//
-//        result->add_attribute("is_property", ea.is_property());
-//        result->add_attribute("is_identifier", ea.is_identifier());
-//        result->add_attribute("property", ea.get_property());
-//        result->add_attribute("property_name", ea.property_name());
-//        result->add_attribute("identifier", ea.get_identifier());
-//        result->add_attribute("this_property", ea.this_property());
-//        result->add_attribute("first", ea.get_first());
-//        result->add_attribute("first_string", ea.first_string());
-//        result->add_attribute("first_property", ea.first_property());
-//        result->add_attribute("is_method", ea.is_call());
-//        result->add_attribute("methd", ea.method());
-//        result->add_attribute("method_name", ea.method_name());
-//
-//        Language lang = ctx->get_language();
-//
-//        str path_str;
-//        expression& path_expr = ea.get_path();
-//        if (!path_expr.empty())
-//          path_str = lang->render_expression(path_expr, ctx);
-//
-//        result->add_attribute("path", path_str);
-//      }
-//
-//    return result;
-//  }
+
+XSSExpression xss_compiler::compile_expression(const param_list params)
+  {
+    if (params.empty())
+      return XSSExpression();
+
+    //get expression
+    variant       expr_value = params.get(0);
+    XSSExpression expr;
+    if (expr_value.is<XSSExpression>())
+      {
+        expr = expr_value;
+      }
+    else if (expr_value.is<str>())
+      {
+        str exprstr = variant_cast<str>(params.get(0), str());
+        if (exprstr.empty())
+          {
+            param_list error;
+            error.add("id", SCompiler);
+            error.add("desc", SAnalyzeExpectsExpression);
+            xss_throw(error);
+          }
+
+        expr = xss_expression_utils::compile_expression(exprstr);
+      }
+    else
+      {
+        expr = xss_expression_utils::constant_expression(expr_value);
+      }
+    
+    //process rest of the params
+    XSSContext ctx = app_->context();
+    for(int i = 0; i < params.size(); i++)
+      {
+        str pname = params.get_name(i);
+        if (pname == "scope")
+          {
+            //we ought to create the context for each element
+            //instances and types, atm
+            XSSObject instance;
+            XSSType   type;
+
+            variant si = params.get(i);
+            if (si.is<XSSObject>())
+              {
+                instance = si;
+              }
+            else if (si.is<XSSType>())
+              {
+                type = si;
+              }
+            else
+              {
+                param_list error;
+                error.add("id", SCompiler);
+                error.add("desc", SInvalidScope);
+                xss_throw(error);
+              }
+
+            if (instance)
+              ctx = XSSContext(new xss_context(CTXID_INSTANCE, instance, ctx));
+            else
+              ctx = XSSContext(new xss_context(CTXID_TYPE, type, ctx));
+          }
+      }
+
+    expr->bind(ctx);
+    return expr;
+  }
+
+XSSObject xss_compiler::get_idiom(variant source)
+  {
+    XSSType type;
+    if (source.is<XSSObject>())
+      {
+        XSSObject obj = source;
+        type = obj->type();
+      }
+    else if (source.is<XSSType>())
+      {
+        type = source;
+      }
+
+    if (!type)
+      return XSSObject();
+
+    return app_->get_idiom(type);
+  }
 
 XSSProperty xss_compiler::add_object_property(const param_list params)
   {
@@ -1752,8 +1794,26 @@ void process_instantiate_params(const param_list params, int idx, instantiate_pa
 
 str xss_compiler::instantiate(const param_list params)
   {
-    assert(false);
-    return str();
+    variant   v    = params.get(0);
+    XSSType   type = variant_cast<XSSType>(v, XSSType());
+    XSSObject instance;
+
+    if (!type)
+      {
+        instance = variant_cast<XSSObject>(v, XSSObject());
+        if (instance)
+          {
+            type = instance->type();
+          }
+      }
+
+    XSSContext ctx  = current_context();
+    Language   lang = ctx->get_language();
+    
+    std::ostringstream result;
+    XSSArguments args(new xss_arguments); //td: !!! grab custom arguments
+    lang->render_instantiation(type, args, ctx, result);
+    return result.str();
     //0.9.5
     //variant   v    = params.get(0);
     //XSSType   type = variant_cast<XSSType>(v, XSSType());
@@ -1854,9 +1914,6 @@ void xss_compiler::register_symbol(const str& symbol, variant value)
 
 void xss_compiler::build(const fs::path& entry, const fs::path& output)
   {
-    //setup
-    ctx_->register_dsl("out", DslLinker(new out_linker(shared_from_this())));
-    
     Language lang = ctx_->get_language();
     lang->init_compile_context(ctx_);
 
@@ -1955,6 +2012,11 @@ str xss_compiler::expression_to_string(XSSExpression expr)
     std::ostringstream result;
     lang->render_expression(expr, ctx_, result);
     return result.str();
+  }
+
+void xss_compiler::set_application(Application app)
+  {
+    app_ = app;
   }
 
 //0.9.5

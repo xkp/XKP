@@ -1,6 +1,7 @@
 
 #include <schema.h>
 #include <xs/operators.h>
+#include <xs/array.h>
 #include <dynamic_objects.h>
 
 using namespace xkp;
@@ -407,6 +408,20 @@ struct str_plus : operator_exec
       }
   };
 
+struct index : operator_exec
+  {
+    virtual variant exec(variant& arg1, variant& arg2)
+      {
+				DynamicArray arr = variant_cast<DynamicArray>(arg1, DynamicArray());
+        int          idx = variant_cast<int>(arg2, -1);
+
+        if (!arr || idx < 0)
+          return variant();
+				
+			  return arr->at(idx);
+      }
+  };
+
 struct opexec_arg1 : operator_exec
   {
     virtual variant exec(variant& arg1, variant& arg2)
@@ -624,6 +639,8 @@ operator_registry::operator_registry()
     register_wildcard(op_notequal,	null,											 type_schema<empty_type>(), new opexec_notnull1() );
     register_wildcard(op_notequal,	type_schema<empty_type>(), null											, new opexec_notnull2() );
     register_wildcard(op_not,				null,											 null,											new default_not() );
+
+		register_wildcard(op_index, null, null, new index() );
 
 		//some string generals
 		register_wildcard(op_plus, type_schema<str>(), null, new str_plus() );

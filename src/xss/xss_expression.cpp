@@ -533,6 +533,12 @@ variant value_operation::constant()
     return constant_;
   }
 
+void value_operation::unbind()
+  {
+    resolve_what_  = RESOLVE_ANY;
+    resolve_value_ = variant();
+  }
+
 void value_operation::bind(RESOLVE_ITEM what, variant value)
   {
     resolve_what_  = what;
@@ -616,9 +622,25 @@ xss_value::xss_value(file_position& begin, file_position& end) :
   {
   }
 
-void xss_value::bind(XSSContext ctx, bool as_setter)
+void xss_value::unbind()
   {
-    assert(state_ != BS_BOUND);
+    if(state_ == BS_UNBOUND)
+      return;
+
+    state_ = BS_UNBOUND;
+    value_operations::iterator it = operations_.begin();
+    value_operations::iterator nd = operations_.end();
+
+    for(; it != nd; it++)
+      {
+        it->unbind();
+      }
+  }
+
+BIND_STATE xss_value::bind(XSSContext ctx, bool as_setter)
+  {
+    if(state_ == BS_BOUND)
+      return BS_BOUND;
 
     value_operations::iterator it = operations_.begin();
     value_operations::iterator nd = operations_.end();
@@ -680,7 +702,7 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
 
                 type_ = ctx->get_type(it->identifier());
                 it->bind(RESOLVE_INSTANCE, type_);
-                return;
+                break;
               };
             case OP_OBJECT:
               {
@@ -692,7 +714,7 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
 
                 type_ = ctx->get_type("var"); //td: 0.9.5 instance_type(args)
                 it->bind(RESOLVE_INSTANCE, type_);
-                return;
+                break;
               };
             case OP_ARRAY:
               {
@@ -708,7 +730,7 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
 				        else if (args->size() == 0)
 					        type_ = ctx->get_array_type(ctx->get_type("var"));
                 it->bind(RESOLVE_CONST, type_);
-                return;
+                break;
               };
 
             case OP_READ:
@@ -851,6 +873,8 @@ void xss_value::bind(XSSContext ctx, bool as_setter)
             type_ = ctx->get_type("var");
           }
       }
+
+    return state_;
   }
 
 XSSType xss_value::type()
@@ -923,6 +947,21 @@ XSSValue xss_value::path()
     return result;
   }
 
+bool xss_value::is_property()
+  {
+    value_operation& op = get_last();
+    return op.bound() && op.resolve_id() == RESOLVE_PROPERTY;
+  }
+
+XSSProperty xss_value::get_property()
+  {
+    value_operation& op = get_last();
+    if (op.bound() && op.resolve_id() == RESOLVE_PROPERTY)
+      return op.resolve_value();
+
+    return XSSProperty();
+  }
+
 //xss_expression
 xss_expression::xss_expression(operator_type op, XSSExpression arg1, XSSExpression arg2, XSSExpression arg3):
   op_(op),  
@@ -940,13 +979,32 @@ xss_expression::xss_expression(XSSValue value):
   {
   }
 
-void xss_expression::bind(XSSContext ctx)
+void xss_expression::unbind()
   {
-    assert(!type_); //already bound
+    if(bind_state_ == BS_UNBOUND)
+      return;
 
     if (value_)
       {
-        value_->bind(ctx, false);
+        value_->unbind();
+        type_ = XSSType();
+      }
+    else
+      {
+        arg1_->unbind();
+        arg2_->unbind();
+        type_ = XSSType();
+      }
+  }
+
+BIND_STATE xss_expression::bind(XSSContext ctx)
+  {
+    if(bind_state_ == BS_BOUND)
+      return bind_state_;
+
+    if (value_)
+      {
+        bind_state_ = value_->bind(ctx, false);
         type_ = value_->type();
       }
     else
@@ -956,11 +1014,16 @@ void xss_expression::bind(XSSContext ctx)
           {
             XSSValue val = arg1_->value();
             if (val)
-              val->bind(ctx, true);
+              bind_state_ = val->bind(ctx, true);
             else
-		          ctx->error(SCannotAssigningNonValue, null, begin_, end_);
+              {
+                bind_state_ = BS_ERROR;
+		            ctx->error(SCannotAssigningNonValue, null, begin_, end_);
+              }
 
-            arg2_->bind(ctx);
+            BIND_STATE bs2 = arg2_->bind(ctx);
+            if (bs2 > bind_state_)
+              bind_state_ = bs2;
 
             XSSExpression expr = XSSExpression(shared_from_this());
             notification ntfy(NOTID_ASSIGN, expr);
@@ -968,16 +1031,46 @@ void xss_expression::bind(XSSContext ctx)
           }
         else
           {
-            arg1_->bind(ctx);
+            bind_state_ = arg1_->bind(ctx);
             if (arg2_)
               {
-                arg2_->bind(ctx);
+                BIND_STATE bs2 = arg2_->bind(ctx);
+                if (bs2 > bind_state_)
+                  bind_state_ = bs2;
+
                 type_ = ctx->get_operator_type(op_, arg1_->type(), arg2_->type());
               }
             else
               type_ = ctx->get_operator_type(op_, arg1_->type(), XSSType());
           }
       }
+
+    return bind_state_;
+  }
+
+BIND_STATE xss_expression::bind_state()
+  {
+    return bind_state_;
+  }
+
+bool xss_expression::unbound()
+  {
+    return bind_state_ == BS_UNBOUND;
+  }
+
+bool xss_expression::bound()
+  {
+    return bind_state_ == BS_BOUND;
+  }
+
+bool xss_expression::bind_error() 
+  {
+    return bind_state_ == BS_ERROR;
+  }
+
+bool xss_expression::in_fixup()
+  {
+    return bind_state_ == BS_FIXUP;
   }
 
 XSSType xss_expression::type()
@@ -1002,6 +1095,20 @@ variant xss_expression::constant_value()
     if (!value_)
       return variant();
     return value_->constant();
+  }
+
+bool xss_expression::is_property()
+  {
+    if (value_)
+      return value_->is_property();
+    return false;
+  }
+
+XSSProperty xss_expression::get_property()
+  {
+    if (value_)
+      return value_->get_property();
+    return XSSProperty();
   }
 
 operator_type xss_expression::op()

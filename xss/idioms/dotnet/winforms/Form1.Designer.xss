@@ -5,8 +5,8 @@
         <xss:code>
         var app = application.root;
         var app_name = application.name + "_Form";
-        var app_instances = application.instances;
-        
+        var app_instances = winforms.instances;
+
         compiler.xss("Designer.xss", app, instances = app_instances, name = app_name);
         </xss:code>
     }

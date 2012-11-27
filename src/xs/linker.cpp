@@ -606,7 +606,9 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
                 variant arg = stack_.top(); stack_.pop();
                 resolve_value(arg);
               }
-            assert(false); //td: !!!
+            
+            stack_.pop();
+            resolve_operator(op, already_in_stack(), already_in_stack(), null);
             break;
           }
         case op_assign:

@@ -192,6 +192,7 @@ class value_operation
       void            id(VALUE_OPERATION op);
       variant         constant();
       void            bind(RESOLVE_ITEM what, variant value);
+      void            unbind();
       XSSArguments    args();
       void            args(XSSArguments value);
       str             identifier();
@@ -584,10 +585,10 @@ enum TYPE_MATCH
 
 enum BIND_STATE
   {
-    BS_UNBOUND,
+    BS_BOUND,
     BS_FIXUP,
     BS_ERROR,
-    BS_BOUND,
+    BS_UNBOUND,
   };
 
 struct xss_context : boost::enable_shared_from_this<xss_context>
@@ -714,7 +715,8 @@ class xss_value
       xss_value(const xss_value& other);
       xss_value(file_position& begin, file_position& end);
     public:
-      void              bind(XSSContext ctx, bool as_setter);
+      BIND_STATE        bind(XSSContext ctx, bool as_setter);
+      void              unbind();
       XSSType           type();
 	    void              type(XSSType type);
       bool              bound();
@@ -727,6 +729,9 @@ class xss_value
       file_position&    begin(); 
       file_position&    end(); 
       XSSValue          path();
+    public:
+      bool        is_property();
+      XSSProperty get_property();
     private:
       XSSType          type_;
       value_operations operations_;      
@@ -751,7 +756,16 @@ class xss_expression : public boost::enable_shared_from_this<xss_expression>
       xss_expression(operator_type op, XSSExpression arg1, XSSExpression arg2 = XSSExpression(), XSSExpression arg3 = XSSExpression());
       xss_expression(XSSValue value);
     public:
-      void    bind(XSSContext ctx);
+      BIND_STATE bind(XSSContext ctx);
+      void       unbind();
+      BIND_STATE bind_state();
+      bool       bound(); 
+      bool       unbound(); 
+      bool       bind_error(); 
+      bool       in_fixup(); 
+    public:
+      bool        is_property();
+      XSSProperty get_property();
     public:
       operator_type op();
       void          op(operator_type val);
@@ -785,6 +799,7 @@ class xss_expression : public boost::enable_shared_from_this<xss_expression>
       XSSExpression arg2_;
       XSSExpression arg3_;
       bool          is_assign_;
+      BIND_STATE    bind_state_;
 
       file_position begin_;
       file_position end_;
@@ -1043,6 +1058,7 @@ struct ILanguage
     
     //0.9.5
     virtual XSSContext create_context()                                                                  = 0;
+    virtual bool       match_types(XSSType left, XSSType right, TYPE_MATCH& result)                      = 0;
     virtual void       init_compile_context(XSSContext ctx)                                              = 0;
     virtual bool       render_code(XSSCode code, XSSContext ctx, std::ostringstream& result)             = 0; 
     virtual bool       render_expression(XSSExpression expr, XSSContext ctx, std::ostringstream& result) = 0; 
@@ -1076,6 +1092,10 @@ struct ILanguage
     virtual bool render_object(value_operation& op, XSSContext ctx, std::ostringstream& result)                                              = 0;  
     virtual bool render_array(value_operation& op, XSSContext ctx, std::ostringstream& result)                                               = 0;  
     virtual bool render_instantiation(XSSType type, XSSArguments args, XSSContext ctx, std::ostringstream& result)                           = 0;  
+
+    //property rendering
+    virtual bool render_get(XSSProperty prop, const str& path, std::ostringstream& result)                   = 0;  
+    virtual bool render_set(XSSProperty prop, const str& path, const str& value, std::ostringstream& result) = 0;  
 
     //utils
     virtual bool render_pre_statement(XSSStatement info, XSSContext ctx, std::ostringstream& result) = 0;  
@@ -1422,6 +1442,11 @@ struct xss_expression_schema : object_schema<xss_expression>
   {
     virtual void declare()
       {
+        readonly_property<bool>       ("error",       &xss_expression::bind_error);
+        readonly_property<bool>       ("is_property", &xss_expression::is_property);
+        readonly_property<XSSProperty>("property",    &xss_expression::get_property);
+
+        method_<void, 0>("unbind",  &xss_expression::unbind);
 			}
   };
 

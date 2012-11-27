@@ -14,12 +14,23 @@ namespace <xss:e v="application.name"/>
         public <xss:e v="application.name"/>_Form()
         {
             InitializeComponent();
+            InitializeXS();
         }
 
         <xss:code>
             //render app object
             var app = application.root;
             compiler.xss("..\common\instance.xss", app);
+
+            compiler.inject("declare_instances");
         </xss:code>
+
+        private void InitializeXS()
+        {
+            <xss:code>
+                compiler.inject("create_instances");
+                compiler.inject("init_instances");
+            </xss:code>
+        }
     }
 }

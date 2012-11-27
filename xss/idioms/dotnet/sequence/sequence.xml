@@ -22,6 +22,8 @@
         <accept_child type="run"     append="as_child_only"/>
         <accept_child type="animate" append="as_child_only"/>
         <reject_child type="*"/>
+        
+        <property id="t" type="float"/>
     </class>
 
     <class id="when">
@@ -29,7 +31,7 @@
         <reject_child type="*"/>
     </class>
 
-    <class id="sequence" instantiator="instantiator.xss" renderer="../sequence.xss" output_id="state.Sequence">
+    <class id="sequence" output_id="Sequence">
         <accept_parent type="sequence"  append="as_child"/>
         <reject_parent type="at" />
         <reject_parent type="when" />

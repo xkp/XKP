@@ -1,106 +1,36 @@
-on pre_process(obj)
-{
-	if (obj.id == '')
-        obj.id = compiler.genid(obj.class_name);
 
-    if (obj.parent)
+on declare_instances()
+{
+    for(var it in instances)
     {
-        if (obj.class_name == 'sequence' && obj.parent.class_name == 'sequence')
+        var type = it.type;
+        out()
         {
-            obj.parent.add_property(obj.id, obj, obj.type);
+            private <xss:e>compiler.type_to_string(type)</xss:e> <xss:e v="it.output_id"/>;
         }
     }
 }
 
-on compile_dependency(dep)
+on create_instances()
 {
-    if (!dep.idiom)
-        return;
-
-    if (dep.idiom.id != "sequence")
-        return;
-
-    var path = project.js_path;
-    if (!path)
-        path = "../js";
-
-    dep.href = path + '/' + dep.href;
-}
-
-on render_initialization()
-{
-	out()
-	{
-		var g_sequence_manager = new state.Manager();
-
-        function default_interpolate(a, b, t)
+    for(var it in instances)
+    {
+        out()
         {
-            return a + (b - a)*t;
-        }		
-	}    
-}
-
-on render_types()
-{
-	compiler.log("Rendering Sequence Types...");
-
-    for(var ut in user_types)
-    {
-        var full_path = compiler.full_path("../sequence.xss");
-		compiler.xss("../../common-js/resig-class.xss", ut, renderer = full_path);
+            <xss:e v="it.output_id"/> = <xss:e v="compiler.instantiate(it)"/>;
+        }
     }
 }
 
-on render_instances()
+on init_instances()
 {
-	//and then instances
-    for(var i in instances)
+    for(var it in instances)
     {
-		compiler.xss("../sequence.xss", i, is_class = false);
+        compiler.xss("idioms/sequence/sequence.xss", it);
     }
 }
 
-on render_update()
-{
-	out()
-	{
-		g_sequence_manager.update(g_delta);
-	}
-}
-
-on render_updater()
-{
-	out()
-	{
-        var g_elapsed = -1;
-        var g_delta = 0.0;	
-        function start(resolution)  
-        <xss:open_brace/>  
-	        function updater()  
-	        <xss:open_brace/>
-		        var now   = new Date().getTime();
-                if (g_elapsed < 0)
-                    g_delta = 0; //first update
-                else
-		            g_delta  = now - g_elapsed;  
-		
-                g_elapsed = now; 
-    }          
-
-    compiler.inject("render_update");
-
-    out()
-    {
-                window.setTimeout(updater, resolution);  
-	        <xss:close_brace/>      
-	        window.setTimeout(updater, resolution);  
-        <xss:close_brace/>      
-        
-        start();  
-    }
-}
-
-//java script delegates
+//sequence.xss handlers
 method begin_interpolator(prop, string iid, string assign, string path)
 {
     out()
@@ -294,24 +224,5 @@ method run_sequence(seq, parent_id)
 
 method run_expression(expr, seq, seq_id)
 {
-    var expr_this = seq;
-    var this_str = seq_id;
-    if (seq.target)
-    {
-        expr_this = compiler.get_instance(seq.target);
-        this_str += ".target";
-    }
-    else if (seq.target_type)
-    {
-        expr_this = compiler.get_type(seq.target_type);
-        this_str += ".target";
-    }
-                
-    string result = compiler.render_expression(expr, expr_this);
-    result = compiler.replace_identifier(result, "this.", this_str + ".");
-            
-    out() 
-    {
-        <xss:e v="result"/>;
-    }
+    compiler.render_expression(expr);
 }

@@ -32,6 +32,23 @@ void typed_lang::init_compile_context(XSSContext ctx)
 	  //do nothing
   }		
 
+bool typed_lang::match_types(XSSType left, XSSType right, TYPE_MATCH& result)
+  {
+    if (left->id() == "int" && right->id() == "float")
+      {
+        result = TYPECAST;
+        return true;
+      }
+
+    if (left->id() == "float" && right->id() == "int")
+      {
+        result = MATCH;
+        return true;
+      }
+
+    return false;
+  }
+
 bool typed_lang::render_code(XSSCode code, XSSContext ctx, std::ostringstream& result)
   {
     statement_list& sl = code->statements();
@@ -1146,3 +1163,78 @@ bool typed_lang::render_instantiation(XSSType type, XSSArguments args, XSSContex
     return true;      
   }
 
+bool typed_lang::render_get(XSSProperty prop, const str& path, std::ostringstream& result)
+  {
+    InlineRenderer prop_getter = prop->getter();
+
+    if (prop_getter)
+      {
+        bool this_property = path.empty();
+                    
+        param_list params;
+        params.add("path", path);
+
+        result.clear();
+        prop_getter->render(params, result);
+      }
+    else
+      {
+        XSSCode code_getter = prop->code_getter();
+        if (code_getter)
+          {
+            //td: !! generalize this
+            if (!path.empty())
+              result << path << '.';
+                        
+            result << prop->output_id(); // << "__get()";
+          }
+        else
+          {
+            if (!path.empty())
+              result << path << '.';
+                        
+            result << prop->output_id();
+          }
+      }
+    
+    return true;
+  }
+
+bool typed_lang::render_set(XSSProperty prop, const str& path, const str& value, std::ostringstream& result)
+  {
+    bool this_property = path.empty();
+
+    if(prop->is_const())
+      return false;
+
+    InlineRenderer prop_setter = prop->setter();
+    if (prop_setter)
+      {
+        param_list params;
+        params.add("path", path);
+        params.add("value", value);
+
+        prop_setter->render(params, result);
+      }
+    else
+      {
+        XSSCode code_setter = prop->code_setter();
+        if (code_setter)
+          {
+            //td: !! generalize this
+            if (!path.empty())
+              result << path << '.';  
+                            
+            result << prop->output_id() << " = " << value; 
+          }
+        else 
+          {
+            if (!path.empty())
+              result << path << '.';  
+
+            result << prop->output_id() << " = " << value;
+          }
+      }
+
+    return true;
+  }

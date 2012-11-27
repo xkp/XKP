@@ -8,6 +8,7 @@
 #include <xss/xss_compiler.h>
 #include <xss/xss_expression.h>
 #include <xss/fixups.h>
+#include <xss/dsl_out.h>
 
 #include <xs/compiler.h>
 #include <xs/xs_error.h>
@@ -212,12 +213,16 @@ idiom_instance::idiom_instance():
   instances_(new dynamic_array),
   types_(new dynamic_array)
   {
+    add_attribute("instances", instances_);
+    add_attribute("types",     types_);
   }
 
 idiom_instance::idiom_instance(const idiom_instance& other):
   instances_(other.instances_),
   types_(other.types_)
   {
+    add_attribute("instances", instances_);
+    add_attribute("types",     types_);
   }
 
 void idiom_instance::add_instance(XSSObject instance)
@@ -228,6 +233,11 @@ void idiom_instance::add_instance(XSSObject instance)
 void idiom_instance::add_class(XSSType type)
   {
     types_->push_back(type);
+  }
+
+DynamicArray idiom_instance::__get_instances()
+  {
+    return instances_;
   }
 
 //idiom
@@ -464,6 +474,7 @@ void instantiate_idiom(Idiom idiom, IdiomInstance result, XSSCompiler compiler, 
         int col  = variant_cast<int>(e.data.get("column"), -1);
 
         param_list error;
+        error.add("desc", desc);
         error.add("file", file.string());
         ctx->error(SErrorCompilingIdiom, &error, file_position(line, col), file_position(line, col));
       }
@@ -531,15 +542,17 @@ void application::build()
     XSSCompiler compiler(new xss_compiler(&out));
     compiler->file_system(fs_);
     compiler->set_output_path(output_path_);
+    compiler->set_application(shared_from_this());
+    compiler->context()->register_dsl("out", DslLinker(new out_linker(compiler)));
+
+    Application self = shared_from_this();
+    compiler->register_symbol("application", self);
+    compiler->register_symbol("compiler",    compiler);
+    compiler->register_symbol("project",     project_);
 
     //process idioms,
     //td: this should seriously be cached
-    compile_idiom_instances(shared_from_this(), compiler, ctx_);
-    
-    Application self = shared_from_this();
-    compiler->register_symbol("application", self);
-    compiler->register_symbol("compiler", compiler);
-    compiler->register_symbol("project", project_);
+    compile_idiom_instances(self, compiler, ctx_);
     
     XSSContext cctx = compiler->context();
     cctx->set_language(ctx_->get_language());

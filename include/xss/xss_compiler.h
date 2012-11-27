@@ -199,7 +199,7 @@ namespace xkp
         xss_compiler(ICompilerOutput* out);
       public:
         //0.9.5
-        //str          render_expression(const str& expr, XSSObject this_);
+        //variant      compile_expression(const str& expr);
 
 				XSSRenderer  compile_xss_file(const str& src_file, XSSContext ctx, const str& html_template = str());
 				XSSRenderer  compile_xss_file(fs::path src_file, XSSContext ctx, const str& html_template = str());
@@ -215,7 +215,6 @@ namespace xkp
         void         log(const param_list params);
         void         error(const param_list params);
         bool         parse_expression(variant v);
-        variant      compile_expression(const str& expr);
         str          render_expr(const expression& expr, XSSObject this_);
         str          replace_identifier(const str& s, const str& src, const str& dst);
         variant      evaluate_property(XSSProperty prop);
@@ -250,27 +249,30 @@ namespace xkp
         str        type_to_string(XSSType sig); 
         void       render_expression(XSSExpression expr);
         str        expression_to_string(XSSExpression expr); 
+        void       set_application(Application app);
 
         //0.9.5
         //void         build(fs::path xml, param_list& args);
         //XSSModule    idiom_by_class(const str& class_name);
+        //XSSObject    analyze_expression(const param_list params);
         //XSSModule    idiom_by_id(const str& id);
         //void         using_idiom(const str& idiom);
-        //XSSObject    analyze_expression(const param_list params);
         //str          file(fs::path path);
         //str          render_code(const str& code, param_list_decl& args, XSSContext ctx);
         //void         add_dependencies(XSSObjectList& dependencies, XSSObject idiom);
         //DynamicArray get_dependencies();
         //DynamicArray idiom_dependencies(const str& idiom);
-        str          build_project(const param_list params);
-        str          get_result();
-        void         render_app_types(const str& renderer);
-        void         type_dependencies(XSSType type, dependency_list& deps);
-        str          render_value(variant value);
-        str          get_env_var(const str& key);
-        str          get_os_name();
-        void         no_ouput();
-        str          escape_file(const str& filename);
+        str           build_project(const param_list params);
+        str           get_result();
+        void          render_app_types(const str& renderer);
+        void          type_dependencies(XSSType type, dependency_list& deps);
+        str           render_value(variant value);
+        str           get_env_var(const str& key);
+        str           get_os_name();
+        void          no_ouput();
+        str           escape_file(const str& filename);
+        XSSExpression compile_expression(const param_list params);
+        XSSObject     get_idiom(variant source);
       public:
         //renderer stack
         void        push_renderer(XSSRenderer renderer);
@@ -385,26 +387,26 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         dynamic_method_ ("log",    &xss_compiler::log);
         dynamic_method_ ("error",  &xss_compiler::error);
 
-        //dynamic_function_<XSSObject>  ("analyze_expression",  &xss_compiler::analyze_expression);
-        dynamic_function_<XSSProperty>("add_object_property", &xss_compiler::add_object_property);
-        dynamic_function_<str>        ("instantiate",         &xss_compiler::instantiate);
-        dynamic_function_<str>        ("render_ctor_args",    &xss_compiler::render_ctor_args);
-        dynamic_function_<str>        ("build",               &xss_compiler::build_project);
-        dynamic_function_<str>        ("instantiation_to_string", &xss_compiler::__instantiation);
+        dynamic_function_<XSSExpression>("compile_expression",      &xss_compiler::compile_expression);
+        dynamic_function_<XSSProperty>  ("add_object_property",     &xss_compiler::add_object_property);
+        dynamic_function_<str>          ("instantiate",             &xss_compiler::instantiate);
+        dynamic_function_<str>          ("render_ctor_args",        &xss_compiler::render_ctor_args);
+        dynamic_function_<str>          ("build",                   &xss_compiler::build_project);
+        dynamic_function_<str>          ("instantiation_to_string", &xss_compiler::__instantiation);
 
         readonly_property<XSSObject>("options", &xss_compiler::options_);
 
         //0.9.5
-        method_<void, 1>("render_code",	         &xss_compiler::render_code);
-        method_<str,  1>("code_to_string",       &xss_compiler::code_to_string);
-        method_<void, 1>("render_signature",	   &xss_compiler::render_signature);
-        method_<str,  1>("signature_to_string",  &xss_compiler::signature_to_string);
-        method_<str,  1>("type_to_string",       &xss_compiler::type_to_string);
-        method_<void, 1>("render_expression",    &xss_compiler::render_expression);
-        method_<str,  1>("expression_to_string", &xss_compiler::expression_to_string);
-        method_<void, 3>("render_assignment",    &xss_compiler::__render_assignment);
-        method_<str,  3>("assignment_to_string", &xss_compiler::__assignment);
-
+        method_<void, 1>     ("render_code",	        &xss_compiler::render_code);
+        method_<str,  1>     ("code_to_string",       &xss_compiler::code_to_string);
+        method_<void, 1>     ("render_signature",	    &xss_compiler::render_signature);
+        method_<str,  1>     ("signature_to_string",  &xss_compiler::signature_to_string);
+        method_<str,  1>     ("type_to_string",       &xss_compiler::type_to_string);
+        method_<void, 1>     ("render_expression",    &xss_compiler::render_expression);
+        method_<str,  1>     ("expression_to_string", &xss_compiler::expression_to_string);
+        method_<void, 3>     ("render_assignment",    &xss_compiler::__render_assignment);
+        method_<str,  3>     ("assignment_to_string", &xss_compiler::__assignment);
+        method_<XSSObject, 1>("get_idiom",            &xss_compiler::get_idiom);
 
         //0.9.5
         //method_<str,          0>("project_path",       &xss_compiler::project_path);
@@ -412,7 +414,6 @@ struct xss_compiler_schema : object_schema<xss_compiler>
 
         method_<str,          1>("genid",	             &xss_compiler::genid);
         method_<bool,         1>("parse_expression",	 &xss_compiler::parse_expression);
-        method_<variant,      1>("compile_expression", &xss_compiler::compile_expression);
         method_<str,	        3>("replace_identifier", &xss_compiler::replace_identifier);
         method_<variant,      1>("evaluate_property",  &xss_compiler::evaluate_property);
         method_<str,          1>("renderer_file",	     &xss_compiler::renderer_file);

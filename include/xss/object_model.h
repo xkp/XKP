@@ -88,6 +88,8 @@ class idiom_instance : public xss_object
     public:
       DynamicArray instances_;
       DynamicArray types_;
+
+      DynamicArray __get_instances();
   };
 
 class idiom
@@ -153,10 +155,11 @@ class application : public boost::enable_shared_from_this<application>
       instance_list&        instances();
       type_list&            types();
     public:
-      XSSObject root(); 
-      void      set_root(XSSObject r); 
-      str       name(); 
-      void      set_name(const str& name); 
+      XSSObject     root(); 
+      void          set_root(XSSObject r); 
+      str           name(); 
+      void          set_name(const str& name); 
+      IdiomInstance get_idiom(XSSType type);
     private:
       fs::path            renderer_;
       fs::path            output_;
@@ -177,7 +180,6 @@ class application : public boost::enable_shared_from_this<application>
       idiom_instance_list idiom_instances_;
 
       str           random_id(XSSObject instance);
-      IdiomInstance get_idiom(XSSType type);
     public:
       //glue
       DynamicArray __instances();
@@ -498,7 +500,7 @@ struct idiom_instance_schema : xss_object_schema<idiom_instance>
   {
     virtual void declare()
       {
-        readonly_property<DynamicArray>("instances",   &idiom_instance::instances_);
+        readonly_property<DynamicArray>("instances",   &idiom_instance::__get_instances);
         readonly_property<DynamicArray>("user_types",  &idiom_instance::types_);
       }
   };

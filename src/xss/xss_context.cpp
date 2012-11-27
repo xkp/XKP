@@ -524,7 +524,8 @@ bool xss_context::match_types(XSSType left, XSSType right, TYPE_MATCH& result)
         return match_types(atl, atr, result);
       }
 
-    return false;
+    Language lang = get_language();
+    return lang && lang->match_types(left, right, result);
   }
 
 XSSType xss_context::assure_type(const str& type)
@@ -1534,7 +1535,7 @@ void xss_object::set_type(XSSType type)
   {
     bool typeless = !type_;
     type_         = type;
-
+    type_name_    = type->id();
     if (typeless && type)
       {
         //td: wassa again?
@@ -3076,28 +3077,7 @@ void xss_property::bind(XSSContext ctx)
 
 XSSType xss_property::type()
   {
-    //if (!type_)
-    //  {
-    //    ICodeRenderer* icr = variant_cast<ICodeRenderer *>(get_, null);
-
-    //    if (icr)
-    //      {
-    //        type_ = icr->type();
-    //      }
-    //    else
-    //      {
-    //        IExpressionRenderer *ier = variant_cast<IExpressionRenderer *>(value_, null);
-
-    //        if (ier)
-    //          {
-    //            type_ = ier->type();
-    //          }
-    //      }
-    //  }
-
-    //return type_;
-    //assert(false); //whats all this crap again?
-    return XSSType();
+    return prop_type_;
   }
 
 //xss_event

@@ -11,8 +11,10 @@
         <accept_parent when="it.container" append="as_child"/>
 
         <property id="position" type="component_position"/>
-        <property id="width" output_id="Width" type="int"/>
+        <property id="width"  output_id="Width"  type="int"/>
         <property id="height" output_id="Height" type="int"/>
+        <property id="x"      output_id="X"      type="int"/>
+        <property id="y"      output_id="Y"      type="int"/>
     </class>
 
     <class id="div" super="component" container="true" output_id="System.Windows.Forms.Panel" hasLayout="true" as_user_control="true">
