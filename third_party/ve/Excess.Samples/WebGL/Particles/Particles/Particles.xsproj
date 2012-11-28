@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{31908a61-0534-419d-acba-235779b6f277}</ProjectGuid>
+    <ProjectGuid>{0bef1295-6a7f-4f17-a634-b0a356c203bb}</ProjectGuid>
     <OutputType>Html</OutputType>
     <RootNamespace>Particles</RootNamespace>
     <AssemblyName>Particles.html</AssemblyName>
@@ -36,31 +36,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="images\sprites" />
+    <Folder Include="resources" />
     <Folder Include="js" />
     <Folder Include="js\jsmanipulate" />
     <Folder Include="js\jquery" />
     <Folder Include="js\three" />
     <Folder Include="js\three\loaders" />
     <Folder Include="js\three\postprocessing" />
-    <Folder Include="images" />
+    <Folder Include="resources\images" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="images\sprites\snowflake1.png">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\sprites\snowflake2.png">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\sprites\snowflake3.png">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\sprites\snowflake4.png">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\sprites\snowflake5.png">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="js\Box2dWeb-2.1.a.3.min.js">
       <SubType>Content</SubType>
     </Content>
@@ -185,6 +170,21 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="js\utils.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\snowflake1.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\snowflake2.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\snowflake3.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\snowflake4.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\snowflake5.png">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>

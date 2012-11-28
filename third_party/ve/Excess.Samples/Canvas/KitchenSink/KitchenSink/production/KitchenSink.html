@@ -46,7 +46,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/progress.full.png",
+		src:			"../resources/images/progress.full.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -62,7 +62,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/progress.empty.png",
+		src:			"../resources/images/progress.empty.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -78,7 +78,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/smile_grin_48.png",
+		src:			"../resources/images/smile_grin_48.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -94,7 +94,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/smile_sad_48.png",
+		src:			"../resources/images/smile_sad_48.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -110,7 +110,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/arrow_left.png",
+		src:			"../resources/images/arrow_left.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -126,7 +126,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image6",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/arrow_right.png",
+		src:			"../resources/images/arrow_right.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -142,7 +142,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image7",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/arrow_right_48.png",
+		src:			"../resources/images/arrow_right_48.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -158,7 +158,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image8",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/arrow_right_green_48.png",
+		src:			"../resources/images/arrow_right_green_48.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -174,7 +174,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image9",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/arrow_left_48.png",
+		src:			"../resources/images/arrow_left_48.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -190,7 +190,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image10",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/arrow_left_green_48.png",
+		src:			"../resources/images/arrow_left_green_48.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -206,7 +206,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"monster_sheet",
 		resource_type:	RESOURCE_SPRITE,
-		src:			"../images/monster.png",
+		src:			"../resources/images/monster.png",
 		frame_width:	64,
 		frame_height:	64,
 		animations:		[],	
@@ -471,15 +471,15 @@ window.onload = function()
 		    lbl_event = new ui.Label(test1.manager, test1, "12px Verdana");
 		    lbl0 = new ui.Label(test1.manager, test1, null);
 		    lbl1 = new ui.Label(test1.manager, test1, null);
-		    btn1 = new ui.Button(test1.manager, test1, "../images/smile_sad_48.png", "../images/smile_grin_48.png");
-		    stateBtn = new ui.StateButton(test1.manager, test1, "../images/smile_grin_48.png", "../images/smile_sad_48.png");
+		    btn1 = new ui.Button(test1.manager, test1, "images/smile_sad_48.png", "images/smile_grin_48.png");
+		    stateBtn = new ui.StateButton(test1.manager, test1, "images/smile_grin_48.png", "images/smile_sad_48.png");
 		    lbl3 = new ui.Label(test1.manager, test1, null);
 		    test2 = new ui.Component(main.manager, main);
 	    test2.mouse_thru = true;
 		    title1 = new ui.Label(test2.manager, test2, "12px Verdana");
 		    pb1 = new ui.ProgressBar(test2.manager, test2, null);
-		    btn2 = new ui.Image(test2.manager, test2, "../images/arrow_left.png");
-		    btn3 = new ui.Image(test2.manager, test2, "../images/arrow_right.png");
+		    btn2 = new ui.Image(test2.manager, test2, "images/arrow_left.png");
+		    btn3 = new ui.Image(test2.manager, test2, "images/arrow_right.png");
 		    lbl2 = new ui.Label(test2.manager, test2, null);
 		    lbl7 = new ui.Label(test2.manager, test2, "11px Verdana");
 		    monster = new ui.Sprite(test2.manager, test2);
@@ -498,7 +498,7 @@ window.onload = function()
 		    lbl5 = new ui.Label(test3.manager, test3, "11px Verdana");
 		    lbl6 = new ui.Label(test3.manager, test3, "11px Verdana");
 		    lbl8 = new ui.Label(test3.manager, test3, "11px Verdana");
-		    btn5 = new ui.Button(test3.manager, test3, "../images/smile_sad_48.png", "../images/smile_grin_48.png");
+		    btn5 = new ui.Button(test3.manager, test3, "images/smile_sad_48.png", "images/smile_grin_48.png");
 		    test4 = new ui.Component(main.manager, main);
 	    test4.mouse_thru = true;
 		    title3 = new ui.Label(test4.manager, test4, "12px Verdana");
@@ -508,15 +508,15 @@ window.onload = function()
 	    clips.mouse_thru = true;
 		    ca1 = new ui.ClipArea(clips.manager, clips, "rect");
 	    ca1.mouse_thru = true;
-		    back_img = new ui.Image(clips.manager, clips, "../images/smile_grin_48.png");
+		    back_img = new ui.Image(clips.manager, clips, "images/smile_grin_48.png");
 		    ca2 = new ui.ClipArea(clips.manager, clips, "circle");
 	    ca2.mouse_thru = true;
 		    tb1 = new ui.TextButton(test4.manager, test4, "My_Button", "12px Arial");
 		    inst1 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
 		    inst2 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
 		    inst3 = new ui.Label(g_ui_root.manager, g_ui_root, "12px Verdana");
-		    btnNext = new ui.Button(g_ui_root.manager, g_ui_root, "../images/arrow_right_green_48.png", "../images/arrow_right_48.png");
-		    btnPrev = new ui.Button(g_ui_root.manager, g_ui_root, "../images/arrow_left_green_48.png", "../images/arrow_left_48.png");
+		    btnNext = new ui.Button(g_ui_root.manager, g_ui_root, "images/arrow_right_green_48.png", "images/arrow_right_48.png");
+		    btnPrev = new ui.Button(g_ui_root.manager, g_ui_root, "images/arrow_left_green_48.png", "images/arrow_left_48.png");
             main.set_x(0);
             main.set_y(0);
             main.set_width(600);

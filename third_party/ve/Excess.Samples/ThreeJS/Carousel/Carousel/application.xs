@@ -3,7 +3,7 @@ property start = 0;
 property speed = 0.02;
 property step = 2*Math.PI/5;
 property max_rotation = 2*Math.PI;
-property img_array = ["../images/test1.png", "../images/test2.png", "../images/test3.png", "../images/test4.png", "../images/test5.png"];
+property img_array = ["images/test1.png", "images/test2.png", "images/test3.png", "images/test4.png", "images/test5.png"];
 property plane_array = [];
 
 on update(){

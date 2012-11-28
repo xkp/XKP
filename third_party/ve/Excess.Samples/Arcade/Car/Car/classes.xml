@@ -1,17 +1,17 @@
 <classes>
-  <class id="car" super="img" src="../images/car.png" width="50" height="100">
+  <class id="car" super="img" src="images/car.png" width="50" height="100">
     <physics body_type="dynamic" shape="rect"/>
   </class>
 
-  <class id="wheel" super="img" src="../images/wheel.png" width="10" height="20">
+  <class id="wheel" super="img" src="images/wheel.png" width="10" height="20">
     <physics body_type="dynamic" shape="rect"/>
   </class>
 
-  <class id="box" super="img" src="../images/box.png" width="100" height="100">
+  <class id="box" super="img" src="images/box.png" width="100" height="100">
     <physics body_type="dynamic" shape="rect"/>
   </class>
 
-  <class id="floor" super="img" src="../images/stone-12.jpg">
+  <class id="floor" super="img" src="images/stone-12.jpg">
     <physics body_type="static" shape="rect"/>
   </class>
 </classes>

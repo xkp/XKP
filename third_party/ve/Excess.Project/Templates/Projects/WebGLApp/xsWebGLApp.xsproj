@@ -35,6 +35,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="resources" />
     <Folder Include="js" />
     <Folder Include="js\jsmanipulate" />
     <Folder Include="js\jquery" />

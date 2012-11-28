@@ -529,8 +529,8 @@ stream.Streamer = Class.extend(
             if (res_id == res.id)
             {
 				return res; 
-            }
-			if (res_id == res.asset)
+            }			
+			if ("../resources/" + res_id == res.asset)
             {
 				return res; 
             }
@@ -724,8 +724,8 @@ stream.Package = Class.extend(
             if (item_id == item.id)
             {
                 return item; 
-            }
-			if (item_id == item.src)
+            }			
+			if ("../resources/" + item_id == item.src)
             {
                 return item; 
             }

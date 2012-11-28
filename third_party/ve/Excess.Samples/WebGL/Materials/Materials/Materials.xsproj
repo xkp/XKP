@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{beabdafa-df28-4e34-a919-73aff5e1c065}</ProjectGuid>
+    <ProjectGuid>{d4b0732d-b134-40df-8719-d8fab6141e6c}</ProjectGuid>
     <OutputType>Html</OutputType>
     <RootNamespace>Materials</RootNamespace>
     <AssemblyName>Materials.html</AssemblyName>
@@ -39,6 +39,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="resources" />
     <Folder Include="js" />
     <Folder Include="js\jsmanipulate" />
     <Folder Include="js\jquery" />

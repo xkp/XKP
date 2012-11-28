@@ -108,7 +108,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/car.png",
+		src:			"../resources/images/car.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -124,7 +124,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/wheel.png",
+		src:			"../resources/images/wheel.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -140,7 +140,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/box.png",
+		src:			"../resources/images/box.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -156,7 +156,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/stone-12.jpg",
+		src:			"../resources/images/stone-12.jpg",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -252,7 +252,7 @@ var car_1;var right_wheel;var right_rear_wheel;var left_wheel;var left_rear_whee
                 )
     {
 			this._super(	
-			manager,parent,src? src : "../images/car.png");       
+			manager,parent,src? src : "images/car.png");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -302,7 +302,7 @@ var car_1;var right_wheel;var right_rear_wheel;var left_wheel;var left_rear_whee
                 )
     {
 			this._super(	
-			manager,parent,src? src : "../images/wheel.png");       
+			manager,parent,src? src : "images/wheel.png");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -352,7 +352,7 @@ var car_1;var right_wheel;var right_rear_wheel;var left_wheel;var left_rear_whee
                 )
     {
 			this._super(	
-			manager,parent,src? src : "../images/box.png");       
+			manager,parent,src? src : "images/box.png");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -402,7 +402,7 @@ var car_1;var right_wheel;var right_rear_wheel;var left_wheel;var left_rear_whee
                 )
     {
 			this._super(	
-			manager,parent,src? src : "../images/stone-12.jpg");       
+			manager,parent,src? src : "images/stone-12.jpg");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -570,19 +570,19 @@ window.onload = function()
         g_ui_root = ui_.root;
      	ui_.load_resources(function()
 		{
-		    car_1 = new car(g_ui_root.manager, g_ui_root, "../images/car.png");
-		    right_wheel = new wheel(g_ui_root.manager, g_ui_root, "../images/wheel.png");
-		    right_rear_wheel = new wheel(g_ui_root.manager, g_ui_root, "../images/wheel.png");
-		    left_wheel = new wheel(g_ui_root.manager, g_ui_root, "../images/wheel.png");
-		    left_rear_wheel = new wheel(g_ui_root.manager, g_ui_root, "../images/wheel.png");
-		    box_1 = new box(g_ui_root.manager, g_ui_root, "../images/box.png");
-		    box_2 = new box(g_ui_root.manager, g_ui_root, "../images/box.png");
-		    box_3 = new box(g_ui_root.manager, g_ui_root, "../images/box.png");
-		    box_4 = new box(g_ui_root.manager, g_ui_root, "../images/box.png");
-		    __floor1 = new floor(g_ui_root.manager, g_ui_root, "../images/stone-12.jpg");
-		    __floor2 = new floor(g_ui_root.manager, g_ui_root, "../images/stone-12.jpg");
-		    __floor3 = new floor(g_ui_root.manager, g_ui_root, "../images/stone-12.jpg");
-		    __floor4 = new floor(g_ui_root.manager, g_ui_root, "../images/stone-12.jpg");
+		    car_1 = new car(g_ui_root.manager, g_ui_root, "images/car.png");
+		    right_wheel = new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
+		    right_rear_wheel = new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
+		    left_wheel = new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
+		    left_rear_wheel = new wheel(g_ui_root.manager, g_ui_root, "images/wheel.png");
+		    box_1 = new box(g_ui_root.manager, g_ui_root, "images/box.png");
+		    box_2 = new box(g_ui_root.manager, g_ui_root, "images/box.png");
+		    box_3 = new box(g_ui_root.manager, g_ui_root, "images/box.png");
+		    box_4 = new box(g_ui_root.manager, g_ui_root, "images/box.png");
+		    __floor1 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
+		    __floor2 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
+		    __floor3 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
+		    __floor4 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
 		    __label1 = new ui.Label(g_ui_root.manager, g_ui_root, "11px Verdana");
             car_1.set_x(300);
             car_1.set_y(200);

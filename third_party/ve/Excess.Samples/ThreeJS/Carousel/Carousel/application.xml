@@ -1,11 +1,11 @@
-﻿<application id="Carousel" src="application.xs" title="Carousel" background="black">
+﻿<application id="Carousel" src="application.xs" title="Carousel" background="Black">
 
   <resources>
-    <image src="../images/test1.png"/>
-    <image src="../images/test2.png"/>
-    <image src="../images/test3.png"/>
-    <image src="../images/test4.png"/>
-    <image src="../images/test5.png"/>
+    <image src="images/test1.png"/>
+    <image src="images/test2.png"/>
+    <image src="images/test3.png"/>
+    <image src="images/test4.png"/>
+    <image src="images/test5.png"/>
   </resources>
 
   <label id="" x="150" y="75" color="Ivory" font="15px Verdana" caption="Move mouse to control the carousel movement"/>
@@ -14,7 +14,7 @@
   <scene>
 
     <camera id="camera_1" fov="45" aspect="1.5" near="1" far="10000">
-      <position x="100" y="50" z="1200"/>
+      <position x="100" y="49" z="1200"/>
     </camera>
 
   </scene>

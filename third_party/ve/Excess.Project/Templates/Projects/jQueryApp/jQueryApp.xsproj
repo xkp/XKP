@@ -35,6 +35,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="resources" />
     <Folder Include="css\ui-lightness" />
     <Folder Include="css\ui-lightness\images" />
     <Folder Include="js" />

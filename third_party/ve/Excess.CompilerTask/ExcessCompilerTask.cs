@@ -170,7 +170,7 @@ namespace Excess.CompilerTasks
 
                 if (old_version)
                 {
-                    string execPath = installPath + version.Value + @"\";
+                    string execPath = installPath + @"\" + version.Value + @"\";
 
                     if (!Directory.Exists(installPath))
                     {

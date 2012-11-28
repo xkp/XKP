@@ -1,3 +1,0 @@
-﻿<project name="Fibonacci" entry_point="idioms/dotnet/console/entry.xss" language="cs" src="application.xs" output_path="bin/Debug">
-  <idiom src="idioms/dotnet/dotnet.xml"/>
-</project>
