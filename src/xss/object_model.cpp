@@ -1162,6 +1162,12 @@ Application object_model::load(DataReader project, param_list& args, fs::path ba
     XSSContext app_ctx(new xss_context(CTXID_FILE, src, global));
     XSSObject  app_obj(new xss_object);
 	  XSSType    app_type = global->get_type("Application"); 
+	  if (!app_type)
+	    {
+		  app_type = XSSType(new xss_type);
+		  app_type->set_id("Application");
+		  global->add_type(app_type, str());
+	    }
     app_obj->set_id("application");
     app_obj->set_type(app_type);
 

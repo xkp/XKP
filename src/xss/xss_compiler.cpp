@@ -1019,12 +1019,11 @@ void xss_compiler::xss(const param_list params)
 		    error_info = rte.data; 
 		    error_info.add("file", file.string()); 
 	    }
-    //td: !!! do this for release only
-    //catch(...)
-	   // {
-		  //  error_info.add("desc", SSnafu); 
-		  //  error_info.add("file", file.string()); 
-	   // }
+    catch(...)
+	    {
+		    error_info.add("desc", SSnafu); 
+		    error_info.add("file", file.string()); 
+	    }
 
     if (!success)
 	    {

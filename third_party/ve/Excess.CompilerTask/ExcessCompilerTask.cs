@@ -165,6 +165,8 @@ namespace Excess.CompilerTasks
                 XAttribute version = XElement.Load(filePath).Attribute("version");
                 bool old_version = version != null && version.Value == "0.9.4";
                 string installPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Excess", @"InstallPath", @"");
+                if (installPath == null || installPath == String.Empty)
+                    installPath = (string)Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Excess", @"InstallPath", @"");    
 
                 if (old_version)
                 {
