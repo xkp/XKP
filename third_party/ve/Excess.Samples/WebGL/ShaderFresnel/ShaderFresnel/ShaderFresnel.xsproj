@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2db9c190-1969-4586-b0e1-e0eb497b59c9}</ProjectGuid>
+    <ProjectGuid>{b6cb1b40-24e1-4e6c-8286-d37f91a8d974}</ProjectGuid>
     <OutputType>Html</OutputType>
     <RootNamespace>ShaderFresnel</RootNamespace>
     <AssemblyName>ShaderFresnel.html</AssemblyName>
@@ -39,38 +39,19 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="images\cube" />
-    <Folder Include="images\cube\Park" />
+    <Folder Include="resources" />
     <Folder Include="js" />
     <Folder Include="js\jsmanipulate" />
     <Folder Include="js\jquery" />
     <Folder Include="js\three" />
     <Folder Include="js\three\loaders" />
     <Folder Include="js\three\postprocessing" />
-    <Folder Include="images" />
+    <Folder Include="resources\images" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="classes.xml">
       <SubType>Content</SubType>
       <DependentUpon>classes.xs</DependentUpon>
-    </Content>
-    <Content Include="images\cube\Park\negx.jpg">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\cube\Park\negy.jpg">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\cube\Park\negz.jpg">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\cube\Park\posx.jpg">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\cube\Park\posy.jpg">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\cube\Park\posz.jpg">
-      <SubType>Content</SubType>
     </Content>
     <Content Include="js\Box2dWeb-2.1.a.3.min.js">
       <SubType>Content</SubType>
@@ -196,6 +177,24 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="js\utils.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\negx.jpg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\negy.jpg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\negz.jpg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\posx.jpg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\posy.jpg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\posz.jpg">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>

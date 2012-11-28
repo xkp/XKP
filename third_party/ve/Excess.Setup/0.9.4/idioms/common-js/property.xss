@@ -69,10 +69,9 @@ else
 
     if (prop.type.is_object && prop.value)
     {        
-        compiler.log(prop.type.id);
         if (prop.value is string)
             value = prop.value;
-        else if (prop.type.id != "object")
+        else
             compiler.xss("instance.xss", prop.value, path = prop_name ); //td: !!!
     }
     else

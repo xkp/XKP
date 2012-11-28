@@ -1,8 +1,9 @@
+
 on hero.collision()
 {
     game_over.visible = true;
     hero.move_around.stop();
-    hero.src = "../images/smile_sad_48.png";
+    hero.src = "images/smile_sad_48.png";
 }
 
 on keydown(keycode)

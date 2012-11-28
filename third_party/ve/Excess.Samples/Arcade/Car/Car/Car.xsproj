@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2c6701f2-37d8-4802-a1b4-e12cb1fe5f9d}</ProjectGuid>
+    <ProjectGuid>{f27ed42b-ddb8-42f7-b82b-2197f472774e}</ProjectGuid>
     <OutputType>Html</OutputType>
     <RootNamespace>Car</RootNamespace>
     <AssemblyName>Car.html</AssemblyName>
@@ -39,30 +39,19 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="resources" />
     <Folder Include="js" />
     <Folder Include="js\jsmanipulate" />
     <Folder Include="js\jquery" />
     <Folder Include="js\three" />
     <Folder Include="js\three\loaders" />
     <Folder Include="js\three\postprocessing" />
-    <Folder Include="images" />
+    <Folder Include="resources\images" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="classes.xml">
       <SubType>Content</SubType>
       <DependentUpon>classes.xs</DependentUpon>
-    </Content>
-    <Content Include="images\box.PNG">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\car.png">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\stone-12.jpg">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\wheel.png">
-      <SubType>Content</SubType>
     </Content>
     <Content Include="js\Box2dWeb-2.1.a.3.min.js">
       <SubType>Content</SubType>
@@ -188,6 +177,18 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="js\utils.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\box.PNG">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\car.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\stone-12.jpg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\wheel.png">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>

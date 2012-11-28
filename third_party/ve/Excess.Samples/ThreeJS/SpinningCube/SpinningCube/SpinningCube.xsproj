@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1888865a-d76f-4de4-a7d2-baa0f5f3ea39}</ProjectGuid>
+    <ProjectGuid>{352cf2a8-4052-4c1c-941f-378cb791e921}</ProjectGuid>
     <OutputType>Html</OutputType>
     <RootNamespace>SpinningCube</RootNamespace>
     <AssemblyName>SpinningCube.html</AssemblyName>
@@ -36,6 +36,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="resources" />
     <Folder Include="js" />
     <Folder Include="js\jsmanipulate" />
     <Folder Include="js\jquery" />

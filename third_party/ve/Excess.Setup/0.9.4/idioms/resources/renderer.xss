@@ -15,7 +15,6 @@
 		id:				"<xss:e v="res.id"/>",
 		resource_type:	<xss:e v="res.resource_type"/>,
 		src:			"<xss:e v="res.src"/>",
-		runtime_src:	<xss:e v="res.runtime_src"/>,
 		frame_width:	<xss:e v="res.frame_width"/>,
 		frame_height:	<xss:e v="res.frame_height"/>,
 		animations:		[],	

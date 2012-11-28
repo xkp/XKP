@@ -6,7 +6,7 @@
 <body>
 <style type="text/css">
 	body{
-	background:black;
+	background:Black;
 	}
 </style>
             <script type="text/javascript" src="../js/resig.js"></script>
@@ -65,7 +65,7 @@ application.events = new ev.EventHolder();
 		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/test1.png",
+		src:			"../resources/images/test1.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -81,7 +81,7 @@ application.events = new ev.EventHolder();
 		{
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/test2.png",
+		src:			"../resources/images/test2.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -97,7 +97,7 @@ application.events = new ev.EventHolder();
 		{
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/test3.png",
+		src:			"../resources/images/test3.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -113,7 +113,7 @@ application.events = new ev.EventHolder();
 		{
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/test4.png",
+		src:			"../resources/images/test4.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -129,7 +129,7 @@ application.events = new ev.EventHolder();
 		{
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/test5.png",
+		src:			"../resources/images/test5.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -227,14 +227,14 @@ camera_1.manager = manager;
             lbl1.set_color("Ivory");
             lbl1.text("Put the mouse over an image to zoom it");
             camera_1.position.x = 100;
-            camera_1.position.y = 50;
+            camera_1.position.y = 49;
             camera_1.position.z = 1200;
             application.angle = null;
             application.start = 0;
             application.speed = 0.0199999996;
             application.step = 2 * Math.PI / 5;
             application.max_rotation = 2 * Math.PI;
-            application.img_array = ["../images/test1.png", "../images/test2.png", "../images/test3.png", "../images/test4.png", "../images/test5.png"];
+            application.img_array = ["images/test1.png", "images/test2.png", "images/test3.png", "images/test4.png", "images/test5.png"];
             application.plane_array = [];
 	application.position_items = function() 
 	{

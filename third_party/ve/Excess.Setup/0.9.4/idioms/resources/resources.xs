@@ -1,7 +1,11 @@
 on pre_process(obj)
-{
-	if(obj.id == '')
-		obj.id = compiler.genid(obj.class_name);	
+{	
+	if(obj.id == '')		
+		obj.id = compiler.genid(obj.class_name);
+	if(obj.src)
+	{		
+		obj.src = "../resources/" + obj.src;		
+	}	
 }
 
 on compile_dependency(dep)
@@ -92,15 +96,7 @@ on render_resources()
 		compiler.xss("children_renderer.xss", res);	
     }	
     out()
-    {	
-		global_package.add_item({
-			id:				"invalid_res",
-			resource_type:	RESOURCE_IMAGE,
-			src:			"images/no_res.png",
-			frame_width:	null,
-			frame_height:	null,
-			animations:		[]
-		});		
+    {				
 		global_package.load();	
     }
 }

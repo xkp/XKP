@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{cb37551c-f6ed-4411-a425-7ad2fb4ea2fc}</ProjectGuid>
+    <ProjectGuid>{1608a26d-dbbc-4830-a1af-ff79bdc77371}</ProjectGuid>
     <OutputType>Html</OutputType>
     <RootNamespace>Carousel</RootNamespace>
     <AssemblyName>Carousel.html</AssemblyName>
@@ -39,37 +39,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="resources" />
     <Folder Include="js" />
     <Folder Include="js\jsmanipulate" />
     <Folder Include="js\jquery" />
     <Folder Include="js\three" />
     <Folder Include="js\three\loaders" />
     <Folder Include="js\three\postprocessing" />
-    <Folder Include="images" />
+    <Folder Include="resources\images" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="images\test1.png">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\test2.png">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\test3.png">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\test4.png">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\test5.png">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\test6.png">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="my_plane.xml">
-      <SubType>Content</SubType>
-      <DependentUpon>my_plane.xs</DependentUpon>
-    </Content>
     <Content Include="js\Box2dWeb-2.1.a.3.min.js">
       <SubType>Content</SubType>
     </Content>
@@ -194,6 +173,25 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="js\utils.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="my_plane.xml">
+      <SubType>Content</SubType>
+      <DependentUpon>my_plane.xs</DependentUpon>
+    </Content>
+    <Content Include="resources\images\test1.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\test2.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\test3.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\test4.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\test5.png">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>

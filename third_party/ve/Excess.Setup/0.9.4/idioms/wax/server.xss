@@ -90,8 +90,8 @@ for(var cpage in pages)
     if (cpage.has_code)
         continue;
 
-    if (!cpage.src && !cpage.application)
-        compiler.error("pages must have code, src, or application", page = cpage.id);
+    if (!cpage.src)
+        compiler.error("pages must have code or src", page = cpage.id);
                 
     out()
     {

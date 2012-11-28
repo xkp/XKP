@@ -1,5 +1,5 @@
 ﻿<application id="KitchenSink" src="application.xs" title="KitchenSink">
-    
+
   <!-- components declaration here -->
   <div id="main" width="1200">
     <accordion id="acc1" placement="left" width="300" fillSpace="true">
@@ -116,5 +116,5 @@
       </div>
     </tabs>
   </div>
-  
+
 </application>

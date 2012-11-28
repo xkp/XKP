@@ -5,6 +5,7 @@
     <ProjectGuid>$guid1$</ProjectGuid>
     <OutputType>Html</OutputType>
     <RootNamespace>$safeprojectname$</RootNamespace>
+    <AssemblyName>$safeprojectname$.html</AssemblyName>
     <MainFile>project.xml</MainFile>
     <TargetFrameworkVersion>v$targetframeworkversion$</TargetFrameworkVersion>
     <TargetPlatform>v4</TargetPlatform>
@@ -35,6 +36,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="resources" />
     <Folder Include="js" />
     <Folder Include="js\jsmanipulate" />
     <Folder Include="js\jquery" />

@@ -7,7 +7,6 @@
 		<class id="package"/>				
 		
         <class id="image" resource_type="RESOURCE_IMAGE" hasimagedata="true">
-		`	<property id="runtime_src" type="string"/>
             <property id="src" type="string"/>
 			<property id="imagedata" type="string" use_plain_value="true">
 				<get text="get_image_data({path})" global = "true"/>
@@ -16,27 +15,22 @@
         </class>	
 		
 		<class id="audio" resource_type="RESOURCE_AUDIO">
-			<property id="runtime_src" type="string"/>
 			<property id="src" type="string"/>			
 		</class>
 		
 		<class id="video" resource_type="RESOURCE_VIDEO">
-			<property id="runtime_src" type="string"/>
 			<property id="src" type="string"/>			
 		</class>
 		
 		<class id="json_model" resource_type="RESOURCE_JSON_MODEL">
-			<property id="runtime_src" type="string"/>
-			<property id="src" type="string"/>					
+			<property id="src" type="string"/>			
 		</class>
 		
-		<class id="collada_model" resource_type="RESOURCE_COLLADA_MODEL">	
-			<property id="runtime_src" type="string"/>
+		<class id="collada_model" resource_type="RESOURCE_COLLADA_MODEL">			
 			<property id="src" type="string"/>			
 		</class>
 				
 		<class id="sprite_sheet" resource_type="RESOURCE_SPRITE">
-			<property id="runtime_src" type="string"/>
 			<property id="src" type="string"/>
 			<property id="frame_width" type="int"/>
 			<property id="frame_height" type="int"/>

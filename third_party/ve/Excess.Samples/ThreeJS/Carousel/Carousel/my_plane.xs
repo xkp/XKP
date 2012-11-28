@@ -13,4 +13,3 @@ class my_plane : transform
 		scale.y = 1;
 	}	
 }
-

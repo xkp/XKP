@@ -2,9 +2,9 @@
 
   <resources>
     <texture_cube 	id="t_cube1"
-						posx="../images/cube/Park/posx.jpg" negx="../images/cube/Park/negx.jpg"
-						posy="../images/cube/Park/posy.jpg" negy="../images/cube/Park/negy.jpg"
-						posz="../images/cube/Park/posz.jpg" negz="../images/cube/Park/negz.jpg"
+						posx="images/posx.jpg" negx="images/negx.jpg"
+						posy="images/posy.jpg" negy="images/negy.jpg"
+						posz="images/posz.jpg" negz="images/negz.jpg"
 		/>
   </resources>
 

@@ -1,7 +1,7 @@
 <classes>
   <class id="move_action" super="sequence" target_type="img" loop="true"/>
 
-  <class id="bad_guy" super="img" src="../images/smile_sad_48.png" width="60" height="60">
+  <class id="bad_guy" super="img" src="images/smile_sad_48.png" width="60" height="60">
     <physics body_type="dynamic" shape="circle" aradius="21.5"/>
 
     <spawner id="cannon" x="20" y="60" rotation="0" auto_start="true" frequency="1" creator_class="bullet" velocity="2"/>
@@ -15,16 +15,16 @@
     </sequence>
   </class>
 
-  <class id="good_guy" super="img" src="../images/smile_grin_48.png" width="30" height="30">
+  <class id="good_guy" super="img" src="images/smile_grin_48.png" width="30" height="30">
     <physics body_type="dynamic" sensor="true" shape="circle" aradius="21.5"/>
     <move_action id="move_around" vx="0" vy="0" auto_start="true"/>
   </class>
 
-  <class id="bullet" super="img" src="../images/bomb.png" width="20" height="20">
+  <class id="bullet" super="img" src="images/bomb.png" width="20" height="20">
     <physics body_type="dynamic" shape="circle" aradius="21.5"/>
   </class>
 
-  <class id="floor" super="img" src="../images/stone-12.jpg">
+  <class id="floor" super="img" src="images/stone-12.jpg">
     <physics body_type="static" shape="rect"/>
   </class>
 </classes>

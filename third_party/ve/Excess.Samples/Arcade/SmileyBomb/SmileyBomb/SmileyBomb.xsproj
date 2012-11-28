@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5bd9b280-02c4-415f-b4f9-1a763cc9bf87}</ProjectGuid>
+    <ProjectGuid>{ae796780-78cc-47d4-957a-202f37132237}</ProjectGuid>
     <OutputType>Html</OutputType>
     <RootNamespace>SmileyBomb</RootNamespace>
     <AssemblyName>SmileyBomb.html</AssemblyName>
@@ -39,37 +39,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="resources" />
     <Folder Include="js" />
     <Folder Include="js\jsmanipulate" />
     <Folder Include="js\jquery" />
     <Folder Include="js\three" />
     <Folder Include="js\three\loaders" />
     <Folder Include="js\three\postprocessing" />
-    <Folder Include="images" />
-    <Folder Include="sounds" />
+    <Folder Include="resources\images" />
+    <Folder Include="resources\sounds" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="classes.xml">
       <SubType>Content</SubType>
       <DependentUpon>classes.xs</DependentUpon>
-    </Content>
-    <Content Include="images\bomb.PNG">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\smile_grin_48.png">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\smile_sad_48.png">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\sound_off.png">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\sound_on.png">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="images\stone-12.jpg">
-      <SubType>Content</SubType>
     </Content>
     <Content Include="js\Box2dWeb-2.1.a.3.min.js">
       <SubType>Content</SubType>
@@ -197,7 +180,25 @@
     <Content Include="js\utils.js">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="sounds\boom.wav">
+    <Content Include="resources\images\bomb.PNG">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\smile_grin_48.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\smile_sad_48.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\sound_off.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\sound_on.png">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\images\stone-12.jpg">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="resources\sounds\boom.wav">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>

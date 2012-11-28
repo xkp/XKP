@@ -108,7 +108,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/smile_sad_48.png",
+		src:			"../resources/images/smile_sad_48.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -124,7 +124,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/smile_grin_48.png",
+		src:			"../resources/images/smile_grin_48.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -140,7 +140,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/sound_on.png",
+		src:			"../resources/images/sound_on.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -156,7 +156,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/sound_off.png",
+		src:			"../resources/images/sound_off.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -172,7 +172,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/stone-12.jpg",
+		src:			"../resources/images/stone-12.jpg",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -188,7 +188,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__image6",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/bomb.png",
+		src:			"../resources/images/bomb.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -204,7 +204,7 @@ var SoundUtils = new ui.SoundUtils();
 		{
 		id:				"__audio1",
 		resource_type:	RESOURCE_AUDIO,
-		src:			"../sounds/boom.wav",
+		src:			"../resources/sounds/boom.wav",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -300,7 +300,7 @@ var sound;var hero;var __floor1;var game_over;
                 )
     {
 			this._super(	
-			manager,parent,src? src : "../images/smile_sad_48.png");       
+			manager,parent,src? src : "images/smile_sad_48.png");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -336,7 +336,7 @@ var sound;var hero;var __floor1;var game_over;
         this.cannon = new arcade.Spawner(g_spawner_manager, 20, 60, 1, 2);
         this.cannon.creator = function()
         {
-            return new bullet(g_ui, g_ui_root, "../images/bomb.png");
+            return new bullet(g_ui, g_ui_root, "images/bomb.png");
         }
             this.cannon.parent = this;
             this.cannon.start();
@@ -396,7 +396,7 @@ this__.fade_out.start();
                 )
     {
 			this._super(	
-			manager,parent,src? src : "../images/smile_grin_48.png");       
+			manager,parent,src? src : "images/smile_grin_48.png");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -462,7 +462,7 @@ g_sequence_manager);
                 )
     {
 			this._super(	
-			manager,parent,src? src : "../images/bomb.png");       
+			manager,parent,src? src : "images/bomb.png");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -504,7 +504,7 @@ g_sequence_manager);
 this__.RemoveFromWorld();
 if (sound.active)
 {
-SoundUtils.play("../sounds/boom.wav");
+SoundUtils.play("sounds/boom.wav");
 }
 }
 	}
@@ -523,7 +523,7 @@ SoundUtils.play("../sounds/boom.wav");
                 )
     {
 			this._super(	
-			manager,parent,src? src : "../images/stone-12.jpg");       
+			manager,parent,src? src : "images/stone-12.jpg");       
         this.events = new ev.EventHolder(); 
         var this__  = this;
 				this.events.addListener('resized', function(cmp)
@@ -635,9 +635,9 @@ window.onload = function()
         g_ui_root = ui_.root;
      	ui_.load_resources(function()
 		{
-		    sound = new ui.StateButton(g_ui_root.manager, g_ui_root, "../images/sound_on.png", "../images/sound_off.png");
-		    hero = new good_guy(g_ui_root.manager, g_ui_root, "../images/smile_grin_48.png");
-		    __floor1 = new floor(g_ui_root.manager, g_ui_root, "../images/stone-12.jpg");
+		    sound = new ui.StateButton(g_ui_root.manager, g_ui_root, "images/sound_on.png", "images/sound_off.png");
+		    hero = new good_guy(g_ui_root.manager, g_ui_root, "images/smile_grin_48.png");
+		    __floor1 = new floor(g_ui_root.manager, g_ui_root, "images/stone-12.jpg");
 		    game_over = new ui.Label(g_ui_root.manager, g_ui_root, "40pt Calibri");
             sound.set_x(50);
             sound.set_y(50);
@@ -649,7 +649,7 @@ window.onload = function()
 	{    
 		game_over.setVisible(true);
 hero.move_around.stop();
-hero.src("../images/smile_sad_48.png");
+hero.src("images/smile_sad_48.png");
 	}
 	);
             __floor1.set_x(0);
@@ -663,7 +663,7 @@ hero.src("../images/smile_sad_48.png");
         sp1 = new arcade.Spawner(g_spawner_manager, 300, 100, 3, null);
         sp1.creator = function()
         {
-            return new bad_guy(g_ui, g_ui_root, "../images/smile_sad_48.png");
+            return new bad_guy(g_ui, g_ui_root, "images/smile_sad_48.png");
         }
             sp1.start();
             sp1.x = 300;

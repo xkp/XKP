@@ -4,9 +4,9 @@
 	if(obj.class_name == "texture_cube")
 	{
 		out(){
-		var urls = ["<xss:e v="obj.posx"/>", "<xss:e v="obj.negx"/>",
-					"<xss:e v="obj.posy"/>", "<xss:e v="obj.negy"/>",
-					"<xss:e v="obj.posz"/>", "<xss:e v="obj.negz"/>" ];		
+		var urls = ["../resources/<xss:e v="obj.posx"/>", "../resources/<xss:e v="obj.negx"/>",
+					"../resources/<xss:e v="obj.posy"/>", "../resources/<xss:e v="obj.negy"/>",
+					"../resources/<xss:e v="obj.posz"/>", "../resources/<xss:e v="obj.negz"/>" ];		
 		}	
 		if(obj.mapping)
 			out(){

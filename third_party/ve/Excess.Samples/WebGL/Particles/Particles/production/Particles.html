@@ -49,7 +49,7 @@ application.events = new ev.EventHolder();
 		{
 		id:				"__image1",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/sprites/snowflake1.png",
+		src:			"../resources/images/snowflake1.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -65,7 +65,7 @@ application.events = new ev.EventHolder();
 		{
 		id:				"__image2",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/sprites/snowflake2.png",
+		src:			"../resources/images/snowflake2.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -81,7 +81,7 @@ application.events = new ev.EventHolder();
 		{
 		id:				"__image3",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/sprites/snowflake3.png",
+		src:			"../resources/images/snowflake3.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -97,7 +97,7 @@ application.events = new ev.EventHolder();
 		{
 		id:				"__image4",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/sprites/snowflake4.png",
+		src:			"../resources/images/snowflake4.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -113,7 +113,7 @@ application.events = new ev.EventHolder();
 		{
 		id:				"__image5",
 		resource_type:	RESOURCE_IMAGE,
-		src:			"../images/sprites/snowflake5.png",
+		src:			"../resources/images/snowflake5.png",
 		frame_width:	null,
 		frame_height:	null,
 		animations:		[],	
@@ -150,23 +150,23 @@ var p_mat1;var p_mat2;var p_mat3;var p_mat4;var p_mat5;var camera_1;var __fly_co
 threejs_load_resources(manager, function()
 {
 p_mat1 = new THREE.ParticleBasicMaterial({
-map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('../images/sprites/snowflake1.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:10,
+map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('images/snowflake1.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:10,
 	});
 			p_mat1.manager = manager;
 p_mat2 = new THREE.ParticleBasicMaterial({
-map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('../images/sprites/snowflake2.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:20,
+map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('images/snowflake2.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:20,
 	});
 			p_mat2.manager = manager;
 p_mat3 = new THREE.ParticleBasicMaterial({
-map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('../images/sprites/snowflake3.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:15,
+map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('images/snowflake3.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:15,
 	});
 			p_mat3.manager = manager;
 p_mat4 = new THREE.ParticleBasicMaterial({
-map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('../images/sprites/snowflake4.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:5,
+map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('images/snowflake4.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:5,
 	});
 			p_mat4.manager = manager;
 p_mat5 = new THREE.ParticleBasicMaterial({
-map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('../images/sprites/snowflake5.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:8,
+map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('images/snowflake5.png').asset),transparent:true,blending:additive_blending,depthTest:false,size:8,
 	});
 			p_mat5.manager = manager;
 		    camera_1 = 
@@ -239,6 +239,10 @@ map:THREE.ImageUtils.loadTexture(manager.streamer.get_resource('../images/sprite
             camera_1.position.z = 500;
             __fly_controls1.movementSpeed = 20;
             __fly_controls1.rollSpeed = 0.200000003;
+	application.events.addListener("init", function()
+	{    
+	}
+	);
 var event_manager = new ev.ThreeEventManager();
 document.onmousemove = function(ev)
 {
