@@ -87,130 +87,6 @@ log: [android] Rendering default files...
 log: Rendering Android Manifest...
 
 Success are greateful
-===[ animationsink.project.xml ]================
-
-
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Sequence Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: lbl1
-log: Rendering instance: lbl2
-log: Rendering instance: lbl3
-log: Rendering instance: btn1
-log: Rendering instance: btn2
-log: Rendering instance: btn3
-log: Rendering instance: anim1
-log: Rendering instance: anim1
-log: Rendering instance: anim2
-log: Rendering instance: anim2
-log: Rendering instance: anim3
-log: Rendering instance: anim3
-log: Copying resource files...
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Copying files...
-log: Rendering Android Manifest...
-
-Success are greateful
-===[ androidcollisions.project.xml ]================
-
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/android/demos/androidcollisions/../../../idioms/android/classes.xmlERROR: Project:  androidcollisions.project.xml
-
-===[ androidcomponents.project.xml ]================
-
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/android/demos/androidcomponents/../../../idioms/android/classes.xmlERROR: Project:  androidcomponents.project.xml
-
-===[ androidkitchensink.project.xml ]================
-
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/android/demos/androidkitchensink/../../../idioms/android/classes.xmlERROR: Project:  androidkitchensink.project.xml
-
-===[ androidmaps.project.xml ]================
-
-
-Error [404] File not found
-	file = d:/xkp/xss/samples/android/demos/androidmaps/../../../idioms/android/classes.xmlERROR: Project:  androidmaps.project.xml
-
-===[ androidcollisions.project.xml ]================
-
-
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Android Imports...
-log: Rendering class: smiley_ball
-log: Rendering Sequence Types...
-log: Rendering Java Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: __img1
-log: Rendering instance: __img2
-log: Rendering instance: __img3
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: __image1
-log: Rendering instance: __image2
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Copying files...
-log: [jbox2d] Copying default files...
-log: Rendering Android Manifest...
-
-Success are greateful
-===[ maps.project.xml ]================
-
-
-log: Rendering Android project...
-log: API Level = 7
-log: Rendering Android Types...
-log: Rendering Sequence Types...
-log: Rendering Java Types...
-log: Rendering Android Imports...
-log: Rendering Android Imports...
-log: Rendering instance: application
-log: Rendering instance: __div1
-log: Rendering instance: btnGallery
-log: Rendering instance: btnMaps
-log: Rendering instance: lblStatus
-log: Rendering instance: lblInformation
-log: Rendering instance: swtScene
-log: Rendering instance: lblSwicherInformation
-log: Rendering instance: imgGallery
-log: Rendering instance: mapController
-log: Copying resource files...
-log: Rendering instance: __resources1
-log: Rendering instance: ico_gallery
-log: Rendering instance: ico_maps
-log: Rendering instance: photos
-log: Rendering instance: worth_1
-log: Rendering instance: worth_2
-log: Rendering instance: worth_3
-log: Rendering instance: worth_4
-log: Rendering instance: worth_5
-log: Rendering instance: worth_6
-log: Rendering instance: worth_7
-log: Rendering instance: maps
-log: Rendering instance: holguin
-log: [android] Copying default files...
-log: [android] Rendering default files...
-log: Copying files...
-log: [jbox2d] Copying default files...
-log: Rendering Android Manifest...
-Error [idiom] Environment variable is not defined
-	variable_name = ANDROID_SDK
-	file = d:/xkp/xss/idioms/android/main.xssERROR: Project:  maps.project.xml
-
 ===[ figures2d.project.xml ]================
 
 
@@ -853,6 +729,7 @@ log: vector3d
 log: vector3d
 log: vector3d
 log: rotation_class
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -870,6 +747,7 @@ log: vector3d
 log: vector3d
 log: vector3d
 log: rotation_class
+log: vector3d
 log: on resources.compile_dependency
 log: on resources.compile_dependency
 log: on resources.compile_dependency
@@ -1153,6 +1031,11 @@ log: Rendering Java Types...
 log: Rendering instance: cx
 
 Success are greateful
+===[ java6.project.xml ]================(Tests)
+
+
+Error [project] A target application must be specified on your projectERROR: Project:  java6.project.xml
+
 ===[ jquery-3js.project.xml ]================(Tests)
 
 
@@ -1175,19 +1058,9 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering 3js Types...
-log: rotation_class
-log: vector3d
-log: vector3d
-log: rotation_class
-log: Rendering UI...
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
+Error [404] File not found
+	file = ../idioms/idioms/threejs/object3d_renderer.xssERROR: Project:  jquery-3js1.project.xml
+
 ===[ jquery-webgl.project.xml ]================(Tests)
 
 
@@ -1236,13 +1109,9 @@ Success are greateful
 log: Rendering Resources...
 log: Rendering UI Types...
 log: Rendering Sequence Types...
-log: Rendering UI...
-log: component
-log: component
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
+Error [404] File not found
+	file = ../idioms/idioms/ms/sequence.xssERROR: Project:  jquery7.project.xml
+
 ===[ jquery8.project.xml ]================(Tests)
 
 
@@ -1267,28 +1136,9 @@ Success are greateful
 
 log: Rendering Resources...
 log: Rendering WebGL Types...
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: vector3d
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-log: on resources.compile_dependency
-Success are greateful
+Error [404] File not found
+	file = ../idioms/idioms/webgl/shader_renderer.xssERROR: Project:  jquery_pp.project.xml
+
 ===[ jsmanip.project.xml ]================(Tests)
 
 

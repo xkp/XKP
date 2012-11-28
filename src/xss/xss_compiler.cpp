@@ -2037,7 +2037,10 @@ void xss_compiler::read_application_types(std::vector<XSSObject>& applications, 
             xss_throw(error);
           }
 
-        fs::path path = fs::complete(base_path_ / entry_point);
+        fs::path path = exepath_ / entry_point;
+        if (!fs::exists(path))
+          path = fs::complete(base_path_ / entry_point);
+
         XSSApplicationRenderer app(new xss_application_renderer(path, lang, shared_from_this()));
 
         //create the "project" object, mainly used to store outside parameters
@@ -2093,7 +2096,10 @@ void xss_compiler::read_application_types(std::vector<XSSObject>& applications, 
 
 XSSModule xss_compiler::read_module(const str& src, XSSApplicationRenderer app, XSSObject module)
   {
-    fs::path path = base_path_ / src;
+    fs::path path = exepath_ / src;
+    if (!fs::exists(path))
+      path = base_path_ / src;
+
     XSSContext ctx(new xss_context(app->context(), path.parent_path()));
 
     xss_object_reader reader(ctx);
@@ -3203,6 +3209,11 @@ str xss_compiler::escape_file(const str& filename)
     boost::replace_all (result, "\n", "\\n");
     boost::replace_all (result, "\"", "\\\"");
     return result;
+  }
+
+void xss_compiler::exe_path(fs::path exepath)
+  {
+    exepath_ = exepath;
   }
 
 void xss_compiler::collect_dependencies(XSSType type, XSSType context)

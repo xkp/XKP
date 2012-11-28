@@ -4,8 +4,8 @@
 		<collada_model id="res_model" runtime_src="dynamic_src">
 			
 		</collada_model>	
-	</resources>
-		
+	</resources>	
+	
 	<scene>			
 		
 		<camera id="camera_1" fov="75" aspect="1.5" near="0.1" far="1000" look_at="scene.position">
@@ -21,8 +21,9 @@
 		</directional_light>
 								
 		<model id="model1" src="res_model">
-			<scale x="100" y="100" z="100"/>	
-			<rotation x="-75"/>
+			<scale x="20" y="20" z="20"/>	
+			<rotation x="-90"/>	
+			<position y="-50" />
 		</model>
 								
 	</scene>

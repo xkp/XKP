@@ -3,32 +3,31 @@
 		<accordion id="acc1" height="360" >
 			<div caption="Translate">				
 				<label id="lbl_xt" caption="X: "/>
-                <editbox id="edit_xt" width="100"/><br/><br/>
+                <editbox id="edit_xt" width="100" text="0"/><br/><br/>
 				<label id="lbl_yt" caption="Y: "/>
-                <editbox id="edit_yt" width="100"/><br/><br/>
+                <editbox id="edit_yt" width="100" text="0"/><br/><br/>
 				<label id="lbl_zt" caption="X: "/>
-                <editbox id="edit_zt" width="100"/><br/><br/>
+                <editbox id="edit_zt" width="100" text="0"/><br/><br/>
             </div>
             <div caption="Rotate">				
                 <label id="lbl_xr" caption="X: "/>
-                <editbox id="edit_xr" width="100"/><br/><br/>
+                <editbox id="edit_xr" width="100" text="0"/><br/><br/>
 				<label id="lbl_yr" caption="Y: "/>
-                <editbox id="edit_yr" width="100"/><br/><br/>
+                <editbox id="edit_yr" width="100" text="0"/><br/><br/>
 				<label id="lbl_zr" caption="Z: "/>
-                <editbox id="edit_zr" width="100"/><br/><br/>
+                <editbox id="edit_zr" width="100" text="0"/><br/><br/>
             </div>
             <div caption="Scale">				
                 <label id="lbl_xs" caption="X: "/>
-                <editbox id="edit_xs" width="100"/><br/><br/>
+                <editbox id="edit_xs" width="100" text="1"/><br/><br/>
 				<label id="lbl_ys" caption="Y: "/>
-                <editbox id="edit_ys" width="100"/><br/><br/>
+                <editbox id="edit_ys" width="100" text="1"/><br/><br/>
 				<label id="lbl_zs" caption="Z: "/>
-                <editbox id="edit_zs" width="100"/><br/><br/>
+                <editbox id="edit_zs" width="100" text="1"/><br/><br/>
             </div>   			
-        </accordion>
-		<button id="apply" caption="Apply"/>		
+        </accordion>				
     </div>
 
-     <canvas id="app" application="blend_xs_wgl.project.xml" width="500" height="500" html_id="left-container"/>
+    <canvas id="app" application="blend_xs_wgl.project.xml" width="500" height="300" html_id="left-container"/>
     
 </application>
