@@ -1,0 +1,10 @@
+<xss:parameter id="it"/>
+<xss:code>
+	
+        out()
+		{
+			<input id="<xss:e v="it.output_id"/>" type="text" class="time"></>
+		}
+   
+   
+</xss:code>

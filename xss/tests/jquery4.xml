@@ -38,8 +38,34 @@
                     </tabs>
                 </div>
             </accordion>
+			
         </div>
         
         <button id="btn1" x="20" y="120" caption="I'm floating"/>
+		<quovolver id="quov" x="47" y="150">
+                <div caption=" Item 1">
+                    <html>
+                        <p>
+                            PARAFO 1   a ac, aliquam ac, risus. Quisque lobortis.
+                            Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
+                            ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis <br/>
+                            lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui. 
+                        </p>
+                        <ul>
+                            <li>List item one</li>
+                            <li>List item two</li>
+                            <li>List item three</li>
+                        </ul>
+                    </html>                    
+                </div>
+                <div caption=" Item 2">
+                    <html>
+                        <p>
+                           4este seria el parafo 2
+                        </p>
+                        
+                    </html>  
+                </div>
+            </quovolver>
     </div>
 </application>

@@ -7,6 +7,8 @@
             <script type="text/javascript" src="../js/jquery-ui-1.8.18.custom.min.js"></script>
             <script type="text/javascript" src="../js/jquery-idiom.js"></script>
             <link rel="stylesheet" href="../css/ui-lightness/jquery-ui-1.8.18.custom.css"></link>
+            <link rel="stylesheet" href="../css/quovolver.style.css"></link>
+            <script type="text/javascript" src="../js/jquery.quovolver.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
         var application = {};
@@ -28,6 +30,9 @@
 			var __div5 = $("#__div5");
 			var __div6 = $("#__div6");
 			var btn1 = $("#btn1").button();
+			var quov = $("#quov");
+			var __div7 = $("#__div7");
+			var __div8 = $("#__div8");
 rb1.__input = "#rb1_input";
 rb1.__label = "#rb1_label";
 cb1.__input = "#cb1_input";
@@ -46,6 +51,7 @@ __radiobutton3.__label = "#__radiobutton3_label";
 		    btn1.click( function() { 
 			lbl1.text(edit1.attr("value"));
 		});
+		$('#quov .quotes').quovolver();
                     if (application.init)
                         application.init();
                 		});
@@ -55,6 +61,7 @@ __radiobutton3.__label = "#__radiobutton3_label";
 #edit1 {width : 252px}
 #__div2 {left : 400px;top : 20px;width : 600px;height : 400px;position : absolute}
 #btn1 {left : 20px;top : 120px;position : absolute}
+#quov {left : 47px;top : 150px;position : absolute}
     </style>
 </head>
 <body>
@@ -112,6 +119,18 @@ __radiobutton3.__label = "#__radiobutton3_label";
 						value="I'm floating" 
 					>
 				</input>
+<div id="quov">
+             <div class="quotes"><blockquote>
+<div id="__div7">
+<p>PARAFO 1 a ac, aliquam ac, risus. Quisque lobortis. Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis<br />lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.</p><ul><li>List item one</li><li>List item two</li><li>List item three</li></ul>
+</div>
+            </blockquote></div>
+             <div class="quotes"><blockquote>
+<div id="__div8">
+<p>4este seria el parafo 2</p>
+</div>
+            </blockquote></div>
+		</div>
 </div>
 </body>
 </html>

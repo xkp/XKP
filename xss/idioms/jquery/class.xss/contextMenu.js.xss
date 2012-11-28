@@ -1,0 +1,121 @@
+<xss:parameter id="it"/>
+<xss:parameter id="extra"/>
+<xss:parameter id="just_content"/>
+
+<xss:code>
+    if (!just_content)
+    {
+        string jquery_creator = it.jquery;
+        if (!jquery_creator)
+            jquery_creator = it.type.id;
+        
+        string caller = it.output_id;
+        if (it.type.caller)
+            caller = it.type.caller;
+        
+        out()
+        {
+			$.contextMenu(<xss:open_brace/>
+				selector: '.<xss:e value="caller"/>', 
+				
+        
+		}
+    
+	}
+	for(var prop in it.properties)
+	{
+		if(prop.render_as != "script")
+			continue;
+		
+        if (prop.type.is_array)
+        {
+            var array_ = prop.value;
+            if (array_)
+            {
+		        out() { <xss:e v="prop.output_id"/>: [ }
+                
+                for(var ac in array_)
+                {
+                    compiler.xss("../common-js/raw-object.xss", ac);
+                    compiler.out(", ");
+                }
+
+		        out() { ], }
+            }
+        }
+        else if (prop.type.is_object)
+        {
+            var obj_ = prop.value;
+            if (obj_)
+            {
+                compiler.xss("../common-js/raw-object.xss", obj_);
+                compiler.out(", ");
+            }
+        }
+        else
+        {
+		    out()
+            {
+                <xss:e v="prop.output_id"/>: <xss:e v="prop.render_value()"/>,
+            }
+        }
+	}
+	if (extra)
+    {
+        for(var e in extra)
+        {
+		    out()
+            {
+                <xss:e v="e.id"/>: <xss:e v="e.value"/>,
+            }
+        }
+    }
+	for(var ev in it.events)
+	{
+        if (ev.render_as != "script")
+            continue;
+            
+	    var	impls = ev.impls;
+        string evargs = "event, ui";
+        if (ev.output_args)
+            evargs = ev.output_args;
+            
+	    out(indent = 0)
+	    {
+		    <xss:e value="ev.output_id"/>: function(<xss:e v="evargs"/>) <xss:open_brace/> 
+	    }
+
+	    for(var evimpl in impls)
+	    {
+			evimpl.use_this_id(true);
+		    out() { <xss:e>evimpl.render()</xss:e> }
+	    }
+
+	    out(indent = 0)
+	    {
+		    <xss:close_brace/>,
+	    }
+	}
+	if(it.children.size >0)
+	{
+	 out()
+		{	
+		items: <xss:open_brace/>   
+		}
+	for(var child in it.children)
+		{
+		if (!child.name)
+				compiler.error("Menu items are expected to provide a name");
+		
+		compiler.xss("../class.xss/MenuItem.js.xss", child);
+		}
+	compiler.out("},");
+	}
+	else
+		compiler.error("Menu  are expected to have items");
+	
+if (!just_content)
+        compiler.out("});");
+		
+		
+</xss:code>

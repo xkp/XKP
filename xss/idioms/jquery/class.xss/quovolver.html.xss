@@ -1,0 +1,23 @@
+<xss:parameter id="it"/>
+
+<div id="<xss:e value="it.output_id"/>">
+
+<xss:code>
+
+        
+	for(var child in it.children)
+	{
+     
+            
+        out()
+		{
+             <div class="quotes"><blockquote>
+		
+        <p> <xss:e v="child.text"/> </p>
+		
+            </blockquote></div>
+		}
+	}
+
+</xss:code>
+</div>

@@ -1,0 +1,103 @@
+
+<xss:parameter id="it"/>
+<xss:parameter id="extra"/>
+<xss:parameter id="just_content"/>
+
+<xss:code>
+out()
+	{
+	"<xss:e value="it.name"/>":<xss:open_brace/> 
+	}   
+	out()
+	{
+		name:"<xss:e value="it.name"/>",
+	} 
+	if(it.icon)
+	{
+		out()
+		{
+		icon:"<xss:e value="it.icon"/>",
+		}
+	}
+	
+	if(it.accesskey) 
+	{
+		out()
+		{
+		accesskey:"<xss:e value="it.accesskey"/>",
+		}
+	}
+	
+	if(it.callback) 
+	{
+		out()
+		{
+		callback:	<xss:e value="it.callback"/>,
+		}
+	}
+	if(it.disabled) 
+	{
+		out()
+		{
+		disabled:<xss:e value="it.disabled"/>,
+		}
+	}
+	if(it.type) 
+	{
+		out()
+		{
+		type:<xss:e value="it.type"/>,
+		}
+	}
+	if(it.value) 
+	{
+		out()
+		{
+		value:<xss:e value="it.value"/>,
+		}
+	}
+	if(it.radio) 
+	{
+		out()
+		{
+		radio:<xss:e value="it.radio"/>,
+		}
+	}
+		if(it.radio) 
+	{
+		out()
+		{
+		radio:<xss:e value="it.radio"/>,
+		}
+	}
+	
+	if(it.events) 
+	{
+		out()
+		{
+		events:{<xss:e value="it.events"/>,}
+		}
+	}
+	
+
+	
+	
+	if(it.children.size >0)
+	{
+		out()
+		{
+		items: <xss:open_brace/>   
+		}
+		for(var child in it.children)
+		{
+			if (!child.name)
+				compiler.error("Menu items are expected to provide a name");
+		
+		compiler.xss("../class.xss/MenuItem.js.xss", child);
+		}
+		 compiler.out("},");
+	}
+	
+
+ compiler.out("},");
+</xss:code>

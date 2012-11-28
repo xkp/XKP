@@ -843,6 +843,8 @@
         </class>
 
          <class id="gmap" super="component" js_renderer="../jquery-object.xss" tag="div">
+		  
+		 
              <dependency href="http://maps.google.com/maps/api/js?sensor=true" absolute="true"/>
              <dependency href="jquery.ui.map.min.js"/>
 
@@ -1022,5 +1024,66 @@
              <event id="tilt_changed" render_as="bind" bind_with="addEventListener"/>
              <event id="zoom_changed" render_as="bind" bind_with="addEventListener"/>
          </class>
-     </types>
+		 
+		 <class id="knob" super="component" js_renderer="../jquery-object.xss"  html_renderer="knob.html.xss">
+			<dependency href="jquery.knob.js"/>
+			<property id="value" type="var" dont_init="true" render_as="script">
+				<get text="val()"/>
+				<set text="val({value}) .trigger('change')"/>
+			</property>
+			<property id="min" type="var" dont_init="true" render_as="script"/>
+			<property id="max" type="var" dont_init="true" render_as="script"/>
+			<property id="angleOffset" type="var" dont_init="true" render_as="script"/>
+			<property id="angleArc" type="var" dont_init="true" render_as="script"/>
+			<property id="cursor" type="string" dont_init="true" render_as="script"/>
+			<property id="readOnly" type="bool" dont_init="true" render_as="script"/>
+			<property id="stopper" type="bool" dont_init="true" render_as="script"/>
+			<property id="thickness" type="var" dont_init="true" render_as="script"/>
+			<property id="width" type="var" dont_init="true" render_as="script"/>
+			<property id="displayInput" type="bool" dont_init="true" render_as="script"/>
+			<property id="displayPrevious" type="bool" dont_init="true" render_as="script"/>
+			<property id="fgColor" type="var" dont_init="true" render_as="script"/>
+			<property id="bgColor" type="var" dont_init="true" render_as="script"/>
+			<event id="change" render_as="script" output_args="value"/>
+		 </class>
+		 
+		 <class id="quovolver" super="component" js_renderer="quovolver.js.xss"  html_renderer="quovolver.html.xss">
+			<dependency stylesheet="true" href="quovolver.style.css"/>
+			<dependency href="jquery.quovolver.js"/>
+		</class>
+		
+		 
+		 <class id="timepicker" super="component" js_renderer="../jquery-object.xss"  html_renderer="timepicker.html.xss">
+			<dependency stylesheet="true" href="jquery.timepicker.css"/>
+			<dependency stylesheet="true" href="timepicker.base.css"/>
+			<dependency href="jquery.timepicker.js"/>
+			<property id="time" type="var" dont_init="true" render_as="script">
+                <get text="val()"/>
+                <set text="timepicker('setTime', new Date())"/>
+            </property>
+			<property id="step" type="var" dont_init="true" render_as="script"/>
+			<property id="minTime" type="var" dont_init="true" render_as="script"/>
+			<property id="maxTime" type="var" dont_init="true" render_as="script"/>
+			<property id="showDuration" type="bool" dont_init="true" render_as="script"/>
+			<property id="timeFormat" type="var" dont_init="true" render_as="script">
+				<set text="timepicker({ 'timeFormat': {value}})"/>
+			</property>
+			<event id="changeTime"  render_as="bind" bind_with="on"/>
+		 </class>
+		 
+		 <class id="contextMenu" super="component" js_renderer="contextMenu.js.xss"  html_renderer="contextMenu.html.xss">
+			<dependency stylesheet="true" href="jquery.contextMenu.css"/>
+			<dependency href="jquery.contextMenu.js"/>
+			<property id="trigger" type="string" dont_init="true" render_as="script"/>
+			<property id="autoHide" type="bool" dont_init="true" render_as="script"/>
+			<property id="delay" type="var" dont_init="true" render_as="script"/>
+			<property id="animation" type="object" dont_init="true" render_as="script"/>
+			<event id="callback"  render_as="script" output_args="key,options" />
+			<event id="click"  render_as="bind" bind_with="on"/>
+	     </class>
+		
+		  
+			
+	     
+	 </types>
 </module>

@@ -1,0 +1,22 @@
+<xss:parameter id="it"/>
+
+
+<input class="knob" id ="<xss:e value="it.output_id"/>" 
+<xss:code>
+		
+		
+		
+		
+		out(){
+		style=" width: 104px; height: 66px; position: absolute;
+		vertical-align: middle; margin-top: 66px; margin-left: -152px; border: 0px; 
+		background-image: none; font-weight: bold; font-style: normal; font-variant: normal; 
+		font-size: 40px; line-height: normal; font-family: Arial; text-align: center; color: rgb(135, 206, 235); 
+		padding: 0px; -webkit-appearance: none; background-position: initial initial;
+		background-repeat: initial initial; 
+	
+		}
+		
+
+</xss:code>
+">

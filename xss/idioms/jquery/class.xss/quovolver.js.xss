@@ -1,0 +1,24 @@
+<xss:parameter id="it"/>
+<xss:parameter id="extra"/>
+<xss:parameter id="just_content"/>
+
+<xss:code>
+    if (!just_content)
+    {
+        string jquery_creator = it.jquery;
+        if (!jquery_creator)
+            jquery_creator = it.type.id;
+        
+        string caller = it.output_id;
+        if (it.type.caller)
+            caller = it.type.caller;
+        
+        out()
+        {
+		$('#<xss:e value="caller"/> .quotes').quovolver();
+           
+        }
+    }
+    
+	
+</xss:code>

@@ -1,0 +1,14 @@
+<xss:parameter id="it"/>
+
+<div id="<xss:e value="it.output_id"/>"  class="<xss:e value="it.output_id"/>">
+
+<xss:code>
+    
+    out()
+		{
+             <p><xss:e v="it.caption"/></p>
+		}      
+
+
+</xss:code>
+</div>
