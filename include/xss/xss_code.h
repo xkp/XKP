@@ -30,7 +30,8 @@ class statement_if : public xss_statement,
   };
 
 class statement_variable : public xss_statement, 
-                           public IStatementVar
+                           public IStatementVar,
+                           public boost::enable_shared_from_this<statement_variable>
   {
     public:
       statement_variable(const str& id, const xs_type& type, XSSExpression value, file_position& begin, file_position& end):
@@ -102,7 +103,8 @@ class statement_for : public xss_statement,
   };
 
 class statement_foreach : public xss_statement, 
-                          public IStatementForEach
+                          public IStatementForEach,
+                          public boost::enable_shared_from_this<statement_foreach>
   {
     public:
       statement_foreach(const str& id, const str& type, XSSExpression iter_expr, XSSCode for_code, file_position& begin, file_position& end):

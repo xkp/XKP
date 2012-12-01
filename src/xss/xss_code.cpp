@@ -81,6 +81,13 @@ void statement_variable::bind(XSSContext ctx)
           }
       }
 
+    XSSStatement var = XSSStatement(shared_from_this());
+    Notification ntfy_var = Notification(new notification(NOTID_DECL_VAR, var));
+    ctx->notify(ntfy_var);
+
+    Notification ntfy_ustype = Notification(new notification(NOTID_USING_TYPE, var));
+    ctx->notify(ntfy_ustype);
+
     ctx->register_symbol(RESOLVE_VARIABLE, id_, type_);
   }
 
@@ -193,6 +200,10 @@ void statement_foreach::bind(XSSContext ctx)
           }
       }
 
+    XSSStatement iter_for = XSSStatement(shared_from_this());
+    Notification ntfy = Notification(new notification(NOTID_ITER_FOR, iter_for));
+    ctx->notify(ntfy);
+
     for_code_->context()->register_symbol(RESOLVE_VARIABLE, id_, type_);
     for_code_->bind(ctx);
   }
@@ -280,6 +291,12 @@ void expr_statement::bind(XSSContext ctx)
   {
     //td: !!! notify return stuff
     expr_->bind(ctx);
+    if (id() == STATEMENT_RETURN)
+      {
+        XSSExpression expr = XSSExpression(expr_);
+        Notification ntfy = Notification(new notification(NOTID_RETURN_EXPR, expr));
+        ctx->notify(ntfy);
+      }
   }
 
 //xss_loop_statement
