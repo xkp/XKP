@@ -1,0 +1,12 @@
+﻿<application src="application.xs" title="Rain" width="744" height="333">
+	<resources>
+		<image id="main" src="02.jpg"/>
+	</resources>
+
+	<ripple_effect id="rip" x="0" y="0" width="670" height="333" ripradius="10" src="02.jpg"/>
+	<sequence id="rain" auto_start="true">
+		<every time="1.5">
+			<run method="drop"/>
+		</every>
+	</sequence>
+</application>
