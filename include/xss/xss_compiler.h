@@ -250,6 +250,7 @@ namespace xkp
         void       render_expression(XSSExpression expr);
         str        expression_to_string(XSSExpression expr); 
         void       set_application(Application app);
+        void       type_dependencies(XSSType type, dependency_list& deps);
 
         //0.9.5
         //void         build(fs::path xml, param_list& args);
@@ -265,7 +266,6 @@ namespace xkp
         str           build_project(const param_list params);
         str           get_result();
         void          render_app_types(const str& renderer);
-        void          type_dependencies(XSSType type, dependency_list& deps);
         str           render_value(variant value);
         str           get_env_var(const str& key);
         str           get_os_name();
@@ -350,9 +350,10 @@ namespace xkp
         //void collect_dependencies(XSSType type, XSSType context = XSSType());
       public:
         //glue
-        str  __instantiation(const param_list params);
-        str  __assignment(const str& path, variant left, variant right);
-        void __render_assignment(const str& path, variant left, variant right);
+        str          __instantiation(const param_list params);
+        str          __assignment(const str& path, variant left, variant right);
+        void         __render_assignment(const str& path, variant left, variant right);
+        DynamicArray __collect_dependencies(const param_list params);
 		};
 
   class xss_string
@@ -393,6 +394,7 @@ struct xss_compiler_schema : object_schema<xss_compiler>
         dynamic_function_<str>          ("render_ctor_args",        &xss_compiler::render_ctor_args);
         dynamic_function_<str>          ("build",                   &xss_compiler::build_project);
         dynamic_function_<str>          ("instantiation_to_string", &xss_compiler::__instantiation);
+        dynamic_function_<DynamicArray> ("get_dependencies",        &xss_compiler::__collect_dependencies);
 
         readonly_property<XSSObject>("options", &xss_compiler::options_);
 

@@ -27,6 +27,7 @@ class   xss_dsl;
 struct  inline_renderer;
 class   xss_statement;
 class   xss_code;
+struct  notification;
 
 //interfaces
 struct ILanguage;
@@ -60,6 +61,7 @@ typedef reference<inline_renderer>      InlineRenderer;
 typedef reference<xss_statement>        XSSStatement;
 typedef reference<xss_code>             XSSCode;
 typedef reference<IErrorHandler>        ErrorHandler;
+typedef reference<notification>         Notification;
 
 //enums
 enum MARKER_SOURCE
@@ -523,8 +525,22 @@ struct IErrorHandler
 
 enum NOTIFIED
   {
-    NOTID_ASSIGN,
-    NOTID_RETURN_TYPE
+    NOTID_DECL_VAR,
+    NOTID_ASSIGN_EXPR,
+    NOTID_ITER_FOR,
+    NOTID_DECL_PROP, 
+    NOTID_DECL_METHOD,
+    NOTID_DECL_EVENT,
+    NOTID_DECL_CLASS,
+    NOTID_DECL_INSTANCE,
+    NOTID_ASSIGN_PROP,
+    NOTID_READ_PROP,
+    NOTID_CALL_METHOD,
+    NOTID_INSTANTIATION_EXPR,
+    NOTID_RETURN_TYPE,
+    NOTID_RETURN_EXPR,
+    NOTID_USING_TYPE,
+    NOTID_DSL
   };
 
 struct notification
@@ -569,6 +585,7 @@ struct symbol_data
 enum CONTEXT_IDENTITY
   {
     CTXID_NONE,
+    CTXID_APPLICATION,
     CTXID_CODE,
     CTXID_INSTANCE,
     CTXID_TYPE,
@@ -637,7 +654,7 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
 			void           visit(context_visitor* visitor);
 	    variant        identity_value();
       bool           add_instance(XSSObject instance);
-      void           notify(notification nfy);
+      void           notify(Notification nfy, bool bottom_up = false);
     public:
       variant resolve(const str& id, RESOLVE_ITEM item_type = RESOLVE_ANY);
       bool    resolve(const str& id, resolve_info& info);
@@ -687,10 +704,14 @@ struct xss_context : boost::enable_shared_from_this<xss_context>
 
     private:
       //0.9.5
-      CONTEXT_IDENTITY identity_;
-      variant          identity_obj_;
-      fs::path         src_file_;
-      fs::path         output_file_;
+      typedef std::multimap<NOTIFIED, Notification> notified_list;
+      typedef std::pair<NOTIFIED, Notification>     notified_pair;
+
+      CONTEXT_IDENTITY  identity_;
+      variant           identity_obj_;
+      fs::path          src_file_;
+      fs::path          output_file_;
+      notified_list     notifications_;
        
       bool     resolve_dot(const str& id, resolve_info& info);
       bool     identity_search(const str& id, resolve_info& info);

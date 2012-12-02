@@ -2050,7 +2050,7 @@ str xss_compiler::expression_to_string(XSSExpression expr)
     if (!expr)
 		return str();
 
-	Language           lang = ctx_->get_language();
+	  Language  lang = ctx_->get_language();
     std::ostringstream result;
     lang->render_expression(expr, ctx_, result);
     return result.str();
@@ -2059,6 +2059,10 @@ str xss_compiler::expression_to_string(XSSExpression expr)
 void xss_compiler::set_application(Application app)
   {
     app_ = app;
+  }
+
+void xss_compiler::type_dependencies(XSSType type, dependency_list& deps)
+  {
   }
 
 //0.9.5
@@ -3851,6 +3855,14 @@ void xss_compiler::__render_assignment(const str& path, variant left, variant ri
     str         result = __assignment(path, left, right);
     XSSRenderer rend   = current_renderer();
     rend->append(result);
+  }
+
+DynamicArray xss_compiler::__collect_dependencies(const param_list params)
+  {
+    DynamicArray result(new dynamic_array);
+
+    //check parameters
+    return result;
   }
 
 //xss_string

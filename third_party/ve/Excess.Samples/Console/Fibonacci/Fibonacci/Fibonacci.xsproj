@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{dac2ce66-a33e-4db7-a572-23bc3ad556d1}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Fibonacci</RootNamespace>
+    <AssemblyName>Fibonacci</AssemblyName>
+    <MainFile>project.xml</MainFile>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetPlatform>v4</TargetPlatform>
+    <Name>Fibonacci</Name>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ExcessPath Condition=" '$(ExcessPath)' == '' ">$(Registry:HKEY_CURRENT_USER\SOFTWARE\Excess@InstallPath)\Extensions\Application\Excess</ExcessPath>
+    <ExcessPath Condition=" '$(ExcessPath)' == '' ">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Excess@InstallPath)\Extensions\Application\Excess</ExcessPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Release\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="application.xs" />
+    <Compile Include="project.xml">
+      <DependentUpon>application.xs</DependentUpon>
+      <Visible>0</Visible>
+      <xs_project>true</xs_project>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(ExcessPath)\Excess.targets" />
+</Project>

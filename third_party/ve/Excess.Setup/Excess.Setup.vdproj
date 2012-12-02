@@ -297,6 +297,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_1952DA541A1044B2BD60EAAD5D8A6C05"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_1A8C594FA5C448FDB13AFB246CBE5E53"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -340,6 +346,12 @@
         "Entry"
         {
         "MsmKey" = "8:_2053D1B392624329A962BF8634FD9E15"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_20C25635FDE14AF4A1CE788B6BCED924"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -418,13 +430,13 @@
         "Entry"
         {
         "MsmKey" = "8:_26264FCA6A30A1431AD8C91254B7107A"
-        "OwnerKey" = "8:_3F88B7D72DDB4C349F82A41E9F062C15"
+        "OwnerKey" = "8:_E5DBEF385672D7559C6ADFF5132ABEFD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_26264FCA6A30A1431AD8C91254B7107A"
-        "OwnerKey" = "8:_E5DBEF385672D7559C6ADFF5132ABEFD"
+        "OwnerKey" = "8:_3F88B7D72DDB4C349F82A41E9F062C15"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -585,6 +597,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_36046AB6351D445AB57DB6BE16388A93"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_366F18136FDB4EE7B2A3E97D8230CDE2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -639,18 +657,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_3AD12E4133994203B01051C694F21287"
-        "OwnerKey" = "8:_04F90B774D1541F3A1F3275A36C4B5E1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3AD12E4133994203B01051C694F21287"
-        "OwnerKey" = "8:_BC5272DA59A647FCA3C38880A289DB3F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_3AEB4EFDE49B47E487663B271ADF31B9"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -664,13 +670,13 @@
         "Entry"
         {
         "MsmKey" = "8:_3B5E44154C4C7B681CE01F7CBDD97EF1"
-        "OwnerKey" = "8:_3F88B7D72DDB4C349F82A41E9F062C15"
+        "OwnerKey" = "8:_E5DBEF385672D7559C6ADFF5132ABEFD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_3B5E44154C4C7B681CE01F7CBDD97EF1"
-        "OwnerKey" = "8:_E5DBEF385672D7559C6ADFF5132ABEFD"
+        "OwnerKey" = "8:_3F88B7D72DDB4C349F82A41E9F062C15"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -789,6 +795,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_454884ABA98D4A1B96CFBFE512FFFC46"
+        "OwnerKey" = "8:_04F90B774D1541F3A1F3275A36C4B5E1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_454884ABA98D4A1B96CFBFE512FFFC46"
+        "OwnerKey" = "8:_BC5272DA59A647FCA3C38880A289DB3F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_454F15349091488DA7F8935B324B4108"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -849,6 +867,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_48DE9DC9A15A4EA5B5844EB57B2A3033"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4AACC811499E4C2684781B092CA7A76D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -874,6 +898,12 @@
         "Entry"
         {
         "MsmKey" = "8:_4CE5031FCD3641E08875C2B077C67364"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4CE9579AB91C4D3B9AF528BD2884A5D5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -982,6 +1012,18 @@
         "Entry"
         {
         "MsmKey" = "8:_5357BEA693F743E7AC8FAA482356D571"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5427370C29BC4DDDA86C6EC77D444052"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_54773D78840E423B87C59EB0124B6903"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1431,6 +1473,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_6BE19E29FCF1415992801C3F40BEFA9F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6BEBD6D152984E33AA3D755FF385FAF5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1474,6 +1522,12 @@
         "Entry"
         {
         "MsmKey" = "8:_709C555220714CD3959586205A8790D9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_70D8663304D74C53A603AFA786FBA928"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1750,6 +1804,12 @@
         "Entry"
         {
         "MsmKey" = "8:_8ACF35A2737955FAC20B07B9705E253C"
+        "OwnerKey" = "8:_E5DBEF385672D7559C6ADFF5132ABEFD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8ACF35A2737955FAC20B07B9705E253C"
         "OwnerKey" = "8:_3F88B7D72DDB4C349F82A41E9F062C15"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1757,12 +1817,6 @@
         {
         "MsmKey" = "8:_8ACF35A2737955FAC20B07B9705E253C"
         "OwnerKey" = "8:_174BDE1499D70969E1E35D0F2802A022"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8ACF35A2737955FAC20B07B9705E253C"
-        "OwnerKey" = "8:_E5DBEF385672D7559C6ADFF5132ABEFD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1863,6 +1917,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_8EED0530DC8347BEA9A626B4907396A0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_8F2E5E2FE4EB401D8A4280F907BBEBC8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1906,13 +1966,13 @@
         "Entry"
         {
         "MsmKey" = "8:_91EEB85B3877D169E8240515B4E16452"
-        "OwnerKey" = "8:_3F88B7D72DDB4C349F82A41E9F062C15"
+        "OwnerKey" = "8:_E5DBEF385672D7559C6ADFF5132ABEFD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_91EEB85B3877D169E8240515B4E16452"
-        "OwnerKey" = "8:_E5DBEF385672D7559C6ADFF5132ABEFD"
+        "OwnerKey" = "8:_3F88B7D72DDB4C349F82A41E9F062C15"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -2050,6 +2110,12 @@
         "Entry"
         {
         "MsmKey" = "8:_9D35CDD2C39BACAA09F32E31493956A0"
+        "OwnerKey" = "8:_E5DBEF385672D7559C6ADFF5132ABEFD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9D35CDD2C39BACAA09F32E31493956A0"
         "OwnerKey" = "8:_1010F8C093E2986915A73CCAA5CBB2E4"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2098,13 +2164,13 @@
         "Entry"
         {
         "MsmKey" = "8:_9D35CDD2C39BACAA09F32E31493956A0"
-        "OwnerKey" = "8:_E5DBEF385672D7559C6ADFF5132ABEFD"
+        "OwnerKey" = "8:_AE0DBFA1C314A87627F4B0A79BAC18E9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9D35CDD2C39BACAA09F32E31493956A0"
-        "OwnerKey" = "8:_AE0DBFA1C314A87627F4B0A79BAC18E9"
+        "MsmKey" = "8:_9DCD5D96AE194C8BA7EA9E31AB56CB45"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -2266,13 +2332,13 @@
         "Entry"
         {
         "MsmKey" = "8:_A9D6D05419CCDFB99FF113F3FB39E9F5"
-        "OwnerKey" = "8:_3F88B7D72DDB4C349F82A41E9F062C15"
+        "OwnerKey" = "8:_E5DBEF385672D7559C6ADFF5132ABEFD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_A9D6D05419CCDFB99FF113F3FB39E9F5"
-        "OwnerKey" = "8:_E5DBEF385672D7559C6ADFF5132ABEFD"
+        "OwnerKey" = "8:_3F88B7D72DDB4C349F82A41E9F062C15"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -2314,6 +2380,12 @@
         "Entry"
         {
         "MsmKey" = "8:_AB0AA39258B4472B8C56C1F5A7EEE8BF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AB2B290B77664E449B38E6ED730B8851"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2943,6 +3015,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_D705C2DF12C24FDD90A5C137756A4659"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_D7308704805040A4A9DDC81C803141AD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -3058,6 +3136,12 @@
         "Entry"
         {
         "MsmKey" = "8:_E1B913094CC04C63B00F46B14AF4D9F4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E267C251461F48B3853E75049294A0AD"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -3454,6 +3538,24 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_E5DBEF385672D7559C6ADFF5132ABEFD"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_2EEADAEC13AF4FB07BB17EBC98E3F7FA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_2B224A76B653D3C5AF97B0F6708201AF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_62F24E6540544A2EFF2ED19CBB87525E"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -3533,12 +3635,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_370A3438EECF196CF1097DDDFC0C26E3"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E5DBEF385672D7559C6ADFF5132ABEFD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -3665,18 +3761,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_6636549C6C4BAA66765E9DE87FEEA10D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_2EEADAEC13AF4FB07BB17EBC98E3F7FA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_2B224A76B653D3C5AF97B0F6708201AF"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -4636,6 +4720,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1952DA541A1044B2BD60EAAD5D8A6C05"
+            {
+            "SourcePath" = "8:..\\Excess.Samples\\Arcade\\Car\\Car\\js\\jquery\\jquery-ui.css"
+            "TargetName" = "8:jquery-ui.css"
+            "Tag" = "8:"
+            "Folder" = "8:_3D2EEE18A0B341AAAD9EA1AEC5BEFD4F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1A8C594FA5C448FDB13AFB246CBE5E53"
             {
             "SourcePath" = "8:0.9.4\\idioms\\ms\\java\\libs\\Manager.java"
@@ -4762,6 +4866,26 @@
             "TargetName" = "8:XKPSwitcher.java"
             "Tag" = "8:"
             "Folder" = "8:_81334114A05C4606BAFF12BC74E0CA3C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_20C25635FDE14AF4A1CE788B6BCED924"
+            {
+            "SourcePath" = "8:..\\Excess.Samples\\ThreeJS\\Lights\\Lights\\js\\jquery\\jquery-ui.css"
+            "TargetName" = "8:jquery-ui.css"
+            "Tag" = "8:"
+            "Folder" = "8:_68414F44135544DEAD8165D8AA201F89"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5497,6 +5621,26 @@
             "TargetName" = "8:entry.xss"
             "Tag" = "8:"
             "Folder" = "8:_0AC13AFD18A44FE18D8FF8441613AB7E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_36046AB6351D445AB57DB6BE16388A93"
+            {
+            "SourcePath" = "8:..\\Excess.Samples\\JQuery\\KitchenSink\\KitchenSink\\css\\ui-lightness\\jquery-ui-1.8.18.custom.css"
+            "TargetName" = "8:jquery-ui-1.8.18.custom.css"
+            "Tag" = "8:"
+            "Folder" = "8:_8380742A43174ADFA00F0801EDF3E84E"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6255,6 +6399,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_48DE9DC9A15A4EA5B5844EB57B2A3033"
+            {
+            "SourcePath" = "8:..\\Excess.Samples\\JQuery\\KitchenSink\\KitchenSink\\js\\jquery\\jquery-ui.css"
+            "TargetName" = "8:jquery-ui.css"
+            "Tag" = "8:"
+            "Folder" = "8:_80F97CCF8533496580B1BD63F731652A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4AACC811499E4C2684781B092CA7A76D"
             {
             "SourcePath" = "8:..\\Excess.Project\\CodeSnippets\\Snippets\\for.snippet"
@@ -6341,6 +6505,26 @@
             "TargetName" = "8:styleable_XKPLayout.xml"
             "Tag" = "8:"
             "Folder" = "8:_112D01EF84C94599BC5EC7D2502CA19F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4CE9579AB91C4D3B9AF528BD2884A5D5"
+            {
+            "SourcePath" = "8:..\\Excess.Samples\\ThreeJS\\Geometries\\Geometries\\js\\jquery\\jquery-ui.css"
+            "TargetName" = "8:jquery-ui.css"
+            "Tag" = "8:"
+            "Folder" = "8:_8001BAA13D6643C0ABFFE4263812372E"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6572,6 +6756,46 @@
             "TargetName" = "8:IronPython_small.png"
             "Tag" = "8:"
             "Folder" = "8:_058D380A20A34EC0AB0F9AE0393DE8F2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5427370C29BC4DDDA86C6EC77D444052"
+            {
+            "SourcePath" = "8:..\\Excess.Samples\\Canvas\\KitchenSink\\KitchenSink\\js\\jquery\\jquery-ui.css"
+            "TargetName" = "8:jquery-ui.css"
+            "Tag" = "8:"
+            "Folder" = "8:_CE8E91114A5F4E62AE5A436CE1217253"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_54773D78840E423B87C59EB0124B6903"
+            {
+            "SourcePath" = "8:..\\Excess.Samples\\ThreeJS\\Particles\\Particles\\js\\jquery\\jquery-ui.css"
+            "TargetName" = "8:jquery-ui.css"
+            "Tag" = "8:"
+            "Folder" = "8:_E69058550AA04D9EA0D8C01AF1742025"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -7634,6 +7858,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6BE19E29FCF1415992801C3F40BEFA9F"
+            {
+            "SourcePath" = "8:..\\Excess.Samples\\WebGL\\ShaderFresnel\\ShaderFresnel\\js\\jquery\\jquery-ui.css"
+            "TargetName" = "8:jquery-ui.css"
+            "Tag" = "8:"
+            "Folder" = "8:_2349A9548DE2450096DFF8855F72BC6B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6BEBD6D152984E33AA3D755FF385FAF5"
             {
             "SourcePath" = "8:..\\Excess.Samples\\WebGL\\Text\\Text\\production\\Text.html"
@@ -7780,6 +8024,26 @@
             "TargetName" = "8:XKPSpawner.java"
             "Tag" = "8:"
             "Folder" = "8:_420A05D4A8A046AC8713621F720A1BEB"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_70D8663304D74C53A603AFA786FBA928"
+            {
+            "SourcePath" = "8:..\\Excess.Samples\\ThreeJS\\Carousel\\Carousel\\js\\jquery\\jquery-ui.css"
+            "TargetName" = "8:jquery-ui.css"
+            "Tag" = "8:"
+            "Folder" = "8:_F051B67E67E44122A5421FBBF56BEAE2"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -8876,6 +9140,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8EED0530DC8347BEA9A626B4907396A0"
+            {
+            "SourcePath" = "8:..\\Excess.Samples\\WebGL\\Particles\\Particles\\js\\jquery\\jquery-ui.css"
+            "TargetName" = "8:jquery-ui.css"
+            "Tag" = "8:"
+            "Folder" = "8:_8A9F002E0AF34AFFB6D8A9F6025DC7C6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8F2E5E2FE4EB401D8A4280F907BBEBC8"
             {
             "SourcePath" = "8:0.9.4\\idioms\\android\\copy.defaults\\res\\drawable-mdpi\\icon.png"
@@ -9418,6 +9702,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9DCD5D96AE194C8BA7EA9E31AB56CB45"
+            {
+            "SourcePath" = "8:..\\Excess.Samples\\WebGL\\Text\\Text\\js\\jquery\\jquery-ui.css"
+            "TargetName" = "8:jquery-ui.css"
+            "Tag" = "8:"
+            "Folder" = "8:_7A86066F7E2A4B4FB472520917ED17F0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9EE4B6F0A60641AD9A70AB503F424881"
             {
             "SourcePath" = "8:0.9.4\\idioms\\webgl\\webgl_embedded.xss"
@@ -9926,6 +10230,26 @@
             "TargetName" = "8:ui.xs"
             "Tag" = "8:"
             "Folder" = "8:_16173A0BDC5244479CE110EFF4BAB911"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AB2B290B77664E449B38E6ED730B8851"
+            {
+            "SourcePath" = "8:..\\Excess.Samples\\Arcade\\SmileyBomb\\SmileyBomb\\js\\jquery\\jquery-ui.css"
+            "TargetName" = "8:jquery-ui.css"
+            "Tag" = "8:"
+            "Folder" = "8:_4F669ECB93D84D49848B937BCB49698A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -11775,6 +12099,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D705C2DF12C24FDD90A5C137756A4659"
+            {
+            "SourcePath" = "8:..\\Excess.Samples\\ThreeJS\\SpinningCube\\SpinningCube\\js\\jquery\\jquery-ui.css"
+            "TargetName" = "8:jquery-ui.css"
+            "Tag" = "8:"
+            "Folder" = "8:_593464F05C9D4BA89BDFBDA26E2B0BD7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D7308704805040A4A9DDC81C803141AD"
             {
             "SourcePath" = "8:..\\Excess.Samples\\WebGL\\ShaderFresnel\\ShaderFresnel\\project.xml"
@@ -12161,6 +12505,26 @@
             "TargetName" = "8:my_plane.xml"
             "Tag" = "8:"
             "Folder" = "8:_63400AEC2A7D4048B666E3DF2600AE64"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E267C251461F48B3853E75049294A0AD"
+            {
+            "SourcePath" = "8:..\\Excess.Samples\\WebGL\\Materials\\Materials\\js\\jquery\\jquery-ui.css"
+            "TargetName" = "8:jquery-ui.css"
+            "Tag" = "8:"
+            "Folder" = "8:_8F80A18ECA8040E28A5084819C3AB5A2"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -14466,6 +14830,28 @@
                                                                 {
                                                                 }
                                                             }
+                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_88457149B03D484BA40BE7EF09BD7A1A"
+                                                            {
+                                                            "Name" = "8:js"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "Property" = "8:_64666BE74DA64BC1AE6851E402AA952A"
+                                                                "Folders"
+                                                                {
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_F051B67E67E44122A5421FBBF56BEAE2"
+                                                                    {
+                                                                    "Name" = "8:jquery"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_E1059E7670F64124B22656FC35FF972C"
+                                                                        "Folders"
+                                                                        {
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -14488,6 +14874,28 @@
                                                     "Property" = "8:_4EED38E7A1EF4EA28B7172BCF65EEE24"
                                                         "Folders"
                                                         {
+                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_50AEB6AF447F405CAD413306F9FE6645"
+                                                            {
+                                                            "Name" = "8:js"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "Property" = "8:_023238AA2C6C44748CEF71509BB9F4A8"
+                                                                "Folders"
+                                                                {
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_E69058550AA04D9EA0D8C01AF1742025"
+                                                                    {
+                                                                    "Name" = "8:jquery"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_EA1FE781A795466B9824B57CCF686456"
+                                                                        "Folders"
+                                                                        {
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
                                                             "{9EF0B969-E518-4E46-987F-47570745A589}:_90782D41644A424EBC16A40638A2EFF5"
                                                             {
                                                             "Name" = "8:production"
@@ -14532,6 +14940,28 @@
                                                                 {
                                                                 }
                                                             }
+                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_FDADD16001254EEFBD8B10C75C8C38D9"
+                                                            {
+                                                            "Name" = "8:js"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "Property" = "8:_A6A29BB8D84E4A0CB39E05F611935686"
+                                                                "Folders"
+                                                                {
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_68414F44135544DEAD8165D8AA201F89"
+                                                                    {
+                                                                    "Name" = "8:jquery"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_4FC069053F274135A92DDC73A66624D1"
+                                                                        "Folders"
+                                                                        {
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -14565,6 +14995,28 @@
                                                                 {
                                                                 }
                                                             }
+                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_E656EE4174CF4569AB2C8920F435068C"
+                                                            {
+                                                            "Name" = "8:js"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "Property" = "8:_775BC10ACCF44BA6A9E2C7466B024F1A"
+                                                                "Folders"
+                                                                {
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_8001BAA13D6643C0ABFFE4263812372E"
+                                                                    {
+                                                                    "Name" = "8:jquery"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_C1869BF5D642425E97A7CF4B6AD3640A"
+                                                                        "Folders"
+                                                                        {
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -14587,6 +15039,28 @@
                                                     "Property" = "8:_0D19A92C7EE149D499E293BE426B456F"
                                                         "Folders"
                                                         {
+                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_090911079BD14792987782DFDC17F37E"
+                                                            {
+                                                            "Name" = "8:js"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "Property" = "8:_3C691BC585C64A58AF150319C1A5B398"
+                                                                "Folders"
+                                                                {
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_593464F05C9D4BA89BDFBDA26E2B0BD7"
+                                                                    {
+                                                                    "Name" = "8:jquery"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_D1399E4B883242E5B1D1CF275BD554B4"
+                                                                        "Folders"
+                                                                        {
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
                                                             "{9EF0B969-E518-4E46-987F-47570745A589}:_4173698F0F3948B6A125557D624D8C87"
                                                             {
                                                             "Name" = "8:production"
@@ -14642,6 +15116,28 @@
                                                                 {
                                                                 }
                                                             }
+                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_F5445146F9524965843E3F34383D8AEB"
+                                                            {
+                                                            "Name" = "8:js"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "Property" = "8:_B2BF56673D924C97886272FE39372B30"
+                                                                "Folders"
+                                                                {
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_CE8E91114A5F4E62AE5A436CE1217253"
+                                                                    {
+                                                                    "Name" = "8:jquery"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_CC12FF67252C4A68AA21773557744038"
+                                                                        "Folders"
+                                                                        {
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -14675,6 +15171,28 @@
                                                     "Property" = "8:_90E2A66DDE3D4A87B15EADCFFAA29171"
                                                         "Folders"
                                                         {
+                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_1AEA3327E4AB4BDEB7095C56C3ACCCD9"
+                                                            {
+                                                            "Name" = "8:js"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "Property" = "8:_B5A4F8F379CB4ED68BEBD5DFA5A9CAD4"
+                                                                "Folders"
+                                                                {
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_3D2EEE18A0B341AAAD9EA1AEC5BEFD4F"
+                                                                    {
+                                                                    "Name" = "8:jquery"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_026F004D335748ABB97BD24B7F42616D"
+                                                                        "Folders"
+                                                                        {
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
                                                             "{9EF0B969-E518-4E46-987F-47570745A589}:_939D206B9AE44370B2413B5759917E9C"
                                                             {
                                                             "Name" = "8:production"
@@ -14719,6 +15237,28 @@
                                                                 {
                                                                 }
                                                             }
+                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_D4AA59774D2E46DEAB424C182A8D7F87"
+                                                            {
+                                                            "Name" = "8:js"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "Property" = "8:_4AAD98DC656E4863BF1DF8A12B46DBF1"
+                                                                "Folders"
+                                                                {
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_4F669ECB93D84D49848B937BCB49698A"
+                                                                    {
+                                                                    "Name" = "8:jquery"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_99916C51CB7D484C84DD192D1C0B4E08"
+                                                                        "Folders"
+                                                                        {
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -14752,6 +15292,28 @@
                                                     "Property" = "8:_9A72FB3BBB83447CB368F5093E8FE271"
                                                         "Folders"
                                                         {
+                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_3F7FF31C6B8A4C74AEFCC5889F065C71"
+                                                            {
+                                                            "Name" = "8:js"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "Property" = "8:_E1E2333EC00F412FA50230A2DC10A000"
+                                                                "Folders"
+                                                                {
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_7A86066F7E2A4B4FB472520917ED17F0"
+                                                                    {
+                                                                    "Name" = "8:jquery"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_A7C1319FB74248239A72D1D7640BFA40"
+                                                                        "Folders"
+                                                                        {
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
                                                             "{9EF0B969-E518-4E46-987F-47570745A589}:_9B4AD380EDAE4D0EA2E9789DF2C59CE0"
                                                             {
                                                             "Name" = "8:production"
@@ -14796,6 +15358,28 @@
                                                                 {
                                                                 }
                                                             }
+                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_8CFEE4081B8542B6B0E267833E3701D6"
+                                                            {
+                                                            "Name" = "8:js"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "Property" = "8:_76F10040C07649D0A6C51C72454923C3"
+                                                                "Folders"
+                                                                {
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_8F80A18ECA8040E28A5084819C3AB5A2"
+                                                                    {
+                                                                    "Name" = "8:jquery"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_3CA398141B5D45B28DE2AD771E180079"
+                                                                        "Folders"
+                                                                        {
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -14829,6 +15413,28 @@
                                                                 {
                                                                 }
                                                             }
+                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_FEC4DC1011704B199E5F9939AF38EB34"
+                                                            {
+                                                            "Name" = "8:js"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "Property" = "8:_1B17EFFFF03A4828B824D842B90A7DFB"
+                                                                "Folders"
+                                                                {
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_8A9F002E0AF34AFFB6D8A9F6025DC7C6"
+                                                                    {
+                                                                    "Name" = "8:jquery"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_6C10E2857A464428A36DC092CCFE3B2F"
+                                                                        "Folders"
+                                                                        {
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -14860,6 +15466,28 @@
                                                             "Property" = "8:_5CEE9279FA8D40ACB4BEE59D595E41F2"
                                                                 "Folders"
                                                                 {
+                                                                }
+                                                            }
+                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_A3EBC5B6DA5C41EDAE15909A1A324FD2"
+                                                            {
+                                                            "Name" = "8:js"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "Property" = "8:_C269F9AD51F248C780B6BDF75CBC35D2"
+                                                                "Folders"
+                                                                {
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_2349A9548DE2450096DFF8855F72BC6B"
+                                                                    {
+                                                                    "Name" = "8:jquery"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_412B862DC38047409A5E82D53CABDA98"
+                                                                        "Folders"
+                                                                        {
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -14904,6 +15532,50 @@
                                                             "Property" = "8:_E6CFFA07FEEA4CF9AA50C11F50A144B2"
                                                                 "Folders"
                                                                 {
+                                                                }
+                                                            }
+                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_CB3436C4D4F245E39AEE1B256CCEC1F2"
+                                                            {
+                                                            "Name" = "8:css"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "Property" = "8:_74967F1EA4E1485C94360C463463418B"
+                                                                "Folders"
+                                                                {
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_8380742A43174ADFA00F0801EDF3E84E"
+                                                                    {
+                                                                    "Name" = "8:ui-lightness"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_D25E03C332B14691AD2EF20C87AAF702"
+                                                                        "Folders"
+                                                                        {
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_ED0ED4FB11114EB5AC74FCC73395F456"
+                                                            {
+                                                            "Name" = "8:js"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "Property" = "8:_7962B3CC2AE94516ABA1020F3559DFC1"
+                                                                "Folders"
+                                                                {
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_80F97CCF8533496580B1BD63F731652A"
+                                                                    {
+                                                                    "Name" = "8:jquery"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_10AF9A1594D34A64A90DA4C9C02692FB"
+                                                                        "Folders"
+                                                                        {
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -14968,15 +15640,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Excess"
-        "ProductCode" = "8:{AC70F885-A9BE-4434-B22B-75CDDC6B0282}"
-        "PackageCode" = "8:{349382A6-07AB-4882-A805-6EFAA0DCEE42}"
+        "ProductCode" = "8:{5ED9DE62-24FF-4E67-A111-F43487943E3B}"
+        "PackageCode" = "8:{89BF2116-6B0E-47B9-BEE3-A1C560FAB919}"
         "UpgradeCode" = "8:{DE445DA7-18B3-49B9-96C9-D6A1C39AD040}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.1.7"
+        "ProductVersion" = "8:0.1.6"
         "Manufacturer" = "8:XKP"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -15713,7 +16385,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_3AD12E4133994203B01051C694F21287"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_454884ABA98D4A1B96CFBFE512FFFC46"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
