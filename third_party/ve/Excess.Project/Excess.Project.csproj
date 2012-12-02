@@ -567,7 +567,13 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Templates\Projects\ArcadeApp\resources\" />
+    <Folder Include="Templates\Projects\CanvasApp\resources\" />
+    <Folder Include="Templates\Projects\jQueryApp\resources\" />
+    <Folder Include="Templates\Projects\ThreeJSApp\resources\" />
+    <Folder Include="Templates\Projects\WebGLApp\resources\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\VSSDK\Microsoft.VsSDK.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

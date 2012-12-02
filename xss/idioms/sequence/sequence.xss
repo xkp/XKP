@@ -22,27 +22,22 @@
         key.value = null;
 
         var this_ = get_scope(owner_seq); 
-        compiler.log("RK Here");
         if (compiler.parse_expression(key_value))
         {
             //in this case we need to figure out the key values at runtime
             //this code will keep the expression information to be genearted later. 
             //Note: such expressions will be evaluated at sequence's start time 
             
-            compiler.log("RK Here 1 " + key_value);
             var expr_info  = analyze_expression(key_value, owner_seq, "", false);
             var info  = object();
-            info.expr = compiler.render_expression(expr_info.expr);
+            info.expr = compiler.expression_to_string(expr_info.expr);
             info.idx  = key_index;
             info.interp = interp;
             
-            compiler.log("RK Here 1.1");
             if (prop_info.inside_class)
                 info.expr = compiler.replace_identifier(info.expr, "this.", "this__."); //td!!! this_str
             
-            compiler.log("owner_seq.key_expressions");
             owner_seq.key_expressions += info;
-            compiler.log("owner_seq.key_expressions out");
         }
         else if (key_value == "@") //convention over configuration
         {
@@ -50,7 +45,6 @@
             //kinda neat
             var nfo = object();
             
-            compiler.log("RK Here 2");
             nfo.expr = compiler.property_get(prop_info.property, prop_info.path);
             nfo.idx  = key_index;
             nfo.interp = interp;
@@ -58,16 +52,12 @@
             //if (!rendering_instance)
             //    nfo.expr = compiler.replace_identifier(nfo.expr, owner_seq.id, "this__");
 
-            compiler.log("owner_seq.key_expressions");
             owner_seq.key_expressions += nfo;
-            compiler.log("owner_seq.key_expressions out");
         }
         else //assume constants
         {
             key.value = key_value;
         }
-
-        compiler.log("RK out");
     }
     
     method generate_at(at, seq, seq_id, rendering_instance)
@@ -102,7 +92,6 @@
                     if (itm.in == null|| itm.from == null || itm.to == null)					
                          compiler.error("animate needs keys or [from, to, in]");
 					
-                    
                     //a simple from/to animation
                     var end     = object();
                     end.t       = itm.in;
@@ -119,32 +108,24 @@
                 int   idx    = 0;
                 for(var key in keys)
                 {
-                    compiler.log("Begin KEY");
                     //td: make time flexible
                     if (key.t > length)
                         length = key.t; 
                             
-                    compiler.log(key.t);
-                    compiler.log(time);
                     key.t += time;
 
                     resolve_key(key, key.value, idx, seq, prop_info, iid);       
                     
-                    compiler.log(" after resolve_key ");       
-
                     if (key.value == null)
                         key.value = "null";
                         
                     myidiom.render_key(iid, key);
                     
                     idx++;
-                    compiler.log("END KEY");
                 }
 
                 //close the interpolator 
-                    compiler.log("What After here?");
                 myidiom.close_interpolator(iid, seq_id);
-                compiler.log("After here?");
             }
             else if (itm.class_name == "run")
             {
@@ -234,13 +215,8 @@
     {
         if (itm.expr)
         {
-            compiler.log("seq.conditions += itm.expr");
             seq.conditions += itm.expr;
-            compiler.log("seq.conditions += itm.expr out");
-
-            compiler.log("seq.actions += itm.children");
             seq.actions += itm.children;
-            compiler.log("seq.actions += itm.children out");
         }
         else if (itm.trigger)
         {
@@ -256,12 +232,12 @@
     
     method generate_every(itm, seq, seq_id, rendering_instance)
     {
-        if (!itm.time)
+        if (!itm.t)
             compiler.error("'every' needs 'time'");
     
         string aid = compiler.genid("__h");
         
-        myidiom.begin_every(aid, itm.time);
+        myidiom.begin_every(aid, itm.t);
         
         for(var child in itm.children)
         {
@@ -317,7 +293,8 @@
         }
         else if (action.expr)
         {
-            myidiom.run_expression(action.expr, seq, seq_id);
+            var run_expr = analyze_expression(action.expr, seq, seq_id, rendering_instance);
+            myidiom.run_expression(run_expr, seq, seq_id);
         }
         else
         {
@@ -380,7 +357,6 @@
         seq.key_expressions = [];
         for(var item in seq.children)
         {
-            compiler.log("HERE");
             generate_item(item, seq, seq_id, rendering_instance);
         }
 
@@ -402,19 +378,25 @@
             
             //check the conditions described on the when clause
             int cond_idx = 0;
+            //var seq_actions = seq.actions;
             for(var cond in seq.conditions)
             {
-                cond = compiler.render_expression(cond);
+                var cond_expr = compiler.compile_expression(cond);
+                if (!cond_expr)
+                    compiler.error("Invalid when expression", expr=cond);
 
                 out()
                 {
-                    if (<xss:e v="cond"/>)
+                    if (<xss:e v="compiler.expression_to_string(cond_expr)"/>)
                     <xss:open_brace/>
                 }
                 
-                var action_list = seq.actions[cond_idx]; cond_idx++;
+                var action_list = seq.actions[cond_idx]; 
+                cond_idx++;
+                
                 generate_when_actions(action_list, seq_id, seq);
                 
+                compiler.log("WHEN 4");
                 out()
                 {
                     <xss:close_brace/>
@@ -429,10 +411,7 @@
     
     on render()
     {
-        compiler.log("Rendering sequence " + seq.id);
-        
         myidiom = compiler.get_idiom(seq);
-        compiler.log(myidiom);
         
         if (is_class)
         {

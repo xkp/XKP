@@ -2435,6 +2435,9 @@ bool xs_compiler::compile_code(const str& code_str, code& result)
 
 bool xs_compiler::compile_xs(const str& code_str, xs_container& result)
   {
+    if (code_str.empty())
+      return true;
+
     parsetree_visitor v;
     str to_parse = process_dsl(code_str, v.dsl_text);
 

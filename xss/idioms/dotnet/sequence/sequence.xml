@@ -31,19 +31,26 @@
         <reject_child type="*"/>
     </class>
 
+    <class id="every">
+        <accept_child type="run" append="as_child_only"/>
+        <reject_child type="*"/>
+    </class>
+
     <class id="sequence" output_id="Sequence">
         <accept_parent type="sequence"  append="as_child"/>
         <reject_parent type="at" />
         <reject_parent type="when" />
         <reject_parent type="run" />
         <reject_parent type="animate" />
-        
+        <reject_parent type="every" />
+
         <accept_parent type="*" append="as_property"/>
         
         <accept_child type="at"      append="as_child_only"/>
         <accept_child type="when"    append="as_child_only"/>
         <accept_child type="run"     append="as_child_only"/>
         <accept_child type="animate" append="as_child_only"/>
+        <accept_child type="every"   append="as_child_only"/>
         <reject_child type="*"/>
 
         <property id="loop"   type="bool"/>

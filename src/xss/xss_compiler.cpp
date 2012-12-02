@@ -1019,11 +1019,13 @@ void xss_compiler::xss(const param_list params)
 		    error_info = rte.data; 
 		    error_info.add("file", file.string()); 
 	    }
+    #ifndef _DEBUG
     catch(...)
 	    {
 		    error_info.add("desc", SSnafu); 
 		    error_info.add("file", file.string()); 
 	    }
+    #endif
 
     if (!success)
 	    {
@@ -1549,6 +1551,27 @@ str xss_compiler::render_value(variant value)
 //      mod->used();
 //  }
 
+//td: undup
+struct local_error_handler : IErrorHandler
+  {
+    virtual void add(const str& description, param_list* data, file_location& loc)
+      {
+        errors_.push_back(error_info(description, data, loc));
+      }
+
+    virtual bool has_errors()
+      {
+        return !errors_.empty();
+      }
+
+    virtual error_list& errors()
+      {
+        return errors_;
+      }
+    private:
+      error_list errors_;
+  };
+
 XSSExpression xss_compiler::compile_expression(const param_list params)
   {
     if (params.empty())
@@ -1578,9 +1601,12 @@ XSSExpression xss_compiler::compile_expression(const param_list params)
       {
         expr = xss_expression_utils::constant_expression(expr_value);
       }
+
+    if (!expr)
+      return XSSExpression();
     
     //process rest of the params
-    XSSContext ctx = app_->context();
+    XSSContext ctx;
     for(int i = 0; i < params.size(); i++)
       {
         str pname = params.get_name(i);
@@ -1609,12 +1635,20 @@ XSSExpression xss_compiler::compile_expression(const param_list params)
               }
 
             if (instance)
-              ctx = XSSContext(new xss_context(CTXID_INSTANCE, instance, ctx));
+              ctx = XSSContext(new xss_context(CTXID_INSTANCE, instance, app_->context()));
             else
-              ctx = XSSContext(new xss_context(CTXID_TYPE, type, ctx));
+              ctx = XSSContext(new xss_context(CTXID_TYPE, type, app_->context()));
           }
       }
 
+    if (!ctx)
+      ctx = XSSContext(new xss_context(app_->context()));
+    
+    //we must eat up the errors
+    ErrorHandler errors(new local_error_handler());
+    ctx->errors(errors);
+
+    //and bind
     expr->bind(ctx);
     return expr;
   }
@@ -1919,12 +1953,21 @@ void xss_compiler::build(const fs::path& entry, const fs::path& output)
     XSSRenderer renderer = compile_xss_file(entry, ctx_);
     str result = renderer->render(XSSObject(), null);
     
-    //td: !!! copy output file, dependencies, etc
+    if (!output.empty())
+      {
+        fs::path op = output;
+        if (!fs::exists(op))
+          {
+            op = output_path_ / output;
+          }
+        
+        output_file(op, result);
+      }
   }
 
 XSSContext xss_compiler::context()
   {
-    return ctx_;
+    return ctx_; 
   }
 
 void xss_compiler::render_code(XSSCode code)

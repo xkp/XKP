@@ -607,7 +607,8 @@ void code_linker::exec_operator(operator_type op, int pop_count, int push_count,
                 resolve_value(arg);
               }
             
-            stack_.pop();
+            variant arr = stack_.top(); stack_.pop();
+            resolve_value(arr);
             resolve_operator(op, already_in_stack(), already_in_stack(), null);
             break;
           }

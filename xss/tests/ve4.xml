@@ -12,7 +12,11 @@
     </button>
 
     <sequence id="seq1">
-        <at t="3">
+        <every t="2">
+            <run expr="btn1.x++"/>
+        </every>
+        
+        <at t="0">
             <animate property="btn1.x" from="10" to="btn2.x" in="3"/>
         </at>
         <at t="3">
@@ -23,6 +27,10 @@
                 <key t="3" value="300"/>
             </animate>
         </at>
+
+        <when expr="btn1.y > 230">
+            <run expr="stop()"/>
+        </when>
     </sequence>
     
     <mySequence id="seq2" target="btn3"/>

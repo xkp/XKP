@@ -64,6 +64,7 @@ XSSExpression test_expression(const str& expr)
 
 void test_expressions()
   {
+    return;
     test_expression("a.b.c = c.d.e");
     test_expression("a.b[i, j].c = c.d(j + 3, f).e");
     test_expression("b[i, j] = new myobj( 3/(a+ b), null)");
@@ -71,8 +72,30 @@ void test_expressions()
     test_expression("a[5] = { a : 3, b : [2, 3, 4]}");
   }
 
-void test_object_model(fs::path target)
+int main(int argc, char* argv[])
   {
+    test_expressions(); //td: !!!DEBUG!!!
+
+    if (argc < 2)
+      {
+        std::cout << "Usage: xss [Project File]" << std::endl;
+        //std::cin.get();
+        return -1;
+      }
+
+    char* fname = argv[1];
+		fs::path target = fs::system_complete(fname);
+
+    if (!fs::exists(target))
+      {
+        param_list error;
+        error.add("id", SProjectError);
+        error.add("desc", SCannotReadProjectFile);
+        print_error(error);
+
+        return -1;
+      }
+
     FileSystem fs(new local_filesystem);
     LanguageFactory lf(new lang_factory);
 
@@ -136,33 +159,7 @@ void test_object_model(fs::path target)
 
         std::cin.get();
       }
-  }
 
-int main(int argc, char* argv[])
-  {
-    test_expressions(); //td: !!!DEBUG!!!
-
-    if (argc < 2)
-      {
-        std::cout << "Usage: xss [Project File]" << std::endl;
-        //std::cin.get();
-        return -1;
-      }
-
-    char* fname = argv[1];
-		fs::path target = fs::system_complete(fname);
-
-    if (!fs::exists(target))
-      {
-        param_list error;
-        error.add("id", SProjectError);
-        error.add("desc", SCannotReadProjectFile);
-        print_error(error);
-
-        return -1;
-      }
-
-    test_object_model(target); //td: !!!DEBUG!!!
     return 0;
 
     //0.9.5

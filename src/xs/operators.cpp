@@ -412,8 +412,8 @@ struct index : operator_exec
   {
     virtual variant exec(variant& arg1, variant& arg2)
       {
-				DynamicArray arr = variant_cast<DynamicArray>(arg1, DynamicArray());
-        int          idx = variant_cast<int>(arg2, -1);
+				DynamicArray arr = variant_cast<DynamicArray>(arg2, DynamicArray());
+        int          idx = variant_cast<int>(arg1, -1);
 
         if (!arr || idx < 0)
           return variant();

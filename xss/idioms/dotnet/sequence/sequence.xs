@@ -33,16 +33,14 @@ on init_instances()
 //sequence.xss handlers
 method begin_interpolator(prop, string iid, string assign, string path)
 {
+    string prop_type = compiler.type_to_string(prop.type);
     out()
     {
-        var <xss:e v="iid"/> = new state.Interpolator(
-                         
-            default_interpolate,
-            function(value)
-            {
-                <xss:e v="assign"/>;
-            },
-            [
+        Interpolator<<xss:e v="prop_type"/>> <xss:e v="iid"/> = new Interpolator<<xss:e v="prop_type"/>>();
+        <xss:e v="iid"/>.onUpdate += delegate(<xss:e v="prop_type"/> value)
+        {
+            <xss:e v="assign"/>;
+        };
     }
 }
 
@@ -50,7 +48,7 @@ method render_key(iid, key)
 {
     out()
     {
-        {t: <xss:e v="key.t"/>, value: <xss:e v="key.value"/>},
+        <xss:e v="iid"/>.addKey(<xss:e v="key.t"/>, <xss:e v="key.value"/>);
     }
 }
 
@@ -58,8 +56,7 @@ method close_interpolator(iid, seq_id)
 {
     out()
     {
-            ]);
-            <xss:e v="seq_id"/>.addHandler(<xss:e v="iid"/>);	              
+        <xss:e v="seq_id"/>.addHandler(<xss:e v="iid"/>);	              
     }
 }
 
@@ -67,7 +64,8 @@ method begin_caller(methd, mid, time)
 {
     out()
     {
-        var <xss:e v="mid"/> = new state.Caller(<xss:e v="time"/>,function()
+        Caller <xss:e v="mid"/> = new Caller(<xss:e v="time"/>);
+        xss:e v="mid"/>.onUpdate += delagate ()
         <xss:open_brace/>
     }
 }
@@ -76,7 +74,7 @@ method close_caller(seq_id, mid)
 {
     out()
     {
-        <xss:close_brace/>);
+        <xss:close_brace/>;
         <xss:e v="seq_id"/>.addHandler(<xss:e v="mid"/>);						  
     }
 }
@@ -108,7 +106,8 @@ method begin_every(aid, time)
 {
     out()
     {
-        var <xss:e v="aid"/> = new state.Every(<xss:e v="time"/>, function(t)
+        var <xss:e v="aid"/> = new Every(<xss:e v="time"/>);
+        <xss:e v="aid"/>.onUpdate += delegate(int t)
         <xss:open_brace/>
     }
 }
@@ -117,7 +116,7 @@ method close_every(aid, seq_id)
 {
     out()
     {
-        <xss:close_brace/>);
+        <xss:close_brace/>;
         <xss:e v="seq_id"/>.addHandler(<xss:e v="aid"/>);	                    
     }
 }
@@ -158,7 +157,7 @@ method begin_key_expressions(seq_id)
 {
     out()
     {
-        <xss:e v="seq_id"/>.events.addListener('start', function()
+        <xss:e v="seq_id"/>.onStart += delegate()
         <xss:open_brace/>
     }
 }
@@ -175,7 +174,7 @@ method close_key_expressions()
 {
     out()
     {
-        <xss:close_brace/>);
+        <xss:close_brace/>;
     }
 }    
 
@@ -183,7 +182,7 @@ method begin_frame_conditions(seq_id)
 {
     out()
     {
-        <xss:e v="seq_id"/>.events.addListener('update',function(elapsed, last)
+        <xss:e v="seq_id"/>.onUpdate += delegate(int elapsed, int last)
         <xss:open_brace/>
     }
 }
@@ -192,7 +191,7 @@ method close_frame_conditions()
 {
     out()
     {
-        <xss:close_brace/>);
+        <xss:close_brace/>;
     }
 }
 
@@ -222,7 +221,8 @@ method run_sequence(seq, parent_id)
     }
 }    
 
-method run_expression(expr, seq, seq_id)
+method run_expression(expr_info, seq, seq_id)
 {
-    compiler.render_expression(expr);
+    compiler.render_expression(expr_info.expr);
+    compiler.out(";");
 }

@@ -5,7 +5,6 @@ class test_class
         for(var i in array_property)
         {
             string si = i;
-            console.log(si);
         }
 
         component_property.name = child_object2.name;
