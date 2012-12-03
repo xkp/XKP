@@ -16,6 +16,7 @@
       <ProjectItem ReplaceParameters="true" OpenInEditor="true">application.xml</ProjectItem>
       <ProjectItem ReplaceParameters="true" OpenInEditor="true">application.xs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="project.xml">project.xml</ProjectItem>
+      <ProjectItem>resources\README.txt</ProjectItem>
       <ProjectItem>js\Box2dWeb-2.1.a.3.min.js</ProjectItem>
       <ProjectItem>js\colors.js</ProjectItem>
       <ProjectItem>js\event.js</ProjectItem>
