@@ -105,6 +105,25 @@
 		if(android_sdk == "")
 			compiler.error("Environment variable is not defined", variable_name = "ANDROID_SDK");
 
+		string java_jdk = compiler.get_env_var("JAVA_JDK");
+		if(java_jdk == "")
+			compiler.error("Environment variable is not defined", variable_name = "JAVA_JDK");
+		
+		// td: verify "javac" with some parameter, or if it's exists inside path o java environment
+		string javac = java_jdk + "bin\javac.exe";
+		compiler.log(javac);
+		
+		var javac_result;
+		shell(shell_cmd = true)
+		{
+			@javac -version > result.log;
+		}
+		
+		compiler.log(javac_result);
+		
+		if(javac_result == "")
+			compiler.error("javac application is no recognized or isn't defined inside PATH.");
+		
 		application.android_sdk = android_sdk;
 		application.output_classes = "java.lst";
 		application.output_javac_options = "javac.opts";
@@ -112,9 +131,6 @@
         string outputClasses = application.output_classes;
         string outputJavacOpts = application.output_javac_options;
     
-        if(appOptions.android_project_type != "apk")
-            return;
-
         compiler.log("Creating .apk bundle file...");
         
         string androidSDKPath   = application.android_sdk;

@@ -296,6 +296,9 @@
     <ClInclude Include="..\..\..\include\xss\fixups.h">
       <Filter>Header Files\xss</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\xss\xss_code.h">
+      <Filter>Header Files\xss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\third_party\gold\xs.grm" />
