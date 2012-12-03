@@ -305,6 +305,7 @@
     <Content Include="Templates\Items\WPFClass\wclass.xml" />
     <Content Include="Templates\Items\WPFClass\WPFClass.ico" />
     <None Include="Templates\Projects\ThreeJSApp\threejsIcon.ico" />
+    <Content Include="Templates\Projects\ArcadeApp\resources\README.txt" />
     <Content Include="Templates\Projects\CanvasApp\application.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -413,6 +414,7 @@
     <VSTemplate Include="Templates\Projects\ArcadeApp\xsArcadeApp.vstemplate">
       <SubType>Designer</SubType>
     </VSTemplate>
+    <Content Include="Templates\Projects\CanvasApp\resources\README.txt" />
     <Content Include="Templates\Projects\jQueryApp\application.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -423,6 +425,7 @@
     <VSTemplate Include="Templates\Projects\jQueryApp\jQueryApp.vstemplate">
       <SubType>Designer</SubType>
     </VSTemplate>
+    <Content Include="Templates\Projects\jQueryApp\resources\README.txt" />
     <Content Include="Templates\Projects\ThreeJSApp\application.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -477,6 +480,110 @@
     <Content Include="Templates\Projects\ThreeJSApp\js\three\Utils.js" />
     <Content Include="Templates\Projects\ThreeJSApp\js\ui.js" />
     <Content Include="Templates\Projects\ThreeJSApp\js\utils.js" />
+    <Content Include="Templates\Projects\jQueryApp\css\ui-lightness\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="Templates\Projects\jQueryApp\css\ui-lightness\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="Templates\Projects\jQueryApp\css\ui-lightness\images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="Templates\Projects\jQueryApp\css\ui-lightness\images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="Templates\Projects\jQueryApp\css\ui-lightness\images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="Templates\Projects\jQueryApp\css\ui-lightness\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Templates\Projects\jQueryApp\css\ui-lightness\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="Templates\Projects\jQueryApp\css\ui-lightness\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="Templates\Projects\jQueryApp\css\ui-lightness\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="Templates\Projects\jQueryApp\css\ui-lightness\images\ui-icons_222222_256x240.png" />
+    <Content Include="Templates\Projects\jQueryApp\css\ui-lightness\images\ui-icons_228ef1_256x240.png" />
+    <Content Include="Templates\Projects\jQueryApp\css\ui-lightness\images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="Templates\Projects\jQueryApp\css\ui-lightness\images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="Templates\Projects\jQueryApp\css\ui-lightness\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Templates\Projects\jQueryApp\css\ui-lightness\jquery-ui-1.8.18.custom.css" />
+    <Content Include="Templates\Projects\jQueryApp\js\Box2dWeb-2.1.a.3.min.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\colors.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\event.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\joint.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\jquery-1.4.2.min.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\jquery-1.7.1.min.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\jquery-idiom.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\jquery-ui-1.8.18.custom.min.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\jquery.easing.min.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\jquery.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\jquery.ui.map.min.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\jquery.utils.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\jquery\jquery-ui.css" />
+    <Content Include="Templates\Projects\jQueryApp\js\jquery\jquery-ui.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\jquery\jquery.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\jsmanipulate\jsm-manager.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\jsmanipulate\jsm-utils.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\jsmanipulate\jsmanipulate.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\keys.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\prototype.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\resig.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\scene_loader.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\sequence.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\spawner.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\state.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\streamer.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\three\Detector.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\three\fonts.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\three\loaders\ColladaLoader.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\three\postprocessing\BloomPass.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\three\postprocessing\DotScreenPass.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\three\postprocessing\EffectComposer.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\three\postprocessing\FilmPass.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\three\postprocessing\MaskPass.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\three\postprocessing\RenderPass.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\three\postprocessing\SavePass.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\three\postprocessing\ShaderPass.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\three\postprocessing\TexturePass.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\three\ShaderExtras.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\three\Stats.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\three\Three.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\three\Utils.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\ui.js" />
+    <Content Include="Templates\Projects\jQueryApp\js\utils.js" />
+    <Content Include="Templates\Projects\ThreeJSApp\resources\README.txt" />
+    <Content Include="Templates\Projects\WebGLApp\js\Box2dWeb-2.1.a.3.min.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\colors.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\event.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\joint.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\jquery-1.4.2.min.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\jquery-1.7.1.min.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\jquery-idiom.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\jquery-ui-1.8.18.custom.min.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\jquery.easing.min.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\jquery.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\jquery.ui.map.min.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\jquery.utils.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\jquery\jquery-ui.css" />
+    <Content Include="Templates\Projects\WebGLApp\js\jquery\jquery-ui.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\jquery\jquery.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\jsmanipulate\jsm-manager.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\jsmanipulate\jsm-utils.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\jsmanipulate\jsmanipulate.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\keys.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\prototype.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\resig.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\scene_loader.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\sequence.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\spawner.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\state.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\streamer.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\three\Detector.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\three\fonts.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\three\loaders\ColladaLoader.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\three\postprocessing\BloomPass.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\three\postprocessing\DotScreenPass.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\three\postprocessing\EffectComposer.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\three\postprocessing\FilmPass.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\three\postprocessing\MaskPass.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\three\postprocessing\RenderPass.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\three\postprocessing\SavePass.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\three\postprocessing\ShaderPass.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\three\postprocessing\TexturePass.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\three\ShaderExtras.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\three\Stats.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\three\Three.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\three\Utils.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\ui.js" />
+    <Content Include="Templates\Projects\WebGLApp\js\utils.js" />
     <Content Include="Templates\Projects\WebGLApp\application.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -486,6 +593,7 @@
     <VSTemplate Include="Templates\Projects\WebGLApp\xsWebGLApp.vstemplate">
       <SubType>Designer</SubType>
     </VSTemplate>
+    <Content Include="Templates\Projects\WebGLApp\resources\README.txt" />
     <Content Include="Templates\Projects\WPFApp\WPFApp.ico" />
     <Content Include="Templates\Projects\WPFApp\WPFApp.xml" />
     <Content Include="VSIXProject_large.png">

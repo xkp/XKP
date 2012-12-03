@@ -44,6 +44,9 @@
     <Folder Include="js\three\postprocessing"/>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="resources\README.txt">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="js\Box2dWeb-2.1.a.3.min.js">
       <SubType>Content</SubType>
     </Content>
