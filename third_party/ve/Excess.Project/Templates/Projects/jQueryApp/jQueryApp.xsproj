@@ -47,6 +47,9 @@
     <Folder Include="css" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="resources\README.txt">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="css\ui-lightness\images\ui-bg_diagonals-thick_18_b81900_40x40.png">
       <SubType>Content</SubType>
     </Content>
