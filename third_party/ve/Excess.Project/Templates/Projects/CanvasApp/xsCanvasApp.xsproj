@@ -176,7 +176,4 @@
     </Content>
   </ItemGroup>
   <Import Project="$(ExcessPath)\Excess.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>"$(TargetPath)"</PostBuildEvent>
-  </PropertyGroup>
 </Project>
