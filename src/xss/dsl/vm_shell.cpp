@@ -3,14 +3,20 @@
 #include <xss/dsl/ga_parser.h>
 #include <xss/xss_error.h>
 
-#include <boost/process.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
 
+#include <boost/process.hpp>
+#include <boost/iostreams/device/file_descriptor.hpp>
 #include <boost/iostreams/stream.hpp>
 
-namespace bp = boost::processes;
+using namespace boost::process;
+using namespace boost::process::initializers;
+using namespace boost::iostreams;
+
+namespace bp  = boost::process;
+namespace bio = boost::iostreams;
 
 using namespace xkp;
 
@@ -18,6 +24,23 @@ const str SLanguage("shell");
 const str SCannotParseAssign("Cannot parse a simple assign text, rtfm");
 const str SShellVariableNotFound("Cannot find shell variable");
 const str SCrashedApplication("Executable application is crashed");
+
+//utils
+inline str wide2str(const std::wstring& w)
+  {
+    str result;
+    result.assign(w.begin(), w.end());
+
+    return result;
+  }
+
+inline std::wstring str2wide(const str& s)
+  {
+    std::wstring result;
+    result.assign(s.begin(), s.end());
+
+    return result;
+  }
 
 struct shellworker : IWorker
   {
@@ -107,84 +130,113 @@ struct shellworker : IWorker
             //finally, execute the application
             try
               {
-                std::string exe = bp::find_executable_in_path(valuable_items[0]);
-                std::vector<std::string> args;
+                std::wstring exe;
+
+                str &first_param = valuable_items[0];
+
+#if defined(BOOST_POSIX_API)
+                size_t pos = first_param.find_last_of('/');
+#elif defined(BOOST_WINDOWS_API)
+                size_t pos = first_param.find_last_of('\\');
+#endif
+
+                if (pos != str::npos)
+                  {
+                    str cmd_path      = first_param.substr(0, pos + 1);
+                    str cmd_filename  = first_param.substr(pos + 1);
+                    exe = search_path(str2wide(cmd_filename), str2wide(cmd_path));
+                  }
+                else
+                  {
+                    exe = search_path(str2wide(first_param));
+                  }
+
+                std::vector<std::wstring> args;
 
                 std::vector<str>::iterator vit = valuable_items.begin();
                 std::vector<str>::iterator vnd = valuable_items.end();
 
-                std::string command;
+                std::wstring command;
                 for(; vit != vnd; vit++)
                   {
                     str arg = *vit;
-                    command += arg + " ";
+
+                    if (arg.find(' ') != str::npos)
+                      arg = '"' + arg + '"';
+
+                    command += str2wide(arg) + L" ";
 
                     //don't add empty params
                     if (!arg.empty())
-                      args.push_back(arg);
+                      args.push_back(str2wide(arg));
                   }
 
-                //td: recover the result of execution and save into variable, how to?
-                //... this is temporal, only for debug purpose
-                //    now all file descriptors are closed, then redirect to file or variable
-                bp::context ctx;
-                ctx.add(bp::close_stream(bp::stdin_fileno))
-                   .add(bp::capture_stream(bp::stdout_fileno))
-                   .add(bp::redirect_to_stdout(bp::stderr_fileno));
+                boost::system::error_code ec;
+                bp::pipe p = create_pipe();
+                  {
+                    bio::file_descriptor_sink sink(p.sink, bio::close_handle);
+                    bp::child c = bp::execute(
+                                    run_exe(exe),
+                                    set_on_error(ec),
+                                    set_args(args),
+                                    bind_stdout(sink),
+                                    bind_stderr(sink),
+                                    close_stdin(),
+                                    //start_in_dir(working_path), //td: if (!working_path.empty())
+                                    inherit_env() //td:
+                                  );
 
-                if (!working_path.empty())
-                  ctx.work_directory = working_path;
-
-                bp::status s(0);
-                bp::child child = launch(shell_cmd, command, exe, args, ctx);
-
+                    auto s = bp::wait_for_exit(c);
+                  }
+                
                 if (!it->variable.empty())
                   {
                     DynamicArray shell_data(new dynamic_array);
-                    boost::iostreams::stream<bp::pipe_end> sout(child.get_stdout());
-                    std::string line; 
-                    while (std::getline(sout, line)) 
+
+                    bio::file_descriptor_source source(p.source, bio::close_handle);
+                    bio::stream<bio::file_descriptor_source> is(source);
+
+                    std::string line;
+                    while (std::getline(is, line))
                       shell_data->push_back(line);
 
                     dynamic_set(result, it->variable, shell_data);
                   }
                 
-                s = child.wait();
-
 //td: personalize class with static function or only functions
-#if defined(__unix__) || defined(__unix) || defined(unix) || defined(__linux__)
-                if (s.exited()) {
-                    //std::cout << "Program returned exit code " << s.exit_status() << std::endl;
-                } else if (s.signaled()) {
-                    //std::cout << "Program received signal " << s.term_signal() << std::endl;
-                    if (s.dumped_core())
-                      {
-                        //std::cout << "Program also dumped core" << std::endl;
-                      }
-                } else if (s.stopped()) {
-                    //std::cout << "Program stopped by signal" << s.stop_signal() << std::endl;
-                } else {
-                    //std::cout << "Unknown termination reason" << std::endl;
-                }
-#elif defined(_WIN32) || defined(_WIN64) || defined(__WIN32__)
-#endif
-
-                if (s.exited() && s.exit_status() == EXIT_SUCCESS)
-                  {
-                    //std::cout << "[" << exe << "]" << " Shell application is executed successfully." << std::endl;
-                  }
-                else
-                  {
-                    //std::cout << "[" << exe << "]" << " Shell application failed." << std::endl;
-                    if (break_errors)
-                      {
-                        param_list error;
-                        error.add("id", SLanguage);
-                        error.add("desc", SCrashedApplication);
-                        error.add("exec", valuable_items[0]);
-                        xss_throw(error);
-                      }
-                  }
+//#if defined(__unix__) || defined(__unix) || defined(unix) || defined(__linux__)
+//                if (s.exited()) {
+//                    //std::cout << "Program returned exit code " << s.exit_status() << std::endl;
+//                } else if (s.signaled()) {
+//                    //std::cout << "Program received signal " << s.term_signal() << std::endl;
+//                    if (s.dumped_core())
+//                      {
+//                        //std::cout << "Program also dumped core" << std::endl;
+//                      }
+//                } else if (s.stopped()) {
+//                    //std::cout << "Program stopped by signal" << s.stop_signal() << std::endl;
+//                } else {
+//                    //std::cout << "Unknown termination reason" << std::endl;
+//                }
+//#elif defined(_WIN32) || defined(_WIN64) || defined(__WIN32__)
+//#endif
+//
+//                if (s.exited() && s.exit_status() == EXIT_SUCCESS)
+//                  {
+//                    //std::cout << "[" << exe << "]" << " Shell application is executed successfully." << std::endl;
+//                  }
+//                else
+//                  {
+//                    //std::cout << "[" << exe << "]" << " Shell application failed." << std::endl;
+//                    if (break_errors)
+//                      {
+//                        param_list error;
+//                        error.add("id", SLanguage);
+//                        error.add("desc", SCrashedApplication);
+//                        error.add("exec", valuable_items[0]);
+//                        xss_throw(error);
+//                      }
+//                  }
               }
             catch (const boost::system::system_error&)
               {
@@ -203,14 +255,6 @@ struct shellworker : IWorker
       }
     private:
       std::vector<ga_item> result_;
-
-      bp::child launch(bool shell_cmd, const str& command, const str& exe, const std::vector<str> args, bp::context& ctx)
-        {
-          if (shell_cmd)
-            return bp::launch_shell(command, ctx);
-          else
-            return bp::launch(exe, args, ctx);
-        }
   };
 
 //vm_dsl
@@ -257,6 +301,12 @@ DSLWorker vm_shell::create_worker(dsl& info, code_linker& owner, std::vector<str
                   {
                     str s = "\"" + variant_cast<str>(first, str("")) + "\"";
                     aux_exprs.push_back(s);
+                    count |= pos;
+                  }
+                else
+                if (first.is<bool>())
+                  {
+                    aux_exprs.push_back(xss_utils::var_to_string(first));
                     count |= pos;
                   }
                 else

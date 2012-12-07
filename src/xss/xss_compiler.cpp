@@ -1350,11 +1350,12 @@ DynamicArray xss_compiler::find_files(const xkp::str &init_path, const xkp::str 
         fs::recursive_directory_iterator it(init_path);
         for (; it != fs::recursive_directory_iterator(); ++it )
           {
+            const fs::path &filepath = it->path();
             if(!fs::is_regular_file(it->status())) continue;
-            if(!boost::regex_match( it->leaf(), what, rfjava)) continue;
+            if(!boost::regex_match( filepath.leaf().string(), what, rfjava)) continue;
 
             XSSObject file(new xss_object);
-            file->add_attribute("filename", it->string());
+            file->add_attribute("filename", filepath.filename().string());
 
             result->push_back(file);
           }
