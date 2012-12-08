@@ -22,9 +22,12 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
 
 #include <iostream>
 #include <fstream>
+
+namespace fs = boost::filesystem;
 
 using namespace xkp;
 
@@ -108,6 +111,9 @@ xss_application_renderer::xss_application_renderer(fs::path entry_point, Languag
 
     XSSString xss_str(new xss_string);
     context_->register_symbol(RESOLVE_NATIVE, "String", xss_str);
+
+    XSSFileSystem xss_fs(new xss_filesystem);
+    context_->register_symbol(RESOLVE_NATIVE, "XSSPath", xss_fs);
 
     XSSMath xss_mth(new xss_math);
     context_->register_symbol(RESOLVE_NATIVE, "XSSMath", xss_mth);
@@ -1351,11 +1357,17 @@ DynamicArray xss_compiler::find_files(const xkp::str &init_path, const xkp::str 
         for (; it != fs::recursive_directory_iterator(); ++it )
           {
             const fs::path &filepath = it->path();
+            
             if(!fs::is_regular_file(it->status())) continue;
             if(!boost::regex_match( filepath.leaf().string(), what, rfjava)) continue;
 
             XSSObject file(new xss_object);
-            file->add_attribute("filename", filepath.filename().string());
+
+            str filename = filepath.filename().string();
+            str abspath = filepath.generic_string();
+
+            file->add_attribute("filename", filename);
+            file->add_attribute("filepath", abspath);
 
             result->push_back(file);
           }
@@ -3530,6 +3542,17 @@ str xss_string::strip_spaces(str s)
         found = r.find(" ", found);
       }
     return r;
+  }
+
+//xss_filesystem
+str xss_filesystem::preferred_path(const str& path)
+  {
+    return fs::path(path).make_preferred().string();
+  }
+
+str xss_filesystem::generic_path(const str& path)
+  {
+    return fs::path(path).generic_string();
   }
 
 //xss_math

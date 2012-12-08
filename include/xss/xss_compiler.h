@@ -19,6 +19,7 @@ namespace xkp
   class xss_module;
   class xss_compiler;
   class xss_string;
+  class xss_filesystem;
   class xss_math;
 
   //interfaces
@@ -29,6 +30,7 @@ namespace xkp
   typedef reference<xss_module>               XSSModule;
   typedef reference<xss_compiler>             XSSCompiler;
   typedef reference<xss_string>               XSSString;
+  typedef reference<xss_filesystem>           XSSFileSystem;
   typedef reference<xss_math>                 XSSMath;
   typedef reference<IXSSRenderer>             XSSRenderer;
 
@@ -340,6 +342,13 @@ namespace xkp
         str  strip_spaces(str s);
     };
 
+  class xss_filesystem
+    {
+      public:
+        str preferred_path(const str &path);
+        str generic_path(const str &path);
+    };
+
   class xss_math
     {
       public:
@@ -431,6 +440,15 @@ struct xss_string_schema : object_schema<xss_string>
       }
   };
 
+struct xss_filesystem_schema : object_schema<xss_filesystem>
+  {
+    virtual void declare()
+      {
+        method_<str, 1>("preferred",  &xss_filesystem::preferred_path);
+        method_<str, 1>("generic",    &xss_filesystem::generic_path);
+      }
+  };
+
 struct xss_math_schema : object_schema<xss_math>
   {
     virtual void declare()
@@ -440,10 +458,11 @@ struct xss_math_schema : object_schema<xss_math>
       }
   };
 
-  register_complete_type(xss_compiler,  xss_compiler_schema);
-  register_complete_type(xss_module,    xss_module_schema);
-  register_complete_type(xss_string,    xss_string_schema);
-  register_complete_type(xss_math,      xss_math_schema);
+  register_complete_type(xss_compiler,   xss_compiler_schema);
+  register_complete_type(xss_module,     xss_module_schema);
+  register_complete_type(xss_string,     xss_string_schema);
+  register_complete_type(xss_filesystem, xss_filesystem_schema);
+  register_complete_type(xss_math,       xss_math_schema);
 }
 
 

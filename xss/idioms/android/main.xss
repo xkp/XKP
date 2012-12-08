@@ -109,19 +109,13 @@
 		if(java_jdk == "")
 			compiler.error("Environment variable is not defined", variable_name = "JAVA_JDK");
 		
-		// td: verify "javac" with some parameter, or if it's exists inside path o java environment
-		string javac = java_jdk + "bin\javac.exe";
+		// generalize path separator for slash (/)
+		appOutputPath 	= XSSPath.generic(appOutputPath);
+		android_sdk 	= XSSPath.generic(android_sdk);
+		//java_jdk		= XSSPath.generic(java_jdk); //win-error when jdk is in c:\Program Files\... because path contain space
 		
-		var javac_result;
-		//shell(shell_cmd = true)
-		//shell()
-		//{
-		//	javac_result = @javac -version;
-		//}
-		//compiler.log(javac_result);
-		
-		//if(javac_result == "")
-		//	compiler.error("javac application is no recognized or isn't defined inside PATH.");
+		//td: extend to other platform: linux
+		string javac = java_jdk + "bin/javac.exe";
 		
 		application.android_sdk = android_sdk;
 		application.output_classes = "java.lst";
@@ -137,10 +131,34 @@
 
         string output_classes = appName + "/" + application.output_classes;
         string output_javac_options = appName + "/" + application.output_javac_options;
+		
+        compiler.log("Detecting version of Java Compiler Application...");
+		
+		array<string> shell_output; 
+		array<string> javac_result;
+		shell()
+		{
+			javac_result = @javac -version
+		}
+		
+		if(!javac_result)
+			compiler.error("Java Compiler application (javac) is no recognized or isn't defined inside PATH.");
+		
+		string first_line;
+		first_line = javac_result[0];
+		
+		int pos = String.find_first(first_line, "1.");
+		string javac_version = String.substr(first_line, pos, 3);
+		application.javac_version = javac_version;
+		
+		//td: for this error, check version of android_tools and android_platforms_tools
+		//    cuz, some new versions work fine with jdk 1.7
+		if(javac_version == "1.7")
+			compiler.error("Current JDK version is not correct to generate Android applications.", javac_version = javac_version);
     
         shell(working_path = appOutputPath)
         {
-            aapt@exeExt package -f -I @apiPlatform -M @appOutputPath/AndroidManifest.xml -A @appOutputPath/assets -S @appOutputPath/res -m -J @appOutputPath/gen -F @appOutputPath/bin/resources.ap_;
+            shell_output = aapt@exeExt package -f -I @apiPlatform -M @appOutputPath/AndroidManifest.xml -A @appOutputPath/assets -S @appOutputPath/res -m -J @appOutputPath/gen -F @appOutputPath/bin/resources.ap_
         }
 
         compiler.xss("javac.options.xss", output_file = output_javac_options, appOutputPath);
@@ -152,25 +170,27 @@
         shell(working_path = appOutputPath)
         {
             javac_result = @javac @@@outputJavacOpts @@@outputClasses;
-            dx@batExt --dex --output=@appOutputPath/bin/classes.dex @appOutputPath/bin @dxLibPath
+            shell_output = dx@batExt --dex --output=@appOutputPath/bin/classes.dex @appOutputPath/bin @dxLibPath
         }
-		
-		compiler.log(javac_result);
 
         string appBinPath = appOutputPath + "/bin";
         shell(working_path = appBinPath)
         {
-            aapt@exeExt add @appOutputPath/bin/resources.ap_ classes.dex
+            shell_output = aapt@exeExt add @appOutputPath/bin/resources.ap_ classes.dex
         }
         
         string libsParams = "-rj " + appOutputPath + "/libs";
-        libsParams = "";
+        libsParams = ""; //td: why this?? what happen when exists libraries inside project??
         string password = "xkp.android.projects.2012";
+		
+		//td: get absolute path of idioms & fix this
         string androidIdiomPath = appOutputPath + "/../../../idioms/android";
+		
+		//shell_output = apkbuilder@batExt @appOutputPath/bin/@appName.apk -z @appOutputPath/bin/resources.ap_ -f @appOutputPath/bin/classes.dex -rf @appOutputPath/src @libsParams;
         shell(working_path = appOutputPath)
         {
-            apkbuilder@batExt @appOutputPath/bin/@appName.apk -z @appOutputPath/bin/resources.ap_ -f @appOutputPath/bin/classes.dex -rf @appOutputPath/src @libsParams;
-            jarsigner -keystore @androidIdiomPath/java.keystore/xkp.android.projects.jks -storepass @password -keypass @password -signedjar @appOutputPath/bin/@appName.apk @appOutputPath/bin/resources.ap_ xkp.android.projects
+			shell_output = apkbuilder@batExt @appOutputPath/bin/@appName.apk -z @appOutputPath/bin/resources.ap_ -rf @appOutputPath/src @libsParams;
+			shell_output = jarsigner -keystore @androidIdiomPath/java.keystore/xkp.android.projects.jks -storepass @password -keypass @password -signedjar @appOutputPath/bin/@appName.apk @appOutputPath/bin/resources.ap_ xkp.android.projects
         }
 	}
 	else

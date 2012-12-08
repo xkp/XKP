@@ -11,12 +11,15 @@
 #include <boost/iostreams/device/file_descriptor.hpp>
 #include <boost/iostreams/stream.hpp>
 
+#include <boost/filesystem.hpp>
+
 using namespace boost::process;
 using namespace boost::process::initializers;
 using namespace boost::iostreams;
 
 namespace bp  = boost::process;
 namespace bio = boost::iostreams;
+namespace fs  = boost::filesystem;
 
 using namespace xkp;
 
@@ -58,7 +61,7 @@ struct shellworker : IWorker
         variant v = args.get(curr++);
         int counter = variant_cast<int>(v, 0);
 
-        str working_path;
+        fs::path working_path = fs::current_path();
         str environment_vars; //td: correctly
         bool break_errors = false;
         bool shell_cmd = false;
@@ -67,6 +70,8 @@ struct shellworker : IWorker
           {
             variant v = args.get(curr++);
             working_path = xss_utils::var_to_string(v);
+            //working_path = fs::path(working_path).generic_string();
+            working_path = fs::path(working_path).make_preferred();
           }
 
         if (counter & 2)
@@ -161,8 +166,9 @@ struct shellworker : IWorker
                   {
                     str arg = *vit;
 
-                    if (arg.find(' ') != str::npos)
-                      arg = '"' + arg + '"';
+                    //td: tests more use cases
+                    //if (arg.find(' ') != str::npos)
+                    //  arg = '"' + arg + '"';
 
                     command += str2wide(arg) + L" ";
 
@@ -182,10 +188,11 @@ struct shellworker : IWorker
                                     bind_stdout(sink),
                                     bind_stderr(sink),
                                     close_stdin(),
-                                    //start_in_dir(working_path), //td: if (!working_path.empty())
+                                    start_in_dir(working_path),
                                     inherit_env() //td:
                                   );
 
+                    //td: return this value like exit_status
                     auto s = bp::wait_for_exit(c);
                   }
                 
@@ -196,7 +203,7 @@ struct shellworker : IWorker
                     bio::file_descriptor_source source(p.source, bio::close_handle);
                     bio::stream<bio::file_descriptor_source> is(source);
 
-                    std::string line;
+                    str line;
                     while (std::getline(is, line))
                       shell_data->push_back(line);
 
@@ -238,8 +245,15 @@ struct shellworker : IWorker
 //                      }
 //                  }
               }
-            catch (const boost::system::system_error&)
+            catch (const boost::system::system_error &error)
               {
+                //td: custom error messages
+                boost::system::error_code err_code = error.code();
+                str what_err = error.what();
+                
+                str msg_err = err_code.message();
+                int val_err = err_code.value();
+                
                 if (break_errors)
                   {
                     param_list error;
