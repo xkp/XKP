@@ -193,9 +193,9 @@ struct shellworker : IWorker
                                   );
 
                     //td: return this value like exit_status
-                    auto s = bp::wait_for_exit(c);
+                    int s = bp::wait_for_exit(c);
                   }
-                
+
                 if (!it->variable.empty())
                   {
                     DynamicArray shell_data(new dynamic_array);
@@ -209,7 +209,7 @@ struct shellworker : IWorker
 
                     dynamic_set(result, it->variable, shell_data);
                   }
-                
+
 //td: personalize class with static function or only functions
 //#if defined(__unix__) || defined(__unix) || defined(unix) || defined(__linux__)
 //                if (s.exited()) {
@@ -250,10 +250,10 @@ struct shellworker : IWorker
                 //td: custom error messages
                 boost::system::error_code err_code = error.code();
                 str what_err = error.what();
-                
+
                 str msg_err = err_code.message();
                 int val_err = err_code.value();
-                
+
                 if (break_errors)
                   {
                     param_list error;

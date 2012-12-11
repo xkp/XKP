@@ -49,14 +49,14 @@
 			<Add directory="..\..\..\include" />
 			<Add directory="..\..\..\third_party\tinyXml" />
 			<Add directory="..\..\..\third_party\jsoncpp\include" />
-			<Add directory="$(#boost_1_44)" />
+			<Add directory="$(#boost_1_52)" />
 		</Compiler>
 		<Linker>
-			<Add library="boost_system$(#boost_1_44.suffix)" />
-			<Add library="boost_filesystem$(#boost_1_44.suffix)" />
-			<Add library="boost_regex$(#boost_1_44.suffix)" />
-			<Add library="boost_process$(#boost_1_44.suffix)" />
-			<Add directory="$(#boost_1_44.lib)" />
+			<Add library="boost_system$(#boost_1_52.suffix)" />
+			<Add library="boost_filesystem$(#boost_1_52.suffix)" />
+			<Add library="boost_regex$(#boost_1_52.suffix)" />
+			<Add library="boost_iostreams$(#boost_1_52.suffix)" />
+			<Add directory="$(#boost_1_52.lib)" />
 		</Linker>
 		<Unit filename="stdafx.cpp" />
 		<Unit filename="stdafx.h" />
