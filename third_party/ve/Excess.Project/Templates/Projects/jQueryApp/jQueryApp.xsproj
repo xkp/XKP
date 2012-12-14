@@ -32,6 +32,7 @@
     <Compile Include="project.xml">
       <DependentUpon>application.xs</DependentUpon>
       <xs_project>true</xs_project>
+      <customRun>$(TargetPath)</customRun>
     </Compile>
   </ItemGroup>
   <ItemGroup>

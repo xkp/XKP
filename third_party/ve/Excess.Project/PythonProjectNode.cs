@@ -17,8 +17,12 @@ using VSConstants = Microsoft.VisualStudio.VSConstants;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.OLE.Interop;
 using Excess.EditorExtensions;
+using Excess.Project;
 using Excess.Project.Library;
 
+using PkgUtils = Microsoft.VisualStudio.Project.Utilities;
+using VsCommands = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
+using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using MSBuild = Microsoft.Build.Evaluation;
 using Excess.CompilerTasks;
 
@@ -39,6 +43,7 @@ namespace Excess.Project
         private ProjectDocumentsListenerForMainFileUpdates projectDocListenerForMainFileUpdates;
         internal static int ImageOffset;
         private DesignerContext designerContext;
+        private string customRun;
         #endregion
 
         #region enums
@@ -132,6 +137,18 @@ namespace Excess.Project
             set
             {
                 pythonImageList = value;
+            }
+        }
+
+        public string CustomRun
+        {
+            get 
+            {
+                return customRun;
+            }
+            set 
+            {
+                customRun = value;
             }
         }
         #endregion
@@ -308,6 +325,10 @@ namespace Excess.Project
                 bool isIt = item.HasMetadata("xs_project");
                 if (isIt)
                     xsPath = item.GetMetadataValue("FullPath");
+
+                isIt = item.HasMetadata("customRun");
+                if (isIt)
+                    CustomRun = item.GetMetadataValue("customRun");
             }
 
             if (xsPath == null)
@@ -654,6 +675,98 @@ namespace Excess.Project
             }
         }
         #endregion
+
+        protected override int InternalExecCommand(Guid cmdGroup, uint cmdId, uint cmdExecOpt, IntPtr vaIn, IntPtr vaOut, CommandOrigin commandOrigin)
+        {
+            if (cmdGroup == Microsoft.VisualStudio.Shell.VsMenus.guidStandardCommandSet97)
+            {
+                switch ((VsCommands)cmdId)
+                { 
+                    case VsCommands.Start:
+                    case VsCommands.StartNoDebug:
+                        EnvDTE.DTE dte = (EnvDTE.DTE)ProjectMgr.GetService(typeof(EnvDTE.DTE));
+
+                        if (StartNoDebug(dte))
+                            return VSConstants.S_OK;
+                        else
+                            break;
+                    default:
+                        break;
+                }
+            }
+
+            return base.InternalExecCommand(cmdGroup, cmdId, cmdExecOpt, vaIn, vaOut, commandOrigin);
+        }
+
+        bool StartNoDebug(EnvDTE.DTE dte)
+        {
+            var startupProjects = (object[])dte.Solution.SolutionBuild.StartupProjects;
+
+            if (startupProjects.Length < 1)
+				throw new ApplicationException("No startup projects.");
+
+            string projectFilePath = Path.Combine(Path.GetDirectoryName(dte.Solution.FullName), (string)startupProjects[0]);
+            string startupProjectFullName = Path.GetFullPath(projectFilePath);
+            var oaExcessProject = GetProject(dte, startupProjectFullName) as OAExcessProject;
+
+            if (oaExcessProject == null)
+                return false;
+
+            var projectNode = oaExcessProject.Project.ProjectMgr;
+            var currentConfigName = Utilities.GetActiveConfigurationName(oaExcessProject);
+
+            projectNode.SetConfiguration(currentConfigName);
+
+            dte.ExecuteCommand("File.SaveAll", "");
+
+            bool isOK;
+            projectNode.BuildTarget("Build", out isOK);
+
+            if (!isOK)
+            {
+                var message = "There were build errors. Would you like to continue and run the last successful build?";
+                OLEMSGICON icon = OLEMSGICON.OLEMSGICON_QUERY;
+                OLEMSGBUTTON buttons = OLEMSGBUTTON.OLEMSGBUTTON_YESNO;
+                OLEMSGDEFBUTTON defaultButton = OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST;
+                var res = VsShellUtilities.ShowMessageBox(projectNode.Site,
+                    message, ExcessConstants.ProductName, icon, buttons, defaultButton);
+
+                if (res == NativeMethods.IDNO)
+                    return true;
+            }
+
+            var path = projectNode.GetProjectProperty("StartProgram");
+
+            //td: think more
+            if (string.IsNullOrEmpty(path))
+                path = projectNode.GetOutputAssembly(currentConfigName);
+
+            if (string.IsNullOrEmpty(CustomRun))
+                return false;
+
+            //if (!File.Exists(path))
+            if (!File.Exists(CustomRun))
+                throw new ApplicationException("Visual Studio cannot start debugging because the debug target '"
+                    + CustomRun + "' is missing. Please build the project and retry, or set the OutputPath and AssemblyName properties appropriately to point at the correct location for the target assembly.");
+
+            Process proc = new Process();
+            proc.StartInfo = new ProcessStartInfo(CustomRun);
+            proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            proc.StartInfo.CreateNoWindow = true;
+            
+            bool success_ = proc.Start();
+            
+            return true;
+        }
+
+        private EnvDTE.Project GetProject(EnvDTE.DTE dte, string startupProjectFullName)
+        {
+            foreach (EnvDTE.Project project in dte.Solution.Projects)
+                if (string.Equals(Path.GetFullPath(project.FullName), startupProjectFullName))
+                    return project;
+
+            return null;
+        }
 
         public override int QueryStatusCommand(uint itemId, ref Guid guidCmdGroup, uint cCmds, Microsoft.VisualStudio.OLE.Interop.OLECMD[] cmds, IntPtr pCmdText)
         {

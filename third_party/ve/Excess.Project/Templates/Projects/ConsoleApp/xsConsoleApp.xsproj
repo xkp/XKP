@@ -31,6 +31,7 @@
       <DependentUpon>application.xs</DependentUpon>
       <Visible>0</Visible>
       <xs_project>true</xs_project>
+      <customRun>$(TargetPath)</customRun>
     </Compile>
   </ItemGroup>
   <Import Project="$(ExcessPath)\Excess.targets" />

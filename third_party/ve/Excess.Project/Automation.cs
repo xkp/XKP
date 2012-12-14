@@ -83,6 +83,21 @@ namespace Excess.Project
 				return PythonCodeModelFactory.CreateProjectCodeModel(this);
 			}
 		}
-	}
 
+        /// <summary>
+        /// Gets a ProjectItems collection for the Project object.
+        /// </summary>
+        public override EnvDTE.ProjectItems ProjectItems
+        {
+            get { return new OAProjectItems(this, Project); }
+        }
+
+        public override EnvDTE.Properties Properties
+        {
+            get
+            {
+                return new ExcessOAProperties(this.Project.NodeProperties);
+            }
+        }
+    }
 }

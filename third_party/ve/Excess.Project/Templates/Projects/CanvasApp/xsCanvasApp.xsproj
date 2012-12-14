@@ -15,11 +15,13 @@
     <ExcessPath Condition=" '$(ExcessPath)' == '' ">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Excess@InstallPath)\Extensions\Application\Excess</ExcessPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <StartProgram>$(TargetPath)</StartProgram>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <StartProgram>$(TargetPath)</StartProgram>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
@@ -33,6 +35,7 @@
     <Compile Include="project.xml">
       <DependentUpon>application.xs</DependentUpon>
       <xs_project>true</xs_project>
+      <customRun>$(TargetPath)</customRun>
     </Compile>
   </ItemGroup>
   <ItemGroup>

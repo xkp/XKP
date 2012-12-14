@@ -8,6 +8,7 @@ namespace Excess.Project
     static class ExcessConstants
     {
         public const string xsFileExtension = ".xs";
+        public const string ProductName = "Excess";
     }
 
     static class GuidList
