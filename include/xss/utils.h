@@ -74,7 +74,21 @@ inline void trim_last_empty_line(str& s)
       }
   }
 
+inline str wide2str(const std::wstring& w)
+  {
+    str result;
+    result.assign(w.begin(), w.end());
 
+    return result;
+  }
+
+inline std::wstring str2wide(const str& s)
+  {
+    std::wstring result;
+    result.assign(s.begin(), s.end());
+
+    return result;
+  }
 }
 
 #endif

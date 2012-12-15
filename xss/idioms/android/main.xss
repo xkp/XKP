@@ -19,6 +19,7 @@
 		appName = application.id;
 	}
 	
+	// define output path of generated application
 	string appOutputPath = compiler.output_path();
 	appOutputPath = appOutputPath + "/" + appName;
 	

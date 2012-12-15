@@ -3,6 +3,7 @@
 #include "xss/object_reader.h"
 #include "xss/xss_renderer.h"
 #include "xss/xss_error.h"
+#include "xss/utils.h"
 #include "xss/language.h"
 #include "xss/lang/debug.h"
 #include "xss/lang/js.h"
@@ -3550,18 +3551,44 @@ str xss_filesystem::preferred_path(const str& path)
     return fs::path(path).make_preferred().string();
   }
 
+#if defined(BOOST_WINDOWS_API)
+#   include <windows.h>
+#endif 
+
 str xss_filesystem::generic_path(const str& path)
   {
-    return fs::path(path).generic_string();
+    str result = fs::path(path).generic_string();
+
+#if defined(BOOST_WINDOWS_API)
+    DWORD length;
+
+    length = GetShortPathName(str2wide(result).c_str(), NULL, 0);
+
+    if (length > 0)
+      {
+        wchar_t *buffer = new wchar_t[length];
+        length = GetShortPathName(str2wide(result).c_str(), buffer, length);
+        
+        if (length > 0)
+          {
+            std::wstring tmp(buffer);
+            result = wide2str(tmp);
+          }
+
+        delete [] buffer;
+      }
+#endif
+
+    return result;
   }
 
 //xss_math
-double xss_math::max(double v1, double v2)
+double xss_math::max_value(double v1, double v2)
   {
-    return std::max(v1, v2);
+    return (v1 > v2) ? v1 : v2;
   }
 
-double xss_math::min(double v1, double v2)
+double xss_math::min_value(double v1, double v2)
   {
-    return std::min(v1, v2);
+    return (v1 < v2) ? v1 : v2;
   }

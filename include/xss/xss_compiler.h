@@ -352,8 +352,8 @@ namespace xkp
   class xss_math
     {
       public:
-        double max(double v1, double v2);
-        double min(double v1, double v2);
+        double max_value(double v1, double v2);
+        double min_value(double v1, double v2);
     };
 
 //glue
@@ -453,8 +453,8 @@ struct xss_math_schema : object_schema<xss_math>
   {
     virtual void declare()
       {
-        method_<double, 2>("max", &xss_math::max);
-        method_<double, 2>("min", &xss_math::min);
+        method_<double, 2>("max", &xss_math::max_value);
+        method_<double, 2>("min", &xss_math::min_value);
       }
   };
 

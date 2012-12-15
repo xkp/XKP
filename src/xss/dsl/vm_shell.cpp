@@ -2,6 +2,7 @@
 #include <xss/dsl/vm_shell.h>
 #include <xss/dsl/ga_parser.h>
 #include <xss/xss_error.h>
+#include <xss/utils.h>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/split.hpp>
@@ -29,22 +30,6 @@ const str SShellVariableNotFound("Cannot find shell variable");
 const str SCrashedApplication("Executable application is crashed");
 
 //utils
-inline str wide2str(const std::wstring& w)
-  {
-    str result;
-    result.assign(w.begin(), w.end());
-
-    return result;
-  }
-
-inline std::wstring str2wide(const str& s)
-  {
-    std::wstring result;
-    result.assign(s.begin(), s.end());
-
-    return result;
-  }
-
 struct shellworker : IWorker
   {
     shellworker(std::vector<ga_item>& result):
