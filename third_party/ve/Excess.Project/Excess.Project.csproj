@@ -256,6 +256,10 @@
     <Content Include="Templates\Items\Class\class.xml" />
     <Content Include="Templates\Items\Class\__TemplateIcon.ico" />
     <None Include="Templates\Items\WPFClass\wclass.xs" />
+    <None Include="Templates\Projects\AndroidApp\application.xs" />
+    <None Include="Templates\Projects\AndroidApp\xsAndroidApp.xsproj">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Templates\Projects\ConsoleApp\project.xml">
       <SubType>Designer</SubType>
     </None>
@@ -306,6 +310,16 @@
     <Content Include="Templates\Items\WPFClass\wclass.xml" />
     <Content Include="Templates\Items\WPFClass\WPFClass.ico" />
     <None Include="Templates\Projects\ThreeJSApp\threejsIcon.ico" />
+    <None Include="Templates\Projects\AndroidApp\androidIcon.ico" />
+    <Content Include="Templates\Projects\AndroidApp\application.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Templates\Projects\AndroidApp\project.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <VSTemplate Include="Templates\Projects\AndroidApp\xsAndroidApp.vstemplate">
+      <SubType>Designer</SubType>
+    </VSTemplate>
     <Content Include="Templates\Projects\ArcadeApp\resources\README.txt" />
     <Content Include="Templates\Projects\CanvasApp\application.xml">
       <SubType>Designer</SubType>

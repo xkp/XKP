@@ -15,13 +15,11 @@
     <ExcessPath Condition=" '$(ExcessPath)' == '' ">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Excess@InstallPath)\Extensions\Application\Excess</ExcessPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <StartProgram>$(TargetPath)</StartProgram>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <StartProgram>$(TargetPath)</StartProgram>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>

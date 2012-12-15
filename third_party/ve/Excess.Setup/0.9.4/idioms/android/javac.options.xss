@@ -1,15 +1,18 @@
 <xss:parameter id="appOutputPath"/>
 
 <xss:code>
-	string android_sdk = application.android_sdk;
-	int targetAPILevel = application.targetAPILevel;
+	string javac_version = application.javac_version;
+	string android_sdk   = application.android_sdk;
+	int targetAPILevel   = application.targetAPILevel;
 	
 	out(indent = 0)
 	{
--Xstdout <xss:e value="appOutputPath"/>/log.txt 
+-g 
+-verbose 
+-Xstdout <xss:e value="appOutputPath"/>/javac.log 
 -Xlint:unchecked 
 -encoding ascii 
--target 1.5 
+-target <xss:e value="javac_version"/> 
 -d <xss:e value="appOutputPath"/>/bin 
 -bootclasspath <xss:e value="android_sdk"/>/platforms/android-<xss:e value="targetAPILevel"/>/android.jar 
 -sourcepath "<xss:e value="appOutputPath"/>/src;<xss:e value="appOutputPath"/>/gen" 

@@ -746,7 +746,7 @@ namespace Excess.Project
 
             //if (!File.Exists(path))
             if (!File.Exists(CustomRun))
-                throw new ApplicationException("Visual Studio cannot start debugging because the debug target '"
+                throw new ApplicationException("Excess cannot start debugging because the debug target '"
                     + CustomRun + "' is missing. Please build the project and retry, or set the OutputPath and AssemblyName properties appropriately to point at the correct location for the target assembly.");
 
             Process proc = new Process();
