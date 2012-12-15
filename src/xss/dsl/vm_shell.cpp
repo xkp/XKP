@@ -124,13 +124,18 @@ struct shellworker : IWorker
 
                 str &first_param = valuable_items[0];
 
-#if defined(BOOST_POSIX_API)
-                size_t pos = first_param.find_last_of('/');
-#elif defined(BOOST_WINDOWS_API)
-                size_t pos = first_param.find_last_of('\\');
-#endif
+                int pos = -1;
+                for (int i = first_param.size() - 1; i >= 0; --i)
+                  {
+                    char c = first_param[i];
+                    if (c == '/' || c == '\\')
+                      {
+                        pos = i;
+                        break;
+                      }
+                  }
 
-                if (pos != str::npos)
+                if (pos != -1)
                   {
                     str cmd_path      = first_param.substr(0, pos + 1);
                     str cmd_filename  = first_param.substr(pos + 1);

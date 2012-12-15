@@ -106,17 +106,58 @@
 		if(android_sdk == "")
 			compiler.error("Environment variable is not defined", variable_name = "ANDROID_SDK");
 
-		string java_jdk = compiler.get_env_var("JAVA_JDK");
-		if(java_jdk == "")
-			compiler.error("Environment variable is not defined", variable_name = "JAVA_JDK");
-		
 		// generalize path separator for slash (/)
 		appOutputPath 	= XSSPath.generic(appOutputPath);
 		android_sdk 	= XSSPath.generic(android_sdk);
-		//java_jdk		= XSSPath.generic(java_jdk); //win-error when jdk is in c:\Program Files\... because path contain space
+		
+		array<string> shell_output;
+		array<string> javac_result;
+		
+        compiler.log("Detecting version of Java Compiler application (javac)...");
+		shell()
+		{
+			javac_result = javac -version
+		}
+		
+		// if JDK isn't declare in PATH, find environment variable
+		string java_jdk = "";
+		if(!javac_result)
+		{
+			java_jdk = compiler.get_env_var("JAVA_JDK");
+			if(java_jdk == "")
+				compiler.error("Environment variable is not defined", variable_name = "JAVA_JDK");
+			
+			java_jdk = XSSPath.generic(java_jdk) + "/bin/";
+		}
 		
 		//td: extend to other platform: linux
-		string javac = java_jdk + "bin/javac.exe";
+		// when SO equals to linux: java commands are inside /usr/bin/
+		string javac 		= java_jdk + "javac" + exeExt;
+		string jarsigner	= java_jdk + "jarsigner" + exeExt;
+		string aapt 		= android_sdk + "/platform-tools/aapt" + exeExt;
+		string dx			= android_sdk + "/platform-tools/dx" + batExt;
+		string apkbuilder	= android_sdk + "/tools/apkbuilder" + batExt;
+		
+		shell()
+		{
+			javac_result = @javac -version
+		}
+		
+		if(!javac_result)
+			compiler.error("Java Compiler application (javac) is no recognized or isn't defined inside PATH.");
+		
+		string first_line;
+		first_line = javac_result[0];
+		
+		// extracting java version
+		int pos = String.find_first(first_line, "1.");
+		string javac_version = String.substr(first_line, pos, 3);
+		application.javac_version = javac_version;
+		
+		//td: for this error, check version of android_tools and android_platforms_tools
+		//    cuz, some new versions work fine with jdk 1.7
+		if(javac_version == "1.7")
+			compiler.error("Current JDK version is not correct to generate Android applications.", javac_version = javac_version);
 		
 		application.android_sdk = android_sdk;
 		application.output_classes = "java.lst";
@@ -133,34 +174,14 @@
         string output_classes = appName + "/" + application.output_classes;
         string output_javac_options = appName + "/" + application.output_javac_options;
 		
-        compiler.log("Detecting version of Java Compiler Application...");
-		
-		array<string> shell_output; 
-		array<string> javac_result;
-		shell()
-		{
-			javac_result = @javac -version
-		}
-		
-		if(!javac_result)
-			compiler.error("Java Compiler application (javac) is no recognized or isn't defined inside PATH.");
-		
-		string first_line;
-		first_line = javac_result[0];
-		
-		int pos = String.find_first(first_line, "1.");
-		string javac_version = String.substr(first_line, pos, 3);
-		application.javac_version = javac_version;
-		
-		//td: for this error, check version of android_tools and android_platforms_tools
-		//    cuz, some new versions work fine with jdk 1.7
-		if(javac_version == "1.7")
-			compiler.error("Current JDK version is not correct to generate Android applications.", javac_version = javac_version);
     
         shell(working_path = appOutputPath)
         {
-            shell_output = aapt@exeExt package -f -I @apiPlatform -M @appOutputPath/AndroidManifest.xml -A @appOutputPath/assets -S @appOutputPath/res -m -J @appOutputPath/gen -F @appOutputPath/bin/resources.ap_
+            shell_output = @aapt package -f -I @apiPlatform -M @appOutputPath/AndroidManifest.xml -A @appOutputPath/assets -S @appOutputPath/res -m -J @appOutputPath/gen -F @appOutputPath/bin/resources.ap_
         }
+		
+		if(!shell_output)
+			compiler.error("Android Asset Packaging Tool (aapt) is no recognized or isn't defined inside PATH.");
 
         compiler.xss("javac.options.xss", output_file = output_javac_options, appOutputPath);
         compiler.xss("java.lst.xss", output_file = output_classes, appOutputPath);
@@ -171,13 +192,13 @@
         shell(working_path = appOutputPath)
         {
             javac_result = @javac @@@outputJavacOpts @@@outputClasses;
-            shell_output = dx@batExt --dex --output=@appOutputPath/bin/classes.dex @appOutputPath/bin @dxLibPath
+            shell_output = @dx --dex --output=@appOutputPath/bin/classes.dex @appOutputPath/bin @dxLibPath
         }
 
         string appBinPath = appOutputPath + "/bin";
         shell(working_path = appBinPath)
         {
-            shell_output = aapt@exeExt add @appOutputPath/bin/resources.ap_ classes.dex
+            shell_output = @aapt add @appOutputPath/bin/resources.ap_ classes.dex
         }
         
         string libsParams = "-rj " + appOutputPath + "/libs";
@@ -190,8 +211,8 @@
 		//shell_output = apkbuilder@batExt @appOutputPath/bin/@appName.apk -z @appOutputPath/bin/resources.ap_ -f @appOutputPath/bin/classes.dex -rf @appOutputPath/src @libsParams;
         shell(working_path = appOutputPath)
         {
-			shell_output = apkbuilder@batExt @appOutputPath/bin/@appName.apk -z @appOutputPath/bin/resources.ap_ -rf @appOutputPath/src @libsParams;
-			shell_output = jarsigner -keystore @androidIdiomPath/java.keystore/xkp.android.projects.jks -storepass @password -keypass @password -signedjar @appOutputPath/bin/@appName.apk @appOutputPath/bin/resources.ap_ xkp.android.projects
+			shell_output = @apkbuilder @appOutputPath/bin/@appName.apk -z @appOutputPath/bin/resources.ap_ -rf @appOutputPath/src @libsParams;
+			shell_output = @jarsigner -keystore @androidIdiomPath/java.keystore/xkp.android.projects.jks -storepass @password -keypass @password -signedjar @appOutputPath/bin/@appName.apk @appOutputPath/bin/resources.ap_ xkp.android.projects
         }
 	}
 	else
