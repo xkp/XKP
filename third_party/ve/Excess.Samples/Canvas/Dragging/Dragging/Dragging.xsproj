@@ -6,26 +6,34 @@
     <ProjectGuid>{1c6bb2f1-77af-4c0f-8a72-ef7afa3c6b88}</ProjectGuid>
     <OutputType>Html</OutputType>
     <RootNamespace>Dragging</RootNamespace>
-    <AssemblyName>Dragging.html</AssemblyName>
+    <AssemblyName>Dragging</AssemblyName>
     <MainFile>project.xml</MainFile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetPlatform>v4</TargetPlatform>
-    <TargetName>Dragging.html</TargetName>
+    <TargetName>$(AssemblyName).$(OutputType)</TargetName>
     <Name>Dragging</Name>
   </PropertyGroup>
   <PropertyGroup>
     <ExcessPath Condition=" '$(ExcessPath)' == '' ">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Excess@InstallPath)\Extensions\Application\Excess</ExcessPath>
+    <ExcessProjectDir Condition=" '$(ExcessProjectDir)' == '' ">$(SolutionDir)$(SolutionName)$(ProjectName)</ExcessProjectDir>
+    <ExcessOutputPath Condition=" '$(ExcessOutputPath)' == '' ">production</ExcessOutputPath>
+    <ExcessTargetDir Condition=" '$(ExcessTargetDir)' == '' ">$([System.IO.Path]::Combine($(ExcessProjectDir),$(ExcessOutputPath)))</ExcessTargetDir>
+    <ExcessTargetFileName Condition=" '$(ExcessTargetFileName)' == '' ">$(AssemblyName).$(OutputType)</ExcessTargetFileName>
+    <ExcessTargetPath Condition=" '$(ExcessTargetPath)' == '' ">$([System.IO.Path]::Combine($(ExcessTargetDir),$(ExcessTargetFileName)))</ExcessTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <CustomRun>$(ExcessTargetPath)</CustomRun>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <CustomRun>$(ExcessTargetPath)</CustomRun>
   </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="application.xs" />
     <Compile Include="application.xml">
@@ -174,7 +182,4 @@
     </Content>
   </ItemGroup>
   <Import Project="$(ExcessPath)\Excess.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>"$(TargetPath)"</PostBuildEvent>
-  </PropertyGroup>
 </Project>

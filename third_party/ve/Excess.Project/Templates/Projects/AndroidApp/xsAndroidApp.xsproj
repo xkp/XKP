@@ -5,26 +5,34 @@
     <ProjectGuid>$guid1$</ProjectGuid>
     <OutputType>APK</OutputType>
     <RootNamespace>$safeprojectname$</RootNamespace>
-    <AssemblyName>$safeprojectname$.apk</AssemblyName>
+    <AssemblyName>$safeprojectname$</AssemblyName>
     <MainFile>project.xml</MainFile>
     <TargetFrameworkVersion>v$targetframeworkversion$</TargetFrameworkVersion>
     <TargetPlatform>v4</TargetPlatform>
-    <TargetName>$safeprojectname$/bin/$safeprojectname$.apk</TargetName>
+    <TargetName>$safeprojectname$\bin\$(AssemblyName).$(OutputType)</TargetName>
   </PropertyGroup>
   <PropertyGroup>
     <ExcessPath Condition=" '$(ExcessPath)' == '' ">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Excess@InstallPath)\Extensions\Application\Excess</ExcessPath>
+    <ExcessProjectDir Condition=" '$(ExcessProjectDir)' == '' ">$(SolutionDir)$(SolutionName)$(ProjectName)</ExcessProjectDir>
+    <ExcessOutputPath Condition=" '$(ExcessOutputPath)' == '' ">production</ExcessOutputPath>
+    <ExcessTargetDir Condition=" '$(ExcessTargetDir)' == '' ">$([System.IO.Path]::Combine($(ExcessProjectDir),$(ExcessOutputPath)))</ExcessTargetDir>
+    <ExcessTargetFileName Condition=" '$(ExcessTargetFileName)' == '' ">$(AssemblyName).$(OutputType)</ExcessTargetFileName>
+    <ExcessTargetPath Condition=" '$(ExcessTargetPath)' == '' ">$([System.IO.Path]::Combine($(ExcessTargetDir),$(ExcessTargetFileName)))</ExcessTargetPath>
+    <DisableShellExecute>true</DisableShellExecute>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <StartProgram>apkInstaller.exe</StartProgram>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <CustomRun>$(ExcessPath)\Excess.APKInstaller.exe</CustomRun>
+    <CustomRunArgs>-f $(ExcessTargetPath) -a 7 -p xkp.android.$safeprojectname$ -i Act$safeprojectname$</CustomRunArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <StartProgram>apkInstaller.exe</StartProgram>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <CustomRun>$(ExcessPath)\Excess.APKInstaller.exe</CustomRun>
+    <CustomRunArgs>-f $(ExcessTargetPath) -a 7 -p xkp.android.$safeprojectname$ -i Act$safeprojectname$</CustomRunArgs>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,7 +43,6 @@
     <Compile Include="project.xml">
       <DependentUpon>application.xs</DependentUpon>
       <xs_project>true</xs_project>
-      <customRun>$(TargetPath)</customRun>
     </Compile>
   </ItemGroup>
   <Import Project="$(ExcessPath)\Excess.targets" />

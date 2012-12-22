@@ -23,7 +23,10 @@ using Excess.Project.Library;
 using PkgUtils = Microsoft.VisualStudio.Project.Utilities;
 using VsCommands = Microsoft.VisualStudio.VSConstants.VSStd97CmdID;
 using OleConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
+
 using MSBuild = Microsoft.Build.Evaluation;
+using MSBuildExecution = Microsoft.Build.Execution;
+
 using Excess.CompilerTasks;
 
 namespace Excess.Project
@@ -43,7 +46,6 @@ namespace Excess.Project
         private ProjectDocumentsListenerForMainFileUpdates projectDocListenerForMainFileUpdates;
         internal static int ImageOffset;
         private DesignerContext designerContext;
-        private string customRun;
         #endregion
 
         #region enums
@@ -137,18 +139,6 @@ namespace Excess.Project
             set
             {
                 pythonImageList = value;
-            }
-        }
-
-        public string CustomRun
-        {
-            get 
-            {
-                return customRun;
-            }
-            set 
-            {
-                customRun = value;
             }
         }
         #endregion
@@ -325,10 +315,6 @@ namespace Excess.Project
                 bool isIt = item.HasMetadata("xs_project");
                 if (isIt)
                     xsPath = item.GetMetadataValue("FullPath");
-
-                isIt = item.HasMetadata("customRun");
-                if (isIt)
-                    CustomRun = item.GetMetadataValue("customRun");
             }
 
             if (xsPath == null)
@@ -705,7 +691,8 @@ namespace Excess.Project
             if (startupProjects.Length < 1)
 				throw new ApplicationException("No startup projects.");
 
-            string projectFilePath = Path.Combine(Path.GetDirectoryName(dte.Solution.FullName), (string)startupProjects[0]);
+            string projectName = (string)startupProjects[0];
+            string projectFilePath = Path.Combine(Path.GetDirectoryName(dte.Solution.FullName), projectName);
             string startupProjectFullName = Path.GetFullPath(projectFilePath);
             var oaExcessProject = GetProject(dte, startupProjectFullName) as OAExcessProject;
 
@@ -717,13 +704,26 @@ namespace Excess.Project
 
             projectNode.SetConfiguration(currentConfigName);
 
+            Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
+            Trace.AutoFlush = true;
+            //Trace.WriteLine("------ Build started: Project: {0}, Configuration: {1} ------", 
+            //    projectName, currentConfigName);
             dte.ExecuteCommand("File.SaveAll", "");
 
+            string customRun = projectNode.GetProjectProperty("CustomRun");
+            string customRunArgs = projectNode.GetProjectProperty("CustomRunArgs");
+
             bool isOK;
+
+            Trace.Indent();
+            //Trace.WriteLine("{0} -> {1}", projectName, startupProjectFullName);
             projectNode.BuildTarget("Build", out isOK);
+            Trace.Unindent();
 
             if (!isOK)
             {
+                Trace.WriteLine("========== Build: 0 succeeded or up-to-date, 1 failed, 0 skipped ==========");
+
                 var message = "There were build errors. Would you like to continue and run the last successful build?";
                 OLEMSGICON icon = OLEMSGICON.OLEMSGICON_QUERY;
                 OLEMSGBUTTON buttons = OLEMSGBUTTON.OLEMSGBUTTON_YESNO;
@@ -734,28 +734,60 @@ namespace Excess.Project
                 if (res == NativeMethods.IDNO)
                     return true;
             }
+            else 
+            {
+                Trace.WriteLine("========== Build: 1 succeeded or up-to-date, 0 failed, 0 skipped ==========");
+            }
 
-            var path = projectNode.GetProjectProperty("StartProgram");
+            //Trace.WriteLine("------ Starting Project: {0}, Configuration: {1} ------",
+            //    projectName, currentConfigName);
 
-            //td: think more
-            if (string.IsNullOrEmpty(path))
-                path = projectNode.GetOutputAssembly(currentConfigName);
-
-            if (string.IsNullOrEmpty(CustomRun))
+            if (string.IsNullOrEmpty(customRun))
                 return false;
 
-            //if (!File.Exists(path))
-            if (!File.Exists(CustomRun))
+            if (!File.Exists(customRun))
                 throw new ApplicationException("Excess cannot start debugging because the debug target '"
-                    + CustomRun + "' is missing. Please build the project and retry, or set the OutputPath and AssemblyName properties appropriately to point at the correct location for the target assembly.");
+                    + customRun + "' is missing. Please build the project and retry, or set the OutputPath and AssemblyName properties appropriately to point at the correct location for the target assembly.");
 
             Process proc = new Process();
-            proc.StartInfo = new ProcessStartInfo(CustomRun);
+            proc.StartInfo = new ProcessStartInfo(customRun);
             proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             proc.StartInfo.CreateNoWindow = true;
+
+            if (!string.IsNullOrEmpty(customRunArgs))
+                proc.StartInfo.Arguments = customRunArgs;
+
+            bool disableShellExecute = Convert.ToBoolean(projectNode.GetProjectProperty("DisableShellExecute"));
+
+            if (disableShellExecute)
+            {
+                proc.StartInfo.UseShellExecute = false;
+
+                proc.StartInfo.RedirectStandardOutput = true;
+                proc.StartInfo.RedirectStandardError = true;
+
+                proc.OutputDataReceived += new DataReceivedEventHandler(
+                        delegate(object sendingProcess, DataReceivedEventArgs outLine)
+                        {
+                            Debug.WriteLine(outLine.Data);
+                        }
+                    );
+                proc.ErrorDataReceived += new DataReceivedEventHandler(
+                        delegate(object sendingProcess, DataReceivedEventArgs outLine)
+                        {
+                            Debug.WriteLine(outLine.Data);
+                        }
+                    );
+            }
             
             bool success_ = proc.Start();
-            
+
+            //don't wait for process exit
+            //proc.WaitForExit();
+
+            Debug.WriteLine("========== Running: 1 project ==========");
+            Debug.Close();
+
             return true;
         }
 

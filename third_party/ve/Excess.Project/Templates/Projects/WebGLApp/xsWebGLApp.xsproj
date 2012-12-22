@@ -5,23 +5,31 @@
     <ProjectGuid>$guid1$</ProjectGuid>
     <OutputType>Html</OutputType>
     <RootNamespace>$safeprojectname$</RootNamespace>
-    <AssemblyName>$safeprojectname$.html</AssemblyName>
+    <AssemblyName>$safeprojectname$</AssemblyName>
     <MainFile>project.xml</MainFile>
     <TargetFrameworkVersion>v$targetframeworkversion$</TargetFrameworkVersion>
-    <TargetPlatform>v4</TargetPlatform>    
+    <TargetPlatform>v4</TargetPlatform>
+    <TargetName>$(AssemblyName).$(OutputType)</TargetName>
   </PropertyGroup>
   <PropertyGroup>
     <ExcessPath Condition=" '$(ExcessPath)' == '' ">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Excess@InstallPath)\Extensions\Application\Excess</ExcessPath>
+    <ExcessProjectDir Condition=" '$(ExcessProjectDir)' == '' ">$(SolutionDir)$(SolutionName)$(ProjectName)</ExcessProjectDir>
+    <ExcessOutputPath Condition=" '$(ExcessOutputPath)' == '' ">production</ExcessOutputPath>
+    <ExcessTargetDir Condition=" '$(ExcessTargetDir)' == '' ">$([System.IO.Path]::Combine($(ExcessProjectDir),$(ExcessOutputPath)))</ExcessTargetDir>
+    <ExcessTargetFileName Condition=" '$(ExcessTargetFileName)' == '' ">$(AssemblyName).$(OutputType)</ExcessTargetFileName>
+    <ExcessTargetPath Condition=" '$(ExcessTargetPath)' == '' ">$([System.IO.Path]::Combine($(ExcessTargetDir),$(ExcessTargetFileName)))</ExcessTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <CustomRun>$(ExcessTargetPath)</CustomRun>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <CustomRun>$(ExcessTargetPath)</CustomRun>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,7 +40,6 @@
     <Compile Include="project.xml">
       <DependentUpon>application.xs</DependentUpon>
       <xs_project>true</xs_project>
-      <customRun>$(TargetPath)</customRun>
     </Compile>
   </ItemGroup>
   <ItemGroup>

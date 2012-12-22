@@ -6,25 +6,34 @@
     <ProjectGuid>{b6cb1b40-24e1-4e6c-8286-d37f91a8d974}</ProjectGuid>
     <OutputType>Html</OutputType>
     <RootNamespace>ShaderFresnel</RootNamespace>
-    <AssemblyName>ShaderFresnel.html</AssemblyName>
+    <AssemblyName>ShaderFresnel</AssemblyName>
     <MainFile>project.xml</MainFile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetPlatform>v4</TargetPlatform>
+    <TargetName>$(AssemblyName).$(OutputType)</TargetName>
     <Name>ShaderFresnel</Name>
   </PropertyGroup>
   <PropertyGroup>
     <ExcessPath Condition=" '$(ExcessPath)' == '' ">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Excess@InstallPath)\Extensions\Application\Excess</ExcessPath>
+    <ExcessProjectDir Condition=" '$(ExcessProjectDir)' == '' ">$(SolutionDir)$(SolutionName)$(ProjectName)</ExcessProjectDir>
+    <ExcessOutputPath Condition=" '$(ExcessOutputPath)' == '' ">production</ExcessOutputPath>
+    <ExcessTargetDir Condition=" '$(ExcessTargetDir)' == '' ">$([System.IO.Path]::Combine($(ExcessProjectDir),$(ExcessOutputPath)))</ExcessTargetDir>
+    <ExcessTargetFileName Condition=" '$(ExcessTargetFileName)' == '' ">$(AssemblyName).$(OutputType)</ExcessTargetFileName>
+    <ExcessTargetPath Condition=" '$(ExcessTargetPath)' == '' ">$([System.IO.Path]::Combine($(ExcessTargetDir),$(ExcessTargetFileName)))</ExcessTargetPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <CustomRun>$(ExcessTargetPath)</CustomRun>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>production</OutputPath>
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <CustomRun>$(ExcessTargetPath)</CustomRun>
   </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="application.xs" />
     <Compile Include="application.xml">
