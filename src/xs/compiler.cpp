@@ -1,6 +1,7 @@
 
 #include <xs/compiler.h>
 #include <xs/xs_error.h>
+#include <xss/utils.h>
 
 extern "C"
 {
@@ -16,23 +17,6 @@ using namespace xkp;
 
 const str SCompilerError("syntax-error");
 const str SErrorCompiling("Error while compiling xs");
-
-//utils
-inline str wide2str(const std::wstring& w)
-  {
-    str result;
-    result.assign(w.begin(), w.end());
-
-    return result;
-  }
-
-inline std::wstring str2wide(const str& s)
-  {
-    std::wstring result;
-    result.assign(s.begin(), s.end());
-
-    return result;
-  }
 
 //a list of rules of interest, note that this struct ought to be updated
 //everytime the grammar is changed, use the rule description as a guide
@@ -245,7 +229,7 @@ struct parameters_ : visitor_base<parameters_>
     expression_& expr;
     param_list   values;
     int          param_count;
-    str          curr_name; 
+    str          curr_name;
 
     //rule handlers
     void named_argument( TokenStruct* token, parsetree_visitor* visitor );
@@ -642,7 +626,7 @@ struct object_ : visitor_base<object_>
       {
         xs_const result;
         result.name =  wide2str(token->Tokens[0]->Data);
-        
+
         expression_ value(result.value);
         visitor->visit(token->Tokens[2], value);
 
@@ -767,7 +751,7 @@ struct try_ : visitor_base<try_>
       {
         return visit_rule(this, token, visitor);
       }
-    
+
     void main( TokenStruct* token, parsetree_visitor* visitor )
       {
         //try <Block> <Catch Clauses> <Finally Clause Opt>
@@ -792,7 +776,7 @@ struct try_ : visitor_base<try_>
       {
         //catch '(' <Qualified ID> ')' <Block>
         catch_ cc;
-        type_  type(cc.type); 
+        type_  type(cc.type);
         visitor->visit(token->Tokens[2], type);
 
         code_  cc_(cc.catch_code);
@@ -805,7 +789,7 @@ struct try_ : visitor_base<try_>
       {
         //catch '(' <Qualified ID> Identifier ')' <Block>
         catch_ cc;
-        type_  type(cc.type); 
+        type_  type(cc.type);
         visitor->visit(token->Tokens[2], type);
 
         cc.id = wide2str( token->Tokens[3]->Data );
@@ -921,7 +905,7 @@ void code_::statement_while( TokenStruct* token, parsetree_visitor* visitor )
 void code_::statement_switch( TokenStruct* token, parsetree_visitor* visitor )
   {
     //<Statement> ::= switch '(' <Switch Header> ')' '{' <Switch Sections Opt> '}'
-    
+
     stmt_switch ss;
     switch_ s(ss);
     visitor->visit(token, s);
@@ -1731,19 +1715,19 @@ struct xs_ : visitor_base<xs_>
 
 // validate parse's errors
 const unsigned int head_parse_errors_count = 7;
-const str parser_errors_head[head_parse_errors_count] = 
+const str parser_errors_head[head_parse_errors_count] =
   {
     "",
-    "Lexical error", 
-    "Tokenizer error", 
-    "Syntax error", 
-    "Comment error", 
-    "Out of memory", 
+    "Lexical error",
+    "Tokenizer error",
+    "Syntax error",
+    "Comment error",
+    "Out of memory",
     ""
   };
 
 const unsigned int descrip_parse_errors_count = 7;
-const str parser_errors_descrip[descrip_parse_errors_count] = 
+const str parser_errors_descrip[descrip_parse_errors_count] =
   {
     "",
     "The grammar does not specify what to do with '%s'.",
@@ -1930,7 +1914,7 @@ int symbol_rules[150] = {
 
 struct perrors_validate
   {
-    perrors_validate(int result, TokenStruct *root, TokenStackStruct *stack) : 
+    perrors_validate(int result, TokenStruct *root, TokenStackStruct *stack) :
       parse_result(result),
       descrip_ecode(result),
       head_ecode(result),
@@ -1963,7 +1947,7 @@ struct perrors_validate
 
         // more stuff...
         rule_error = find_rule(token_stack);
-        
+
         if (token->Data != NULL)
           token_data = wide2str(std::wstring(token->Data, 1024));
 
@@ -2080,7 +2064,7 @@ struct perrors_validate
         std::stringstream ss;
         for (size_t i = 0; i < expected_tokens.size(); ++i)
           {
-            if (i > 0) 
+            if (i > 0)
               {
                 ss << ", ";
                 if (i >= expected_tokens.size() - 2) ss << "or ";
@@ -2099,14 +2083,14 @@ struct perrors_validate
 
     str error()
       {
-        if (head_ecode == 0) 
+        if (head_ecode == 0)
           return str();
 
         std::stringstream ss;
 
-        ss << head_error() << 
-          " at line " << line << 
-          " column " << column << 
+        ss << head_error() <<
+          " at line " << line <<
+          " column " << column <<
           ". \n";
 
         ss << descrip_error() << "\n";
@@ -2289,7 +2273,7 @@ str xs_compiler::process_dsl(const str& src, std::vector<str>& dsl_texts)
             if (curr == str::npos)
               break;
 
-            
+
             size_t prev_char = curr - 1;
             size_t next_char = curr + dsl.size();
             if (curr > 0 && !isspace(result[prev_char]) )
@@ -2328,7 +2312,7 @@ str xs_compiler::process_dsl(const str& src, std::vector<str>& dsl_texts)
                         break;
                       }
 
-                    case '(' :  
+                    case '(' :
 											{
 												if (!found_my_p)
 													{
@@ -2343,13 +2327,13 @@ str xs_compiler::process_dsl(const str& src, std::vector<str>& dsl_texts)
 															}
 													}
 
-												pcount++; 
+												pcount++;
 												break;
 											}
 
-                    case ')' :  
+                    case ')' :
 											{
-												pcount--; 
+												pcount--;
 												if (!close_my_p && pcount == 0)
 													{
 														close_my_p = true;
@@ -2378,7 +2362,7 @@ str xs_compiler::process_dsl(const str& src, std::vector<str>& dsl_texts)
 																is_dsl = false;
 																break;
 															}
-														
+
 														if (pcount != 0)
                               not_dsl = true;
                             else

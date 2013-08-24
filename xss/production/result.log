@@ -2733,3 +2733,30 @@ Success are greateful
 	
 
 Success are greateful
+===[ animtest.project.xml ]================
+
+
+log: Rendering Android project...
+log: API Level = 4
+log: Rendering Android Types...
+log: Rendering Sequence Types...
+log: Rendering Android Imports...
+log: Rendering instance: application
+log: Rendering instance: lbl1
+log: Rendering instance: lbl2
+log: Rendering instance: lbl3
+log: Rendering instance: btn1
+log: Rendering instance: btn2
+log: Rendering instance: btn3
+log: Rendering instance: anim1
+log: Rendering instance: anim1
+log: Rendering instance: anim2
+log: Rendering instance: anim2
+log: Rendering instance: anim3
+log: Rendering instance: anim3
+log: [android] Copying default files...
+log: [android] Rendering default files...
+log: Copying files...
+log: Rendering Android Manifest...
+
+Success are greateful

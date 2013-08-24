@@ -32,6 +32,22 @@ const str SCrashedApplication("Executable application is crashed");
 //utils
 struct shellworker : IWorker
   {
+#if defined(_WIN32) || defined(_WIN64) || defined(__WIN32__)
+    typedef std::wstring bp_string;
+
+    inline std::wstring bp_str2wide(const str& s)
+      {
+        return str2wide(s);
+      }
+#else
+    typedef str bp_string;
+
+    inline str bp_str2wide(const str& s)
+      {
+        return s;
+      }
+#endif
+
     shellworker(std::vector<ga_item>& result):
       result_(result)
       {
@@ -120,7 +136,7 @@ struct shellworker : IWorker
             //finally, execute the application
             try
               {
-                std::wstring exe;
+                bp_string exe;
 
                 str &first_param = valuable_items[0];
 
@@ -139,14 +155,14 @@ struct shellworker : IWorker
                   {
                     str cmd_path      = first_param.substr(0, pos + 1);
                     str cmd_filename  = first_param.substr(pos + 1);
-                    exe = search_path(str2wide(cmd_filename), str2wide(cmd_path));
+                    exe = search_path(bp_str2wide(cmd_filename), bp_str2wide(cmd_path));
                   }
                 else
                   {
-                    exe = search_path(str2wide(first_param));
+                    exe = search_path(bp_str2wide(first_param));
                   }
 
-                std::vector<std::wstring> args;
+                std::vector<bp_string> args;
 
                 std::vector<str>::iterator vit = valuable_items.begin();
                 std::vector<str>::iterator vnd = valuable_items.end();
@@ -164,13 +180,21 @@ struct shellworker : IWorker
 
                     //don't add empty params
                     if (!arg.empty())
-                      args.push_back(str2wide(arg));
+                      args.push_back(bp_str2wide(arg));
                   }
 
                 boost::system::error_code ec;
                 bp::pipe p = create_pipe();
                   {
                     bio::file_descriptor_sink sink(p.sink, bio::close_handle);
+
+#if defined(_WIN32) || defined(_WIN64) || defined(__WIN32__)
+                    fs::path start_dir = working_path;
+#else
+                    str start_dir = working_path.string();
+#endif
+
+
                     bp::child c = bp::execute(
                                     run_exe(exe),
                                     set_on_error(ec),
@@ -178,7 +202,7 @@ struct shellworker : IWorker
                                     bind_stdout(sink),
                                     bind_stderr(sink),
                                     close_stdin(),
-                                    start_in_dir(working_path),
+                                    start_in_dir(start_dir),
                                     inherit_env() //td:
                                   );
 

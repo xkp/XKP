@@ -156,6 +156,11 @@
 		
 		//td: for this error, check version of android_tools and android_platforms_tools
 		//    cuz, some new versions work fine with jdk 1.7
+		// error is: 
+		//              trouble processing:
+        //              bad class file magic (cafebabe) or version (0033.0000)
+        //                  ...while parsing (classname)
+        //                  ...while processing (classname)
 		if(javac_version == "1.7")
 			compiler.error("Current JDK version is not correct to generate Android applications.", javac_version = javac_version);
 		
@@ -194,6 +199,12 @@
             javac_result = @javac @@@outputJavacOpts @@@outputClasses;
             shell_output = @dx --dex --output=@appOutputPath/bin/classes.dex @appOutputPath/bin @dxLibPath
         }
+        
+        //compiler.log("Dalvik command line output result:");
+        //for(var line1 in shell_output)
+        //{
+        //    compiler.log(line1);
+        //}
 
         string appBinPath = appOutputPath + "/bin";
         shell(working_path = appBinPath)
@@ -201,6 +212,12 @@
             shell_output = @aapt add @appOutputPath/bin/resources.ap_ classes.dex
         }
         
+        //compiler.log("AAPT command line output result:");
+        //for(var line2 in shell_output)
+        //{
+        //    compiler.log(line2);
+        //}
+
         string libsParams = "-rj " + appOutputPath + "/libs";
         libsParams = ""; //td: why this?? what happen when exists libraries inside project??
         string password = "xkp.android.projects.2012";
@@ -214,6 +231,11 @@
 			shell_output = @apkbuilder @appOutputPath/bin/@appName.apk -z @appOutputPath/bin/resources.ap_ -rf @appOutputPath/src @libsParams;
 			shell_output = @jarsigner -keystore @androidIdiomPath/java.keystore/xkp.android.projects.jks -storepass @password -keypass @password -signedjar @appOutputPath/bin/@appName.apk @appOutputPath/bin/resources.ap_ xkp.android.projects
         }
+        
+        // then, at the end, copy .apk output
+        string srcfile = appOutputPath + "/bin/" + appName + ".apk";
+        string dstfile = appName + ".apk";
+        compiler.copy_file(src = srcfile, dst = dstfile);
 	}
 	else
 	{
